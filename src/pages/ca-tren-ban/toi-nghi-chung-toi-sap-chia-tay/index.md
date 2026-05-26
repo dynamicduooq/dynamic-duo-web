@@ -16,8 +16,7 @@ coverImage: "biatnctsct.png"
 truyen_id: "tnctsct"
 chuong: 0
 ---
-
-![](https://dynamicduoq.wordpress.com/wp-content/uploads/2026/05/e28098-10.png?w=655)
+<img src="https://dynamicduoq.wordpress.com/wp-content/uploads/2026/05/e28098-10.png?w=655" style="width: 140px; height: 190px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: block; margin: 0 auto 15px auto;" />
 
 ## Tôi nghĩ chúng tôi sắp chia tay
 

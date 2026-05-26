@@ -22,7 +22,7 @@ _về tất cả những chú cá tẩm gia vị_
 
 ---
 
-![]((https://dynamicduoq.wordpress.com/wp-content/uploads/2026/05/dd-cover-commission-7.png))
+![](https://dynamicduoq.wordpress.com/wp-content/uploads/2026/05/dd-cover-commission-7.png)
 
 [**VẬT DỄ VỠ - THIẾT NHĨ**](/ca-tren-ban/vat-de-vo)
 

@@ -3,15 +3,12 @@ const { frontmatter } = Astro.props;
 import settings from '../data/settings.json';
 
 // --- BẮT ĐẦU MA THUẬT NHẬN DIỆN TRUYỆN ---
-const currentPath = Astro.url?.pathname || ''; 
+const currentPath = Astro.url?.pathname ?? ''; 
 let currentTruyenId = frontmatter?.truyen_id;
 
-if (!currentTruyenId) {
-    const parts = currentPath.split('/').filter(Boolean);
-    const fileName = parts[parts.length - 1]; 
-    if (fileName && fileName.includes('-')) {
-        currentTruyenId = fileName.split('-')[0];
-    }
+const folderName = parts[parts.length - 2] || parts[parts.length - 1];
+if (!currentTruyenId && folderName) {
+    currentTruyenId = frontmatter?.truyen_id; // ưu tiên frontmatter
 }
 
 let chapters = [];
@@ -52,13 +49,18 @@ const isNovelPage = frontmatter?.chuong !== undefined;
     <style is:global>
         /* ─── BỘ BIẾN MÀU (Lấy chuẩn từ bản HTML cũ của cậu) ─── */
         :root {
-            --sky: #0284c7; --sky2: #0369a1; --sky-light: #bae6fd; --sky-pale: #f0f9ff;
-            --sky-dark: #03507c; --text-main: #1e3a50; --text-mid: #5f8295; --text-dim: #94a3b8;
-            --cream: #fafcff; --bg-content: #ffffff;
-            --r-sm: 12px; --r-md: 20px; --r-lg: 28px; --r-pill: 999px;
-            --sh-soft: 0 4px 20px rgba(2,132,199,.07);
-            --sh-card: 0 8px 30px rgba(2,132,199,.10);
-            --t: .28s cubic-bezier(.4,0,.2,1);
+            --sky: #0ea5e9;
+--sky2: #0284c7;
+--sky-dark: #0369a1;
+--sky-light: #bae6fd;
+--sky-pale: #f0f9ff;
+--text-mid: #64748b;
+--text-dim: #94a3b8;
+--sh-card: 0 4px 15px rgba(2,132,199,0.12);
+--sh-soft: 0 2px 8px rgba(0,0,0,0.08);
+--r-md: 12px;
+--r-pill: 999px;
+--t: all 0.2s ease;
         }
 
         body {
@@ -126,6 +128,7 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         
         .chapter-dropdown summary { display: block; padding: 12px 20px; background: var(--sky-pale); border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky-dark); font-size: 14px; font-weight: bold; cursor: pointer; max-width: 200px; margin: 0 auto; text-align: center; list-style: none; transition: var(--t);}
         .chapter-dropdown summary:hover { background: var(--sky-light); color: white;}
+        .chapter-dropdown { position: relative; display: inline-block; }
         .chapter-list { position: absolute; top: 115%; left: 50%; transform: translateX(-50%); width: 250px; max-height: 250px; overflow: auto; background: var(--bg-content); border: 1px solid var(--sky-light); border-radius: var(--r-md); display: flex; flex-direction: column; z-index: 10; box-shadow: var(--sh-card); }
         .chapter-list a { padding: 12px 10px; border-bottom: 1px dashed var(--sky-pale); color: var(--text-mid); text-align: center; font-size: 14px; transition: var(--t);}
         .chapter-list a:hover { background: var(--sky-pale); color: var(--sky); }
@@ -240,7 +243,17 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             )}
         </div>
     </div>
-
+{isNovelPage && (() => {
+    const idx = chapters.findIndex(c => c.url === currentPath);
+    const prev = chapters[idx - 1];
+    const next = chapters[idx + 1];
+    return (
+        <div class="chapter-nav">
+            {prev && <a href={prev.url}>← {prev.frontmatter.title}</a>}
+            {next && <a href={next.url}>{next.frontmatter.title} →</a>}
+        </div>
+    );
+})()}
     <footer>
         <div class="footer-inner">
             <div class="ft-brand">

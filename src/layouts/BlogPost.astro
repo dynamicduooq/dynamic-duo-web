@@ -1,0 +1,179 @@
+---
+const { frontmatter } = Astro.props;
+import settings from '../data/settings.json';
+
+// --- BẮT ĐẦU MA THUẬT NHẬN DIỆN TRUYỆN CŨ & MỚI ---
+const currentPath = Astro.url.pathname; 
+let currentTruyenId = frontmatter.truyen_id;
+
+// Nếu là truyện cũ (không có truyen_id), tự động quét tên file (vd: tnctsct-chuong-74 -> lấy chữ tnctsct)
+if (!currentTruyenId) {
+    const parts = currentPath.split('/').filter(Boolean);
+    const fileName = parts[parts.length - 1]; 
+    if (fileName && fileName.includes('-')) {
+        currentTruyenId = fileName.split('-')[0]; // Cắt lấy cụm đầu tiên làm ID
+    }
+}
+
+let chapters = [];
+if (currentTruyenId) {
+    const allPosts = await Astro.glob('../pages/**/*.md');
+    chapters = allPosts
+        .filter(post => {
+            const postPath = post.url || '';
+            const postFileName = postPath.split('/').pop() || '';
+            // Tìm cả truyện mới (có truyen_id) và truyện cũ (cùng tiền tố tên file)
+            const postTruyenId = post.frontmatter.truyen_id || (postFileName.includes('-') ? postFileName.split('-')[0] : null);
+            return postTruyenId === currentTruyenId;
+        })
+        .sort((a, b) => {
+            // Tự đoán số chương để sắp xếp cho chuẩn
+            const parseChapter = (post) => {
+                if (post.frontmatter.chuong) return post.frontmatter.chuong;
+                const match = (post.url || '').match(/chuong-(\d+)/i);
+                return match ? parseInt(match[1]) : 0;
+            };
+            return parseChapter(a) - parseChapter(b);
+        });
+}
+// --- KẾT THÚC MA THUẬT ---
+---
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{frontmatter?.title || 'Trang chủ'} | {settings.site_name}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,700;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+    
+    <script async src="https://hypothes.is/embed.js"></script>
+
+    <style is:global>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-content: #ffffff;
+            --text-main: #334155;
+            --primary: #0369a1;
+            --accent-bg: #f0f9ff;
+            --border-color: #bae6fd;
+            --shadow-decor: 6px 6px 0px #e2e8f0;
+        }
+
+        body.dark-mode {
+            --bg-body: #0f172a; --bg-content: #1e293b; --text-main: #cbd5e1;
+            --accent-bg: #0f172a; --border-color: #334155; --shadow-decor: 6px 6px 0px #020617;
+        }
+
+        body {
+            background-color: var(--bg-body); color: var(--text-main);
+            font-family: 'Newsreader', serif; font-size: 18px; line-height: 1.9;
+            margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; color: var(--primary); text-align: center; }
+
+        /* Navigation */
+        nav { background: var(--bg-content); display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--primary); font-weight: bold; font-family: sans-serif; font-size: 14px; text-transform: uppercase; }
+        
+        /* Dropdown Nav */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background: var(--bg-content); min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.1); border-radius: 8px; top: 100%; left: 0; z-index: 1; }
+        .dropdown-content a { display: block; padding: 12px 16px; border-bottom: 1px solid var(--border-color); margin: 0; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .container { max-width: 800px; margin: 40px auto; background-color: var(--bg-content); padding: 40px 50px; border-radius: 20px; box-shadow: 0 10px 30px rgba(2, 132, 199, 0.05); }
+
+        /* Auto Decor cho Markdown */
+        blockquote { background: var(--accent-bg); border-radius: 20px; padding: 30px 25px; margin: 40px auto; box-shadow: var(--shadow-decor); border: 1px solid var(--border-color); font-style: normal; }
+        hr { border: none; text-align: center; margin: 40px 0; }
+        hr::after { content: "𓆝 𓆟 𓆞 𓆝 𓆟"; color: #7dd3fc; font-size: 20px; letter-spacing: 5px; }
+
+        /* Tags & Dropdown Chương */
+        .tag-badge { display: inline-block; padding: 4px 12px; border: 1.5px solid var(--text-main); border-radius: 15px; font-size: 0.85rem; text-decoration: none; margin: 4px; color: var(--text-main); }
+        .tag-badge:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .chapter-dropdown summary { display: block; padding: 12px 20px; background: var(--accent-bg); border: 1.5px solid var(--border-color); border-radius: 25px; color: var(--primary); font-size: 14px; font-weight: bold; cursor: pointer; max-width: 200px; margin: 0 auto; text-align: center; list-style: none; }
+        .chapter-list { position: absolute; top: 115%; left: 50%; transform: translateX(-50%); width: 250px; max-height: 250px; overflow: auto; background: var(--bg-content); border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .chapter-list a { padding: 12px 10px; border-bottom: 1px dashed #e0f2fe; text-decoration: none; color: var(--primary); text-align: center; font-size: 13px; }
+
+        /* Progress Bar & Float Buttons */
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, #7dd3fc 0%, #0284c7 100%); width: 0%; z-index: 1001; }
+        .float-btns { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
+        .float-btns button { background: var(--accent-bg); color: var(--primary); border: 1px solid var(--border-color); border-radius: 50%; width: 45px; height: 45px; font-size: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="myBar"></div>
+
+    <nav>
+        <div class="logo"><a href="/"><img src={settings.logo} alt={settings.site_name} style="height: 55px;" onerror="this.style.display='none'" /></a></div>
+        <div class="nav-links">
+            <a href="/">Trang chủ</a>
+            <div class="dropdown">
+    <a href="#" style="cursor: pointer;">Truyện ▾</a>
+    <div class="dropdown-content">
+        <a href="/ca-duoi-nuoc">Cá dưới nước (Đang bơi)</a>
+        <a href="/ca-tren-ban">Cá trên bàn (Đã lên thớt)</a>
+        <a href="/ca-tren-troi">Cá trên trời (Sắp bắt)</a>
+    </div>
+</div>
+            <a href="/tags">Thể loại</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {frontmatter?.tags && (
+            <div style="text-align: center; margin-bottom: 25px;">
+                {frontmatter.tags.map(tag => ( <a href={`/tags/${tag}`} class="tag-badge"># {tag}</a> ))}
+            </div>
+        )}
+
+        {chapters.length > 0 && (
+            <div style="text-align: center; margin-bottom: 30px; position: relative;">
+                <details class="chapter-dropdown">
+                    <summary>⚓ Chọn chương ▾</summary>
+                    <div class="chapter-list">
+                        {chapters.map((chap) => ( <a href={chap.url}>{chap.frontmatter.title}</a> ))}
+                    </div>
+                </details>
+            </div>
+        )}
+
+        <slot />
+
+        {chapters.length > 0 && (
+            <div style="text-align: center; margin-top: 40px; position: relative;">
+                <details class="chapter-dropdown">
+                    <summary>⚓ Chọn chương ▾</summary>
+                    <div class="chapter-list">
+                        {chapters.map((chap) => ( <a href={chap.url}>{chap.frontmatter.title}</a> ))}
+                    </div>
+                </details>
+            </div>
+        )}
+
+        <footer style="margin-top: 60px; border-top: 1px dashed var(--border-color); padding-top: 30px;">
+            <script src="https://giscus.app/client.js" data-repo="TEN_GITHUB/REPO" data-repo-id="ID_REPO" data-category="Comments" data-category-id="ID_CATEGORY" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light" data-lang="vi" crossorigin="anonymous" async></script>
+        </footer>
+    </div>
+
+    <div class="float-btns">
+        <button onclick="document.body.classList.toggle('dark-mode')" title="Đổi giao diện">🌙</button>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Lên đầu">▲</button>
+        <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" title="Xuống cuối">▼</button>
+    </div>
+
+    <script>
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("myBar").style.width = ((winScroll / height) * 100) + "%";
+        };
+    </script>
+</body>
+</html>

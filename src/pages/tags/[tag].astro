@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await Astro.glob('../../pages/**/*.md');
+  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags || []).flat())];
+
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) => post.frontmatter.tags?.includes(tag));
+    return { params: { tag }, props: { posts: filteredPosts } };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+<Layout>
+  <h1 style="color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Thể loại: {tag}</h1>
+  <ul>
+    {posts.map((post) => (
+      <li style="margin: 15px 0; list-style: none;">
+        <a href={post.url} style="font-size: 20px; font-weight: bold; color: var(--text-main); text-decoration: none;">
+          {post.frontmatter.title}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Layout>

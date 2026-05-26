@@ -1,0 +1,58 @@
+backend:
+  name: github
+  repo: TEN_GITHUB_CUA_BAN/dynamic-duo-web # Sửa lại tên repo sau khi tạo trên GitHub
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "ongoing"
+    label: "Cá dưới nước (Đang tiến hành)"
+    folder: "src/pages/ca-duoi-nuoc"
+    create: true
+    slug: "{{truyen_id}}-{{chuong}}"
+    fields:
+      - { label: "Mã truyện (Vd: tnctsct)", name: "truyen_id", widget: "string" }
+      - { label: "Số chương (Vd: 73)", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Tên hiển thị (Vd: Chương 73)", name: "title", widget: "string" }
+      - { label: "Ngày đăng", name: "date", widget: "datetime" }
+      - { label: "Thể loại (Tags)", name: "tags", widget: "list", default: ["đam mỹ"] }
+      - { label: "Nội dung chương", name: "body", widget: "markdown" }
+
+  - name: "completed"
+    label: "Cá trên bàn (Đã hoàn thành)"
+    folder: "src/pages/ca-tren-ban"
+    create: true
+    slug: "{{truyen_id}}-{{chuong}}"
+    fields:
+      - { label: "Mã truyện", name: "truyen_id", widget: "string" }
+      - { label: "Số chương", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Tên hiển thị", name: "title", widget: "string" }
+      - { label: "Ngày đăng", name: "date", widget: "datetime" }
+      - { label: "Thể loại (Tags)", name: "tags", widget: "list" }
+      - { label: "Nội dung chương", name: "body", widget: "markdown" }
+
+ - name: "upcoming"
+    label: "Cá trên trời (Đang đặt gạch)"
+    folder: "src/pages/ca-tren-troi"
+    create: true
+    slug: "{{truyen_id}}-{{chuong}}"
+    fields:
+      - { label: "Mã truyện", name: "truyen_id", widget: "string" }
+      - { label: "Số chương", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Tên hiển thị", name: "title", widget: "string" }
+      - { label: "Ngày đăng", name: "date", widget: "datetime" }
+      - { label: "Thể loại (Tags)", name: "tags", widget: "list" }
+      - { label: "Nội dung chương", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Cài đặt Giao diện"
+    files:
+      - file: "src/data/settings.json"
+        label: "Logo & Banner"
+        name: "general"
+        fields:
+          - { label: "Tên Website", name: "site_name", widget: "string", default: "Dynamic Duo" }
+          - { label: "Logo Website", name: "logo", widget: "image", required: false }
+          - { label: "Banner Trang chủ", name: "banner", widget: "image", required: false }

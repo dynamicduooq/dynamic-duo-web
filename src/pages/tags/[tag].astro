@@ -2,27 +2,46 @@
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const allPosts = await Astro.glob('../../pages/**/*.md');
-  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags || []).flat())];
+  // Dùng lệnh import.meta.glob thay cho Astro.glob
+  const allPosts = Object.values(import.meta.glob('../../pages/**/*.md', { eager: true }));
+  
+  // Quét toàn bộ tag và loại bỏ các tag trùng lặp
+  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter?.tags || []).flat())];
 
+  // Tạo đường dẫn cho từng tag
   return uniqueTags.map((tag) => {
-    const filteredPosts = allPosts.filter((post) => post.frontmatter.tags?.includes(tag));
-    return { params: { tag }, props: { posts: filteredPosts } };
+    const filteredPosts = allPosts.filter((post) => post.frontmatter?.tags?.includes(tag));
+    return { 
+      params: { tag }, 
+      props: { posts: filteredPosts } 
+    };
   });
 }
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
-<Layout>
-  <h1 style="color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Thể loại: {tag}</h1>
-  <ul>
-    {posts.map((post) => (
-      <li style="margin: 15px 0; list-style: none;">
-        <a href={post.url} style="font-size: 20px; font-weight: bold; color: var(--text-main); text-decoration: none;">
-          {post.frontmatter.title}
-        </a>
-      </li>
-    ))}
-  </ul>
+<Layout title={`Thể loại: ${tag}`}>
+  <div class="container">
+      <h1 style="font-family: 'Merriweather', serif; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 30px;">
+          🏷️ Thể loại: {tag}
+      </h1>
+      
+      <ul style="padding: 0;">
+        {posts.map((post) => (
+          <li style="margin: 20px 0; list-style: none; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+            <a href={post.url} style="font-size: 18px; font-weight: bold; color: var(--primary); text-decoration: none; transition: 0.2s;">
+              {post.frontmatter?.title || 'Chương không tên'}
+            </a>
+            
+            {/* Hiển thị ngày đăng nếu có */}
+            {post.frontmatter?.date && (
+                <p style="font-size: 14px; color: #64748b; margin-top: 5px; margin-bottom: 0; font-family: sans-serif;">
+                    📅 {new Date(post.frontmatter.date).toLocaleDateString('vi-VN')}
+                </p>
+            )}
+          </li>
+        ))}
+      </ul>
+  </div>
 </Layout>

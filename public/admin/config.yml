@@ -1,10 +1,10 @@
 backend:
   name: github
-  repo: dynamicduooq/dynamic-duo-web # Đã trỏ chính xác về kho GitHub của cậu
+  repo: dynamicduooq/dynamic-duo-web
   branch: main
 
 media_folder: "public/images/uploads"
-public_folder: "/dynamic-duo-web/images/uploads" # Đã sửa đường dẫn ảnh để tương thích với GitHub Pages
+public_folder: "/dynamic-duo-web/images/uploads"
 
 collections:
   - name: "ongoing"
@@ -14,7 +14,7 @@ collections:
     slug: "{{truyen_id}}-{{chuong}}"
     fields:
       - { label: "Mã truyện (Vd: qhbcp, hcđh)", name: "truyen_id", widget: "string" }
-      - { label: "Số chương (Dùng để sắp xếp)", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Số chương (Dùng để xếp thứ tự)", name: "chuong", widget: "number", value_type: "int" }
       - { label: "Tên hiển thị (Vd: Chương 1 - After that)", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Thể loại (Tags)", name: "tags", widget: "list", default: ["đam mỹ", "hiện đại"] }
@@ -27,7 +27,7 @@ collections:
     slug: "{{truyen_id}}-{{chuong}}"
     fields:
       - { label: "Mã truyện (Vd: ndntkm, tnctsct)", name: "truyen_id", widget: "string" }
-      - { label: "Số chương (Dùng để sắp xếp)", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Số chương (Dùng để xếp thứ tự)", name: "chuong", widget: "number", value_type: "int" }
       - { label: "Tên hiển thị", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Thể loại (Tags)", name: "tags", widget: "list" }

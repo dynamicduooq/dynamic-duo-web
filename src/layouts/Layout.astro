@@ -3,7 +3,7 @@ const { frontmatter } = Astro.props;
 import settings from '../data/settings.json';
 
 // --- BẮT ĐẦU MA THUẬT NHẬN DIỆN TRUYỆN CŨ & MỚI ---
-const currentPath = Astro.url.pathname; 
+const currentPath = Astro.url?.pathname || ''; 
 let currentTruyenId = frontmatter?.truyen_id;
 
 // Nếu là truyện cũ (không có truyen_id), tự động quét tên file (vd: tnctsct-chuong-74 -> lấy chữ tnctsct)
@@ -17,22 +17,24 @@ if (!currentTruyenId) {
 
 let chapters = [];
 if (currentTruyenId) {
-    const allPosts = await Astro.glob('../pages/**/*.md');
+    // [ĐÃ SỬA LỖI]: Dùng import.meta.glob thay cho Astro.glob
+    const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true }));
+    
     chapters = allPosts
         .filter(post => {
             const postPath = post.url || '';
             const postFileName = postPath.split('/').pop() || '';
             // Tìm cả truyện mới (có truyen_id) và truyện cũ (cùng tiền tố tên file)
-            const postTruyenId = post.frontmatter.truyen_id || (postFileName.includes('-') ? postFileName.split('-')[0] : null);
+            const postTruyenId = post.frontmatter?.truyen_id || (postFileName.includes('-') ? postFileName.split('-')[0] : null);
             return postTruyenId === currentTruyenId;
         })
         .sort((a, b) => {
             // Tự đoán số chương để sắp xếp cho chuẩn
             const parseChapter = (post) => {
-                if (post.frontmatter.chuong !== undefined) return post.frontmatter.chuong;
+                if (post.frontmatter?.chuong !== undefined) return post.frontmatter.chuong;
                 const match = (post.url || '').match(/chuong-(\d+)/i);
                 // Nếu là file index (văn án) thì luôn xếp số 0 để lên đầu tiên
-                return match ? parseInt(match[1]) : (post.url.includes('index') ? 0 : 999);
+                return match ? parseInt(match[1]) : (post.url?.includes('index') ? 0 : 999);
             };
             return parseChapter(a) - parseChapter(b);
         });

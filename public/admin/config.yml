@@ -1,10 +1,10 @@
 backend:
   name: github
-  repo: TEN_GITHUB_CUA_BAN/dynamic-duo-web # Sửa lại tên repo sau khi tạo trên GitHub
+  repo: dynamicduooq/dynamic-duo-web # Đã trỏ chính xác về kho GitHub của cậu
   branch: main
 
 media_folder: "public/images/uploads"
-public_folder: "/images/uploads"
+public_folder: "/dynamic-duo-web/images/uploads" # Đã sửa đường dẫn ảnh để tương thích với GitHub Pages
 
 collections:
   - name: "ongoing"
@@ -13,11 +13,11 @@ collections:
     create: true
     slug: "{{truyen_id}}-{{chuong}}"
     fields:
-      - { label: "Mã truyện (Vd: tnctsct)", name: "truyen_id", widget: "string" }
-      - { label: "Số chương (Vd: 73)", name: "chuong", widget: "number", value_type: "int" }
-      - { label: "Tên hiển thị (Vd: Chương 73)", name: "title", widget: "string" }
+      - { label: "Mã truyện (Vd: qhbcp, hcđh)", name: "truyen_id", widget: "string" }
+      - { label: "Số chương (Dùng để sắp xếp)", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Tên hiển thị (Vd: Chương 1 - After that)", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
-      - { label: "Thể loại (Tags)", name: "tags", widget: "list", default: ["đam mỹ"] }
+      - { label: "Thể loại (Tags)", name: "tags", widget: "list", default: ["đam mỹ", "hiện đại"] }
       - { label: "Nội dung chương", name: "body", widget: "markdown" }
 
   - name: "completed"
@@ -26,14 +26,14 @@ collections:
     create: true
     slug: "{{truyen_id}}-{{chuong}}"
     fields:
-      - { label: "Mã truyện", name: "truyen_id", widget: "string" }
-      - { label: "Số chương", name: "chuong", widget: "number", value_type: "int" }
+      - { label: "Mã truyện (Vd: ndntkm, tnctsct)", name: "truyen_id", widget: "string" }
+      - { label: "Số chương (Dùng để sắp xếp)", name: "chuong", widget: "number", value_type: "int" }
       - { label: "Tên hiển thị", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Thể loại (Tags)", name: "tags", widget: "list" }
       - { label: "Nội dung chương", name: "body", widget: "markdown" }
 
- - name: "upcoming"
+  - name: "upcoming"
     label: "Cá trên trời (Đang đặt gạch)"
     folder: "src/pages/ca-tren-troi"
     create: true

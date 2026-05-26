@@ -2,15 +2,22 @@
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  // Dùng lệnh import.meta.glob thay cho Astro.glob
-  const allPosts = Object.values(import.meta.glob('../../pages/**/*.md', { eager: true }));
+  // Quét toàn bộ file markdown nằm trong thư mục src/pages
+  const allPosts = Object.values(import.meta.glob('../**/*.md', { eager: true }));
   
-  // Quét toàn bộ tag và loại bỏ các tag trùng lặp
-  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter?.tags || []).flat())];
+  // Quét và lọc ra danh sách các tag độc nhất
+  const uniqueTags = [...new Set(allPosts.map((post: any) => post.frontmatter?.tags || []).flat())];
 
-  // Tạo đường dẫn cho từng tag
+  // Sinh đường dẫn tĩnh cho từng tag
   return uniqueTags.map((tag) => {
-    const filteredPosts = allPosts.filter((post) => post.frontmatter?.tags?.includes(tag));
+    // Lọc các bài viết chứa tag này và chỉ lấy những chương truyện thực tế (loại trừ file danh mục index)
+    const filteredPosts = allPosts.filter((post: any) => 
+        post.frontmatter?.tags?.includes(tag) && 
+        post.url && 
+        !post.url.endsWith('/ca-duoi-nuoc') && 
+        !post.url.endsWith('/ca-tren-ban')
+    );
+    
     return { 
       params: { tag }, 
       props: { posts: filteredPosts } 
@@ -22,26 +29,29 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 <Layout title={`Thể loại: ${tag}`}>
-  <div class="container">
-      <h1 style="font-family: 'Merriweather', serif; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 30px;">
-          🏷️ Thể loại: {tag}
+  <div style="margin-bottom: 30px;">
+      <h1 style="font-family: 'Merriweather', serif; color: var(--sky-dark); border-bottom: 2px dashed var(--sky-light); padding-bottom: 15px; margin-bottom: 30px; text-align: left;">
+          🏷️ Thể loại: #{tag}
       </h1>
       
-      <ul style="padding: 0;">
-        {posts.map((post) => (
-          <li style="margin: 20px 0; list-style: none; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
-            <a href={post.url} style="font-size: 18px; font-weight: bold; color: var(--primary); text-decoration: none; transition: 0.2s;">
-              {post.frontmatter?.title || 'Chương không tên'}
+      <ul style="padding: 0; margin: 0;">
+        {posts.map((post: any) => (
+          <li style="margin: 20px 0; list-style: none; border-bottom: 1px dashed var(--sky-pale); padding-bottom: 15px; display: flex; flex-direction: column; align-items: flex-start;">
+            <a href={post.url} style="font-size: 1.15rem; font-weight: bold; color: var(--sky2); text-decoration: none; transition: var(--t); font-family: 'Merriweather', serif;">
+              {post.frontmatter?.title || 'Chương truyện'}
             </a>
             
-            {/* Hiển thị ngày đăng nếu có */}
             {post.frontmatter?.date && (
-                <p style="font-size: 14px; color: #64748b; margin-top: 5px; margin-bottom: 0; font-family: sans-serif;">
+                <p style="font-size: 13px; color: var(--text-dim); margin-top: 6px; margin-bottom: 0; font-family: sans-serif;">
                     📅 {new Date(post.frontmatter.date).toLocaleDateString('vi-VN')}
                 </p>
             )}
           </li>
         ))}
       </ul>
+      
+      {posts.length === 0 && (
+          <p style="font-style: italic; color: var(--text-dim); text-align: center; margin-top: 40px;">𓆝 Chưa có chương truyện nào thuộc thể loại này.</p>
+      )}
   </div>
 </Layout>

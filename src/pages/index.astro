@@ -4,69 +4,149 @@ import settings from '../data/settings.json';
 ---
 <Layout title="Trang chủ">
     <style>
-        /* CSS cho các hiệu ứng trên trang chủ */
+        /* === HIỆU ỨNG & BỐ CỤC TRANG CHỦ === */
+        
+        /* 1. Phần Banner & Logo (Hero Section) */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+        }
+        .hero-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+        .hero-logo {
+            position: absolute;
+            width: 70%; /* Kích cỡ chữ namexoanen, có thể chỉnh to/nhỏ tùy ý */
+            max-width: 500px;
+            z-index: 2;
+            filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+        .hero-logo:hover {
+            transform: scale(1.02);
+        }
+
+        /* 2. Bảng tin chạy */
         .marquee-wrapper {
             background: #f0f9ff; border-radius: 20px; padding: 10px 15px; display: flex; align-items: center; 
             border: 1px solid #bae6fd; margin: 20px auto 40px auto; max-width: 800px; box-shadow: inset 0 2px 4px rgba(2,132,199,0.05);
         }
-        .rule-box {
-            background: var(--bg-content, #ffffff); border: 1.5px dashed var(--primary, #0369a1); border-radius: 15px; 
-            padding: 30px; margin: 40px auto; max-width: 800px; box-shadow: 6px 6px 0px #e0f2fe;
+
+        /* 3. Khung Lưu ý / Giới thiệu (Mô phỏng WordPress cũ) */
+        .intro-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .rule-box li { margin-bottom: 12px; color: var(--text-main); }
-        
+        .rule-item {
+            background: #ffffff;
+            border: 2px solid #bae6fd;
+            border-radius: 40px; /* Bo góc tròn trịa giống ảnh frontpage */
+            padding: 25px 35px;
+            margin: 30px auto;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.04);
+            transition: transform 0.3s ease;
+        }
+        .rule-item:hover {
+            transform: translateY(-3px);
+            border-color: #7dd3fc;
+        }
+        .rule-title {
+            color: #0369a1;
+            font-family: 'Merriweather', serif;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .rule-text {
+            font-size: 16px;
+            color: #334155;
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        /* 4. Lưới Phân loại truyện */
         .category-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 40px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 40px;
         }
         .category-card {
-            padding: 30px 20px; border-radius: 15px; text-align: center; border: 1px solid var(--border-color);
+            padding: 30px 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease; background: var(--bg-content);
         }
         .category-card:hover {
             transform: translateY(-5px); box-shadow: 0 10px 20px rgba(2, 132, 199, 0.15);
         }
         .btn-link {
-            display: inline-block; padding: 10px 25px; border-radius: 20px; text-decoration: none; 
-            font-size: 14px; font-weight: bold; transition: opacity 0.3s; color: white;
+            display: inline-block; padding: 10px 25px; border-radius: 25px; text-decoration: none; 
+            font-size: 14px; font-weight: bold; transition: opacity 0.3s, transform 0.2s; color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .btn-link:hover { opacity: 0.85; }
+        .btn-link:hover { opacity: 0.9; transform: scale(1.05); }
     </style>
 
-    <div style="text-align: center;">
-        <img src={settings.banner} alt="Banner Trang Chủ" style="width: 100%; max-width: 800px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);" onerror="this.style.display='none'" />
+    <div class="hero-container">
+        <img src="/dynamic-duo-web/images/banner.png" alt="Biển sao" class="hero-bg" onerror="this.src='/images/banner.png'" />
+        <img src="/dynamic-duo-web/images/namexoanen.png" alt="Dynamic Duo" class="hero-logo" onerror="this.src='/images/namexoanen.png'" />
     </div>
 
     <div class="marquee-wrapper">
         <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 15px; font-family: sans-serif; font-size: 0.85rem; font-weight: bold; white-space: nowrap; margin-right: 15px;">BẢNG TIN 📢</span>
-        <marquee scrollamount="5" direction="right" style="font-family: 'Newsreader', serif; font-size: 16px; color: #0369a1;">
-            Nhà mới xây còn đang trong quá trình hoàn thiện, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé! Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡
+        <marquee scrollamount="5" direction="left" style="font-family: 'Newsreader', serif; font-size: 16px; color: #0369a1;">
+            Nhà mới xây còn đang trong quá trình hoàn thiện, xem trên điện thoại sẽ hơi nhỏ một chút, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé! Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡
         </marquee>
     </div>
 
-    <div class="rule-box">
-        <h2 style="color: var(--primary); text-align: center; margin-top: 0; font-family: 'Merriweather', serif; font-size: 22px;">📜 Nội quy nhà cá</h2>
-        <ul style="font-size: 16px; font-family: 'Newsreader', serif;">
-            <li>Toàn bộ truyện edit phi thương mại, chưa có sự đồng ý của tác giả. Vui lòng <strong>không reup</strong> hay chuyển ver dưới mọi hình thức.</li>
-            <li>Không hối chương, không spoil trước nội dung gây ảnh hưởng trải nghiệm người đọc sau. Hãy là những chú cá văn minh!</li>
-            <li>Hố mở tùy hứng, lấp tùy tâm. Xin hãy đọc kỹ "Góc dò mìn" (Văn án) trước khi nhảy hố.</li>
-        </ul>
+    <div class="intro-container">
+        <div class="rule-item">
+            <div class="rule-title">🐟 Về bể cá</div>
+            <p class="rule-text">Nhà có <strong>hai người</strong>, dễ tính và thoải mái về xưng hô. Chúng mình vô cùng hoan nghênh những lời góp ý để hoàn thiện hơn, nhưng trái tim mong manh, mong cậu ghé qua đừng buông lời nặng nề ‧ ₊ ˚ ⋆</p>
+        </div>
+
+        <div class="rule-item">
+            <div class="rule-title">🌊 Về gu truyện trong nhà</div>
+            <p class="rule-text">Truyện được chọn hoàn toàn theo gu của chúng mình. Đa số sẽ có <strong>thủy tinh</strong> và các tình tiết <strong>drama cũ rích</strong>, không phù hợp với <strong>tất cả mọi người</strong>. Chúng mình sẽ cố gắng <strong>cảnh báo</strong> trước, tuy nhiên sẽ có một số trường hợp đặc biệt. Các cậu nhớ đọc kỹ lưu ý trước khi quyết định nhảy hố nha.</p>
+        </div>
+
+        <div class="rule-item">
+            <div class="rule-title">💻 Về bản edit</div>
+            <p class="rule-text">Chúng mình đang chập chững học tiếng Trung, các bản edit có dùng các <strong>công cụ hỗ trợ</strong>. Do đó, độ chính xác không thể cam đoan 100% so với bản gốc. Nhưng chúng mình sẽ luôn cố gắng trau chuốt câu chữ mượt mà nhất có thể, đừng quên góp ý về lỗi chính tả nữa nhé!</p>
+        </div>
+
+        <div class="rule-item">
+            <div class="rule-title">🗓️ Về lịch đăng</div>
+            <p class="rule-text">Hiện nhà <strong>chưa có lịch up truyện</strong> cố định, nhưng chúng mình sẽ cố gắng duy trì tiến độ đều đặn nhất. Tuy nhiên, <strong>tần suất đăng truyện</strong> có thể thay đổi <strong>linh hoạt</strong> tùy vào thời điểm chúng mình tìm được bộ truyện ưng ý ˆ ᵕ ˆ<br/>Chúng mình sẽ cố gắng hoàn thành hết các <strong>truyện đã đặt gạch</strong>, nếu có gì thay đổi sẽ báo lại ngay nhé.</p>
+        </div>
+
+        <div style="text-align: center; color: #0284c7; font-weight: bold; font-size: 18px; margin-top: 20px;">
+            Chào mừng các cậu ghé chơi.<br/>Mong rằng cậu sẽ để lại góc nhỏ này thật nhiều bông hoa rực rỡ... ✿ ﾟ. ✿
+        </div>
     </div>
 
-    <div style="text-align: center; margin: 40px 0;">
-        <div style="color: #7dd3fc; font-size: 24px; letter-spacing: 5px;">𓆝 𓆟 𓆞 𓆝 𓆟</div>
+    <div style="text-align: center; margin: 50px 0;">
+        <div style="color: #7dd3fc; font-size: 26px; letter-spacing: 8px;">𓆝 𓆟 𓆞 𓆝 𓆟</div>
     </div>
 
     <div class="category-grid">
         <div class="category-card" style="background-color: #e0f2fe; border-color: #bae6fd;">
-            <h3 style="color: #0369a1; font-family: 'Merriweather', serif; margin-bottom: 5px;">🐟 CÁ DƯỚI NƯỚC</h3>
-            <p style="font-size: 14px; color: #334155; margin-bottom: 20px; font-style: italic;">_về tất cả những chú cá đang bơi (On-going)_</p>
-            <a href="/ca-duoi-nuoc" class="btn-link" style="background: #0284c7;">Lặn xuống ➔</a>
+            <h3 style="color: #0284c7; font-family: 'Merriweather', serif; margin-bottom: 5px; font-size: 18px;">🐟 CÁ DƯỚI NƯỚC</h3>
+            <p style="font-size: 13px; color: #334155; margin-bottom: 20px; font-style: italic;">_về tất cả những chú cá đang bơi_</p>
+            <a href="/dynamic-duo-web/ca-duoi-nuoc" class="btn-link" style="background: #0284c7;">Lặn xuống ➔</a>
         </div>
 
         <div class="category-card" style="background-color: #f0f9ff; border-color: #e0f2fe;">
-            <h3 style="color: #0369a1; font-family: 'Merriweather', serif; margin-bottom: 5px;">🍣 CÁ TRÊN BÀN</h3>
-            <p style="font-size: 14px; color: #334155; margin-bottom: 20px; font-style: italic;">_về tất cả những chú cá tẩm gia vị (Completed)_</p>
-            <a href="/ca-tren-ban" class="btn-link" style="background: #0369a1;">Thưởng thức ➔</a>
-        </div>
-    </div>
-</Layout>
+            <h3 style="color: #0369a1; font-family: 'Merriweather', serif; margin-bottom: 5px; font-size: 18px;">🍣 CÁ TRÊN BÀN</h3>
+            <p style="font-size: 13px; color: #334155; margin-bottom: 20px; font-style: italic;">_về tất cả những chú cá tẩm gia vị_</p>
+            <a href="/dynamic-

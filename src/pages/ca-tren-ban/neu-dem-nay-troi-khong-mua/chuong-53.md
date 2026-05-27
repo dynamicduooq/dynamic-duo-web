@@ -1,7 +1,8 @@
 ---
-title: "NĐNTKM - Chương 53"
-date: 2026-05-18
-tags: 
+title: "Chương 53"
+truyen_id: "ndntkm"
+date: "2026-05-18"
+tags:
   - "neu-dem-nay-troi-khong-mua"
 ---
 

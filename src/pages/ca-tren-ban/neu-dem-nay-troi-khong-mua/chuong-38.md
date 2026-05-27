@@ -1,220 +1,178 @@
 ---
-title: "NĐNTKM - Chương 38"
-date: 2026-05-17
-tags: 
-  - "neu-dem-nay-troi-khong-mua"
+layout: ../../../layouts/Layout.astro
+title: "Chương 36"
+truyen_id: "ndntkm"
+chuong: 38
+date: "2026-05-17"
+tags:
+  - "nếu đêm nay trời không mưa"
+  - "đam mỹ"
+  - "hiện đại"
+  - "HE"
 ---
 
-## **Chương** 38
+## **Chương **36
 
-Gần đến Tết, hàng loạt học sinh và người lao động được nghỉ lễ đã đổ xô khắp nơi, đi đến đâu cũng là cảnh người chen chúc, người ép người.
+Trong phòng làm việc chỉ có một ngọn đèn bàn tỏa ánh sáng trong vắt, chụp đèn bằng thủy tinh viền sóng trắng e ấp cúi mặt, hắt xuống một quầng sáng dịu dàng hình thang trên mặt bàn chất đầy sách vở tài liệu.
 
-Hạ Tranh và Lâm Hướng Bắc cũng đi sắm đồ Tết như bao gia đình khác, đang khó khăn đẩy xe mua sắm trong siêu thị, quẹo qua góc là khu vực đồ ăn vặt.
+Khuôn mặt của Hạ Tranh được ánh sáng trắng rọi vào trở nên lạnh lẽo, hàng mi đen gần như không chớp hơi cụp xuống tạo thành một mảng bóng dày dưới mắt, vẻ mặt như bị sương mù bao phủ không thể thấy rõ.
 
-“Có gì muốn ăn thì cứ lấy.” Hạ Tranh chậm bước lại, cầm một hộp hạt lên xem.
+Anh khẽ nhúc nhích, vặn nắp bút trong tay ra rồi xoay lại, lặp đi lặp lại hành động vô nghĩa này vài lần, thấy chán, đặt cây bút máy về vị trí cũ.
 
-Việc cai thuốc đột ngột khiến Lâm Hướng Bắc vô cùng khổ sở, mỗi khi lên cơn thèm cậu lại bồn chồn xoa xoa ngón tay, cắn môi, thậm chí mất ngủ. Mấy lần xuống lầu đổ rác cậu đều muốn lén hút một điếu, nhưng sợ cái mũi thính của Hạ Tranh phát hiện ra rồi lại cãi nhau, nên đành phải cắn răng chịu đựng.
+Việc đưa Lâm Hướng Bắc về nhà hoàn toàn là quyết định bồng bột không suy nghĩ trước, nào ngờ chẳng mấy chốc đã xảy ra mâu thuẫn.
 
-Hạ Tranh không có ý định mua kẹo cho cậu, nhưng ánh mắt cậu cứ vô thức dính vào những bao bì kẹo sặc sỡ màu sắc.
+Tính ngang bướng không chịu khuất phục của Lâm Hướng Bắc dường như đã khắc sâu vào xương tủy, như một miếng đất sét đàn hồi, nếu thái độ của Hạ Tranh không đủ cứng rắn, chỉ cần lơ đễnh một chút là sẽ lại quay về dáng vẻ ban đầu.
 
-Hạ Tranh bỏ hộp hạt đã chọn vào xe, thấy Lâm Hướng Bắc đang ngẩn người, anh nhìn theo hướng ánh mắt cậu, hiểu được ý nghĩ của cậu, thấy cậu không động đậy, chỉ nói: “Không mua thì đi thôi, đến khu thực phẩm tươi trước.”
+Từ mười năm trước Hạ Tranh đã có vết xe đổ, không thể nuông chiều Lâm Hướng Bắc, chiều một lần là sẽ kiêu ngạo ngay.
 
-Lâm Hướng Bắc cũng nghĩ mình không còn 17, 18 tuổi nữa, cai thuốc bằng kẹo rất không đáng tin cậy, gật đầu đồng ý.
+Anh gần như mang tâm lý vặn vẹo mong Lâm Hướng Bắc thoái hóa thành một đứa trẻ sơ sinh với bộ não chưa phát triển hoàn chỉnh, để rồi tự tay anh sẽ nặn ra một nhân cách mới, chẳng qua, những suy nghĩ phi lý như vậy chỉ có thể là tưởng tượng đơn phương của Hạ Tranh.
 
-Vì dùng thẻ của Hạ Tranh để thanh toán, Lâm Hướng Bắc không đề nghị mua thêm thứ gì, cùng lắm coi là người đi cùng, nhưng chỉ được đi ra ngoài mua sắm bình thường với Hạ Tranh vậy thôi đã khiến cậu cảm thấy hoàn toàn thỏa mãn.
+Đột nhiên, Hạ Tranh đang nghĩ ngợi viển vông lại bắt được một mùi hương mơ hồ thoảng qua trong bầu không khí trong lành, anh ngước mắt nhìn về phía nhà vệ sinh đóng kín đối diện với phòng làm việc, đột ngột kéo ghế bước nhanh về phía trước, không gõ cửa mà vặn ngay tay nắm.
 
-Khi thanh toán, đồ đạc chất đống trên quầy, Lâm Hướng Bắc ra trước lấy đồ, hai người xách túi lớn túi nhỏ đầy tay, đi thẳng đến hầm để xe, nhét đồ kín cả cốp sau.
+Mùi thuốc lá nồng nặc lập tức xộc vào mặt anh.
 
-Chiều tối trở về, chỗ nồi niêu xoong chảo Hạ Tranh mua đã có đất dụng võ, anh rửa tay sạch sẽ, mặc tạp dề màu cà phê nhạt, nói với Lâm Hướng Bắc đang phân loại thực phẩm cho vào tủ lạnh: “Đưa xương bò và củ cải cho tôi.”
+Lâm Hướng Bắc ngồi trên nắp bồn cầu hút thuốc nhả khói, kẹp nửa điếu thuốc đang cháy trong kẽ tay, chưa đầy mười phút, dưới chân đã rải đầy hai, ba đầu lọc thuốc lá.
 
-Lâm Hướng Bắc quay người lại, thấy bóng lưng đang hơi cúi xuống rửa nồi, ngạc nhiên hỏi: “Anh định nấu bữa tối à?”
+Cậu giật mình vì Hạ Tranh bất ngờ xuất hiện, quay mặt đi ho khù khụ, miệng hé mở phả ra từng đợt khói trắng.
 
-Hạ Tranh quay nửa mặt về phía cậu, nhẹ nhàng “ừm” một tiếng: “Ngày mai nghỉ rồi, cũng rảnh rỗi.”
+Sắc mặt Hạ Tranh âm u, hoàn toàn không thể kiểm soát được giọng nói: “Ai cho phép cậu hút thuốc ở đây?”
 
-Nồi rửa sạch được để ráo nước rồi lau khô bằng giấy bếp, anh giơ tay lên: “Đừng đứng ngây ra đó, đồ đâu?”
+Lâm Hướng Bắc ho vài tiếng mới dừng lại được, lúng túng cầm điếu thuốc, giọng cậu khàn đi vì khói: “Xin lỗi, tôi tưởng bật quạt thông gió là được, có ám mùi đến chỗ anh không?”
 
-Lâm Hướng Bắc vội vàng mở túi tìm những nguyên liệu cần thiết, chuyển cho Hạ Tranh, trong lòng ấm áp, như một vũng nước ấm: “Để tôi gọt vỏ nhé.”
+Cậu vung tay trong không khí vài cái cố gắng xua mùi thuốc đi, rồi vội vàng nói: “Tôi ra hành lang hút.”
 
-Hạ Tranh nói: “Không cần, tôi không quen có người bên cạnh khi làm việc.”
+Lâm Hướng Bắc đứng dậy định đi ra ngoài, vừa sượt vào vai Hạ Tranh đã bị anh nắm tay kéo lại, xoay một vòng, lưng tựa vào cánh cửa khép hờ, loạng choạng lùi về sau hai bước, cửa đóng sầm lại.
 
-Bị từ chối, Lâm Hướng Bắc ngượng ngùng rút tay về, lặng lẽ lui ra ngoài xếp gọn gàng tất cả đồ đạc đã mua, nghĩ đi nghĩ lại vẫn không đành lòng để Hạ Tranh làm một mình, lại chạy ra ban công thu quần áo hôm qua vào phòng ngủ, kéo thẳng từng món một ra gấp gọn gàng để vào tủ quần áo.
+Hạ Tranh vô cùng căm ghét thuốc lá, giống như những người ăn chay cực đoan chưa ngửi thấy mùi tanh của thịt, chỉ cần nghe hai chữ “ăn thịt” đã nhíu mày.
 
-Quần áo của cậu chỉ có hai ba bộ, ít đến đáng thương, vì không được bảo quản đúng cách, khi mới đến đây chúng nhăn nheo như khuôn mặt đầy nếp nhăn của một bà lão, chính Hạ Tranh không chịu nổi đã ủi qua nhiều lần mới giúp chúng trẻ trung trở lại.
+Nhà vệ sinh kín bưng tràn ngập mùi nicotine rẻ tiền, luồn vào mũi Hạ Tranh, làm phổi anh khó chịu không kìm nổi, anh tối mặt nhìn chằm chằm vào điếu thuốc không rời tay Lâm Hướng Bắc, đập mạnh lên mu bàn tay cậu.
 
-Quần áo của cậu không để chung với Hạ Tranh, nhưng cậu tìm mãi vẫn không thấy chiếc túi hành lý của mình đặt ở góc phòng đâu.
+Lâm Hướng Bắc run tay, tàn thuốc lả tả rơi xuống đất, nhưng cậu không kịp để ý đến cơn đau, phản ứng đầu tiên là lo xem Hạ Tranh có bị đầu thuốc làm bỏng không, lại không muốn Hạ Tranh hít phải khói thuốc trên người cậu, vội vàng giơ tay ra xa, giãy giụa nói: “Mở cửa ra đi.”
 
-Lâm Hướng Bắc đi ra hỏi Hạ Tranh đang rửa củ cải: “Anh để túi của tôi đâu rồi?”
+Hạ Tranh khóa chặt tay phải cậu, nhanh chóng giật lấy điếu thuốc đã gần tàn, quay người dụi tắt trong bồn rửa vuông, sau đó mở vòi nước lớn nhất để xả trôi tàn thuốc, rồi đầy căm tức ném mẩu thuốc vào thùng rác.
 
-Hạ Tranh rất không thích nghe những từ phân biệt hai người như “của anh”, “của tôi” từ miệng Lâm Hướng Bắc, không ngẩng đầu lên mà nói: “Tôi vứt rồi.”
+Lâm Hướng Bắc nhìn loạt động tác trôi chảy của anh, ngượng ngùng cúi xuống nhặt mấy đầu lọc thuốc dưới sàn, vừa đứng dậy đã bị đẩy vào phòng tắm kính dạng vách ngăn.Hạ Tranh chụp lấy vòi sen, không báo trước mà nhắm thẳng vào Lâm Hướng Bắc.
 
-“Vứt rồi?” Lâm Hướng Bắc lo lắng tiến lên vài bước, bám vào cửa kính bếp: “Tôi cần để quần áo mà.”
+Nước lạnh dội ướt sũng người Lâm Hướng Bắc.
 
-Hạ Tranh quay đầu lại lạnh lùng liếc cậu: “Nhà tôi không có chỗ cho cậu để đồ sao?”
+Tóc Lâm Hướng Bắc ướt, quần áo cũng ướt, theo phản xạ giơ tay lên che, vì lạnh, giọng nói biến dạng: “Anh làm gì vậy?”
 
-Tim Lâm Hướng Bắc đập thình thịch, mím môi: “Vậy tôi để trong tủ quần áo nhé?”
+Hạ Tranh lặng thinh, đứng trước cửa kính trượt như một ngọn núi không thể lay chuyển, chặn con đường thoát duy nhất của Lâm Hướng Bắc.
 
-Lúc này Hạ Tranh mới quay đầu lại tiếp tục chiến đấu với củ cải trắng mập: “Ừm.”
+Lâm Hướng Bắc trốn đến đâu, dòng nước sẽ dội đến đó, như một chú chó ướt đẫm tội nghiệp không có chỗ nào để trốn.
 
-Anh làm theo hướng dẫn trong ứng dụng, đổ nầm bò đã khử mùi tanh bằng gừng và rượu nấu ăn vào nồi hầm, thêm nước nóng ngập mặt ninh trong một tiếng rưỡi -- canh xương bò củ cải, tốt cho xương.
+Nhiệt độ nước dần dần ấm lên sau hơi lạnh ban đầu, Lâm Hướng Bắc run rẩy vì lạnh không tránh né nữa, cậu đã ướt sũng từ đầu đến chân, lưng dán vào gạch men lạnh lẽo, vai hơi thõng xuống, mở đôi mắt bị dội nước đến đỏ hoe nhìn Hạ Tranh với vẻ vừa tức giận vừa ấm ức, thăm dò ý định của anh.
 
-Cắt mực thành hình bông hoa, kết hợp với đậu Hà Lan giòn ngọt xào nhanh, lần đầu làm không kiểm soát được gia vị, hơi mặn.
+Hai người đàn ông cao lớn chen chúc trong nhà vệ sinh, không gian vốn đã có hạn lại càng chật chội hơn, dù có cử động hay không, khắp nơi đều là bóng dáng của đối phương.
 
-Trong chảo chống dính là những con tôm sú dài bằng bàn tay được rang muối, từng con đỏ au bóc vỏ, lộ ra phần thịt chắc màu cam xen trắng, bày ra đĩa trên bàn.
+Môi Lâm Hướng Bắc mím chặt, giơ tay lau những giọt nước trên mặt, năm ngón tay vuốt mái tóc ướt không ngừng nhỏ giọt ra sau, để lộ hết những đường nét trên khuôn mặt, cậu quay mặt đi, nét mặt thoáng chút ương bướng.
 
-Còn có thêm một một đĩa rau cải xào đơn giản, đủ món mặn chay, tiêu chuẩn ba món một canh.
+Hạ Tranh tắt vòi sen đặt trở lại vị trí cũ, tiến đến gần Lâm Hướng Bắc, hơi ẩm bám trên người Lâm Hướng Bắc cũng lây sang anh.
 
-Lâm Hướng Bắc ngồi trên ghế sofa, nhìn bóng dáng bận rộn trong bếp, có một cảm giác vừa khó xử vừa thoải mái của một kẻ ham ăn lười làm.
+Lâm Hướng Bắc không chịu nhìn anh, anh bèn nắm lấy cằm Lâm Hướng Bắc, buộc cậu phải đối diện với anh, bắt buộc phải nhìn thẳng vào mắt anh.
 
-Hạ Tranh cởi tạp dề, rửa sạch mùi của các loại thực phẩm trên tay, cất tiếng: “Chuẩn bị ăn cơm thôi.”
+Ở khoảng cách rất gần, anh thoáng ngửi thấy một mùi thuốc lá nhàn nhạt khiến người ta khó chịu, đôi lông mày lạnh lùng nhíu chặt, mở miệng nói: “Thuốc lá ngon đến vậy sao?”
 
-Chỉ đợi khoảnh khắc này, Lâm Hướng Bắc lấy bát đũa ra từ tủ khử trùng, vừa mở nắp nồi cơm điện, lập tức ngẩn người.
+Suýt nữa thì bị thứ này hại cả đời, vậy mà còn dám nghiện.
 
-Hạ Tranh dùng khăn cách nhiệt bưng canh ra bàn, thấy Lâm Hướng Bắc cầm muôi cơm đứng bất động, đi đến cầm lấy và nói: “Để tôi làm.”
+Mấy lần gặp trước anh không can thiệp được, nhưng bây giờ Hạ Tranh đã có đủ tư cách để ngăn cấm.
 
-Lâm Hướng Bắc đảo mắt, lẩm bẩm: “Anh không nấu cơm.”
+Lâm Hướng Bắc nhận ra vấn đề tức giận nói: “Anh không muốn tôi hút thuốc thì nói thẳng, xịt nước vào tôi là sao hả?”
 
-Hạ Tranh chỉ lo khoe tài với Lâm Hướng Bắc, nhìn nồi cơm điện trống rỗng, lặng lẽ nghiến răng, đậy nắp lại nói: “Nhiều món, ăn canh đi.”
+“Người ta là ngã một lần khôn một lần, cậu là ngã một lần rồi lại ngã tiếp, tôi nói với cậu cậu có nhớ nổi không?” Hạ Tranh không tin tưởng cậu: “Phải phạt cho đàng hoàng cậu mới nhớ lâu được.”
 
-Lâm Hướng Bắc mỉm cười với anh.
+Mi mắt Lâm Hướng Bắc kết thành từng cụm nhỏ, cánh mũi hít nhẹ, nghe Hạ Tranh nói tiếp: “Sau này không được hút thuốc nữa, tôi không muốn ôm một cái tẩu thuốc hôi hám đi ngủ.”
 
-Canh xương bò củ cải có màu nhạt, nước canh thơm ngon mọng nước, thịt bò ninh mềm rục rời xương, củ cải tan ngay khi vào miệng, Lâm Hướng Bắc uống hai bát, vì cả dạ dày lẫn trái tim đều quá ấm áp, cả người được bao bọc trong hơi ấm chuếnh choáng, đến mắt cũng nóng lên.
+Lâm Hướng Bắc cảm thấy yêu cầu của Hạ Tranh với cậu đã trở nên quá cao, cấm đoán đủ thứ, nhưng dù gì cũng là do cậu mắc lỗi trước, đành ậm ừ đáp một tiếng: “Tôi sẽ cố gắng.”
 
-Cậu chớp chớp mắt, liếc nhìn Hạ Tranh cũng đang ngồi đối diện ăn canh, cảm thấy mình như một con gấu rơi vào hũ mật, hạnh phúc đến mức không nhịn được muốn lăn lộn trong đó.
+“Đừng cố gắng, cậu phải làm được.” Hạ Tranh thoáng hoài niệm: “Đã cai được một lần, thì sẽ cai được lần thứ hai.”
 
-Cậu kiềm chế lại, ngửa mặt uống sạch đến giọt cuối cùng trong bát, để đáp đền công sức của Hạ Tranh.
+Tim Lâm Hướng Bắc khẽ đập mạnh, cổ họng cảm thấy ngứa ngáy, muốn nhai gì đó.
 
-Cậu chưa bao giờ nghi ngờ lòng tốt của Hạ Tranh, nhưng Hạ Tranh càng tốt với cậu, cậu càng cảm thấy rõ nỗi ăn năn đang cuộn trào trong lòng.
+Hạ Tranh có còn mua cho cậu thật nhiều kẹo nữa không? Vừa chua vừa ngọt.
 
-Hạ Tranh thấy Lâm Hướng Bắc định múc bát thứ ba, ngăn lại: “Ngon đến thế sao?”
+Lâm Hướng Bắc không nhận ra ánh mắt mình toát lên vẻ mong đợi, rơi vào mắt Hạ Tranh lại giống như lời mời gọi.
 
-Lâm Hướng Bắc không chút do dự trả lời: “Anh nấu gì cũng ngon.”
+Quần áo cậu thấm đẫm nước, dính trên người vừa lạnh vừa nặng, tay chân run rẩy, rất khó chịu.
 
-Mắt Hạ Tranh hơi nheo lại: “Bớt nói quá đi.” Nhưng rõ ràng nghe câu khen này thì rất vui, nhấp một ngụm canh nói: “Dù ngon cũng không thể uống nhiều vậy, ăn ít thức ăn đi.”
+Đã xử lý xong lỗi lầm của cậu thì hình phạt này cũng nên kết thúc rồi chứ, Lâm Hướng Bắc nói: “Lạnh quá, tôi muốn tắm.”
 
-Lâm Hướng Bắc ngoan ngoãn gắp một miếng rau cải nhai nhai.
+Hạ Tranh đứng yên bất động, đôi mắt sâu thẳm nhìn cậu.
 
-Hạ Tranh chưa bao giờ biết mình có sở thích thích nhìn người khác ăn, thấy cậu nhai phồng cả má, lại gắp cho cậu một cọng nữa, cậu bèn cho vào miệng nhai nhai.
+Ngón tay Lâm Hướng Bắc lạnh cóng, cảm nhận được nhiệt độ cơ thể của Hạ Tranh hoàn toàn trái ngược với cậu, lồng ngực khẽ phập phồng, giọng nói khàn khàn lặp lại một lần nữa: “Lạnh quá...”
 
-Như một loài động vật gặm nhấm ngờ nghệch nào đó, chắc chắn không phải chuột, có lẽ là con sóc tuyết đáng yêu nhất trong họ nhà sóc lông xù.
+Như bị ma xui quỷ khiến, cậu áp lại gần, hôn lên đôi môi mềm mại ấm áp của Hạ Tranh để hút lấy hơi ấm, vừa tách ra một chút, Hạ Tranh đã đuổi theo hôn lại cậu.
 
-Thông thường, việc nhà phải chia nhau làm, nhưng Hạ Tranh lại đảm nhận tất cả, anh lấy lý do là tay trái của Lâm Hướng Bắc đang dán thuốc để không cho cậu rửa bát, đuổi cậu đi tắm.
+Cậu gần như nôn nóng ôm lấy eo Hạ Tranh, so với nụ hôn, cái ôm truyền hơi ấm tốt hơn.
 
-Khi cả hai đều tắm rửa xong đã gần 10 giờ, họ cuộn mình trên ghế sofa, ai làm việc người nấy.
+Hai tay nắm lấy gấu áo hoodie của cậu, đẩy lên, để cơ thể rắn rỏi mà mềm dẻo thoát khỏi cái lạnh.
 
-Lâm Hướng Bắc không có tâm trạng xem nội dung phim trên màn hình, vừa rảnh rỗi lại hơi thèm thuốc, trong miệng và đầu óc đều ngứa ngáy, như có một đàn kiến đang bò qua bò lại, lưỡi cứ liên tục liếm môi, ở chỗ Hạ Tranh không thấy được, mấy ngón tay đã xoắn vào như đan dây.
+Vòi sen lại được bật lên, trong làn sương mù, vẻ mặt của cả hai trở nên mơ màng, trong chuyện này, khát khao và phản ứng cơ thể không biết nói dối.
 
-Lâm Hướng Bắc tự động viên trong lòng, người trưởng thành mà không kiềm chế được chút ham muốn này thì làm gì cũng sẽ thất bại!
+Giống như đã chờ đợi giây phút này từ lâu, hành động cũng trở nên mãnh liệt không thể tự kiểm soát, thậm chí là thô bạo.
 
-Cậu tự cho rằng mình đã giấu sự bồn chồn rất tốt, nhưng trong mắt Hạ Tranh, Lâm Hướng Bắc đúng là đang đứng ngồi không yên.
+Gây đau đớn, nhưng chính cơn đau làm sự hiện diện của người kia thêm rõ ràng, không còn chỉ là ảo ảnh trong ký ức.
 
-Tất nhiên Hạ Tranh biết nguyên nhân, từ ngày đầu tiên bắt Lâm Hướng Bắc cai thuốc, thỉnh thoảng cậu lại biểu hiện ra những triệu chứng này, anh thấy rõ nhưng không vạch trần, rất không hài lòng với việc Lâm Hướng Bắc cứ chạm vào thứ hại người này.
+Lâm Hướng Bắc chống tay lên bồn rửa, nhìn thấy một bóng hình phủ lên một bóng hình khác trong tấm gương mờ sương.
 
-Thích hút thuốc phải không, vậy thì cứ khó chịu đi.
+Mười ngón tay siết chặt đến trắng bệch.
 
-Anh đổi tư thế đọc sách.
+Hạ Tranh tìm cách làm cho cơ thể co rúm của Lâm Hướng Bắc duỗi ra, vì không có đường lui, Lâm Hướng Bắc chỉ có thể phục tùng, như một con mèo hoang được thuần hóa, ngoan ngoãn lạ thường, không dám hoang dại nữa.
 
-Lâm Hướng Bắc chột dạ, giật mình như chim sợ cành cong, làm Hạ Tranh liếc qua, cậu vội ngồi thẳng lưng nghiêm chỉnh.
+Tim cậu đập dữ dội, át đi mọi âm thanh, một cảm giác hoảng loạn như thức đêm quá độ sắp đột tử, nhưng cậu biết đó là do quá phấn khích, khiến cậu không thể kiểm soát nhịp tim của mình.
 
-Tiếng giở sách thỉnh thoảng lại vang lên sột soạt.
+Hạ Tranh nhẹ nhàng nắm lấy tóc cậu, buộc đầu cậu phải ngả ra sau, tựa vào vai Hạ Tranh, trong khoảng nghỉ giữa những nụ hôn, cậu nghe thấy giọng nói khàn khàn vang bên tai: “Cậu đã từng làm với cậu ta chưa?”
 
-Lâm Hướng Bắc đứng dậy đi vào nhà vệ sinh, Hạ Tranh nghĩ ngợi một chút, chen vào trước khi cậu kịp đóng cửa: “Tôi rửa tay, cậu cứ tự nhiên.”
+Nhắc đến người thứ ba vào lúc này mang một cảm giác vô đạo đức không thể nói rõ, nhưng dòng nước chẳng tài nào dập tắt ngọn lửa ghen tuông ẩn giấu, như đang tự hành hạ mình để nhận lấy một câu trả lời đã định trước.
 
-“Vậy anh rửa trước đi.”
+Suy nghĩ của Lâm Hướng Bắc rối như tơ vò, cậu biết Hạ Tranh đang muốn hỏi gì, mặc dù mối quan hệ với Giang Kiệt là giả, nhưng cậu cũng đã từng hẹn hò, dù cho đó là chuyện rất lâu trước đây và cũng đã thất bại.
 
-Hạ Tranh chặn cậu lại: “Tôi không được xem sao?”
+Cậu nghĩ đến lời tuyên bố mạnh mẽ “mỗi người một nhu cầu” của Hạ Tranh, anh đã qua lại với bao nhiêu người, có bao nhiêu bạn giường, thậm chí có từng đưa ai khác về nhà không -- giống như đã đưa cậu về vậy, trái tim cậu chẳng khác nào bị vò nát đến xót xa, không thể không để tâm.
 
-Việc này có liên quan gì đến được hay không được?
+Lâm Hướng Bắc như đang so găng với anh, nghèn nghẹn đáp: “Rồi.”
 
-Lâm Hướng Bắc cảm thấy khó hiểu, nhưng những mặt xấu hổ nhất cũng lộ ra hết trước mặt Hạ Tranh, nên dù hơi ngượng, cậu vẫn quay nghiêng người giải quyết nhu cầu sinh lý trước mặt Hạ Tranh.
+Hạ Tranh dừng lại một chút, càng trở nên dữ dội hơn: “Là cậu hay là cậu ta?”
 
-Rửa tay xong, Hạ Tranh vào phòng làm việc, Lâm Hướng Bắc thở dài một hơi, ngồi phịch xuống ghế sofa cắn cắn môi.
+“Cả hai...”
 
-Cơn thèm thuốc lá khác nhau tùy người, nhưng vì cậu không có giai đoạn chuyển tiếp, nên khi nó đến thì vô cùng khó chịu.
+Lâm Hướng Bắc khẽ kêu lên một tiếng, ngã xuống bồn rửa, đầu cúi xuống suýt đập vào trong, Hạ Tranh phản ứng nhanh đưa lòng bàn tay đỡ lấy, kéo cậu về, xoay người lại, vuốt ve khóe mắt ướt át ửng đỏ của cậu, nói: “Ngày mốt đến bệnh viện kiểm tra sức khỏe đi.”
 
-Hạ Tranh quay lại, đứng từ trên cao nhìn xuống với ánh mắt hiểu rõ: “Muốn hút thuốc à?”
+Lâm Hướng Bắc ngơ ngác vài giây, nhíu mày: “Anh sợ tôi có bệnh à?”
 
-Lâm Hướng Bắc mím chặt môi, đột nhiên hiểu ra lý do Hạ Tranh nhất quyết phải vào nhà vệ sinh với cậu, cậu đã cố gắng cai thuốc như vậy mà vẫn bị nghi ngờ, giọng xen lẫn chút bực bội nói: “Tôi đã hứa với anh không hút thì chắc chắn sẽ không hút nữa.”
+Hạ Tranh che mắt cậu, đầu ngón tay trượt xuống: “Phòng ngừa khả năng.”
 
-Trước đây Lâm Hướng Bắc từng hứa với Hạ Tranh rất nhiều điều, có điều nào thực sự làm được đâu?
+Nói một cách khó nghe nhưng thực tế hơn là: “Bạn trai cậu lăng nhăng bừa bãi, cậu lại ở những nơi như quán bar, làm sao tôi biết cậu đã tiếp xúc với những người như thế nào.”
 
-Hạ Tranh ngồi xuống, so với sự kích động của Lâm Hướng Bắc, anh rất bình tĩnh nói: “Cậu không cần phản ứng mạnh như vậy.”
+Lâm Hướng Bắc gần như không thở nổi, buộc phải hé môi mới có thể duy trì hô hấp, cậu hôn lên ngón tay bên môi mình, buồn bã cười: “Làm thì cũng làm rồi...”
 
-Lâm Hướng Bắc quay mặt đi, im lặng.
+Cậu phản công: “Vậy anh với bạn giường không sợ sao?”
 
-Một bàn tay vươn ra nắm lấy cằm cậu, buộc cậu quay mặt lại.
+Hạ Tranh không hề bảo thủ cười nhạo cậu: “Cậu không biết có giấy xét nghiệm à?”
 
-Lâm Hướng Bắc hỏi: “Làm gì vậy?”
+Lâm Hướng Bắc bị câu nói này đánh bại, thầm lặng xin tha, vẻ mặt hơi hoảng hốt.
 
-Hạ Tranh dùng lực bóp hai má cậu, bắt cậu mở miệng, giọng lạnh lùng nói: “Xem răng cậu.”
+Hạ Tranh như bị cậu mê hoặc, nửa kéo nửa bế cậu đến phòng ngủ chính, hung hăng đè xuống, bằng sự áp chế đáng sợ không thể chống cự, không cho lăn lộn, không cho trở mình, không cho không chịu nổi.
 
-\-- Cậu bỏ thuốc lá được không? Không tốt cho phổi, nghe nói hút nhiều tay và răng sẽ bị vàng.
+Trong tim Hạ Tranh là một lỗ hổng to lớn -- không thể để Lâm Hướng Bắc phát hiện, lỗ hổng như biển hận trời yêu đang dần được lấp đầy, không chừa một kẽ hở nào.
 
-Lâm Hướng Bắc định khép miệng lại theo phản xạ, Hạ Tranh nhíu mày: “Đừng nhúc nhích.”
+Điên cuồng và gấp gáp thăm dò rồi tấn công, yêu và hận cùng nhau đan xen.
 
-Anh nhìn chăm chú bằng ánh mắt rất tập trung, thậm chí là thiêu đốt.
+Lâm Hướng Bắc nằm ngửa, thở dốc, tròng mắt đảo lộn, trắng nhiều đen ít, rơi vào một cảnh giới kích động đầy sa đọa.
 
-Đè lưỡi xuống, đảm bảo có thể nhìn thấy rõ tình trạng khoang miệng nhất.
+Trong khoái lạc vô biên, cậu đột nhiên có hơi muốn khóc, không chỉ vì sinh lý, mà còn vì những cơn sóng mặn đắng đang dâng lên từng đợt từ lồng ngực, cần phải được Hạ Tranh ôm vào lòng mới có thể xoa dịu đôi chút.
 
-Da đầu Lâm Hướng Bắc hơi tê, vì Hạ Tranh không chỉ quan sát, mà còn dùng ngón tay kiểm tra từng chiếc răng một.
+Tay Hạ Tranh đã từng nắm lấy, từng ôm ấp người khác chưa?
 
-Cậu cảm thấy hơi xấu hổ, giống như lúc nhỏ đi tiêm ở phòng khám, phải kéo quần xuống để lộ mông cho người lạ xem.
+Cũng mạnh mẽ, ấm áp thế này sao?
 
-Sờ qua sờ lại răng, rồi cạo cạo bề mặt lưỡi.
+Anh có rất nhiều lựa chọn, những lựa chọn tốt hơn Lâm Hướng Bắc.
 
-Lâm Hướng Bắc nuốt khan, phát ra âm thanh không rõ: “Đừng...”
+Trong nỗi hoảng hốt bị bỏ rơi, đôi mắt Lâm Hướng Bắc ướt đẫm, cười nói: “Hạ Tranh, ngày mai tôi sẽ ở nhà.”
 
-Hạ Tranh không nghe thấy, vẻ mặt nghiêm túc từ từ tiến gần hỏi cậu: “Ngứa lắm à?”
+Thời gian lén trộm được như đang trôi trên dòng sông ánh vàng, mộng mơ mà ngắn ngủi, người cầm lái Hạ Tranh có quyền đuổi Lâm Hướng Bắc lên bờ bất cứ lúc nào. Ít nhất thì trước khi kết quả có thể dự đoán kia đến, cậu không muốn thấy ánh mắt thất vọng chất chứa Hạ Tranh dành cho mình.
 
-Cằm cậu đã mỏi, không nói được lời nào: “Ưm...”
+--
 
-Xấu hổ đến mức mặt hơi ửng đỏ, Lâm Hướng Bắc đẩy Hạ Tranh một cái, nhưng lại lại bị đè xuống ghế sofa.
+***Lời tác giả:***
 
-Hạ Tranh cúi người hôn cậu, cậu thành thạo đáp lại, cố gắng dùng cách này để xoa dịu cơn nghiện thuốc khó chịu, dùng lực rất mạnh, đột nhiên cảm thấy có thứ gì đó được lùa qua kẽ răng đang mở.
-
-Vị giác phản ứng, vị ngọt lan tỏa khắp miệng -- là một viên kẹo cứng vị táo xanh.
-
-Lâm Hướng Bắc bị hôn đến ngây người, ngạc nhiên mở to mắt, đối diện với Hạ Tranh gần kề, như được yêu mà sợ, gần như lắp bắp “anh” mãi hồi lâu vẫn không thành câu.
-
-Hạ Tranh một tay chống bên đầu cậu, một tay ôm lấy mặt cậu: “Tiện tay mua lúc thanh toán.”
-
-Lâm Hướng Bắc mút kẹo, nước đường chua ngọt trượt xuống theo cổ họng, chảy vào tận tim.
-
-Cậu cũng trở nên chua chua đầy đầy.
-
-“Yên tâm, răng rất tốt, nhưng nếu tiếp tục hút thì khó nói lắm.” Hạ Tranh chia sẻ kết quả kiểm tra với cậu: “Cậu đừng nghĩ nhiều, tôi chỉ muốn cậu cai thuốc càng sớm càng tốt, ban đêm cậu không ngủ được cứ cựa quậy ảnh hưởng đến chất lượng giấc ngủ của tôi, làm ồn khiến ban ngày tôi không làm việc nổi.”
-
-Lâm Hướng Bắc ngậm kẹo trong má, làm cho má hơi phồng lên, vì thế mà bản thân cũng như trở lại vẻ ngây thơ của tuổi 17, lí nhí nói: “Anh biết hết rồi à.”
-
-Hạ Tranh hôn lên cái má phồng của cậu, như chê cách một lớp thịt không nếm được vị ngọt, lại mút thật mạnh một cái.
-
-Dưới quần áo để lại dấu thế nào cũng không sao, nhưng mặt là phải lộ ra ngoài, Lâm Hướng Bắc né tránh, lấy người có uy quyền ra nói: “Bác sĩ nói không được hôn như thế.”
-
-“Bây giờ biết nghe lời bác sĩ rồi à?” Hạ Tranh tức cười: “Bác sĩ bảo cậu uống thuốc sau bữa ăn, sao cậu không nghe, còn phải để tôi giám sát?”
-
-Lâm Hướng Bắc lăn viên kẹo chua ngọt từ bên này sang bên kia, vì đuối lý nên nhìn Hạ Tranh không nói gì.
-
-Yên lặng, hơi thở của hai người quấn quýt, môi lướt qua, mơn trớn chạm mà như không chạm.
-
-Hạ Tranh cảm thấy Lâm Hướng Bắc toát ra một sự ngọt ngào đáng sợ thu hút anh, là mối quan hệ giữa con chim và hạt lúa, cáo và thỏ, báo săn và linh dương, thậm chí còn mãnh liệt hơn cả mối quan hệ giữa ác thú ăn thịt\* với muôn loài, trong lòng anh có một cơn đói như thể dù có nuốt Lâm Hướng Bắc từng miếng từng miếng một cũng không bao giờ lấp đầy được.
-
-_Chú thích_
-
-_(\*) Nguyên văn là Thao Thiết (饕餮): một con thú trong thần thoại Trung Quốc, biểu tượng của sự tham lam vô độ, ăn ngấu nghiến mọi thứ._
-
-Nhưng anh vẫn chưa tha thứ cho Lâm Hướng Bắc, tỏ ra quá tử tế dường như là phản bội bản thân ngày trước.
-
-Ánh mắt anh lạnh đi, né tránh nụ hôn Lâm Hướng Bắc dâng lên, tư thế vội vàng rút lui, nghiêm mặt đứng dậy nói: “Được rồi, tối nay nếu còn làm phiền tôi, cậu sẽ ngủ ở phòng khách.”
-
-Lâm Hướng Bắc đang đắm chìm trong niềm vui vì Hạ Tranh mua kẹo cho mình, chứng kiến người trước mặt thay đổi sắc mặt, biểu cảm hơi ngơ ngác.
-
-Cậu chống tay ngồi dậy, Hạ Tranh đã vào phòng ngủ, “cạch” một tiếng đóng cửa ngăn cậu ở bên ngoài, như thể người vừa ôm hôn thân mật với cậu không phải anh.
-
-Viên kẹo trong miệng đột nhiên đổi vị, chua nhiều, ngọt ít.
-
-Nghỉ ngơi không tốt khiến Hạ Tranh dễ cáu giận hơn, giây trước còn nhẹ nhàng như gió thoảng, giây sau đã lạnh băng đẩy cậu ra, tối nay nhất quyết không được làm phiền Hạ Tranh nữa, Lâm Hướng Bắc ngậm kẹo phồng má nghĩ.
-
-\--
-
-**_Lời tác giả:_**
-
-Hằng ngày tự tẩy não của luật sư Hạ: Tôi không yêu cậu ta, tôi chưa tha thứ cho cậu ta, tôi chẳng quan tâm cậu ta chút nào ^\_^
+Luật sư Hạ của chúng ta thực sự coi Tiểu Bắc như trẻ con, muốn cậu ấy trở nên ngoan ngoãn.

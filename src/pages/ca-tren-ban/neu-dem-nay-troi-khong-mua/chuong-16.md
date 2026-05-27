@@ -1,150 +1,184 @@
 ---
-title: "NĐNTKM - Chương 16"
-date: 2026-05-17
-tags: 
-  - "neu-dem-nay-troi-khong-mua"
+layout: ../../../layouts/Layout.astro
+title: "Chương 14"
+truyen_id: "ndntkm"
+chuong: 16
+date: "2026-05-17"
+tags:
+  - "nếu đêm nay trời không mưa"
+  - "đam mỹ"
+  - "hiện đại"
+  - "HE"
 ---
 
-## **Chương** 16
+**Chương 14**
 
-Gió đêm gào thét như lưỡi kiếm muốn băm vằm người ta thành ngàn mảnh, nhưng không sắc bén, chỉ để lại cơn đau chẳng thấy vết trên da, chiếc áo hoodie ướt sũng vì đá tan dính chặt vào người, hút đi chút hơi ấm cuối cùng.
+Một chậu nước lẫn với lá rau vụn bắn tung tóe bên chân Lâm Hướng Bắc. Cậu nhanh mắt nhanh chân lùi lại, mới may mắn tránh được cảnh sáng sớm mùa thu bị tạt ướt sũng trên đường đến trường.
 
-Vì quá lạnh, Lâm Hướng Bắc buộc phải tạm dừng xe điện bên đường, tìm một bức tường chắn gió để tựa vào nghỉ tạm.
+Bà nội Hạ tóc đã hoa râm nhưng tay chân vẫn lanh lẹ, ném cái xô nhựa đỏ xuống đất “bịch” một cái rồi chống nạnh, giọng như chuông đồng mắng: “Thằng nhóc con, mày đừng có phá phách Hạ Tranh nhà bà, thằng bé không giống mày đâu, sau này nó sẽ có thành tựu lớn, nếu mày dám dẫn nó đi làm mấy trò lộn xộn đó thì bà sẽ không để yên cho mày.”
 
-Phố xá nhộn nhịp, người qua lại tấp nập đi lướt qua nhau, Lâm Hướng Bắc người đầy thương tích thu hút không ít ánh nhìn, nhưng cậu chẳng có sức để ý người khác nhìn mình thế nào nữa, chỉ riêng việc chịu đựng cơn đau đã lấy đi gần hết sức lực của cậu.
+Lâm Hướng Bắc gãi gãi mũi, nể tình bà cụ này là bà nội của Hạ Tranh nên chỉ lẩm bẩm một câu: “Cháu chỉ đến...”
 
-Cậu móc điếu thuốc từ trong túi, kẹp giữa môi và châm lửa, rít mạnh một hơi, nuốt cục máu trong miệng xuống, nicotine đi một vòng quanh phổi rồi từ từ thoát ra qua mũi và miệng, làn khói trắng xóa lượn lờ bay xoáy lên không trung.
+Bà nội Hạ vừa nghe vậy, tức đến nghiến răng, bên cạnh không có vũ khí vừa tay, bà cúi lưng xuống cởi dép cầm trong tay rồi xông lên đánh nhau với Lâm Hướng Bắc, mới đi được hai bước đã bị Hạ Tranh từ trong nhà chạy ra ngăn lại: “Bà nội, bà làm gì vậy?”
 
-Giữa làn khói mờ ảo, cậu cúi đầu nhìn, một đứa trẻ khoảng ba bốn tuổi đang đứng bên cạnh mẹ, nhìn chằm chằm vào cậu không chớp mắt. Cậu bỗng nổi hứng, làm mặt quỷ với đứa bé vô lo vô nghĩ, kéo căng vết thương trên mặt, hít vào một hơi vì đau.
+“Cháu cũng bị nó lừa rồi, kết bạn với thằng nhóc lưu manh này, sớm muộn gì cũng sẽ hại chết cháu đấy!” Bà nội Hạ tức tối không biết xả đi đâu, không nỡ trút giận lên cháu mình, trừng mắt nhìn Lâm Hướng Bắc núp sau lưng Hạ Tranh, chẳng tiếc lời đuổi: “Mày đi đi, đi mau đi!”
 
-Có lẽ vì cậu có tài năng làm mặt quỷ, đứa bé sợ hãi bật khóc ré lên, người phụ nữ vội vàng ôm đứa bé vào lòng dịu dàng dỗ dành.
+Hạ Tranh kẹt ở giữa, tay lén đưa ra sau lưng vẫy vẫy, Lâm Hướng Bắc hiểu ý, nhìn anh đẩy bà cụ đang tức giận vào nhà, loáng thoáng nghe thấy một câu rất nhẹ: “Bà nội, Lâm Hướng Bắc không phải như bà nghĩ đâu” -- Vì Hạ Tranh đã nói tốt cho cậu, môi Lâm Hướng Bắc vô thức cong lên.
 
-Kẻ đầu xỏ Lâm Hướng Bắc nhìn cặp mẹ con ấm áp rất bình thường này, chẳng hiểu sao trong lòng lại thoáng ghen tị với đứa trẻ xa lạ, muốn khóc thì khóc, muốn cười thì cười, còn được mẹ yêu thương.
+Cậu trốn ở góc ngõ, chờ Hạ Tranh dỗ dành bà nội xong sẽ ra tìm cậu.
 
-Điếu thuốc cháy hết, không tìm thấy thùng rác, cậu nhét tàn thuốc còn ẩm vào túi.
+Vì tiếng tăm của cậu, bà nội Hạ luôn phản đối Hạ Tranh qua lại với cậu. Bình thường sáng sớm bà ra chợ bán rau, cậu tiện đường đến đón Hạ Tranh đi học, ai ngờ hôm nay lại đụng mặt như vậy?
 
-Tay đút túi, cậu thẫn thờ nhìn xa xăm, vẻ mặt hơi mờ mịt, không biết tiếp theo phải làm gì, vì quá mơ hồ, thậm chí bắt đầu hối hận vì đã bốc đồng nghỉ việc -- Colin nói không sai, rời khỏi Muselbar, cậu biết tìm đâu công việc lương cao hơn để trả nợ hàng tháng?
+Lâm Hướng Bắc mở điện thoại ra xem, mười mấy phút trước Hạ Tranh đã nhắn tin mật báo cho cậu, nhưng lúc đó cậu đang đi xe nên không để ý.
 
-Phía trước truyền đến tiếng ồn ào, Lâm Hướng Bắc nhìn theo, chỉ thấy một cái xe tải chở theo chiếc Rolls-Royce lướt qua đường lớn, thùng xe trong suốt được trang trí bằng dây ruy băng có dòng chữ “happy birthday”, là món quà mừng lễ thành niên của một thiếu niên nào đó.
+Thật sơ suất quá.
 
-Chiếc xe tải được trang trí như một hộp quà rẽ qua khúc cua, Lâm Hướng Bắc run rẩy kéo chặt áo khoác, che đi chiếc áo hoodie ẩm ướt, cúi đầu bước vô định giữa dòng người mênh mông, đi về hướng ngược lại...
+Nghe tiếng bước chân, cậu ngẩng lên cười khổ: “Không sao chứ?”
 
-Cả đời Lâm Hướng Bắc chỉ từng có một lần sinh nhật đúng nghĩa.
+Hạ Tranh lắc đầu, mở miệng hơi áy náy nói: “Bà nội tôi...”
 
-Chung Trạch Nhuệ biết cậu sắp tròn mười tám tuổi, rất hào phóng sắp xếp tổ chức sinh nhật cho cậu, địa điểm là phòng hát karaoke ở tầng ba của Tân Thế Giới.
+Lâm Hướng Bắc cắm chìa khóa xe vào ổ, ngắt lời anh: “Tôi hiểu mà, thật ra bà nội anh nói cũng không sai, tôi đúng là một thằng nhóc lưu manh, chuyện bình thường thôi, đã làm thì không sợ người ta nói.”
 
-Cậu mong Hạ Tranh cũng có thể tham dự bữa tiệc sinh nhật đầu tiên của mình, sau khi năn nỉ mãi, Hạ Tranh đã đồng ý.
+Cậu chống một tay lên yên xe vỗ vỗ, cười thoải mái gạt qua chủ đề này: “Lên nhanh đi, đừng để anh trễ học.”
 
-Lâm Hướng Bắc cứ nhắm mắt là lại lén luyện tập trong đầu những động tác và biểu cảm sẽ dùng khi ước, thổi nến, cắt bánh, nhận quà. Luyện tập cường độ cao khiến cậu phấn khích đến mức mấy ngày không ngủ nổi, chỉ mong mở mắt ra đã ngồi trên ghế sofa da trong phòng hát, nhận được những lời chúc.
+Hạ Tranh cũng không cố chấp đào sâu thêm, đợi xe điện rẽ qua vài ba con hẻm, anh khẽ dùng ngón tay cào nhẹ một cái sau lưng Lâm Hướng Bắc.
 
-Một ngày trước sinh nhật, Lâm Hướng Bắc tan học về nhà, ngạc nhiên phát hiện trên chiếc bàn khập khiễng trong nhà đột nhiên có một mô hình xe hơi đang thịnh hành lúc bấy giờ, đồ chơi chỉ dành cho trẻ con, cậu nghĩ vậy, nhưng vẫn tò mò mở hộp ra cầm lên ngắm nghía, đó là một chiếc xe màu đỏ, dẹt dẹt, mô phỏng một chiếc xe sang nào đó.
+Lâm Hướng Bắc nhột, xe nghiêng sang một bên, căng thẳng quay đầu lại: “Làm gì vậy?”
 
-Đang nghĩ xem vật này từ đâu ra, cánh cửa phòng Lâm Học Khôn bật mở, cậu quay đầu nhìn lại, đặt mô hình trở về bàn, lạnh nhạt gọi một tiếng ba.
+“Áo cậu rách rồi.”
 
-Mối quan hệ giữa cha con rất xa cách, ngày thường dù ở cùng nhà, trừ khi cần thiết, hầu như không trò chuyện với nhau, Lâm Hướng Bắc đang định chui vào phòng mình thì nghe Lâm Học Khôn vội gọi cậu lại: “Ngày mai lẽ ra ba sẽ ở nhà, nhưng bên sếp không cho nghỉ, lát nữa phải đi rồi.”
+Thời tiết se lạnh, mọi người đều đã giở chiếc áo đồng phục dài tay cất trong đáy tủ ra mặc, áo khoác của Lâm Hướng Bắc bị vò thành một cục nhét trong tủ quần áo lâu ngày không thấy ánh sáng, lười giặt nên mặc luôn vào người, nhăn nhúm như vỏ hạt óc chó. Cậu vẫn giữ vẻ oai phong trẻ con, không kéo khóa, giơ một tay kéo ra xem, không biết tại sao bên hông đồng phục lại bị rách một đường dài.
 
-Lâm Hướng Bắc ừ một tiếng.
+“Ôi đệch, rách từ bao giờ vậy?”
 
-Lâm Học Khôn gãi đầu: “Món quà đó, không biết con có thích không?”
+Hạ Tranh nhíu mày vì câu chửi bậy bất chợt của cậu, đây còn chỉ là câu nhẹ nhàng nhất, giao du lâu với đám người kia, có những câu còn thô tục hơn, chửi bới từ cha mẹ đến cả họ hàng, nhưng Lâm Hướng Bắc hiếm khi nhắc đến trước mặt học sinh giỏi Hạ Tranh.
 
-“Gì cơ?”
+Đợi đến một ngày nào đó phải sửa cái tật xấu này của Lâm Hướng Bắc mới được, nhưng giờ Hạ Tranh tạm thời bỏ qua một số lời khó nghe quá mức của cậu.
 
-Lâm Học Khôn đi đến bên bàn, chạm vào mô hình cậu đã mở, nhìn cậu đầy mong đợi.
+“Tan học tôi vá cho cậu nhé.”
 
-Lâm Hướng Bắc ngạc nhiên nói: “Cho con ạ?”
+Lâm Hướng Bắc ngạc nhiên: “Anh vá cho tôi?”
 
-Lâm Học Khôn “ừ ừ” hai tiếng, gật đầu mạnh như lò xo: “Sinh nhật con...”
+Hạ Tranh “ừm” một tiếng: “Tối nay tôi không phải ra quán, nhà cậu có kim chỉ không?”
 
-“Con không tổ chức sinh nhật.” Lâm Hướng Bắc ngắt lời người đàn ông, chẳng hề cảm kích, giọng điệu cứng nhắc: “Với lại, con mười tám tuổi, không phải tám tuổi.”
+Từ nhỏ đến lớn, Lâm Hướng Bắc mới chỉ thấy mấy thứ đó ở tiệm may ven đường, tiếc nuối lắc lắc đầu.
 
-Lâm Học Khôn dường như vẫn dừng lại ở thời con trai mình còn nhỏ, vẻ mặt lúng túng: “Họ nói mẫu này bán chạy lắm.”
+Thế là chuyện lại biến thành Hạ Tranh lẻn vào nhà mình như đi ăn trộm, lấy cắp hộp kim chỉ mà bà nội để trong hộp sắt, đi đến nhà Lâm Hướng Bắc để vá áo cho cậu.
 
-Lâm Hướng Bắc thoáng chốc không biết nói gì.
+Đây là lần đầu tiên có bạn đến nhà Lâm Hướng Bắc, cậu vừa phấn khích vừa ngại ngùng, vội lấy túi rác đen trùm cái thùng rác đầy tràn chưa đổ trong phòng khách bừa bộn, dẫn Hạ Tranh vào phòng mình. Không có ghế, cậu hào sảng vỗ vỗ lên cái giường chất đầy chăn bông hoa đỏ: “Ngồi tự nhiên đi, đừng khách sáo.”
 
-Người đàn ông móc từ chiếc ví rách ba trăm đồng, suy nghĩ một lúc rồi thêm hai trăm nữa, đặt bên cạnh mô hình xe: “Con lớn rồi, cầm đi chơi với bạn bè đi.”
+Cậu nhanh chóng cởi lớp áo vải ni lông cứng ngắc không có tác dụng giữ ấm ra khỏi người, đặt đồng phục bên cạnh giường: “Tôi lấy nước ngọt cho anh.”
 
-Lâm Hướng Bắc không nói nhận cũng không nói không nhận, tay đặt trên tay nắm cửa, một chân bước về phía trước, có vẻ như sẽ đi vào bất cứ lúc nào.
+Không đợi Hạ Tranh từ chối, cậu đã nhanh chóng biến mất ở cửa phòng, hai phút sau lại ngượng ngùng gãi đầu quay lại: “Nhà chỉ còn cái này thôi.”
 
-Nhưng Lâm Học Khôn lại tự nói tiếp: “Mẹ con đi cũng nhiều năm rồi, chớp mắt một cái con đã lớn thế này.”
+Một lốc Sảng Oai Oai* in hình chú chó tai to dành cho trẻ em.
 
-Lâm Hướng Bắc mím môi, rất khó chịu trước việc ông nhắc đến người mẹ chưa từng gặp của cậu, ký ức về bà đã mờ nhạt, cậu “cạch” một tiếng mở cửa.
+Chú thích
+(*) Là một hãng sữa chua uống ở Trung Quốc cho trẻ em.
 
-Lâm Học Khôn như thể đã kìm nén rất lâu, lại giống như nghĩ rằng Lâm Hướng Bắc đã là người lớn, có thể gánh vác nỗi đau khổ trong lòng ông ấy, buồn bã nói tiếp: “Năm đó bà mối dẫn ba đến nhà, mẹ con mặc chiếc váy xanh, ba vừa nhìn đã để ý đến mẹ con, nhưng thật ra mẹ con không muốn đi với ba, là ông ngoại con nhận tiền sính lễ, bà ấy đành chịu.”
+Hạ Tranh không nhịn được cúi đầu cười.
 
-Ký ức như quả bóng nước bị cắt một nhát, tràn ra lênh láng, Lâm Hướng Bắc ngạc nhiên, thoáng nín thở, quay đầu nhìn người đàn ông trung niên tiều tụy này, chính là cha cậu.
+Lâm Hướng Bắc giấu đầu hở đuôi giải thích: “Không phải tôi thích uống đâu, cũng không biết sao lại có trong nhà tôi...” Cậu bí lời, mở một chai, cắn ống hút: “Thôi được, thật ra cũng ngon, anh uống một chai không?”
 
-“Ba biết ba vô dụng, mẹ con theo ba chỉ có thể sống khổ cực, mẹ con ra đi cũng tốt, con đừng trách mẹ.” Lâm Học Khôn vừa lắc đầu vừa vào phòng lấy lương khô đi đường dài, khi đi ra Lâm Hướng Bắc vẫn đứng ở vị trí cũ, nếp nhăn trên mặt ông ấy hằn sâu lại, vẫy tay: “Vào đi, ba đi đây.”
+Cậu xoay người ngồi xuống cạnh Hạ Tranh, người kia lắc đầu, đã cầm áo khoác đồng phục trong tay, mở hộp kim chỉ chuẩn bị vá.
 
-Lâm Hướng Bắc nhìn chằm chằm bóng lưng Lâm Học Khôn đi đến cửa, mang chút uất ức bước vào phòng, đóng sầm cửa thật mạnh, cả bức tường cũng rung theo, để thể hiện sự bất mãn của cậu đối với người đàn ông vừa đáng ghét vừa đáng thương này.
+Lâm Hướng Bắc đơn giản cởi giày nằm lên giường, nhìn Hạ Tranh thành thạo xỏ chỉ vào kim, tò mò hỏi: “Anh học từ bà nội anh à?”
 
-Sao phải đợi đến hôm nay mới nói với cậu những điều này?
+Sau khi nhận được cái gật đầu, cậu đổi tư thế từ nằm chuyển sang ngồi xếp bằng, hứng thú nhìn bàn tay Hạ Tranh cầm kim chỉ linh hoạt xuyên tới xuyên lui qua vải, nhìn đến mê mẩn, ánh mắt vô thức rơi trên sườn mặt sắc nét, toát lên khí chất thư sinh lạnh lùng của Hạ Tranh, buột miệng nói: “Hạ Tranh, anh tốt thật, nếu anh là con gái, tôi chắc chắn cưới anh làm vợ.”
 
-Sau mười tám năm bị gọi là “rùa xanh nhỏ“, khi cậu đã chấp nhận mẹ mình là người phụ nữ xấu xa bỏ rơi cậu, khi cậu đã yên tâm thoải mái ghét bà, Lâm Học Khôn lại rộng lượng khuyên cậu đừng oán trách.
+Tay Hạ Tranh khựng lại, hỏi ngược cậu: “Cậu nghĩ chỉ có phụ nữ mới biết may vá sao?”
 
-Lâm Hướng Bắc tựa lưng vào cửa, đợi Lâm Học Khôn khóa cửa ngoài rồi mới bước ra ngoài, tức tối đi đến bên bàn.
+Lâm Hướng Bắc chưa bao giờ nghĩ đến vấn đề sâu sắc như vậy, nghẹn lời một lúc, sau đó mới trả lời bằng kinh nghiệm sống ít ỏi của mình: “Dù sao anh cũng là người đàn ông đầu tiên tôi thấy biết may vá.” Vai cậu chạm vào vai Hạ Tranh, chân thành lặp lại câu cảm thán: “Hạ Tranh, anh tốt thật.”
 
-Cậu căm tức nhìn chằm chằm vào chiếc mô hình xe mà Lâm Học Khôn đã chọn lựa kỹ càng, giơ cao lên muốn đập tan, nhưng cuối cùng tay vẫn không hạ xuống nổi.
+Âm cuối kéo dài, đầy lười biếng, như mang theo dấu ngã*, nếu không nghe kỹ thì giống như đang làm nũng. Hạ Tranh biết không phải, nhưng anh có thể coi là vậy.
 
-Chiếc mô hình bị Lâm Hướng Bắc chê bai ấy, cuối cùng đã được cậu lén giấu vào đáy tủ quần áo, cứ như thể chỉ cần vật ấy không lộ ra ánh sáng, thì nghĩa là cậu vẫn chưa chấp nhận món quà này. Nhưng thật ra, Lâm Hướng Bắc là đứa trẻ ngốc nghếch miệng cứng lòng mềm. Một đứa trẻ ngốc thì chẳng bao giờ để bụng, dù người khác có bao nhiêu điểm xấu, chỉ cần một điểm tốt cũng đủ để cậu xóa nhòa tất cả.
+Chú thích
+(*) Là dấu ~.
 
-Như người mẹ bất đắc dĩ ra đi, hay như sự vắng mặt của Lâm Học Khôn trong suốt những năm tháng trưởng thành của cậu.
+Mạch suy nghĩ của Lâm Hướng Bắc đã đi rất xa: “Vậy anh có biết đan len không?”
 
-Quay lại chuyện chính, chút biến cố này không hề ngăn được Lâm Hướng Bắc ôm đầy mong đợi lao vào tuổi mười tám của mình.
+Hai ngón trỏ giơ ngang, xoay tròn thật nhanh trong không khí, rất mong đợi nhìn Hạ Tranh.
 
-Tám rưỡi tối, cậu đến Tân Thế Giới đúng giờ, Chung Trạch Nhuệ đã sớm trang trí xong phòng tiệc chờ cậu ở tầng ba, Hạ Tranh nhắn tin nói sẽ đến muộn một chút.
+Hạ Tranh quả nhiên không làm người ta thất vọng: “Biết.”
 
-Chung Trạch Nhuệ đã dặn dò trước, Lâm Hướng Bắc đi đến đâu cũng gặp những khuôn mặt dù là quen thuộc hay chỉ từng nói chuyện với cậu vài lần, ai cũng chúc cậu sinh nhật vui vẻ.
+“Tuyệt quá.” Lâm Hướng Bắc nhướn mày, không hề khách sáo nói: “Tháng sau sinh nhật tôi, anh đan cho tôi một cái khăn quàng cổ làm quà nhé.”
 
-Mặt cậu hơi đỏ lên, là sắc màu của niềm vui từ tận đáy lòng, cậu là nhân vật chính tối nay, ngẩng cao đầu chạy lên cầu thang, diễn vai chính trong vở kịch của mình.
+Hạ Tranh lấy kéo ra cắt đứt chỉ thừa: “Khi nào?”
 
-“Tiểu Bắc, mau vào đi!” Chung Trạch Nhuệ đứng trước cửa phòng vẫy tay.
+“Ngày 3 tháng 12, anh còn nửa tháng để chuẩn bị.”
 
-Lâm Hướng Bắc nhanh chóng bước đến, vừa đến cửa đx “đùng đùng” hai tiếng, hai bên trong phòng bắn pháo giấy kim tuyến, những mảnh vụn lấp lánh vàng chói rắc đầy trên đầu cậu.
+Hạ Tranh đưa áo khoác đã vá xong cho Lâm Hướng Bắc, gật đầu: “Được thôi.”
 
-Bên trong toàn là những người quen biết, hơn mười người, nhiệt tình kéo cậu vào.
+Cạch --
 
-Chung Trạch Nhuệ thân thiết vỗ vai cậu: “Nào, bật bài hát sinh nhật lên, bánh kem, bánh kem đâu rồi?”
+Tiếng chiếc nắp mở ra.
 
-Lâm Hướng Bắc được đám đông vây quanh đứng ở chính giữa căn phòng, mọi thứ đã chuẩn bị sẵn sàng, cả đám người quây lấy cậu, ồn ào hát chúc mừng sinh nhật theo tiếng nhạc phát, giọng hát lệch tông, Lâm Hướng Bắc hơi ngại ngùng cười toe, bắt chước kiểu diễn cũ kỹ nhất trên tivi, chân thành chắp tay không ngừng nói cảm ơn, nhưng mắt lại thỉnh thoảng liếc về phía cửa, mong chờ Hạ Tranh đến.
+Quá khứ bị chôn vùi nhiều năm giống như chiếc hộp nhựa đặt ở góc phòng phủ một lớp bụi mỏng, Lâm Hướng Bắc dùng tay phủi phủi, bụi bay làm cậu bị sặc, quay mặt đi, nhưng tay không hề ngừng lại, khẩn thiết muốn nhìn thấy món đồ quý giá cất giữ bao năm.
 
-Chung Trạch Nhuệ đưa cho cậu con dao: “Cậu là người sinh nhật, bánh kem phải do cậu cắt.”
+Cậu đặt nắp hộp đã mở sang một bên, thấy ở dưới cùng của đống quần áo là một màu đỏ tươi nằm trong túi ni lông bọc kín -- chiếc khăn quàng cổ Hạ Tranh đã tự tay đan cho cậu.
 
-Chưa từng được coi trọng như vậy, Lâm Hướng Bắc cảm thấy lồng ngực và vành mắt hơi nóng lên: “Cảm ơn anh Trạch Nhuệ.”
+Trong mười năm qua, Lâm Hướng Bắc chạy ngược chạy xuôi, để đi đường nhẹ hơn nên buộc phải từ bỏ nhiều thứ, chỉ có chiếc khăn quàng cổ đã cũ này là giống như chỗ dựa tinh thần không thể rời bỏ, đã đồng hành cùng cậu từ Lệ Hà đến Quảng Châu, rồi lang bạt đến tận Thâm Quyến.
 
-“Anh em bao nhiêu năm rồi, nói gì vậy.” Chung Trạch Nhuệ chỉ vào một thanh niên gầy gò nhuộm tóc vàng trong phòng: “Tam Điều nghe nói sinh nhật cậu, bỏ cả mạt chược không đánh nữa, đủ nghĩa khí chưa?”
+Cậu cẩn thận lấy chiếc khăn ra khỏi túi ni lông, tay vuốt ve thật chậm rãi, mặc dù Hạ Tranh đã nghiên cứu kỹ và chọn chất liệu tốt, Lâm Hướng Bắc cũng bảo quản cẩn thận, nhưng dưới sự bào mòn vô hình của thời gian, cảm giác mềm mại của chất liệu len đã trở nên hơi thô ráp. Điều đó cũng không ảnh hưởng đến nụ cười nho nhỏ hiện lên trên đôi môi tái nhợt của Lâm Hướng Bắc.
 
-Rồi lại chỉ vào một người thấp lùn mặc áo khoác da in hình sọ người, quần bò bó: “Đông Qua vốn định đi với bạn gái, anh gọi một cuộc điện thoại bảo cậu ta dẫn cả bạn gái đến, càng đông càng vui!”
+Lúc đó Hạ Tranh không chỉ vá áo cho cậu, mà còn dọn dẹp toàn bộ căn nhà lộn xộn của cậu từ trong ra ngoài, Lâm Hướng Bắc cảm kích rơi nước mắt nhưng không có cách nào đền đáp, đã kiên quyết nhét hai chai Sảng Oai Oai còn lại trong nhà vào ba lô của Hạ Tranh làm thù lao.
 
-“Còn có A Tiêu, lát nữa phải đi làm, cách đây bảy tám dặm, vẫn cố đến mừng sinh nhật cậu.”
+Cậu nắm chặt chiếc khăn bằng cả hai tay, vùi sâu mặt mình vào đó, cố gắng ngửi thấy những mùi thơm đẹp đẽ như ánh nắng hay gió mát, nhưng tiếc rằng thứ mùi duy nhất len vào mũi cậu chỉ là mùi đặc trưng của long não thuộc về những nơi tăm tối, khiến người ta hơi choáng váng. Cậu thở dài tiếc nuối quay về thực tại, quay về căn nhà thuê không có ánh nắng, về với cuộc sống rối bời của cậu.
 
-Có lẽ trong mắt người ngoài, những người có mặt ở đây đều là những kẻ vô công rỗi nghề, lêu lổng, nhưng đối với Lâm Hướng Bắc từ nhỏ đến lớn không biết đã phải nhận bao nhiêu cái nhìn khinh miệt, vào lúc này đây, không gì có thể khiến cậu cảm động hơn những người đã có lòng đến dự tiệc sinh nhật của cậu.
+Màu đỏ rực rỡ này trở thành màu sắc duy nhất trong tầm nhìn quá u tối, chói lọi đến mức khiến mắt cậu gần như dâng lên chút ẩm ướt không nên có.
 
-Lâm Hướng Bắc cười đến mức mắt cong lên, để lộ một hàm răng đều tăm tắp, liên tục nói cảm ơn.
+Lâm Hướng Bắc thở dài nặng nề, tay luồn vào kẽ khăn đã gấp gọn, chạm đến một góc cứng, từ từ rút ra.
 
-Cắt bánh xong, điện thoại trong túi rung lên mấy cái.
+Đó là một tấm thẻ dự thi đại học đen trắng cỡ bàn tay, được bọc nhựa cẩn thận -- thẻ dự thi của Hạ Tranh. Lâm Hướng Bắc từng lẻn vào phòng thi, tìm từng phòng một, thấy khuôn mặt Hạ Tranh, dùng lưỡi dao cẩn thận cắt dọc theo phần dưới, biến nó thành của riêng mình.
 
-Lâm Hướng Bắc lập tức chạy xuống dưới, quả nhiên thấy Hạ Tranh đang cầm một túi giấy kraft ở cửa, không giấu được sự phấn khích nói: “Anh đến đúng lúc lứm, đi lên với tôi, tôi đang chia bánh kem.”
+Mặt giấy thô ráp bọc trong lớp nhựa phản quang, khuôn mặt thiếu niên Hạ Tranh như phản chiếu trên mặt nước mờ mờ, cậu dùng ngón tay vuốt qua vuốt lại, như thể có thể lau sạch để nó trở nên rõ ràng hơn.
 
-Hạ Tranh đưa tay quệt má cậu, lau đi một chút kem nhỏ: “Dính rồi.”
+Lâm Hướng Bắc không thi đại học, lúc đó cậu còn đang tranh thủ từng giây kiếm bộn tiền với Chung Trạch Nhuệ, đâu có thời gian gặp Hạ Tranh, nghe anh khuyên nhủ?
 
-Lâm Hướng Bắc “ừm” một tiếng, vụng về dùng mu bàn tay lau vết bẩn đi, tay đặt lên vai Hạ Tranh, sợ người ta chạy mất -- thật không dễ dàng gì mới thuyết phục được Hạ Tranh đến Tân Thế Giới.
+Để đuổi Hạ Tranh đi, cậu đã nói rất nhiều lời khó nghe đến kinh ngạc.
 
-Cậu đẩy Hạ Tranh đi vào, luôn miệng nói: “Tôi sợ anh không đến lắm, bảo đi đón thì anh lại nói không cần.”
+“Đừng ngu ngốc thế nữa, bây giờ là thời đại gì, học hành thì có ích gì, anh thích thi thì tự đi thi đi, đừng có suốt ngày đến làm phiền tôi.”
 
-Hạ Tranh cong môi cười: “Đã hứa với cậu thì chắc chắn sẽ đến.”
+“Anh hèn thế à, đã nói chia tay rồi, anh có hiểu chia tay là gì không?”
 
-Lâm Hướng Bắc nghiêng đầu nhìn góc mặt ngiêng của anh: “Cái trong tay anh là cho tôi à?”
+“Anh cũng biết chuyện của hai ta không thể nói cho ai, chẳng lẽ cứ dây dưa với anh mãi sao?”
 
-Hạ Tranh cũng quay mặt lại, ánh mắt nhìn thẳng vào cậu, ừ một tiếng.
+“Đây là số tiền tôi kiếm được với anh Trạch Nhuệ mấy ngày nay, anh nhìn kỹ đi, có mấy sinh viên đại học kiếm được thế này không?”
 
-Hai người đi đến phòng hát ở tầng ba, cửa đóng kín, Lâm Hướng Bắc đẩy thẳng vào, chỉ trong chốc lát, bên trong đã ầm ĩ, tiếng ồn ào trào ra như sóng.
+Vì Hạ Tranh quấn lấy cậu quá nhiều, Chung Trạch Nhuệ đã cho người chặn Hạ Tranh trong con hẻm của Tân Thế Giới để đánh hội đồng một trận, không nặng lắm, nhưng Lâm Hướng Bắc chỉ đứng hút thuốc dựa vào cửa sổ tầng hai, trơ mắt nhìn Hạ Tranh thất vọng tột cùng, khập khiễng rời khỏi thế giới của cậu.
 
-Người hút thuốc, người uống rượu, người hát, người đánh bài...
+Rồi sau đó, sau đó...
 
-Trong không khí kín mít đầy mùi hỗn tạp, cửa vừa mở, hàng loạt cái đầu đủ màu sắc đồng thời nhìn ra.
+Lâm Hướng Bắc nhanh chóng nhét khăn quàng cổ cùng với thẻ dự thi vào lại hộp, dùng sức dụi mắt, không có nước mắt.
 
-Chung Trạch Nhuệ thoạt tiên liếc nhìn Lâm Hướng Bắc, rồi nhìn qua vai cậu, ánh mắt chạm vào Hạ Tranh đang nhíu mày, rồi đứng dậy cười nói như chủ nhà: “Tiểu Bắc, còn chưa cắt bánh kem xong đâu.”
+Cậu không phải người hay khóc.
 
-Lâm Hướng Bắc vô tư bước vào, thấy Hạ Tranh không nhúc nhích, cậu vươn tay nắm lòng bàn tay hơi lạnh của anh, hoàn toàn không dùng sức, nhưng Hạ Tranh lại giống như rất cần cái nắm tay này - như một sự công nhận - nắm chặt tay cậu, rồi bước lên phía trước đứng song song với cậu, là tư thế của người nhà.
+Những gì đáng khóc cũng khóc đủ rồi.
 
-Cánh cửa kim loại nặng nề tự động lắc lư mấy cái, rồi chậm rãi khép lại.
+Cậu không hối hận.
+
+Đậy nắp lại, Lâm Hướng Bắc điều chỉnh tâm trạng, mở điện thoại kiểm tra lương đã chuyển vào tài khoản.
+
+Đã là ngày cuối cùng của tháng, cậu phải chuyển tiền trả nợ tháng này cho anh Đại Phi trước tối nay, nhưng khi mở tài khoản ngân hàng, tiền lương nhận được lại có chút sai lệch so với tưởng tượng của cậu -- thiếu hẳn mười lăm ngàn.
+
+Tim Lâm Hướng Bắc bắt đầu hoảng loạn, đập thình thịch mấy cái, vội gọi điện cho quản lý.
+
+Câu trả lời nhận được là: Hoàng Kính Nam không định tính doanh số rượu tháng này vào thành tích của cậu.
+
+“Tại sao chứ?” Lâm Hướng Bắc bồn chồn đi đi lại lại trong căn phòng chật hẹp: “Không thể tính số liệu kiểu đó được, chẳng phải đã nói doanh số ngày nào tính vào ngày đó sao, sao anh ta có thể nói không tính là không tính?”
+
+Quản lý nói lấp lửng: “Cậu đừng vội...”
+
+Lâm Hướng Bắc khẽ quát: “Làm sao tôi không vội được?”
+
+Cậu hít một hơi thật sâu, vơ lấy áo khoác đi ra ngoài: “Tôi đi qua đó ngay, có gì nói rõ ràng mặt đối mặt.”
+
+Không cho quản lý cơ hội nói thêm, Lâm Hướng Bắc lập tức ấn nút cúp máy, nhanh chóng mang giày chạy ra khỏi tòa nhà.
+
+Bầu trời chiều tối xám xịt, chẳng rõ là nắng hay mưa, nhưng Lâm Hướng Bắc cắn răng lao thẳng tới trước, chẳng nhìn gì, chẳng nghĩ gì, chẳng sợ gì.
+
+--
+
+***Lời tác giả:***
+
+Tiểu Hạ (cặm cụi đan len): Nói ai là vợ, ai là vợ hả?

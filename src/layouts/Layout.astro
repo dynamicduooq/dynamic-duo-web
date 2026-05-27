@@ -1,929 +1,558 @@
 ---
-const { frontmatter } = Astro.props;
+const { frontmatter, title: titleProp } = Astro.props;
 import settings from '../data/settings.json';
 
-// Nhận diện chương và truyện hiện tại
+const pageTitle = frontmatter?.title || titleProp || settings.site_name;
 const currentPath = Astro.url?.pathname ?? '';
-
-// Xác định truyen_id và chương hiện tại
-const isNovelPage = frontmatter?.chuong !== undefined;
+const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
 const currentTruyenId = frontmatter?.truyen_id;
 
-// Load tất cả chapters của truyện hiện tại
-let chapters = [];
-if (currentTruyenId) {
-    const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true }));
-    chapters = allPosts
-        .filter((post: any) => post.frontmatter?.truyen_id === currentTruyenId)
-        .sort((a: any, b: any) => {
-            const ca = a.frontmatter?.chuong ?? 999;
-            const cb = b.frontmatter?.chuong ?? 999;
-            return ca - cb;
-        });
+let chapters: any[] = [];
+let prevChap: any = null;
+let nextChap: any = null;
+
+if (currentTruyenId && isNovelPage) {
+  const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
+  chapters = allPosts
+    .filter((p) => p.frontmatter?.truyen_id === currentTruyenId && p.frontmatter?.chuong !== undefined && p.frontmatter?.chuong !== 0)
+    .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
+
+  const idx = chapters.findIndex((c) => {
+    const cUrl = (c.url || '').replace(/\/$/, '');
+    const cur = currentPath.replace(/\/$/, '');
+    return cUrl === cur || cur.endsWith(cUrl);
+  });
+  if (idx > 0) prevChap = chapters[idx - 1];
+  if (idx >= 0 && idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
-
-// Tìm chapter trước/sau
-const currentIdx = chapters.findIndex((c: any) => {
-    const url = c.url || '';
-    return currentPath.endsWith(url) || currentPath === url || url === currentPath.replace(/\/$/, '');
-});
-const prevChap = currentIdx > 0 ? (chapters[currentIdx - 1] as any) : null;
-const nextChap = currentIdx < chapters.length - 1 ? (chapters[currentIdx + 1] as any) : null;
 ---
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{frontmatter?.title || settings.site_name} | {settings.site_name}</title>
-    <meta name="description" content={frontmatter?.description || 'paired dreams, boundless gleam.'} />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600;1,7..72,300;1,7..72,400&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
-
-    <style is:global>
-        /* ─── BIẾN MÀU ─── */
-        :root {
-            --sky:      #0ea5e9;
-            --sky2:     #0284c7;
-            --sky-dark: #0369a1;
-            --sky-light:#bae6fd;
-            --sky-pale: #f0f9ff;
-            --cream:    #fafcff;
-            --bg-content:#ffffff;
-            --text-main:#1e3a5f;
-            --text-mid: #64748b;
-            --text-dim: #94a3b8;
-            --sh-card:  0 4px 15px rgba(2,132,199,.12);
-            --sh-soft:  0 2px 8px rgba(0,0,0,.08);
-            --r-sm:     6px;
-            --r-md:     12px;
-            --r-lg:     20px;
-            --r-pill:   999px;
-            --t:        all .2s ease;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            background: var(--cream);
-            color: var(--text-main);
-            font-family: 'Newsreader', serif;
-            font-size: 18px;
-            line-height: 1.9;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Merriweather', serif;
-            color: var(--sky-dark);
-            text-align: center;
-        }
-
-        a { color: inherit; text-decoration: none; }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: var(--sky-pale); }
-        ::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
-
-        /* ─── NAVBAR ─── */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-            display: flex; align-items: center; justify-content: space-between;
-            height: 56px; padding: 0 28px;
-            background: rgba(255,255,255,.97);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(186,230,253,.5);
-            box-shadow: 0 2px 12px rgba(2,132,199,.08);
-        }
-
-        .nav-logo {
-            font-family: 'Literata', serif;
-            font-weight: 600;
-            font-size: .95rem;
-            color: var(--sky-dark);
-            white-space: nowrap;
-            letter-spacing: .5px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .nav-item { position: relative; }
-
-        .nav-item > a, .nav-btn {
-            font-family: 'Newsreader', serif;
-            font-size: .76rem;
-            font-weight: 400;
-            color: var(--text-mid);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 6px 12px;
-            border-radius: var(--r-pill);
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: var(--t);
-            cursor: pointer;
-            background: none;
-            border: none;
-            white-space: nowrap;
-        }
-
-        .nav-item > a:hover,
-        .nav-btn:hover,
-        .nav-item:hover > a,
-        .nav-item:hover > .nav-btn {
-            background: var(--sky-pale);
-            color: var(--sky);
-        }
-
-        /* Dropdown */
-        .dropdown-content {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%) translateY(8px);
-            min-width: 240px;
-            background: #fff;
-            border: 1px solid rgba(186,230,253,.7);
-            border-radius: var(--r-md);
-            box-shadow: 0 16px 48px rgba(2,132,199,.13), 0 2px 8px rgba(2,132,199,.06);
-            padding: 8px 6px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity .22s ease, transform .22s ease;
-            z-index: 600;
-        }
-
-        .nav-item:hover .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .dd-section-title {
-            font-size: .62rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            padding: 6px 12px 3px;
-        }
-
-        .dd-item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 12px;
-            font-size: .82rem;
-            color: var(--text-mid);
-            border-radius: var(--r-sm);
-            transition: var(--t);
-        }
-
-        .dd-item:hover { background: var(--sky-pale); color: var(--sky); }
-
-        .dd-divider {
-            height: 1px;
-            background: rgba(186,230,253,.45);
-            margin: 5px 8px;
-        }
-
-        /* Hamburger mobile */
-        .nav-hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            padding: 6px;
-            background: none;
-            border: none;
-        }
-
-        .nav-hamburger span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--sky-dark);
-            border-radius: 2px;
-            transition: var(--t);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 56px; left: 0; right: 0;
-            background: rgba(255,255,255,.98);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(186,230,253,.5);
-            padding: 12px 20px 20px;
-            z-index: 490;
-            flex-direction: column;
-            gap: 4px;
-            box-shadow: 0 8px 24px rgba(2,132,199,.1);
-        }
-
-        .mobile-menu.open { display: flex; }
-
-        .mobile-menu a, .mobile-menu .mobile-section {
-            padding: 8px 12px;
-            font-size: .85rem;
-            color: var(--text-mid);
-            border-radius: var(--r-sm);
-            transition: var(--t);
-        }
-
-        .mobile-menu a:hover { background: var(--sky-pale); color: var(--sky); }
-
-        .mobile-section-title {
-            font-size: .65rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            padding: 10px 12px 2px;
-        }
-
-        @media (max-width: 700px) {
-            .nav-links { display: none; }
-            .nav-hamburger { display: flex; }
-        }
-
-        /* ─── LAYOUT ─── */
-        .page-wrapper {
-            margin-top: 80px;
-            min-height: 70vh;
-            padding: 0 16px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto 60px;
-            background-color: rgba(255, 255, 255, .98);
-            padding: 40px 50px;
-            border-radius: var(--r-lg);
-            box-shadow: var(--sh-soft);
-            border: 1px solid rgba(186,230,253,.5);
-        }
-
-        @media (max-width: 640px) {
-            .container { padding: 24px 20px; }
-        }
-
-        /* ─── NỘI DUNG TRUYỆN ─── */
-        blockquote {
-            font-style: italic;
-            font-size: .9rem;
-            color: var(--text-mid);
-            line-height: 1.75;
-            border-left: 3px solid var(--sky-light);
-            padding: 15px 20px;
-            margin: 20px 0;
-            background: var(--sky-pale);
-            border-radius: 0 12px 12px 0;
-        }
-
-        hr {
-            border: none;
-            text-align: center;
-            margin: 40px 0;
-        }
-
-        hr::after {
-            content: "𓆝 𓆟 𓆞 𓆝 𓆟";
-            color: var(--sky-light);
-            font-size: 20px;
-            letter-spacing: 5px;
-        }
-
-        /* ─── TAG BADGES ─── */
-        .tag-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border: 1.5px solid var(--sky);
-            border-radius: var(--r-pill);
-            font-size: .8rem;
-            margin: 3px;
-            color: var(--sky);
-            transition: var(--t);
-            cursor: pointer;
-        }
-
-        .tag-badge:hover { background: var(--sky-pale); }
-
-        .tag-badge.active {
-            background: var(--sky);
-            color: #fff;
-        }
-
-        /* ─── CHAPTER DROPDOWN ─── */
-        .chapter-nav-box {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .chapter-select-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 22px;
-            background: var(--sky-pale);
-            border: 1.5px solid var(--sky-light);
-            border-radius: var(--r-pill);
-            color: var(--sky-dark);
-            font-size: .88rem;
-            font-family: 'Newsreader', serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--t);
-        }
-
-        .chapter-select-btn:hover {
-            background: var(--sky-light);
-            color: #fff;
-        }
-
-        .chapter-dropdown-list {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: 280px;
-            max-height: 280px;
-            overflow-y: auto;
-            background: #fff;
-            border: 1px solid var(--sky-light);
-            border-radius: var(--r-md);
-            display: none;
-            flex-direction: column;
-            z-index: 100;
-            box-shadow: var(--sh-card);
-        }
-
-        .chapter-dropdown-list.open { display: flex; }
-
-        .chapter-dropdown-list a {
-            padding: 10px 16px;
-            border-bottom: 1px dashed rgba(186,230,253,.5);
-            color: var(--text-mid);
-            font-size: .84rem;
-            transition: var(--t);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .chapter-dropdown-list a:last-child { border-bottom: none; }
-
-        .chapter-dropdown-list a:hover { background: var(--sky-pale); color: var(--sky); }
-
-        .chapter-dropdown-list a.current {
-            background: var(--sky-pale);
-            color: var(--sky);
-            font-weight: 600;
-        }
-
-        /* ─── ĐIỀU HƯỚNG TRƯỚC/SAU ─── */
-        .chapter-prev-next {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin: 40px 0 20px;
-            flex-wrap: wrap;
-        }
-
-        .chap-nav-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border: 1.5px solid var(--sky-light);
-            border-radius: var(--r-pill);
-            color: var(--sky-dark);
-            font-size: .84rem;
-            font-family: 'Newsreader', serif;
-            transition: var(--t);
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .chap-nav-btn:hover { background: var(--sky-pale); color: var(--sky); }
-        .chap-nav-btn.prev { justify-content: flex-start; }
-        .chap-nav-btn.next { justify-content: flex-end; text-align: right; }
-
-        /* ─── BÌNH LUẬN INLINE ─── */
-        .novel-content {
-            position: relative;
-        }
-
-        .novel-content p {
-            position: relative;
-            padding-right: 32px;
-        }
-
-        .inline-comment-btn {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--sky-pale);
-            border: 1px solid var(--sky-light);
-            color: var(--sky);
-            font-size: .65rem;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--t);
-        }
-
-        .novel-content p:hover .inline-comment-btn,
-        .inline-comment-btn.active {
-            display: flex;
-        }
-
-        .novel-content p:hover .inline-comment-btn:hover {
-            background: var(--sky);
-            color: #fff;
-        }
-
-        .inline-comment-panel {
-            display: none;
-            background: var(--sky-pale);
-            border: 1px solid var(--sky-light);
-            border-radius: var(--r-md);
-            padding: 12px 16px;
-            margin: 8px 0;
-            font-size: .84rem;
-        }
-
-        .inline-comment-panel.open { display: block; }
-
-        .inline-comment-panel textarea {
-            width: 100%;
-            border: 1px solid var(--sky-light);
-            border-radius: var(--r-sm);
-            padding: 8px 12px;
-            font-family: 'Newsreader', serif;
-            font-size: .84rem;
-            resize: vertical;
-            min-height: 60px;
-            color: var(--text-main);
-            background: #fff;
-        }
-
-        .inline-comment-panel textarea:focus {
-            outline: none;
-            border-color: var(--sky);
-        }
-
-        .inline-submit {
-            margin-top: 8px;
-            padding: 6px 16px;
-            background: var(--sky);
-            color: #fff;
-            border: none;
-            border-radius: var(--r-pill);
-            font-size: .8rem;
-            cursor: pointer;
-            transition: var(--t);
-        }
-
-        .inline-submit:hover { background: var(--sky2); }
-
-        /* ─── FOOTER ─── */
-        footer {
-            background: #fff;
-            border-top: 1px solid rgba(186,230,253,.4);
-            padding: 44px 20px 26px;
-            margin-top: auto;
-        }
-
-        .footer-inner {
-            max-width: 1120px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 28px;
-            align-items: start;
-        }
-
-        @media (max-width: 600px) {
-            .footer-inner { grid-template-columns: 1fr; text-align: center; }
-            .ft-social { align-items: center !important; }
-        }
-
-        .ft-brand .ft-logo {
-            font-family: 'Literata', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--sky-dark);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .ft-brand p {
-            font-size: .78rem;
-            color: var(--text-dim);
-            font-style: italic;
-            margin: 3px 0;
-        }
-
-        .ft-links {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            align-items: center;
-        }
-
-        .ft-links a {
-            font-size: .76rem;
-            color: var(--text-mid);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: var(--t);
-        }
-
-        .ft-links a:hover { color: var(--sky); }
-
-        .ft-social {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            align-items: flex-end;
-        }
-
-        .ft-social-row { display: flex; gap: 8px; }
-
-        .social-ic {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 1px solid var(--sky-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .88rem;
-            color: var(--sky);
-            background: var(--sky-pale);
-            transition: var(--t);
-        }
-
-        .social-ic:hover { background: var(--sky-light); transform: translateY(-2px); }
-
-        .ft-bottom {
-            max-width: 1120px;
-            margin: 26px auto 0;
-            padding-top: 16px;
-            border-top: 1px solid rgba(186,230,253,.3);
-            text-align: center;
-            font-size: .7rem;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-        }
-
-        /* ─── SCROLL BUTTONS ─── */
-        .scroll-btns {
-            position: fixed;
-            bottom: 24px;
-            right: 22px;
-            z-index: 300;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .scroll-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--sky);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: var(--sh-card);
-            transition: var(--t);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .scroll-btn.show { opacity: 1; pointer-events: auto; }
-        .scroll-btn:hover { transform: translateY(-3px); background: var(--sky2); }
-
-        /* ─── TAG FILTER ─── */
-        .tag-filter-section {
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        /* ─── GISCUS ─── */
-        .giscus-wrap {
-            margin-top: 60px;
-            border-top: 1px dashed var(--sky-light);
-            padding-top: 30px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle} | {settings.site_name}</title>
+  <meta name="description" content={frontmatter?.description || settings.tagline} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600;1,7..72,300;1,7..72,400&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+
+  <style is:global>
+    :root {
+      --sky:       #0ea5e9;
+      --sky2:      #0284c7;
+      --sky-dark:  #0369a1;
+      --sky-light: #bae6fd;
+      --sky-pale:  #f0f9ff;
+      --cream:     #fafcff;
+      --bg-content:#ffffff;
+      --text-main: #1e3a5f;
+      --text-mid:  #64748b;
+      --text-dim:  #94a3b8;
+      --sh-card:   0 4px 15px rgba(2,132,199,.12);
+      --sh-soft:   0 2px 8px rgba(0,0,0,.08);
+      --r-sm:      6px;
+      --r-md:      12px;
+      --r-lg:      20px;
+      --r-pill:    999px;
+      --t:         all .2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--text-main);
+      font-family: 'Newsreader', serif;
+      font-size: 18px;
+      line-height: 1.9;
+      margin: 0; padding: 0;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Merriweather', serif; color: var(--sky-dark); text-align: center; }
+    a { color: inherit; text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--sky-pale); }
+    ::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; padding: 0 28px;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(186,230,253,.5);
+      box-shadow: 0 2px 12px rgba(2,132,199,.08);
+    }
+    .nav-logo {
+      font-family: 'Literata', serif; font-weight: 600; font-size: .95rem;
+      color: var(--sky-dark); white-space: nowrap; letter-spacing: .5px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-item { position: relative; }
+    .nav-item > a, .nav-btn {
+      font-family: 'Newsreader', serif; font-size: .76rem; font-weight: 400;
+      color: var(--text-mid); letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 12px; border-radius: var(--r-pill);
+      display: inline-flex; align-items: center; gap: 5px;
+      transition: var(--t); cursor: pointer; background: none; border: none; white-space: nowrap;
+    }
+    .nav-item > a:hover, .nav-btn:hover,
+    .nav-item:hover > a, .nav-item:hover > .nav-btn {
+      background: var(--sky-pale); color: var(--sky);
+    }
+    .nav-item > a.active-link { color: var(--sky); font-weight: 600; }
+
+    /* Dropdown */
+    .dropdown-content {
+      position: absolute; top: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 240px; background: #fff;
+      border: 1px solid rgba(186,230,253,.7); border-radius: var(--r-md);
+      box-shadow: 0 16px 48px rgba(2,132,199,.13), 0 2px 8px rgba(2,132,199,.06);
+      padding: 8px 6px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease; z-index: 600;
+    }
+    .nav-item:hover .dropdown-content {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dd-section-title { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 6px 12px 3px; }
+    .dd-item { display: flex; align-items: center; gap: 7px; padding: 7px 12px; font-size: .82rem; color: var(--text-mid); border-radius: var(--r-sm); transition: var(--t); }
+    .dd-item:hover { background: var(--sky-pale); color: var(--sky); }
+    .dd-divider { height: 1px; background: rgba(186,230,253,.45); margin: 5px 8px; }
+
+    /* Hamburger mobile */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px; background: none; border: none;
+    }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--sky-dark); border-radius: 2px; transition: var(--t); }
+    .mobile-menu {
+      display: none; position: fixed; top: 56px; left: 0; right: 0;
+      background: rgba(255,255,255,.99); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(186,230,253,.5);
+      padding: 10px 16px 18px; z-index: 490;
+      flex-direction: column; gap: 2px;
+      box-shadow: 0 8px 24px rgba(2,132,199,.1);
+      max-height: calc(100vh - 56px); overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: 9px 12px; font-size: .88rem; color: var(--text-mid); border-radius: var(--r-sm); transition: var(--t); display: block; }
+    .mobile-menu a:hover { background: var(--sky-pale); color: var(--sky); }
+    .mobile-section-title { font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 10px 12px 3px; }
+    @media (max-width: 700px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+
+    /* ── LAYOUT ── */
+    .page-wrapper { margin-top: 80px; min-height: 70vh; padding: 0 16px; }
+    .container {
+      max-width: 800px; margin: 0 auto 60px;
+      background: rgba(255,255,255,.98);
+      padding: 40px 50px; border-radius: var(--r-lg);
+      box-shadow: var(--sh-soft); border: 1px solid rgba(186,230,253,.5);
+    }
+    @media (max-width: 640px) { .container { padding: 24px 20px; } }
+
+    /* ── NỘI DUNG TRUYỆN ── */
+    .novel-content { position: relative; }
+    .novel-content p { position: relative; padding-right: 30px; }
+
+    blockquote {
+      font-style: italic; font-size: .9rem; color: var(--text-mid); line-height: 1.75;
+      border-left: 3px solid var(--sky-light); padding: 15px 20px;
+      margin: 20px 0; background: var(--sky-pale); border-radius: 0 12px 12px 0;
+    }
+    hr { border: none; text-align: center; margin: 40px 0; }
+    hr::after { content: "𓆝 𓆟 𓆞 𓆝 𓆟"; color: var(--sky-light); font-size: 20px; letter-spacing: 5px; }
+
+    /* ── TAG BADGES ── */
+    .tag-badge {
+      display: inline-block; padding: 4px 12px;
+      border: 1.5px solid var(--sky); border-radius: var(--r-pill);
+      font-size: .8rem; margin: 3px; color: var(--sky); transition: var(--t);
+    }
+    .tag-badge:hover { background: var(--sky-pale); }
+
+    /* ── CHAPTER DROPDOWN ── */
+    .chap-nav-wrap {
+      display: flex; justify-content: center; gap: 10px;
+      align-items: center; margin: 20px 0; flex-wrap: wrap;
+    }
+    .chap-select-btn {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 20px;
+      background: var(--sky-pale); border: 1.5px solid var(--sky-light);
+      border-radius: var(--r-pill); color: var(--sky-dark);
+      font-size: .86rem; font-family: 'Newsreader', serif; font-weight: 600;
+      cursor: pointer; transition: var(--t); user-select: none;
+    }
+    .chap-select-btn:hover { background: var(--sky-light); color: var(--sky-dark); }
+
+    .chap-dropdown-list {
+      position: absolute; top: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      width: 290px; max-height: 270px; overflow-y: auto;
+      background: #fff; border: 1px solid var(--sky-light);
+      border-radius: var(--r-md); z-index: 200;
+      box-shadow: var(--sh-card);
+      display: none; flex-direction: column;
+    }
+    .chap-dropdown-list.open { display: flex; }
+    .chap-dropdown-list a {
+      padding: 9px 16px; border-bottom: 1px solid rgba(186,230,253,.3);
+      color: var(--text-mid); font-size: .83rem; transition: var(--t);
+    }
+    .chap-dropdown-list a:last-child { border-bottom: none; }
+    .chap-dropdown-list a:hover { background: var(--sky-pale); color: var(--sky); }
+    .chap-dropdown-list a.current-chap { background: var(--sky-pale); color: var(--sky); font-weight: 600; }
+
+    /* PREV / NEXT */
+    .chap-prev-next {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin: 36px 0 20px; flex-wrap: wrap;
+    }
+    .chap-pn-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 18px; border: 1.5px solid var(--sky-light);
+      border-radius: var(--r-pill); color: var(--sky-dark); font-size: .83rem;
+      font-family: 'Newsreader', serif; transition: var(--t); flex: 1; min-width: 120px;
+    }
+    .chap-pn-btn:hover { background: var(--sky-pale); color: var(--sky); }
+    .chap-pn-btn.prev-btn { justify-content: flex-start; }
+    .chap-pn-btn.next-btn { justify-content: flex-end; }
+
+    /* ── INLINE BÌNH LUẬN ── */
+    .inline-comment-btn {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--sky-pale); border: 1px solid var(--sky-light);
+      color: var(--sky); font-size: .6rem;
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--t); line-height: 1;
+    }
+    .novel-content p:hover .inline-comment-btn { display: flex; }
+    .inline-comment-btn:hover { background: var(--sky); color: #fff; }
+    .inline-panel {
+      background: var(--sky-pale); border: 1px solid var(--sky-light);
+      border-radius: var(--r-md); padding: 12px 16px; margin: 6px 0 10px;
+      font-size: .83rem; display: none;
+    }
+    .inline-panel.open { display: block; }
+    .inline-panel textarea {
+      width: 100%; border: 1px solid var(--sky-light); border-radius: var(--r-sm);
+      padding: 8px 12px; font-family: 'Newsreader', serif; font-size: .83rem;
+      resize: vertical; min-height: 56px; color: var(--text-main); background: #fff;
+    }
+    .inline-panel textarea:focus { outline: none; border-color: var(--sky); }
+    .inline-submit {
+      margin-top: 7px; padding: 5px 14px; background: var(--sky); color: #fff;
+      border: none; border-radius: var(--r-pill); font-size: .78rem; cursor: pointer; transition: var(--t);
+    }
+    .inline-submit:hover { background: var(--sky2); }
+
+    /* ── GISCUS ── */
+    .giscus-wrap { margin-top: 56px; border-top: 1px dashed var(--sky-light); padding-top: 28px; }
+
+    /* ── FOOTER ── */
+    footer { background: #fff; border-top: 1px solid rgba(186,230,253,.4); padding: 44px 20px 26px; }
+    .footer-inner {
+      max-width: 1120px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px; align-items: start;
+    }
+    @media (max-width: 600px) { .footer-inner { grid-template-columns: 1fr; text-align: center; } .ft-social { align-items: center !important; } }
+    .ft-logo { font-family: 'Literata', serif; font-size: 1.1rem; font-weight: 600; color: var(--sky-dark); display: block; margin-bottom: 5px; }
+    .ft-brand p { font-size: .78rem; color: var(--text-dim); font-style: italic; margin: 3px 0; }
+    .ft-links { display: flex; flex-direction: column; gap: 7px; align-items: center; }
+    .ft-links a { font-size: .76rem; color: var(--text-mid); letter-spacing: 1px; text-transform: uppercase; transition: var(--t); }
+    .ft-links a:hover { color: var(--sky); }
+    .ft-social { display: flex; flex-direction: column; gap: 7px; align-items: flex-end; }
+    .ft-social-row { display: flex; gap: 8px; }
+    .social-ic {
+      width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--sky-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .88rem; color: var(--sky); background: var(--sky-pale); transition: var(--t);
+    }
+    .social-ic:hover { background: var(--sky-light); transform: translateY(-2px); }
+    .ft-bottom { max-width: 1120px; margin: 26px auto 0; padding-top: 16px; border-top: 1px solid rgba(186,230,253,.3); text-align: center; font-size: .7rem; color: var(--text-dim); letter-spacing: 1px; }
+
+    /* ── SCROLL BUTTONS ── */
+    .scroll-btns { position: fixed; bottom: 24px; right: 22px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+    .scroll-btn {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--sky); color: #fff;
+      border: none; cursor: pointer; font-size: 1rem; box-shadow: var(--sh-card);
+      transition: var(--t); display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+    }
+    .scroll-btn.show { opacity: 1; pointer-events: auto; }
+    .scroll-btn:hover { transform: translateY(-3px); background: var(--sky2); }
+  </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav id="navbar">
-        <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
 
-        <div class="nav-links">
-            <div class="nav-item">
-                <a href="/dynamic-duo-web/">Trang chủ</a>
-            </div>
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
+  <div class="nav-links">
+    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
 
-            <div class="nav-item">
-                <button class="nav-btn">Cá dưới nước <span>▾</span></button>
-                <div class="dropdown-content">
-                    <div class="dd-section-title">Trang mục</div>
-                    <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
-                    <div class="dd-divider"></div>
-                    <div class="dd-section-title">Truyện</div>
-                    <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
-                    <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
-                </div>
-            </div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá dưới nước ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
+      </div>
+    </div>
 
-            <div class="nav-item">
-                <button class="nav-btn">Cá trên bàn <span>▾</span></button>
-                <div class="dropdown-content">
-                    <div class="dd-section-title">Trang mục</div>
-                    <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
-                    <div class="dd-divider"></div>
-                    <div class="dd-section-title">Truyện</div>
-                    <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
-                    <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-                </div>
-            </div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá trên bàn ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
+      </div>
+    </div>
 
-            <div class="nav-item">
-                <a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a>
-            </div>
+    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
+    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-            <div class="nav-item">
-                <a href="/dynamic-duo-web/about/">About</a>
-            </div>
-        </div>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
+  <div class="mobile-section-title">Cá dưới nước</div>
+  <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
+  <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">✦ Quan hệ bạn cùng phòng</a>
+  <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">✦ Hạ cháy đồng hoang</a>
+  <div class="mobile-section-title">Cá trên bàn</div>
+  <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">✦ Nếu đêm nay trời không mưa</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">✦ Vật dễ vỡ</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">✦ Thiếu đế xuân tâm</a>
+  <div class="mobile-section-title">Khác</div>
+  <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
+  <a href="/dynamic-duo-web/about/">✉ About</a>
+  <a href="/dynamic-duo-web/admin/">⚙ Admin</a>
+</div>
 
-        <!-- Hamburger mobile -->
-        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
+<div class="page-wrapper">
+  <div class="container">
+
+    {/* Tags */}
+    {frontmatter?.tags && frontmatter.tags.length > 0 && (
+      <div style="text-align:center;margin-bottom:24px;">
+        {frontmatter.tags.map((tag: string) => (
+          <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag)}/`} class="tag-badge"># {tag}</a>
+        ))}
+      </div>
+    )}
+
+    {/* Dropdown chương đầu trang */}
+    {isNovelPage && chapters.length > 1 && (
+      <div class="chap-nav-wrap" style="position:relative;">
+        <button class="chap-select-btn" id="chapBtnTop">
+          ⚓ {frontmatter?.title} ▾
+          <div class="chap-dropdown-list" id="chapListTop">
+            {chapters.map((c: any) => (
+              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'current-chap' : ''}>
+                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
+              </a>
+            ))}
+          </div>
         </button>
-    </nav>
+      </div>
+    )}
 
-    <!-- MOBILE MENU -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
-        <div class="mobile-section-title">Cá dưới nước</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">✦ Quan hệ bạn cùng phòng</a>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">✦ Hạ cháy đồng hoang</a>
-        <div class="mobile-section-title">Cá trên bàn</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">✦ Nếu đêm nay trời không mưa</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-        <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
-        <a href="/dynamic-duo-web/about/">✉ About</a>
+    {/* NỘI DUNG */}
+    <div class={isNovelPage ? 'novel-content' : ''}>
+      <slot />
     </div>
 
-    <div class="page-wrapper">
-        <div class="container">
+    {/* Prev / Next */}
+    {isNovelPage && (prevChap || nextChap) && (
+      <div class="chap-prev-next">
+        {prevChap
+          ? <a href={prevChap.url} class="chap-pn-btn prev-btn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
+          : <span />}
+        {nextChap
+          ? <a href={nextChap.url} class="chap-pn-btn next-btn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
+          : <span />}
+      </div>
+    )}
 
-            {/* Tags */}
-            {frontmatter?.tags && frontmatter.tags.length > 0 && (
-                <div style="text-align: center; margin-bottom: 25px;">
-                    {frontmatter.tags.map((tag: string) => (
-                        <a href={`/dynamic-duo-web/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`} class="tag-badge"># {tag}</a>
-                    ))}
-                </div>
-            )}
+    {/* Dropdown chương cuối trang */}
+    {isNovelPage && chapters.length > 1 && (
+      <div class="chap-nav-wrap" style="position:relative;">
+        <button class="chap-select-btn" id="chapBtnBot">
+          ⚓ Chọn chương ▾
+          <div class="chap-dropdown-list" id="chapListBot" style="bottom:calc(100% + 6px);top:auto;">
+            {chapters.map((c: any) => (
+              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'current-chap' : ''}>
+                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
+              </a>
+            ))}
+          </div>
+        </button>
+      </div>
+    )}
 
-            {/* Dropdown chương đầu trang */}
-            {isNovelPage && chapters.length > 1 && (
-                <div class="chapter-nav-box" id="chapNavTop">
-                    <button class="chapter-select-btn" id="chapBtnTop">
-                        ⚓ {frontmatter?.title || `Chương ${frontmatter?.chuong}`} ▾
-                    </button>
-                    <div class="chapter-dropdown-list" id="chapListTop">
-                        {chapters.map((chap: any) => (
-                            <a
-                                href={chap.url}
-                                class={chap.frontmatter?.chuong === frontmatter?.chuong ? 'current' : ''}
-                            >
-                                {chap.frontmatter?.title || `Chương ${chap.frontmatter?.chuong}`}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
+    {/* Giscus bình luận */}
+    {isNovelPage && (
+      <div class="giscus-wrap">
+        <script src="https://giscus.app/client.js"
+          data-repo="dynamicduooq/dynamic-duo-web"
+          data-repo-id="R_kgDOSn8PYg"
+          data-category="Announcements"
+          data-category-id="DIC_kwDOSn8PYs4C923K"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="light"
+          data-lang="vi"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    )}
 
-            {/* NỘI DUNG */}
-            <div class={isNovelPage ? 'novel-content' : ''}>
-                <slot />
-            </div>
+  </div>
+</div>
 
-            {/* Điều hướng trước/sau */}
-            {isNovelPage && (prevChap || nextChap) && (
-                <div class="chapter-prev-next">
-                    {prevChap ? (
-                        <a href={prevChap.url} class="chap-nav-btn prev">
-                            ← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}
-                        </a>
-                    ) : <span />}
-                    {nextChap ? (
-                        <a href={nextChap.url} class="chap-nav-btn next">
-                            {nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →
-                        </a>
-                    ) : <span />}
-                </div>
-            )}
-
-            {/* Dropdown chương cuối trang */}
-            {isNovelPage && chapters.length > 1 && (
-                <div class="chapter-nav-box" id="chapNavBot" style="margin-top: 20px;">
-                    <button class="chapter-select-btn" id="chapBtnBot">
-                        ⚓ Chọn chương ▾
-                    </button>
-                    <div class="chapter-dropdown-list" id="chapListBot" style="bottom: calc(100% + 8px); top: auto;">
-                        {chapters.map((chap: any) => (
-                            <a
-                                href={chap.url}
-                                class={chap.frontmatter?.chuong === frontmatter?.chuong ? 'current' : ''}
-                            >
-                                {chap.frontmatter?.title || `Chương ${chap.frontmatter?.chuong}`}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Giscus comment */}
-            {isNovelPage && (
-                <div class="giscus-wrap">
-                    <script src="https://giscus.app/client.js"
-                            data-repo="dynamicduooq/dynamic-duo-web"
-                            data-repo-id="R_kgDOSn8PYg"
-                            data-category="Announcements"
-                            data-category-id="DIC_kwDOSn8PYs4C923K"
-                            data-mapping="pathname"
-                            data-strict="0"
-                            data-reactions-enabled="1"
-                            data-emit-metadata="0"
-                            data-input-position="bottom"
-                            data-theme="light"
-                            data-lang="vi"
-                            crossorigin="anonymous"
-                            async>
-                    </script>
-                </div>
-            )}
-
-        </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="ft-brand">
+      <span class="ft-logo">dynamic duo 𓆝.°•</span>
+      <p>paired dreams, boundless gleam.</p>
+      <p style="margin-top:5px;font-size:.74rem">✉ dynamicduoo.q@gmail.com</p>
     </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-inner">
-            <div class="ft-brand">
-                <span class="ft-logo">dynamic duo 𓆝.°•</span>
-                <p>paired dreams, boundless gleam.</p>
-                <p style="margin-top:5px;font-size:.74rem">✉ dynamicduoo.q@gmail.com</p>
-            </div>
-            <div class="ft-links">
-                <a href="/dynamic-duo-web/">Trang chủ</a>
-                <a href="/dynamic-duo-web/ca-duoi-nuoc/">Cá dưới nước</a>
-                <a href="/dynamic-duo-web/ca-tren-ban/">Cá trên bàn</a>
-                <a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a>
-                <a href="/dynamic-duo-web/about/">About</a>
-            </div>
-            <div class="ft-social">
-                <p style="font-size:.68rem;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Ghé thăm</p>
-                <div class="ft-social-row">
-                    <a href="https://dynamicduoq.wordpress.com" target="_blank" class="social-ic" title="WordPress">🌐</a>
-                </div>
-            </div>
-        </div>
-        <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
-    </footer>
-
-    <!-- SCROLL BUTTONS -->
-    <div class="scroll-btns">
-        <button class="scroll-btn" id="scrollTop" title="Lên đầu trang" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
-        <button class="scroll-btn" id="scrollBot" title="Xuống cuối trang" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>
+    <div class="ft-links">
+      <a href="/dynamic-duo-web/">Trang chủ</a>
+      <a href="/dynamic-duo-web/ca-duoi-nuoc/">Cá dưới nước</a>
+      <a href="/dynamic-duo-web/ca-tren-ban/">Cá trên bàn</a>
+      <a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a>
+      <a href="/dynamic-duo-web/about/">About</a>
     </div>
+    <div class="ft-social">
+      <p style="font-size:.68rem;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Ghé thăm</p>
+      <div class="ft-social-row">
+        <a href="https://dynamicduoq.wordpress.com" target="_blank" class="social-ic" title="WordPress">🌐</a>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
+</footer>
 
-    <script is:inline>
-        // Scroll buttons visibility
-        const scrollTop = document.getElementById('scrollTop');
-        const scrollBot = document.getElementById('scrollBot');
+<!-- SCROLL BUTTONS -->
+<div class="scroll-btns">
+  <button class="scroll-btn" id="scrollTop" title="Lên đầu" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <button class="scroll-btn" id="scrollBot" title="Xuống cuối" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>
+</div>
 
-        window.addEventListener('scroll', () => {
-            const y = window.scrollY;
-            const max = document.body.scrollHeight - window.innerHeight;
-            scrollTop.classList.toggle('show', y > 300);
-            scrollBot.classList.toggle('show', y < max - 100);
-        });
-        // Hiện nút xuống ngay lúc load
-        setTimeout(() => {
-            const max = document.body.scrollHeight - window.innerHeight;
-            if (max > 100) scrollBot.classList.add('show');
-        }, 100);
+<script is:inline>
+  // ── Scroll buttons ──
+  const _st = document.getElementById('scrollTop');
+  const _sb = document.getElementById('scrollBot');
+  function _updScroll() {
+    const y = window.scrollY;
+    const max = document.body.scrollHeight - window.innerHeight;
+    _st?.classList.toggle('show', y > 300);
+    _sb?.classList.toggle('show', y < max - 80);
+  }
+  window.addEventListener('scroll', _updScroll, { passive: true });
+  setTimeout(_updScroll, 150);
 
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        hamburger?.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-        });
+  // ── Hamburger ──
+  document.getElementById('hamburger')?.addEventListener('click', () => {
+    document.getElementById('mobileMenu')?.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    const mm = document.getElementById('mobileMenu');
+    const hb = document.getElementById('hamburger');
+    if (mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target)) {
+      mm.classList.remove('open');
+    }
+  });
 
-        // Chapter dropdown logic (đóng khi click bên ngoài)
-        function setupChapDropdown(btnId, listId) {
-            const btn = document.getElementById(btnId);
-            const list = document.getElementById(listId);
-            if (!btn || !list) return;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                list.classList.toggle('open');
-            });
-        }
+  // ── Chapter dropdowns ──
+  function setupChapBtn(btnId, listId) {
+    const btn = document.getElementById(btnId);
+    const list = document.getElementById(listId);
+    if (!btn || !list) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = list.classList.contains('open');
+      document.querySelectorAll('.chap-dropdown-list.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) list.classList.add('open');
+    });
+  }
+  setupChapBtn('chapBtnTop', 'chapListTop');
+  setupChapBtn('chapBtnBot', 'chapListBot');
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.chap-dropdown-list.open').forEach(el => el.classList.remove('open'));
+  });
 
-        setupChapDropdown('chapBtnTop', 'chapListTop');
-        setupChapDropdown('chapBtnBot', 'chapListBot');
+  // ── Scroll current chapter into view in dropdown ──
+  document.querySelectorAll('.current-chap').forEach(el => {
+    const list = el.closest('.chap-dropdown-list');
+    if (list) setTimeout(() => { el.scrollIntoView({ block: 'center' }); }, 50);
+  });
 
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.chapter-dropdown-list').forEach(el => el.classList.remove('open'));
-        });
+  // ── Inline comment ──
+  document.querySelectorAll('.novel-content p').forEach((p, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'inline-comment-btn';
+    btn.title = 'Bình luận đoạn này';
+    btn.textContent = '💬';
+    p.style.position = 'relative';
+    p.appendChild(btn);
 
-        // Inline comment trên từng đoạn văn
-        document.querySelectorAll('.novel-content p').forEach((p, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'inline-comment-btn';
-            btn.title = 'Bình luận dòng này';
-            btn.textContent = '💬';
-            btn.setAttribute('aria-label', 'Bình luận dòng này');
-            p.style.position = 'relative';
-            p.appendChild(btn);
+    const panel = document.createElement('div');
+    panel.className = 'inline-panel';
+    panel.innerHTML = `<div style="font-size:.74rem;color:var(--text-dim);margin-bottom:6px">💬 Bình luận đoạn ${idx + 1}:</div>
+      <textarea placeholder="Viết bình luận..."></textarea>
+      <button class="inline-submit">Gửi vào Giscus ↓</button>`;
+    p.after(panel);
 
-            const panel = document.createElement('div');
-            panel.className = 'inline-comment-panel';
-            panel.innerHTML = `
-                <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:6px">💬 Bình luận cho đoạn này:</div>
-                <textarea placeholder="Viết bình luận của bạn..." rows="2"></textarea>
-                <button class="inline-submit">Gửi (qua Giscus bên dưới)</button>
-            `;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = panel.classList.contains('open');
+      document.querySelectorAll('.inline-panel.open').forEach(el => el.classList.remove('open'));
+      if (!wasOpen) { panel.classList.add('open'); panel.querySelector('textarea').focus(); }
+    });
 
-            p.parentNode.insertBefore(panel, p.nextSibling);
-
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isOpen = panel.classList.contains('open');
-                // Đóng tất cả panels khác
-                document.querySelectorAll('.inline-comment-panel.open').forEach(el => el.classList.remove('open'));
-                document.querySelectorAll('.inline-comment-btn.active').forEach(el => el.classList.remove('active'));
-                if (!isOpen) {
-                    panel.classList.add('open');
-                    btn.classList.add('active');
-                    panel.querySelector('textarea').focus();
-                }
-            });
-
-            // Submit: cuộn xuống giscus với nội dung
-            panel.querySelector('.inline-submit').addEventListener('click', () => {
-                const text = panel.querySelector('textarea').value.trim();
-                if (!text) return;
-                // Copy text + cuộn xuống giscus
-                const quote = `> Đoạn ${idx + 1}: "${p.textContent.trim().slice(0, 60)}..."\n\n${text}`;
-                navigator.clipboard?.writeText(quote).catch(() => {});
-                const giscus = document.querySelector('.giscus-wrap');
-                if (giscus) {
-                    giscus.scrollIntoView({ behavior: 'smooth' });
-                }
-                panel.classList.remove('open');
-                btn.classList.remove('active');
-                panel.querySelector('textarea').value = '';
-                alert('Đã copy nội dung! Paste vào ô bình luận bên dưới để gửi.');
-            });
-        });
-    </script>
+    panel.querySelector('.inline-submit').addEventListener('click', () => {
+      const txt = panel.querySelector('textarea').value.trim();
+      if (!txt) return;
+      const quote = `> Đoạn ${idx + 1}: "${p.textContent.trim().slice(0,60)}..."\n\n${txt}`;
+      navigator.clipboard?.writeText(quote).catch(() => {});
+      document.querySelector('.giscus-wrap')?.scrollIntoView({ behavior: 'smooth' });
+      panel.classList.remove('open');
+      panel.querySelector('textarea').value = '';
+      alert('Đã copy! Paste vào ô bình luận bên dưới nhé.');
+    });
+  });
+</script>
 </body>
 </html>

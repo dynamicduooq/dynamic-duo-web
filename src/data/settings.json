@@ -1,5 +1,13 @@
 {
-  "site_name": "Dynamic Duo",
+  "site_name": "dynamic duo 𓆝.°•",
+  "tagline": "paired dreams, boundless gleam.",
   "logo": "/dynamic-duo-web/images/logo1.png",
-  "banner": "/dynamic-duo-web/images/banner.png"
+  "logo2": "/dynamic-duo-web/images/logo2.png",
+  "banner": "/dynamic-duo-web/images/banner.png",
+  "frontpage": "/dynamic-duo-web/images/frontpage.png",
+  "email": "dynamicduoo.q@gmail.com",
+  "wordpress_url": "https://dynamicduoq.wordpress.com",
+  "github_repo": "dynamicduooq/dynamic-duo-web",
+  "giscus_repo_id": "R_kgDOSn8PYg",
+  "giscus_category_id": "DIC_kwDOSn8PYs4C923K"
 }

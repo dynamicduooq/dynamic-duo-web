@@ -1,198 +1,202 @@
 ---
-title: "NĐNTKM - Chương 37"
-date: 2026-05-17
-tags: 
-  - "neu-dem-nay-troi-khong-mua"
+layout: ../../../layouts/Layout.astro
+title: "Chương 35"
+truyen_id: "ndntkm"
+chuong: 37
+date: "2026-05-17"
+tags:
+  - "nếu đêm nay trời không mưa"
+  - "đam mỹ"
+  - "hiện đại"
+  - "HE"
 ---
 
-## **Chương** 37
+## **Chương **35
 
-Hạ Tranh là người nói được làm được, anh kéo Lâm Hướng Bắc đi khám sức khỏe tổng quát.
+Đồng hồ sinh học của Hạ Tranh vô cùng chính xác, sáng sớm tỉnh giấc, mở mắt trước cả khi chuông báo thức tám giờ ngày làm việc kịp reo.
 
-Khi cần cởi quần áo để kiểm tra, Lâm Hướng Bắc thấy hơi ngượng. Cậu từng nhìn bản thân trong gương, trên cơ thể đầy những vết tích chằng chịt lộn xộn, hai bên thắt lưng có hai vết đỏ sâu hoắm do bị véo không tan đi được, phần hõm cổ không còn được áo len cổ cao che chắn, lộ ra những vết bầm tím chồng lên nhau như hình vẽ graffiti, trông khá đáng sợ, như thể bị ngược đãi, nhưng thật ra thì không phải vậy.
+Lâm Hướng Bắc tuy ngang bướng nhưng ngủ lại rất ngoan, không đạp chăn, không ngáy, thậm chí tư thế cũng không thay đổi nhiều.
 
-Vị bác sĩ dày dặn kinh nghiệm hơi sững lại một chút, há miệng như muốn nói gì đó, cuối cùng cũng chỉ nhắc nhở cậu rằng, hành vi như vậy rất nguy hiểm, tốt nhất là nên tránh động mạch cổ, nếu không có thể gây nguy hiểm như ngừng tim đột ngột.
+Tối qua cậu khẽ co người nép vào lòng Hạ Tranh, nửa đêm tỉnh dậy một lần trong trạng thái mơ màng, bị xoay lại đối diện với Hạ Tranh cũng chỉ lầm bầm một tiếng rồi gục đầu vào hõm cổ Hạ Tranh.
 
-Lâm Hướng Bắc nghe xong, mặt lập tức đỏ rần biến từ da vàng thành da đỏ, nóng ran từ đầu đến chân, chỉ ước gì có thể đào một cái lỗ để chui xuống.
+Lâm Hướng Bắc lúc ngủ đáng yêu hơn lúc tỉnh.
 
-Ở bệnh viện mất cả một ngày, quá nhiều mục cần làm, hôm sau Hạ Tranh đích thân đi lấy kết quả kiểm tra của Lâm Hướng Bắc.
+Hạ Tranh ôm cậu cả đêm, chỉ cảm thấy thân thể này gầy quá mức, xương nhô lên rất rõ, gần như đâm ra ngoài da, rất cấn người, ôm vào chẳng thấy thoải mái chút nào.
 
-Tạm gác qua chuyện vết bầm mô mềm, thiếu máu và mất cân bằng dinh dưỡng, điều đáng chú ý nhất là bàn tay trái được chụp cộng hưởng từ: gãy xương cũ và viêm khớp xương, vì khi bị thương không được điều trị đúng cách, những năm qua lại không chăm sóc tốt, khớp đã bị mòn và lão hóa nghiêm trọng, còn có xu hướng không thể chữa lành.
+Anh chậm rãi rút cánh tay tê rần ra, nhẹ nhàng xuống giường, không đánh thức Lâm Hướng Bắc đang ngủ say.
 
-“Tình trạng của cậu ấy sẽ có ảnh hưởng nhất định đến cuộc sống hàng ngày, hiện nay điều kiện cấp chứng nhận khuyết tật đã được nới lỏng, nếu cần làm thủ tục thì có thể đến đây để lấy giấy chứng nhận.”
+Anh thường ăn sáng ở quán cà phê gần công ty, hôm nay cũng vậy, trước khi ra cửa nhắn tin cho Lâm Hướng Bắc, bảo trong tủ lạnh có bánh mì và sữa, hoặc tự gọi đồ ăn.
 
-Khuyết tật --
+Ngoài công việc, anh còn một lịch trình rất quan trọng, 3 giờ chiều đến địa điểm mà Đại Phi chỉ định để gặp mặt giải quyết vấn đề vay nặng lãi của Lâm Hướng Bắc.
 
-Hai từ sắc nhọn như móng tay cào lên bảng đen, quá mức chói tai, đồng tử của Hạ Tranh khẽ run lên, anh xác nhận lại mấy lần vẫn không thể tin được Lâm Hướng Bắc lại có liên quan đến khuyết tật.
+Văn phòng luật Quân Bình vẫn như mọi ngày, Hạ Tranh bước chân nhanh nhẹn hơn một chút, ngoài ra cũng không khác ngày thường là bao.
 
-Anh cầm tờ kết quả ngồi im lặng trong xe rất lâu, nghĩ đi nghĩ lại, một người đang yên đang lành, sao lại trở thành người tàn phế?
+Buổi trưa phân vân giữa việc xuống lầu ăn với đồng nghiệp hay về nhà, anh chọn cái trước, nhưng rõ ràng lúc nói chuyện hơi lơ đãng, mấy lần điện thoại hiện thông báo đều mở ra xem.
 
-Lâm Hướng Bắc sống tệ hơn anh tưởng tượng nhiều, cậu đã kéo lê cơ thể tàn tạ này loạng choạng bước đi một mình bao lâu rồi?
+Chu Trác thấy anh liên tục chú ý đến điện thoại, không khỏi hỏi: “Khách hàng à?”
 
-Răng Hạ Tranh ê buốt đau đớn, không định kể lại lời bác sĩ cho Lâm Hướng Bắc, cảm giác điều đó quá tàn nhẫn -- Lâm Hướng Bắc có biết tình trạng của mình không, có lẽ Hạ Tranh còn không thể đối mặt với thực tế này hơn cả cậu.
+Hạ Tranh mỉm cười, nhận ra lúc ăn mà phân tâm thì không được lịch sự lắm, lại cất điện thoại đi.
 
-Người tự nguyện trở thành trụ cột tinh thần phải luôn có thể ra vẻ bình thản.
+Lâm Hướng Bắc chắc mười giờ mới dậy, trả lời “Được” rồi không có tin nhắn mới nào nữa.
 
-Anh không muốn đối xử với Lâm Hướng Bắc như một người không lành lặn, tự điều chỉnh tâm lý, phải cố nói chuyện bình tĩnh.
+Ở nhà một mình không nói gì với anh sao? Hay là có đối tượng chia sẻ tốt hơn?
 
-“Sao lại bị như vậy?”
+Hạ Tranh tạm thời gác những câu hỏi khác lại, vì có thêm người ở nhà nên phải cân nhắc lối sống mới, thấy Lâm Hướng Bắc gầy như vậy, việc cấp bách là bồi bổ cho cậu tăng cân, kẻo ngày nào cũng cấn vào anh, nhưng trước đó phải đến bệnh viện kiểm tra tổng quát, nhất là vết thương ở bụng, chắc chắn là một đòn rất nặng có thể tổn thương đến nội tạng.
 
-Báo cáo được chuyển đến tay Lâm Hướng Bắc, cậu mím môi: “Chỉ là không cẩn thận ngã một cái thôi...”
+Còn cả tay trái của Lâm Hướng Bắc nữa, bóp nhẹ đã kêu đau, e là viêm nhiễm gì đó -- Người đã lớn như vậy rồi mà vẫn như trẻ con, không biết tự chăm sóc bản thân, làm người ta lo không hết.
 
-Rõ ràng là cách nói qua loa, đến lúc này mà vẫn muốn giấu, Hạ Tranh không nhịn được nghiêm giọng ngắt lời cậu: “Nói thật đi.”
+Giỏ hàng của Hạ Tranh đầy nồi niêu xoong chảo, một cú nhấp chuột, ngày mai sẽ nhận được.
 
-Lâm Hướng Bắc không muốn nhắc đến giai đoạn đó trước mặt Hạ Tranh, suy nghĩ một lúc mới khẽ nói: “Trước đây trong tù đánh nhau với người ta, không thắng được.”
+Anh không thường nấu nướng, không quá cầu kỳ, tay nghề chỉ ở mức bình thường.
 
-Vì nói rất nhỏ, ngược lại giống như đang ngượng ngùng mách Hạ Tranh rằng có người bắt nạt cậu.
+Trương Tiểu Mẫn và bạn trai là những người sành ăn, rất am hiểu về nguyên liệu, Thái Bác Minh khen cô là đầu bếp cấp độ Michelin, Hạ Tranh cũng đã nếm thử tay nghề của cô, thoáng nghe cô nhắc đến một ứng dụng dạy nấu ăn gia đình.
 
-Không cần Lâm Hướng Bắc nói chi tiết, với nghề nghiệp và kinh nghiệm của Hạ Tranh, anh cũng có thể tưởng tượng được ở trong tù khổ cực đến mức nào, nhưng làm sai phải trả giá, Lâm Hướng Bắc đáng phải chịu như vậy.
+Mãi đến khi chuẩn bị ra ngoài, Hạ Tranh mới đứng trước chỗ làm việc của Trương Tiểu Mẫn, hỏi tên ứng dụng.
 
-Hạ Tranh khẽ hít vào một hơi, cuối cùng vẫn không thể nói lời mỉa mai ra miệng.
+“Anh định tự nấu ăn à?” Trương Tiểu Mẫn rất thích chia sẻ, lập tức nói với anh: “Anh tìm ‘Một người ăn’ là được, đơn giản lắm, làm một lần là biết.”
 
-Anh im lặng đặt tay Lâm Hướng Bắc vào lòng bàn tay mình, như thể muốn xem mức độ chấn thương, xoa xoa cổ tay trắng mảnh khảnh, lực không mạnh, nhưng lông mày Lâm Hướng Bắc vẫn vô thức nhíu lại.
+Hạ Tranh suy nghĩ một lúc rồi hỏi: “Còn khẩu phần hai người thì sao?”
 
-Những rãnh sâu trong lòng Hạ Tranh không nông hơn nếp nhăn trên trán cậu, vừa hận, vừa trách.
+Hoàn toàn là một câu thừa thãi, nhưng anh lại nói ra rất thản nhiên, thấp thoáng chút vẻ khoe khoang như đang thông báo.
 
-Hận Lâm Hướng Bắc đi sai một bước, hủy hoại cả một đời.
+Trương Tiểu Mẫn ngạc nhiên “ơ” một tiếng, nhưng Hạ Tranh lại như đang vội không tiện nói nhiều, nhìn đồng hồ nói: “Tôi còn có việc, sau này sẽ hỏi cô thêm.”
 
-“Đau lắm à?” Hạ Tranh hỏi, có vẻ rất quan tâm đến Lâm Hướng Bắc, nhận ra điều đó, anh lại vội nói tiếp: “Bác sĩ bảo tôi hỏi cậu, gần đây có chấn thương mới làm nặng thêm triệu chứng không, có ảnh hưởng đến cuộc sống hàng ngày không.”
+Anh vừa đi, tin đồn đã bắt đầu lan truyền trong phạm vi nhỏ giữa mấy bàn làm việc gần đó.
 
-Hai câu hỏi liên tiếp che lấp sự quan tâm ban đầu, Lâm Hướng Bắc quả nhiên tập trung vào việc trả lời.
+“Có phải Hạ Tranh đang yêu không, mấy ngày trước tôi thấy anh ấy cứ như người mất hồn, trong nhà có ai rồi à?”
 
-Cậu rút tay về, chậm rãi xoay mấy vòng trước mặt Hạ Tranh, không quá linh hoạt, nói: “Bình thường không sao, nhưng không nhấc được đồ nặng.”
+Thái Bác Minh kéo ghế chen vào, gọi “này này” vài tiếng: “Tiểu Mẫn, vừa nãy tôi và Chu Trác ăn cơm với anh ấy, mắt Hạ Tranh gần như dán vào điện thoại, tôi đoán anh ấy đang đợi tin nhắn của bạn gái.”
 
-Hạ Tranh vẫn chờ cậu nói tiếp, cậu đành nói thật: “Mấy ngày trước bị Đại Phi giẫm một cú, có thể hơi ảnh hưởng.”
+“Thật không?”
 
-“Cậu thật sự không để người ta yên tâm được.” Hạ Tranh quở trách, như đừng trước một thiếu niên nổi loạn tuổi dậy thì, chỉ có thể dùng trách mắng để che giấu cảm xúc của mình: “Suốt ngày gây chuyện đánh nhau với người ta, cậu không thể dùng sức đó vào những việc khác à?”
+“Hạ Tranh đang theo đuổi ai à...”
 
-Lâm Hướng Bắc ấm ức trừng mắt: “Đâu phải tôi muốn đánh nhau với họ, lẽ nào khi người ta đánh tôi, tôi phải đứng im cho người ta đánh sao?”
+Thì thầm lao xao, giờ làm việc khô khan tẻ nhạt cũng trở nên vui vẻ hơn nhờ những cuộc bàn tán về người quen: con người sống nhờ vào những niềm vui nhỏ nhoi như vậy.
 
-Hạ Tranh tiếp lời châm chọc cậu, giọng gay gắt: “Cậu ngu ngốc thật, nếu không cũng chẳng tự làm mình thành ra như thế này.”
+Đương sự Hạ Tranh hoàn toàn không hay biết chuyện này, đã đi gặp Đại Phi, tốn chút công sức xóa nợ cho Lâm Hướng Bắc.
 
-Nhắc đến tình trạng hiện tại của Lâm Hướng Bắc, cậu chỉ còn nước nghẹn lời, hơn nữa bây giờ cậu đã không thể tranh luận thắng được chuyên gia tranh biện Hạ Tranh, nghẹn nửa ngày mới đành chịu thua: “Tôi không cãi với anh nữa.”
+Đại Phi mặt bóng dầu, dùng tăm xỉa răng, bảo đàn em đưa hợp đồng vay nợ có chữ ký và dấu vân tay của Lâm Hướng Bắc cho anh: “Anh là gì của nó mà vung tay ghê thế?”
 
-Chuyện đã đến nước này, mắng Lâm Hướng Bắc te tua cũng chẳng làm được gì, hai người yên lặng như giận dỗi mấy giây, trái lại có một sự hòa hợp kỳ lạ.
+Hạ Tranh cẩn thận xem xét hợp đồng, không trả lời câu hỏi của gã ta: “Chỉ có những thứ này thôi, không còn gì khác chứ?”
 
-Mấy ngày nay hầu như Lâm Hướng Bắc chỉ ở nhà, ra ngoài sẽ báo cho Hạ Tranh, vì ngoan ngoãn theo ý anh, nên chưa xảy ra bất kỳ mâu thuẫn nào.
+“Bọn tôi cũng có quy tắc, đưa tiền rồi là xong, không lằng nhằng.” Đại Phi đầy đạo đức nghề nghiệp, gác chân lên bàn, nhổ mảnh thịt dính trong kẽ răng: “Nhưng tôi phải nhắc nhở anh, à, anh họ, họ Hạ phải không?”
 
-Hạ Tranh đọc kỹ các kết quả kiểm tra còn lại của Lâm Hướng Bắc, một lúc sau mới đóng báo cáo lại, nói: “Tôi đã hẹn hai giờ chiều mai tới tái khám ở bệnh viện cho cậu, buổi sáng tôi có chút việc phải hoàn thành, ăn trưa xong sẽ đến đón cậu.”
+Hạ Tranh xác nhận không có sai sót gì cất hợp đồng, nhìn Đại Phi.
 
-Giọng điệu thông báo, rõ ràng đã quyết định trước khi nói chuyện.
+“Luật sư Hạ, anh muốn giúp Lâm Hướng Bắc thì được, nhưng cẩn thận kẻo đắc tội ai mà không biết.” Đại Phi tặc lưỡi hai tiếng, tỏ vẻ ghê tởm: “Thời buổi này thật là lạ, đếch hiểu sao đàn ông giờ toàn đi cửa sau...”
 
-Lâm Hướng Bắc đang mơ màng, nghe vậy sững lại, tay trái từ từ nắm chặt, vẻ mặt khó xử.
+Hạ Tranh nhíu mày, không nói thêm với gã ta nữa, cầm đồ ra khỏi tòa nhà, nghĩ đến lời nhắc nhở của gã, khóe môi hơi chùng xuống, tăng tốc bước chân rời đi.
 
-Tất nhiên Hạ Tranh hiểu mối lo ngại của cậu, nhàn nhạt nói: “Chi phí điều trị cậu không cần lo.”
+Tít --
 
-“Sao mà vậy được?”
+Trong nhà im ắng, Lâm Hướng Bắc không ra đón anh.
 
-Cậu đã nợ Hạ Tranh quá nhiều rồi, thêm một khoản nữa, biết bao giờ mới trả hết?
+Đã hơn 4 giờ chiều rồi, vẫn đang ngủ sao?
 
-Hạ Tranh như thể cố tình muốn đạt được hiệu quả này, khiến Lâm Hướng Bắc không còn mặt mũi nào để nói đến việc rời xa anh, anh cuộn tròn bản báo cáo, gõ nhẹ hai cái vào lòng bàn tay, chốt hạ: “Cứ quyết định vậy đi, nếu cậu không muốn đến lúc già thậm chí không nhấc nổi một cái cốc.”
+Hạ Tranh đặt cặp công văn ở lối vào, suy nghĩ một lúc rồi lấy hợp đồng ra, chậm rãi bước đến phòng ngủ chính.
 
-Rồi lập tức chuyển sang chủ đề mới: “Ngày kia tôi bắt đầu nghỉ phép năm, đến mùng 10 Tết sẽ đi làm lại, đêm giao thừa có muốn đi thăm ba cậu không?”
+Trên giường còn chăn chưa gấp, Lâm Hướng Bắc không biết đã đi đâu.
 
-Chỉ bằng dăm ba câu, Lâm Hướng Bắc đã dễ dàng bị Hạ Tranh dẫn dắt, hỏi: “Anh không về Lệ Hà à?”
+Hạ Tranh nhanh chóng đi đến phía bên kia, thấy túi hành lý vẫn nằm trên sàn mới dừng lại, lập tức gọi điện cho Lâm Hướng Bắc, phải gọi hơn mười giây mới được kết nối.
 
-Hạ Tranh im lặng vài giây, giọng trầm xuống: “Thanh minh rồi về.”
+Lâm Hướng Bắc dậy ăn bánh mì rồi ra ngoài giao hàng, cậu nợ Hạ Tranh nhiều tiền như vậy, mặc dù gần Tết không tìm được công việc mới, nhưng cũng không thể ăn bám mãi, trả được chút nào hay chút ấy.
 
-Thanh minh liên quan đến cái chết, Lâm Hướng Bắc nghĩ đến bà nội Hạ đã qua đời, nhưng Hạ Tranh không chỉ có một người thân, cậu định nói lại thôi, có linh cảm không tốt.
+“A lô, Hạ Tranh, có chuyện gì không?”
 
-“Khi tôi vừa lên năm thứ ba đại học, ba tôi mắc bệnh cấp tính trong tù, không cứu kịp.” Hạ Tranh rất bình tĩnh, không phải vì không để tâm, mà là buộc phải chấp nhận kết quả này, anh nhìn Lâm Hướng Bắc: “Dì có gia đình riêng, tôi không muốn làm phiền dì, đã nhiều năm rồi tôi không về quê ăn Tết.”
+Bên phía Lâm Hướng Bắc rất ồn ào, có lẽ đang ở ngoài đường, còn có tiếng gió ù ù thổi vào tai Hạ Tranh.
 
-Ngụ ý là, Hạ Tranh thật sự chỉ còn lại một mình, những ngày đoàn viên chẳng hề liên quan gì đến anh.
+Anh đưa điện thoại ra xa một chút, giọng trầm trầm: “Cậu đi đâu vậy?”
 
-Tim Lâm Hướng Bắc thoạt tiên hẫng đi một nhịp, nhói lên từng chút một, sau đó lại đập loạn xạ, gần như vội vàng nói: “Vậy tôi ăn Tết cùng anh nhé!”
+Là giọng điệu của người lớn đang quở trách đứa trẻ không về nhà.
 
-Nói xong mới cảm thấy đang hơi tự cho mình là quan trọng, không biết giấu mặt vào đâu.
+Lâm Hướng Bắc dừng xe lại để nghe rõ lời Hạ Tranh hơn: “Tôi đang đi giao hàng mà.”
 
-Hạ Tranh không đồng ý ngay, chỉ cười cười nhìn cậu một lúc lâu, nhìn đến khi cậu cảm thấy da đầu tê dại mới chậm rãi ngẫm nghĩ: “Lúc đó để tôi xem lịch, không chắc có thời gian.”
+Người còn chưa khỏe đã chạy lung tung, thân lừa ưa nặng!
 
-Lâm Hướng Bắc thực sự muốn tìm một cái lỗ để chui xuống, vẻ mặt hơi ngượng ngùng vì sự tự ý của mình.
+Hạ Tranh nghiến răng: “Về đây.”
 
-Những năm qua vì cô đơn một mình bên ngoài, cậu thật sự rất sợ các ngày lễ, càng đông đúc bao nhiêu lại càng cô đơn bất nhiều, lần nào cậu cùng dùng công việc để lấp đầy thời gian chậm chạp, nhưng cuộc sống đầy màu sắc sống động của Hạ Tranh chắc chắn khác với cậu, làm sao thiếu người bầu bạn được?
+“Gần đến giờ cao điểm rồi, lúc này nhiều đơn, 8 giờ tôi sẽ về, anh không cần đợi tôi ăn cơm đâu.” Lâm Hướng Bắc chỉ chăm chăm muốn giao hàng trong thời gian quy định, lớn tiếng nói: “Không nói nữa, tôi sắp trễ giờ rồi, bye.”
 
-Đầu óc cậu như bị lấp đầy gỗ, rất chậm chạp.
+Cậu cúp điện thoại cái rụp, vặn ga chạy đi, vì đơn hàng này là đơn đường dài, có thể kiếm thêm 5 tệ so với đơn bình thường, hơn nữa sau khi nghe giọng Hạ Tranh, cả người cậu bỗng tràn đầy năng lượng, cảm thấy có thể chạy thêm vài trăm cây số nữa.
 
-Hạ Tranh dùng một câu kéo cậu ra khỏi sự mơ màng: “Nhưng năm mới thì không gọi đồ ăn ngoài được, nhà không có nguyên liệu, ngày mai đến bệnh viện xong nếu còn thời gian thì ghé qua siêu thị.”
+Lâm Hướng Bắc ra ngoài đến gần 9 giờ mới về đến nhà.
 
-Liếc nhìn đống thùng giao hàng chất đống ở góc tường, là dụng cụ nhà bếp mua online: “Rảnh thì mở đồ ra sắp xếp giúp tôi.”
+Vừa mở cửa, bất ngờ thấy Hạ Tranh đang ngồi vắt chéo chân trên ghế sofa, có vẻ đang cố tình đợi cậu, nhưng ánh mắt nhìn qua có chút oán trách khó tả.
 
-Đến khi Hạ Tranh đã biến mất khỏi phòng khách, Hướng Lâm Bắc mới chậm chạp “ồ” một tiếng, cậu gãi gãi sau tai, đứng dậy tìm dao rọc giấy, ngồi xếp bằng trên sàn nhà lạnh lẽo, mở từng hộp một.
+Lâm Hướng Bắc cầm mũ bảo hiểm giao hàng trong tay, khi vừa vào cổng, bảo vệ tưởng cậu là người giao hàng, đã chặn cậu lại, may mà trước đó Hạ Tranh đã đưa thẻ ra vào cho cậu, bảo vệ nghi ngờ kiểm tra mấy lần cậu mới được vào trong.
 
-Nồi cơm điện, bếp điện từ, thớt gỗ, chảo rán, một bộ bát đĩa thìa đũa sứ đầy đủ, lộn xộn chất đầy sàn, trông giống như sắp mở một nhà hàng nhỏ tư nhân.
+Lâm Hướng Bắc không giận, ai cũng phải ra ngoài mưu sinh, làm tròn trách nhiệm là rất tốt.
 
-Những vật dụng đầy hơi thở cuộc sống khiến Lâm Hướng Bắc chạm đến được cảm giác chân thực khi sống chung với Hạ Tranh.
+Cậu thay giày xong, vừa cởi áo khoác ra đã nghe Hạ Tranh gọi: “Cậu lại đây.”
 
-Cậu ngây ngẩn mỉm cười, hăng hái chuyển hết đồ vào bếp, căn bếp vốn trống trải chẳng mấy chốc đã được lấp đầy, nhưng vì quá mới nên vẫn còn hơi lạnh lẽo, phải chờ đợi hơi người đến sưởi ấm, để những vật dụng không có sự sống trở nên sống động hơn.
+Nhạy bén ngửi ra trông không khí có mùi căng thẳng, thần kinh đang thả lỏng thoáng căng lên, cậu đi qua, vì ngại người đầy bụi bặm, ngồi xuống bên phải Hạ Tranh cách hơn một cánh tay.
 
-Lâm Hướng Bắc cặm cụi bận rộn cả nửa tiếng, toát một lớp mồ hôi mỏng, xếp gọn mấy chục hộp giao hàng to nhỏ đặt ở lối đi gần cửa, suy nghĩ một lúc rồi quay lại gõ cửa phòng làm việc.
+Trên bàn đặt mấy tờ giấy, Lâm Hướng Bắc liếc một cái đã nhìn thấy dấu vân tay đỏ chói, đó là hợp đồng vay nợ của cậu.
 
-Cửa mở, Hạ Tranh đang xử lý công việc ở bàn ngẩng đầu lên, nhìn thấy gò má Lâm Hướng Bắc ửng đỏ, trán sáng lấp lánh, ánh mắt như một vũng nước phẳng, cảm xúc đều ẩn giấu dưới đáy.
+Hạ Tranh thả chân trái đang vắt lên xuống, hơi hất cằm: “Xem đi.”
 
-Lâm Hướng Bắc khẽ thở gấp: “Tôi đi vứt rác.”
+Lâm Hướng Bắc nắm tay lại, cầm lên, hai tờ giấy rất nhẹ, nhưng lại là ngọn núi đè nặng cậu suốt thời gian qua.
 
-Hạ Tranh gật đầu: “Cần tôi giúp không?”
+“Một bản đã được hủy, bản này cậu tự quyết định.” Hạ Tranh nhìn về phía cậu, bất ngờ nói: “Tôi khuyên là nên giữ lại.”
 
-“Có mấy thứ này, chạy vài chuyến là xong.” Niềm vui ngập tràn trong lòng Lâm Hướng Bắc toát lên trong giọng điệu nhẹ nhàng của cậu, từng câu từng chữ như những con chim sẻ nhảy nhót, con này vừa đáp xuống, con kia lại vỗ cánh bay lên, sinh động không thể nắm bắt: “Tôi chỉ báo với anh một tiếng thôi.”
+Cổ họng cậu khô khốc, nuốt nước bọt một cái mới nói được nên lời: “Tại sao?”
 
-Cậu chạy vụt ra cửa, thoắt cái đã biến mất.
+“Để nhắc nhở cậu sau này đừng tái phạm, tôi thấy tốt nhất là đóng khung treo đầu giường, mỗi tối trước khi ngủ đọc hai lần, học thuộc lòng, chữa cái tật gì cũng dám ký của cậu.” Hạ Tranh nói với giọng trách móc không đành lòng: “Thứ này ai học vài năm cũng hiểu, lãi suất gấp đôi, không biết nên nói cậu can đảm hay là không biết nên không sợ nữa.”
 
-Hạ Tranh ngồi một lúc rồi bước đến trước chuông cửa gắn màn hình, qua màn hình nhỏ bằng bàn tay, anh nhìn chăm chú bóng dáng Lâm Hướng Bắc đang bận rộn qua lại bên ngoài, viền đen của màn hình phản chiếu một phần nhỏ khuôn mặt người đang đứng im, khóe môi khẽ cong lên một đường cong nhẹ như trăng non.
+Lâm Hướng Bắc bị mắng một trận, vẻ mặt khó xử, chuyện đã rồi, giải thích với Hạ Tranh rằng khi đó cậu thực sự cùng đường nên mới bất đắc dĩ bước lên con đường này nghe giống như ngụy biện, nhưng chắc chắn không thể thiếu lời cảm ơn, cậu chân thành nhìn Hạ Tranh nói: “Tôi biết tôi không thông minh bằng anh, nhưng cảm ơn anh.”
 
-Cho đến khi cửa thang máy mở ra đóng vào, bên ngoài trở nên yên tĩnh, anh mới thu hồi ánh mắt, xoay người nhìn căn bếp được Lâm Hướng Bắc tự tay lấp đầy, trái tim vốn cố tình đúc cho cứng rắn và sắc cạnh của anh như bị giấy nhám chà nhẹ, hơi tê dại.
+Hạ Tranh cười khẩy một tiếng: “Cách cậu cảm ơn thật là khiến người ta không dám nhận.”
 
-Giá mà Lâm Hướng Bắc có thể ngoan ngoãn như thế mãi thì tốt biết mấy, dù là giả vờ, anh cũng sẽ chăm Lâm Hướng Bắc thật tốt, không để cậu chịu bất cứ tổn thương nào.
+Lâm Hướng Bắc ngơ ngác, không hiểu sao anh lại nổi cáu.
 
-Khóe môi Hạ Tranh trở lại bình thường, lần nữa vào vai một người lạnh lùng, nhưng thật ra, đối với anh, cả có được hay mất đi đều quan trọng như nhau.
+Hợp đồng trong tay được thay bằng thỏa thuận giữa cậu và Hạ Tranh, ngón tay thon dài chỉ vào một điều khoản: “Đọc.”
 
-Lâm Hướng Bắc không lay chuyển được Hạ Tranh, ngày hôm sau vẫn phải đến bệnh viện.
+Lâm Hướng Bắc làm theo: “Trong thời gian sống chung với Hạ Tranh, mọi việc phải đặt Hạ Tranh lên hàng đầu.”
 
-Trong y học, chưa có phương pháp điều trị tốt nhất cho viêm khớp xương, thường là kết hợp vật lý trị liệu và điều trị bằng thuốc, chỉ khi bất đắc dĩ mới áp dụng phẫu thuật xâm lấn tối thiểu.
+Cậu thắc mắc ngước mắt lên, Hạ Tranh nói: “Tối qua còn nói sẽ nghe lời tôi, tôi bảo cậu về, cậu đã nghe tai này lọt tai kia rồi à?”
 
-Tình trạng của Lâm Hướng Bắc phức tạp hơn một chút, nhưng bác sĩ vẫn khuyên nên điều trị bảo tồn trước, kê một số thuốc uống và bôi để giảm đau cũng như làm dịu triệu chứng, dặn cậu tuân theo chỉ dẫn của bác sĩ.
+Lâm Hướng Bắc khó hiểu: “Tôi cũng phải đi làm chứ, đâu thể ở nhà từ sáng đến tối được.”
 
-Lâm Hướng Bắc đã quen với những cơn đau thỉnh thoảng bùng phát, cũng không còn hy vọng gì vào bàn tay này, vì vậy thái độ rất thờ ơ, Hạ Tranh chú ý nhiều hơn cậu, đăng ký lấy thuốc, hỏi han chi tiết, thậm chí ghi chú những điểm quan trọng trên điện thoại, khiến Lâm Hướng Bắc cảm động đến mức hơi lúng túng.
+“Tại sao không được?”
 
-Trên đường lấy xe, Hạ Tranh có lẽ không hài lòng với thái độ tiêu cực của Lâm Hướng Bắc, mắng cả một tràng dài: “Đây là tay của cậu, bản thân cậu có thể để tâm một chút không? Cậu chưa đến ba mươi, khớp đã lão hóa đến mức năm, sáu mươi tuổi, bây giờ không chú ý, đến khi cậu thực sự năm, sáu mươi tuổi, không biết sẽ thoái hóa đến mức nào.”
+Lâm Hướng Bắc càng không thể hiểu nổi: “Tôi không đi làm, làm sao trả tiền cho anh được?”
 
-Lâm Hướng Bắc thấy những lời này hơi quen tai, cậu thường dùng để động viên Lâm Học Khôn, liếc nhìn Hạ Tranh một cái, nghĩ bụng khi năm, sáu mươi tuổi cậu còn không biết mình sẽ ở đâu, không dám cãi lại.
+Hạ Tranh đã có tính toán từ trước: “Học một nghề nuôi thân đi đã rồi hẵng nói đến chuyện trả tiền, còn mấy ngày nữa là Tết rồi, cậu cứ ở nhà đi, tôi đăng ký cho cậu một lớp làm bánh, sau Tết cậu sẽ đi học.”
 
-Cậu thích nghe Hạ Tranh nói chuyện, mặc dù giọng điệu của anh lạnh lùng và cứng rắn, nhưng vẫn rất vui khi được Hạ Tranh cằn nhằn.
+Lâm Hướng Bắc ngạc nhiên trợn mắt, nghi ngờ mình nghe nhầm: “Làm bánh?” ngừng một chút: “Là kiểu làm bánh như bánh ngọt ở tiệm đó hả?”
 
-“Cậu cười ngây ngô gì vậy?”
+Hạ Tranh nhìn cậu với vẻ mặt “chứ còn gì nữa”.
 
-Hạ Tranh đang cầm một túi thuốc, dừng bước, nhíu mày nhìn chăm chú.
+Lâm Hướng Bắc hoàn toàn không thể hiểu nổi suy nghĩ của Hạ Tranh, cúi đầu chỉ vào mình, “Anh thấy tôi hợp đi nhào nặn làm bánh ngọt à? Đừng đùa nữa.”
 
-Lúc này Lâm Hướng Bắc mới phát hiện mình đang cười toe toét, “ừ” một tiếng rồi ngậm miệng lại.
+Hợp hay không cũng không quan trọng, mục đích cuối cùng của Hạ Tranh chỉ là kiểm soát toàn bộ động thái của Lâm Hướng Bắc, anh thêm một lựa chọn: “Hoặc cậu muốn học pha cà phê cũng được.”
 
-Hạ Tranh ném túi thuốc vào ghế sau xe, bảo Lâm Hướng Bắc lên xe, tâm trạng cũng không tệ, nhưng chỉ để lại cho Lâm Hướng Bắc một góc mặt nghiêng lạnh lùng.
+Lâm Hướng Bắc đặt hợp đồng xuống, vội nói: “Tôi chưa từng tiếp xúc với mấy thứ đó.”
 
-Lâm Hướng Bắc gọi anh một tiếng: “Đi siêu thị sao?”
+“Vậy thì bắt đầu học từ đầu, kiểu gì cũng sẽ học được thôi.”
 
-Trong lời nói có sự mong đợi như được đi dã ngoại.
+Lâm Hướng Bắc líu lưỡi: “Đây không phải vấn đề có học hay không, tôi có thể tự tìm việc làm...”
 
-Hạ Tranh nhàn nhạt “ừ” một tiếng, ánh mắt như vô tình lướt qua cổ tay đã dán cao của cậu, thấy cậu không thoải mái cựa quậy mãi, tức giận nói: “Bác sĩ đã nói tránh dùng khớp quá mức, cậu không có việc gì thì đừng cứ xoay nó thế.”
+Sống nhờ Hạ Tranh như vậy, nghĩa là sao chứ? Từ chủ nợ nâng cấp lên mức độ bao nuôi, Lâm Hướng Bắc có tay có chân có thể làm việc không muốn như vậy.
 
-Lâm Hướng Bắc vội đặt tay xuống, nói: “Hơi nóng.”
+Cậu chưa thi đại học, nhưng tình cảnh này lại giống như một học sinh bị người lớn ép phải chọn chuyên ngành mình không thích, Hạ Tranh sợ cậu lại phạm sai lầm đã biến thành một phụ huynh theo chủ nghĩa chuyên chế, tự mình quyết định mọi thứ.
 
-“Thế là bình thường.”
+Thấy Lâm Hướng Bắc còn định phản bác, Hạ Tranh bèn nói: “Nếu những điều cậu hứa với tôi chỉ để lừa tôi, thì ngay từ đầu không cần thiết phải nói những lời ngon ngọt như vậy.”
 
-Lâm Hướng Bắc lén lật qua tờ hóa đơn thanh toán mấy lần, số tiền không nhỏ, vì dính líu quá nhiều nên thấy hơi có gánh nặng, cậu cười nhẹ nói: “Thật ra tôi đã quen lâu rồi, nói đau cũng không đau lắm, chườm khăn nóng cũng giống vậy mà.”
+Lâm Hướng Bắc liếc nhìn giấy trắng mực đen trên bàn, lập tức im bặt, bây giờ cậu chẳng có tư cách cãi lại anh.
 
-Hạ Tranh khẽ hít vào một hơi: “Lâm Hướng Bắc, cậu có thể đừng...”
+Tối qua họ còn yên ổn nằm trên cùng một chiếc giường, chưa đầy 24 giờ đã phá vỡ lớp vỏ yên bình này, thoáng chốc, cả hai đều bâng khuâng không biết phải làm sao, giống như tờ giấy mỏng -- sờ từ các góc độ khác nhau sẽ có cảm giác khác nhau, bề mặt trơn láng phẳng phiu vô hại, song cạnh sắc lại có thể vô tình cứa rách làn da mỏng manh, không đau lắm, nhưng sẽ rớm máu.
 
-Lâm Hướng Bắc mở to mắt nhìn anh, chờ đợi anh nói tiếp.
+Hai người quá mạnh mẽ va vào nhau, không tránh khỏi xô xát.
 
-Có thể đừng nói khoác không, đau là đau, không phải nói không đau là có thể giả vờ không đau được.
+Nhưng Hạ Tranh vẫn rất kiên định: “Nói một đằng làm một nẻo với tôi không xong đâu, hy vọng cậu có tinh thần hợp đồng, nghiêm túc tuân thủ quy định trong thỏa thuận của chúng ta.”
 
-Rõ ràng lúc vừa nãy bác sĩ kiểm tra đã toát mồ hôi đầy trán, đến trước mặt anh lại cứ muốn cãi.
+Anh không cho Lâm Hướng Bắc cơ hội thương lượng, đứng dậy vào phòng làm việc.
 
-Hạ Tranh thấy mình không được tin tưởng, ngày xưa chân thành ngọt ngào như thế, ngụp lặn trong dòng chảy năm tháng, lại trở thành có trăm ngàn cách trở, nói một câu giấu ba câu.
+Sự áp đặt của Hạ Tranh khiến Lâm Hướng Bắc tức nghẹn, cúi đầu thở mạnh mấy lần cũng không xua đi được, ngón cái và ngón trỏ vô thức cọ xát vào nhau vì lo lắng, sờ thấy túi quần hơi phồng, suy nghĩ một lúc rồi đi vòng vào phòng vệ sinh, khép cửa lại.
 
-Anh không nói tiếp, chỉ tăng tốc độ xe, nhưng rất muốn hỏi Lâm Hướng Bắc một câu, có phải bao năm qua vẫn cứ nói dối mình không hề đau, nói dối mãi rồi cũng tự lừa chính mình luôn không?
+--
 
-\--
+***Lời tác giả:***
 
-**_Lời tác giả:_**
-
-Luật sư Hạ giống như một người cha tốt yêu sâu sắc trách mắng nặng nhưng không nổi cáu bừa bãi (không hẳn).
+Luật sư Hạ về nhà belike: Định cho vợ đang ngủ một bất ngờ, chẳng phải sẽ làm cậu ấy chết mê sao, khoan đã, vợ to đùng của tôi đi đâu rồi, phù, chưa chạy, tự dọa mình thôi.

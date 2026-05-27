@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const upcoming = [
+  {
+    title: 'Vạn dặm vân',
+    author: 'Chưa xác nhận',
+    desc: 'Đang đặt gạch...',
+    tags: ['cổ đại', 'đam mỹ'],
+    cover: '/dynamic-duo-web/images/biavdv.png',
+  },
+  {
+    title: '??',
+    author: '??',
+    desc: 'Một câu chuyện đang trong giai đoạn ươm ý tưởng...',
+    tags: ['viễn tưởng'],
+    cover: '',
+  },
+];
+---
+
+<Layout frontmatter={{ title: 'Cá trên trời' }}>
+  <style>
+    .page-hero { text-align: center; padding: 10px 0 36px; }
+    .page-emoji { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+    .page-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 6px; }
+    .page-sub { font-size: .85rem; color: var(--text-dim); font-style: italic; margin: 0 0 30px; }
+    .cloud-note {
+      background: var(--sky-pale);
+      border: 1.5px dashed var(--sky-light);
+      border-radius: var(--r-md);
+      padding: 20px 24px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .cloud-note p { color: var(--text-mid); font-size: .88rem; font-style: italic; margin: 0; line-height: 1.7; }
+    .upcoming-list { display: flex; flex-direction: column; gap: 16px; }
+    .upcoming-item {
+      display: flex; gap: 16px; align-items: center;
+      border: 1px solid rgba(186,230,253,.5);
+      border-radius: var(--r-md);
+      padding: 16px 20px;
+      background: #fff;
+    }
+    .upcoming-cover {
+      width: 60px; height: 80px; border-radius: var(--r-sm);
+      object-fit: cover; background: var(--sky-pale);
+      flex-shrink: 0; display: block;
+    }
+    .upcoming-cover-placeholder {
+      width: 60px; height: 80px; border-radius: var(--r-sm);
+      background: var(--sky-pale); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--sky-light);
+    }
+    .upcoming-info { flex: 1; }
+    .upcoming-badge {
+      font-size: .65rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 2px 10px; border-radius: var(--r-pill); margin-bottom: 6px;
+      font-weight: 600; display: inline-block;
+      background: #e0f2fe; color: #0369a1;
+    }
+    .upcoming-title { font-family: 'Merriweather', serif; font-size: .95rem; color: var(--sky-dark); margin: 0 0 4px; }
+    .upcoming-author { font-size: .74rem; color: var(--text-dim); font-style: italic; margin: 0 0 6px; }
+    .upcoming-desc { font-size: .82rem; color: var(--text-mid); margin: 0 0 8px; line-height: 1.5; }
+    .upcoming-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .upcoming-tag { font-size: .65rem; padding: 2px 7px; border: 1px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky); background: var(--sky-pale); }
+  </style>
+
+  <div class="page-hero">
+    <span class="page-emoji">🌤️</span>
+    <h1 class="page-title">Cá trên trời</h1>
+    <p class="page-sub">những chú cá đang bay — truyện dự định làm (sắp đào)</p>
+  </div>
+
+  <div class="cloud-note">
+    <p>☁️ Những câu chuyện này vẫn đang nằm trên mây, chờ ngày hạ cánh.<br />
+    Danh sách có thể thay đổi bất cứ lúc nào tùy vào tâm trạng của Xê và Gờ.</p>
+  </div>
+
+  <div class="upcoming-list">
+    {upcoming.map(u => (
+      <div class="upcoming-item">
+        {u.cover
+          ? <img src={u.cover} alt={u.title} class="upcoming-cover" onerror="this.style.display='none'" />
+          : <div class="upcoming-cover-placeholder">☁️</div>
+        }
+        <div class="upcoming-info">
+          <span class="upcoming-badge">🌤️ Sắp đào</span>
+          <h3 class="upcoming-title">{u.title}</h3>
+          <p class="upcoming-author">Tác giả: {u.author}</p>
+          <p class="upcoming-desc">{u.desc}</p>
+          <div class="upcoming-tags">
+            {u.tags.map(t => <span class="upcoming-tag"># {t}</span>)}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>

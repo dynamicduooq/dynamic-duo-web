@@ -1,0 +1,21 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout frontmatter={{ title: 'Thiếu đế xuân tâm', description: 'Truyện sắp được đăng tải...' }}>
+  <style>
+    .coming-wrap { text-align: center; padding: 40px 20px; }
+    .coming-emoji { font-size: 3rem; display: block; margin-bottom: 16px; }
+    .coming-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 8px; }
+    .coming-note { font-size: .9rem; color: var(--text-mid); font-style: italic; }
+    .coming-cover { width: 160px; border-radius: 12px; box-shadow: var(--sh-card); margin: 0 auto 24px; display: block; }
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 24px; padding: 9px 22px; background: var(--sky-pale); border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky-dark); font-size: .86rem; transition: var(--t); }
+    .back-btn:hover { background: var(--sky-light); }
+  </style>
+  <div class="coming-wrap">
+    <img src="/dynamic-duo-web/images/biatdxt.png" alt="Thiếu đế xuân tâm" class="coming-cover" onerror="this.style.display='none'" />
+    <span class="coming-emoji">🌤️</span>
+    <h1 class="coming-title">Thiếu đế xuân tâm</h1>
+    <p class="coming-note">Chương sẽ được cập nhật sớm. Hãy quay lại sau nhé! ☁️</p>
+    <a href="/dynamic-duo-web/ca-tren-ban/" class="back-btn">← Quay lại Cá trên bàn</a>
+  </div>
+</Layout>

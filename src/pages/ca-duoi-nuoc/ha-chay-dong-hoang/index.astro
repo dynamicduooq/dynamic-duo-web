@@ -1,0 +1,85 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const allPosts = Object.values(
+  import.meta.glob('./*.md', { eager: true })
+) as any[];
+const chapters = allPosts
+  .filter((p) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0)
+  .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
+
+const total = 109;
+const pct = Math.round((chapters.length / total) * 100);
+---
+
+<Layout frontmatter={{
+  title: 'Hạ cháy đồng hoang',
+  description: 'Tình yêu là bản năng ẩn sau miền hoang tàn của ký ức.',
+  tags: ['đam mỹ', 'hiện đại', 'chua xót', 'mất trí nhớ', 'đồng quê', 'thủy tinh']
+}}>
+  <style>
+    .story-cover { width: 200px; border-radius: 12px; box-shadow: var(--sh-card); display: block; margin: 0 auto 28px; }
+    .status-badge { display: inline-block; padding: 3px 14px; border-radius: var(--r-pill); font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; background: #fef9c3; color: #854d0e; margin: 8px 0 16px; }
+    .progress-bar-wrap { max-width: 320px; margin: 12px auto; }
+    .progress-label { font-size: .76rem; color: var(--text-dim); text-align: center; margin-bottom: 5px; }
+    .progress-bar { height: 6px; background: rgba(186,230,253,.4); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(to right, var(--sky-light), var(--sky)); border-radius: 3px; }
+    .intro-block { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.5); border-radius: var(--r-md); padding: 20px 24px; margin: 24px 0; font-size: .9rem; color: var(--text-mid); line-height: 1.8; }
+    .intro-block h4 { font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sky-dark); text-align: left; margin: 0 0 10px; }
+    .char-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; text-align: center; margin: 20px 0; }
+    .char-name { font-family: 'Merriweather', serif; font-size: .95rem; color: var(--sky-dark); }
+    .char-role { font-size: .72rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+    .toc-section { margin-top: 32px; }
+    .toc-title { font-family: 'Merriweather', serif; font-size: .88rem; color: var(--sky-dark); letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px dashed var(--sky-light); }
+    .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+    @media (max-width: 480px) { .toc-grid { grid-template-columns: 1fr; } }
+    .toc-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--r-sm); font-size: .84rem; color: var(--text-mid); transition: var(--t); border: 1px solid transparent; }
+    .toc-item:hover { background: var(--sky-pale); color: var(--sky); border-color: rgba(186,230,253,.5); }
+    .toc-num { font-size: .7rem; color: var(--text-dim); width: 28px; flex-shrink: 0; font-family: monospace; }
+    .read-btn { display: block; text-align: center; margin: 28px auto 0; padding: 12px 32px; background: var(--sky); color: #fff; border-radius: var(--r-pill); font-size: .9rem; font-family: 'Newsreader', serif; transition: var(--t); max-width: 220px; }
+    .read-btn:hover { background: var(--sky2); transform: translateY(-2px); }
+  </style>
+
+  <img src="/dynamic-duo-web/images/biatdxt.png" alt="Bìa truyện" class="story-cover"
+    onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
+
+  <div style="text-align:center">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Hạ cháy đồng hoang</h2>
+    <span class="status-badge">🌊 Đang tiến hành</span>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Tác giả:</strong> Hỉ Thượng Mi Sao</div>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Editor:</strong> Dynamic Duo</div>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Thể loại:</strong> Đam mỹ · Hiện đại · Chua xót · Mất trí nhớ</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label">📖 Tiến độ: {pct}% ({chapters.length}/{total} chương)</div>
+      <div class="progress-bar"><div class="progress-fill" style={`width:${pct}%`}></div></div>
+    </div>
+  </div>
+
+  <div class="char-grid">
+    <div><div class="char-name">??</div><div class="char-role">Công</div></div>
+    <div style="font-size:1.2rem;color:var(--sky-light)">✧ ✖ ✧</div>
+    <div><div class="char-name">??</div><div class="char-role">Thụ</div></div>
+  </div>
+
+  <div class="intro-block">
+    <h4>📖 Giới thiệu</h4>
+    <p>Tình yêu là bản năng ẩn sau miền hoang tàn của ký ức.</p>
+    <p>Khi anh không còn nhớ gì, liệu tình cảm có thể tự tìm lại đường về?</p>
+  </div>
+
+  {chapters.length > 0 && (
+    <a href={chapters[0].url} class="read-btn">Đọc từ Chương 1 →</a>
+  )}
+
+  <div class="toc-section">
+    <div class="toc-title">🌊 Mục lục ({chapters.length} chương đã đăng)</div>
+    <div class="toc-grid">
+      {chapters.map((c) => (
+        <a href={c.url} class="toc-item">
+          <span class="toc-num">C{c.frontmatter?.chuong}</span>
+          <span>{c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

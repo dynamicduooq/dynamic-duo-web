@@ -1,5 +1,4 @@
 ---
-layout: ../../../layouts/Layout.astro
 title: "Chương 2"
 truyen_id: "ndntkm"
 chuong: 2
@@ -11,7 +10,7 @@ tags:
   - "HE"
 ---
 
-## **Chương **2
+## **Chương 2**
 
 Bữa cơm diễn ra rất vui vẻ, ăn uống no nê.
 

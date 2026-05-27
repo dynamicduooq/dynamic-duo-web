@@ -1,5 +1,5 @@
 ---
-title: "Chương 1: \\"Có phải đã gặp ở đâu rồi không\\""
+title: "Chương 1: \\\"Có phải đã gặp ở đâu rồi không\\\""
 truyen_id: "ndntkm"
 chuong: 1
 date: "2026-05-30"
@@ -10,238 +10,140 @@ tags:
   - "HE"
 ---
 
-**Chương 1: "Có phải đã gặp ở đâu rồi không"**
+Dự báo thời tiết nói đêm nay sẽ có mưa.
 
-Thời tiết trên núi thất thường, buổi sáng vẫn còn nắng đẹp, đến trưa trời bỗng đổ mưa, nhiệt độ giảm mạnh, cảm giác như đã bước vào mùa đông.
+Lâm Hướng Bắc, vốn chẳng thích mưa, nhất là mưa mùa đông, vừa tỉnh dậy đã thấy những hạt mưa nhỏ li ti lạnh buốt đóng đầy khung cửa sổ, còn có chiều hướng ngày càng dữ dội không thể cản nổi.
 
-Rõ ràng đã là cuối tháng tư rồi.
+“Chán chết mất.”
 
-Lý Trác Diệu lái chiếc Passat màu đen của mình trên con đường uốn lượn quanh núi Bàn Sơn. Thiết bị định vị cảnh báo *Phía trước là đoạn đường nguy hiểm, vui lòng lái xe cẩn thận*.
+Cậu lẩm bẩm, nheo mắt tắt chuông báo thức đang kêu inh ỏi bên gối, xoay người kéo góc chăn trùm kín đầu, hít sâu vài hơi rồi mới chậm rãi ngồi dậy. Tay cậu xoa xoa trán một hồi, cố gắng xua đi cảm giác khó chịu sau cơn say xỉn đêm qua.
 
-Cậu quan sát một chút, đúng là đoạn đường phía trước đang ngày càng hẹp lại, chỉ đủ cho một chiếc xe đi qua, phía dưới là vách đá dựng đứng, ở đáy vực trồng thông đuôi ngựa um tùm. Cuối đoạn đường hẹp hơi mở rộng ra một chút, có một tảng đá lớn đứng sừng sững, trên đó khắc ba chữ "Sườn Đại Bình".
+Màn hình điện thoại sáng lên sau một tiếng “đing”, cậu lặng lẽ nhìn tin nhắn gửi đến từ dãy số quen thuộc, rồi lật úp nó xuống như đang trốn tránh.
 
-"Sếp, khi anh lái xe qua sườn Đại Bình thì nhớ cẩn thận nhé, đường xá ở đây không tốt lắm mà chính quyền lại chưa sang sửa, cứ để như vậy. Hình như mười năm gần đây, năm nào cũng xảy ra tai nạn giao thông."
+Dù không muốn rời giường đến đâu cũng phải dậy thôi. Lâm Hướng Bắc vơ đại một chiếc áo len mặc vào, tĩnh điện kêu xẹt xẹt khiến mái tóc vốn đã rối bù sau giấc ngủ lại dựng đứng lên trông rất buồn cười.
 
-Đây là những lời trợ lý Tạ Quân đã nói lúc giúp cậu thu xếp hành lý trước khi đến Quý Châu quay chương trình. Quê Tạ Quân ở huyện Độc Sơn. Huyện Độc Sơn nằm ở khu tự trị Kiềm Nam, Quý Châu, là nơi có rất nhiều dãy núi trùng điệp, địa hình hiểm trở.
+Mở cửa phòng, phòng khách không được ánh nắng chiếu tới trông như một khoang tàu lạnh lẽo ẩm ướt, dưới bầu trời âm u càng khó phân biệt ngày đêm. Hai cánh cửa phòng khác vẫn đang đóng chặt.
 
-Lần này Lý Trác Diệu đến Độc Sơn để quay chương trình mới tên là "Nhật ký đồng quê", một chương trình trải nghiệm thực tế có tiết tấu chậm. Cậu đã chuẩn bị trong khoảng nửa năm, cuối cùng lựa chọn thôn Ông Đài ở Độc Sơn làm địa điểm ghi hình chính. Cả năm nay, cậu vốn luôn ấp ủ ý tưởng làm một chương trình "văn nghệ đồng quê" theo phong cách nguyên sơ. Đài truyền hình không ủng hộ, không cấp kinh phí, cậu lại lười tìm nhà tài trợ, nên đã tự bỏ ba triệu tiền túi ra để khởi động chương trình này. Gần như chương trình nào của cậu cũng nổi tiếng, rất được các ngôi sao nghệ sĩ yêu thích, nhiều nghệ sĩ còn tự giảm cát-xê để tham gia.
+Cậu bước vào nhà vệ sinh trong lúc vẫn còn buồn ngủ, cúi xuống nhìn sàn nhà loang lổ vết ố vàng, không khỏi nhíu mày, cậu muốn dọn dẹp, nhưng vì vội ra ngoài nên đành nhắm mắt làm ngơ.
 
-Ba triệu đối với cậu cũng chẳng phải việc gì to tát. Chỉ cần bán hai chiếc xe là đủ, một chiếc Cayenne và một siêu xe Lotus, dù sao cậu cũng không thường xuyên lái hai chiếc xe đó. So ra, cậu thích chạy chiếc Passat này hơn.
+Vòi nước trong căn hộ cho thuê ở làng đô thị không có nước nóng, cứ như nối thẳng vào tủ lạnh đông đá, dòng nước chảy ào ào mang theo cái lạnh thấu xương.
 
-Bấy giờ, cơn mưa bắt đầu trở nên nặng hạt, cần gạt nước cũng không ngăn nổi những giọt mưa nối nhau chảy thành từng dòng trên tấm kính chắn gió.
+Lâm Hướng Bắc vội vã đánh răng, ngẩng đầu nhìn mình trong tấm gương vuông dán trên tường bằng keo không in dấu, mặt gương lốm đốm bọt trắng. Da cậu trắng bệch, quầng thâm dưới mắt đen sì, rõ ràng là một gương mặt không được nghỉ ngơi đủ, cuộc sống chẳng hề như ý. Cậu không suy nghĩ gì vốc một vốc nước lạnh rửa mặt, hít vào một hơi, tay trái đột nhiên siết chặt thành nắm đấm.
 
-"May mà vừa qua sườn Đại Bình thì mưa mới dày hạt." Cậu thở phào nhẹ nhõm, nhìn bình xăng, thấy hiển thị lượng xăng không đủ, chỉ còn 20%.
+Tay trái cậu từng bị thương rất nặng, nhìn bên ngoài không khác bình thường là bao nhưng không thể làm việc tỉ mỉ, cũng không nâng nổi vật nặng, xem như đã tàn phế một nửa. Vậy mà lại không đủ tiêu chuẩn để làm giấy chứng nhận khuyết tật nhận trợ cấp xã hội, đáng sợ hơn, cứ đến ngày mưa, nó lại đau nhức như có sâu đục vào kẽ xương, ê ẩm khó chịu. Có xoay kiểu gì, xoa bóp ra sao, chườm lạnh chườm nóng cũng chẳng ăn thua, chỉ có thể để mặc cơn đau lan từ cổ tay lên cả cánh tay.
 
-Tìm kiếm trên bản đồ, dưới chân núi có một trạm xăng, cách khách sạn cậu ở khoảng năm cây số.
+Cậu thật sự rất ghét trời mưa!
 
-Lại vừa hay.
+Một dấu chấm than chưa đủ diễn tả cảm xúc của cậu, phải thêm một cái nữa!
 
-Chạng vạng tối, trên núi bắt đầu nổi gió. Lý Trác Diệu chỉ mặc một chiếc áo gió màu đen, có vẻ như không chống đỡ nổi cái lạnh, cậu cũng không thích bật điều hòa khi lái xe, một lúc sau đã cảm thấy hơi nghẹt mũi. Thậm chí còn không nhìn thấy tảng đá phía trước, bánh xe Passat cán thẳng qua tảng đá đó, khiến hai tay cậu đột ngột tê rần.
+“Tối nay con không về.” Cậu gõ ngón tay lên cánh cửa kim loại màu bạc trắng, trong buổi trưa quá mức yên ắng, âm thanh rất nhỏ ấy lại trở nên chói tai: “Sáng mai tự nhớ đi bệnh viện tái khám đi.”
 
-May mà đã xuống được núi rất nhanh. Nhiệt độ dưới chân núi cao hơn ở trên núi khá nhiều, Lý Trác Diệu cảm thấy cái lạnh quanh người đã giảm bớt. Bây giờ mưa đã nhỏ hơn, những hạt mưa li ti như tấm rèm hạt châu mỏng mảnh, bị cơn gió thổi cho xiêu vẹo.
+Nói xong câu đó, cậu vội mở cửa, cẩn thận bước xuống cầu thang ẩm ướt dọc theo chân tường.
 
-Từ xa, cậu đã trông thấy trạm xăng đó, đứng giữa màn mưa bụi mù mịt.
+Chiếc xe điện được đặt ở trạm sạc gần đó, cách một con hẻm nhỏ, Lâm Hướng Bắc ham nhanh, không che ô mà chạy thẳng một mạch tới, tóc cũng chỉ hơi ướt. Trong cốp xe có áo mưa, là loại nhựa xanh phổ thông nhất. Cậu nhanh chóng khoác lên, nhìn mưa rơi tí tách không ngừng, trong lòng chỉ thấy vô cùng bực bội.
 
-Trên xe không có ô. Cậu cũng chẳng bận tâm, đầu đội những hạt mưa li ti, đi thẳng vào.
+Ai có kinh nghiệm đều biết đi xe điện vào ngày mưa khổ sở thế nào.
 
-"Xin chào, xăng 95, đổ 300 tệ."
+Gió táp mưa xối chẳng thể ngăn quyết tâm đi làm của Lâm Hướng Bắc: Tư bản chẳng quan tâm lý do gì, cứ trễ là trừ lương.
 
-Cậu gọi người đàn ông mặc đồng phục màu xanh đậm kia lại. Hiện giờ cũng không có chiếc xe nào khác đến đổ xăng, người đàn ông đeo găng tay cao su dính đầy dầu máy đen sì, ống tay áo xắn lên nửa chừng, để lộ cánh tay màu đồng cổ với đường nét cứng cáp, nửa người khuất dưới gầm xe, đang dùng kìm sửa xe.
+Giáng sinh vừa qua chưa lâu, dọc đường, mấy cửa hàng đầu tư lớn để trang trí mặt tiền vẫn còn giữ lại những món đồ màu mè để tận dụng nốt. Những cây thông Noel đẫm nước, ông già Noel áo đỏ râu trắng, con tuần lộc ngốc nghếch, dải ruy băng đủ màu sắc và đèn ngôi sao nhấp nháy đồng hành cùng Lâm Hướng Bắc.
 
-"Được, đến ngay đây."
+Cậu rẽ qua một góc, vô tình nhìn thấy một cây thông đã bị vặt trụi gần hết đồ trang trí, không hiểu sao lại thò tay ra khỏi áo mưa, giật lấy một chiếc chuông đồng nhỏ đã bong sơn nhét vào túi. Đến khi cậu tìm được một mái hiên che cho chiếc xe điện, chiếc chuông to vừa một bàn tay buộc dây đỏ ấy đã đổi chủ, được cậu treo lên tay lái.
 
-Người đàn ông đáp lại rồi chui ra khỏi gầm xe, phủi bụi bặm trên người, sau đó ngẩng đầu lên.
+Lâm Hướng Bắc khẽ gảy nó vài cái, một chút niềm vui thời thơ ấu lâu rồi không thấy chợt ùa về.
 
-Một gương mặt đẹp đẽ hơi gầy gò hiện ra trước mắt Lý Trác Diệu. Như thể khi điêu khắc núi đá lạ thường trong vùng núi Quý Châu, thiên nhiên cũng đã thuận tay điêu khắc khuôn mặt này với những đường nét thật rõ ràng và sắc sảo.
+Cậu làm nhân viên đỗ xe ở khách sạn cao cấp nổi tiếng Kim Sa tại Thâm Quyến theo ca, từ 5 giờ chiều đến 11 giờ đêm. Nhưng đây không phải công việc duy nhất của cậu.
 
-Lý Trác Diệu chưa bao giờ nghĩ rằng, ở một nơi như thế này, lại có thể trông thấy gương mặt nổi bật đến vậy. Thậm chí trên má phải còn đang dính một vệt dầu đen.
+Đầu tiên, cậu quẹt thẻ, đi qua lối nhân viên vào phòng thay đồ, mặc bộ đồng phục màu xám xanh đồng bộ được phát. Vừa kéo khóa xong, một đồng nghiệp ở bếp sau đã đẩy cửa vào chào: “Đến rồi à, Tiểu Lâm.”
 
-Người đàn ông nhìn thấy Lý Trác Diệu, thoạt đầu hơi ngạc nhiên, sau đó vội vàng dùng ống tay áo đang xắn lên lau nhanh qua khuôn mặt, tháo găng tay ném vào capo xe, bước lại gần mấy bước, cầm vòi bơm xăng, ánh mắt vẫn dán chặt lên chiếc xe này, như thể đang quan sát điều gì đó.
+Lâm Hướng Bắc gọi “anh Vương”, cất áo khoác vừa cởi ra, thuận miệng đáp: “Mưa rồi, lạnh thật đấy.”
 
-"Xin lỗi, xe của tôi có vấn đề gì sao?" Lý Trác Diệu tiến gần hơn vài bước, tò mò hỏi.
+Cái lạnh ở Thâm Quyến không nằm ở nhiệt độ, mà ở cái ẩm ướt len lỏi khắp nơi. Đi ngoài đường như sống trong một tuýp kem đánh răng bạc hà khổng lồ, gió thổi bọt kem tung tóe, phết lên mặt, lên da, không tránh khỏi thấy lạnh buốt.
 
-"Không có gì. Cảm giác là xe cũ, nhưng được bảo dưỡng khá tốt."
+Mấy ngày mưa này nhiệt độ giảm mạnh, nhưng khách sạn càng cao cấp, quy định lại càng nghiêm ngặt: dù thế nào nhân viên cũng không được mặc thêm áo khoác bên ngoài đồng phục. Người khổ nhất là các cô lễ tân ở cửa, váy ngắn đồng phục đen, tất mỏng, giày cao gót, đứng ở chỗ gió lùa vài tiếng liền. So với họ, Lâm Hướng Bắc được mặc áo len bên trong đồng phục đã là may mắn lắm rồi.
 
-"Đã lái bảy năm rồi, cũng có tình cảm."
+Kim đồng hồ qua 5 giờ, lượng khách dần đông lên.
 
-"Cậu cũng trọng tình cũ nhỉ."
+Lâm Hướng Bắc khởi động cơ thể tại chỗ, “hăm dọa” bàn tay trái đang âm ỉ đau “cố lên chút đi”, nở một nụ cười tiêu chuẩn rồi mau chóng bước tới chỗ một chiếc xe sang vừa dừng, hơi cúi người giơ tay: “Chào anh, mời đi lối này.”
 
-Người đàn ông lạnh nhạt nói, ánh mắt nhìn về một nơi không rõ tiêu điểm, như thể đang đắm chìm trong cảm xúc nào đó. Vài giây sau anh lấy lại tinh thần, quay đầu nhìn thẳng vào đôi mắt Lý Trác Diệu, có lẽ vì vẫn chưa hoàn toàn thoát khỏi cảm xúc đó, ánh mắt anh như được bao phủ bởi một lớp sương mù ẩm ướt, tựa dòng nước tĩnh lặng chảy dưới tầng sâu.
+Thời buổi kinh tế khó khăn, ngay cả việc làm nhân viên đỗ xe cũng cạnh tranh khốc liệt, công việc này không dễ kiếm.
 
-Lý Trác Diệu hơi ngượng ngùng trước ánh mắt ấy của anh.
+Lâm Hướng Bắc còn nhớ lúc phỏng vấn, tính cả cậu là bốn người, trừ cậu ra ai cũng có kinh nghiệm. Lúc đó cậu không hy vọng gì, vậy mà quản lý lại chọn cậu, khiến mấy người kia tức tối không phục.
 
-"Trên mặt tôi có dính gì à?"
+Sau này vào làm mới nghe một đồng nghiệp buôn chuyện, bảo đây là quy tắc tuyển dụng ngầm của khách sạn Kim Sa: thích chọn người trông ưa nhìn — Lâm Hướng Bắc cứ thế mơ mơ màng màng kiếm được bát cơm nhờ vào khuôn mặt.
 
-"Không phải, nhìn cậu không giống người địa phương."
+Cậu làm việc được hơn nửa tháng, chăm chỉ không chút sai sót, nhưng mấy hôm nay vì thức khuya uống rượu, nghỉ ngơi không đủ, cậu hay ngáp vặt. Bởi vậy nên quản lý không hài lòng, gọi riêng cậu ra nói chuyện, yêu cầu cậu phải thể hiện tinh thần tốt nhất với khách.
 
-Lý Trác Diệu móc bao thuốc lá theo thói quen, vừa lấy được một điếu, lại chợt nhớ ra đây là trạm xăng, vội vàng cất về chỗ cũ.
+Lâm Hướng Bắc nào dám cãi, cười trừ xin lỗi, lúc buồn ngủ lại lén véo đùi mình, kết quả chẳng đuổi được cơn buồn ngủ, chỉ làm mắt cay xè rơi mấy giọt nước.
 
-"Xin lỗi, quên mất ở trạm xăng không được hút thuốc. Tôi là người Quảng Đông. Lần đầu tiên đến Quý Châu."
+Cậu cầm ô đưa xe khách vào chỗ đỗ xe sâu nhất, mưa xiên xiên làm ướt nửa bên áo, giày tất cũng thấm nước, lạnh run người. Nhưng cậu vẫn cười, nụ cười hơi cứng nhắc, cậu phải cười.
 
-"À, lần đầu đến..." Người đàn ông khẽ cười, lặp lại câu nói của Lý Trác Diệu. Có lẽ là ảo giác, Lý Trác Diệu chợt thấy trên gương mặt anh hiện lên một loại cảm xúc khó tả, dường như mang theo chút mỉa mai, màu sắc trong đôi mắt nhanh chóng bị che khuất bởi một tầng mây mù ảm đạm, nhưng cảm xúc này rất nhạt, cậu chưa kịp nghiền ngẫm đã chẳng còn chút dấu vết gì.
+“Tiểu Lâm.” Đồng nghiệp gọi: “Vào lau nước trên người đi, tôi thay cậu một lúc.”
 
-Anh cúi đầu, không nhìn Lý Trác Diệu nữa, tập trung quan sát miệng bình xăng. Đúng lúc này, tiếng "tít tít" báo hiệu của máy bơm xăng vang lên.
+Lâm Hướng Bắc cười cảm ơn, lần này là thật lòng, mắt cong cong lộ chút ngây ngô chất phác, dường như đây mới là con người thật của cậu: “Cảm ơn anh.”
 
-"Xong rồi. Mã thanh toán ở trên tường." Người đàn ông thu vòi bơm xăng lại, giơ tay chỉ về phía bức tường.
+Một chiếc xe chạy tới làm nước bắn tung tóe trên đường. Lâm Hướng Bắc chạy chậm lại, đồng nghiệp vẫy tay: “Đi đi.”
 
-"Ồ, được."
+Cậu mới khuất sau góc rẽ.
 
-Lý Trác Diệu lúng túng lấy điện thoại ra định quét mã, phát hiện không có tín hiệu.
+Dưới ánh đèn đường vàng vọt trong cơn mưa lất phất, một chàng trai cao gầy chống ô đen bước xuống từ ghế sau xe, đứng thẳng, vòng sang mở cửa cho đồng nghiệp nữ bên kia.
 
-Cậu móc ví tiền trong túi áo khoác, rút ra ba tờ tiền. Có một tấm ảnh chụp lấy ngay rơi ra từ trong ví, bay xuống chân người đàn ông, chưa gì đã dính phải vài giọt mưa.
+“Hạ Tranh.” Cửa kính ghế lái hạ xuống, Chu Trác thò đầu ra: “Mấy cậu vào trước đi, tôi với A Minh đi tìm chỗ đỗ xe.”
 
-Người đàn ông cúi xuống nhặt tấm ảnh lên, dường như vô tình liếc qua một cái, cho nên đã hơi khựng lại trong một giây lát ngắn ngủi. Anh đưa tấm ảnh cho Lý Trác Diệu.
+“Được, lát gặp.”
 
-"Đồ của cậu rơi này."
+Hạ Tranh cùng vài đồng nghiệp chen dưới hai chiếc ô đi về phía sảnh lớn. Trương Tiểu Mẫn đứng cạnh anh nói: “Chu Trác cũng thật là, tụ tập mà không xem dự báo thời tiết trước, mưa này làm hỏng cả lớp trang điểm của tôi rồi.”
 
-"Cảm ơn."
+Giọng điệu trách móc, nhưng chỉ là đùa, không có ý oán giận. Mọi người cười phá lên, tiếng cười vô tư xua tan cái ảm đạm của cơn mưa.
 
-Lý Trác Diệu giơ tay nhận lấy tấm ảnh, đầu ngón trỏ hai người chạm phải nhau vỏn vẹn một giây. Đầu ngón tay anh rất lạnh, như thể vừa ngâm thật lâu trong nước sông trên núi. Còn đầu ngón tay cậu thì ấm.
+Các cô lễ tân đứng ở cửa đặt tay trước bụng, đồng thanh ngọt ngào: “Chào mừng quý khách đến với khách sạn Kim Sa.”
 
-Lý Trác Diệu đặt lại tấm ảnh vào ví, đó là một tấm ảnh chụp lấy ngay bị cắt mất một nửa, trên đó cậu đang giơ ngón tay chữ V hướng về phía máy ảnh.
+Nhóm thanh niên tinh thần phấn chấn bước qua cửa xoay, nhân viên dẫn đường lập tức tiến tới, cười hỏi: “Chào anh chị, xin hỏi có đặt bàn trước không?”
 
-Tấm ảnh này vẫn luôn được cất trong ví của cậu. Do thời gian trôi qua khá lâu, mép ảnh đã bắt đầu ngả vàng, nhưng vẫn được bảo quản tốt trong ví.
+Hạ Tranh đứng gần, đọc mã đặt bàn đã giữ, vừa dứt lời, từ cửa lớn cách đó một đoạn vang lên giọng nói hơi cao vút: “Không ở đúng vị trí của mình, hấp ta hấp tấp chạy lung tung làm gì?”
 
-"Đồ giữ bên mình, lần sau nên cất cẩn thận." Người đàn ông chỉ để lại một câu, rồi quay người đi vào nhà, vừa đi vừa thả ống tay áo đang xắn kia xuống.
+Theo tiếng động, anh nhìn ra ngoài qua cánh cửa xoay màu vàng kim, thấy một người trông như quản lý đang mắng nhân viên. Tầm nhìn hạn chế, bóng dáng màu xám xanh bị che khuất phần lớn, không thấy rõ mặt, nhưng dường như có một cảm giác mơ hồ thúc giục anh nhìn kỹ hơn.
 
-"Xin lỗi."
+Hạ Tranh hơi xoay người, vai bị vỗ một cái. Trương Tiểu Mẫn hỏi: “Nhìn gì thế?”
 
-Rõ ràng là đồ của mình bị rơi, nhưng Lý Trác Diệu lại nhận ra một cảm giác tội lỗi kỳ lạ đang dâng lên trong lòng.
+Bị cắt ngang, anh thấy người quản lý đã nhận ra việc mắng nhân viên trước cửa là bất lịch sự, vội vẫy tay đuổi người đi.
 
-Cậu quay lại xe, thắt dây an toàn rồi khởi động, còn chưa kịp rời khỏi trạm xăng, thân xe đã phát ra một tiếng động nặng nề, sau đó, lốp sau bên phải bỗng nổ "bùm" một tiếng.
+Hạ Tranh thu tầm mắt lại, khẽ cười: “Không có gì, đi thôi.”
 
-"Chậc, chắc chắn là do tảng đá đó." Lý Trác Diệu dừng xe lại, lập tức tháo dây an toàn xuống xe để kiểm tra, chợt phát hiện ra người đàn ông sửa xe lúc nãy đã lại đây từ lúc nào.
+Phòng riêng ở tầng năm, phía trong, bàn lớn đủ bảy người, vừa khít nhóm đến hôm nay.
 
-"Lốp xe bị nổ à?" Anh đi quanh chiếc xe một vòng, ấn ấn vào lốp sau bên phải.
+Họ đều làm việc tại văn phòng Luật sư Quân Bình – một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác (1), Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
 
-"Đúng vậy. Lúc nãy trên núi chẹt phải một tảng đá."
+Chu Trác có gia thế, mối quan hệ rộng, thầy của Hạ Tranh lại là cây đại thụ trong ngành, nổi danh “Luật sư số một Đài Bắc”. Một người có lợi thế bẩm sinh, một người được chống lưng bởi nhân vật có quyền uy, cộng thêm năng lực chuyên môn xuất sắc, trong ngành luật sư chênh lệch lớn về nguồn khách và thu nhập, họ thực sự là những ngôi sao đang lên, tài năng trẻ xuất chúng.
 
-"Để tôi xem nào."
+Nhân viên mang thực đơn lên, gọi hai món chính, Chu Trác và Thái Bác Minh đỗ xe xong cũng vào phòng.
 
-Người đàn ông không nói không rằng, chui ngay vào gầm xe.
+Phòng bật máy sưởi ấm, Chu Trác phủi nước trên người, ngồi xuống nói: “May mà vừa nãy cậu nhân viên đỗ xe cầm ô đưa bọn tôi đến cửa, không thì ướt hết. Tôi bảo cậu ta lát nữa đưa thêm một đoạn đường.” Anh ấy chỉ thuận miệng nhắc tới: “Mọi người gọi món chưa?”
 
-Lý Trác Diệu cũng ngồi xổm xuống theo, bật đèn pin trên điện thoại để soi sáng cho anh.
+“Sao mà không đợi anh được chứ?” Trương Tiểu Mẫn hơi nhổm dậy đưa thực đơn cho Chu Trác: “Xem đi.”
 
-"Lốp phía sau bị thủng, hơi xì rồi." Giọng người đàn ông vang lên từ dưới gầm xe, nghe có vẻ hơi nặng nề.
+Nhưng Hạ Tranh vẫn nghĩ về nhân viên bị mắng lúc nãy, dáng người cao gầy, tay áo đồng phục rộng lộ ra cổ tay trắng mảnh khảnh, có phải nhân viên đỗ xe Chu Trác nhắc đến không?
 
-Anh chống tay vào bánh xe, khẽ dùng sức ở eo để chui ra, hai tay phủi bụi bặm trên người.
+“Hạ Tranh, Hạ Tranh?”
 
-"Nhưng hiện tại tôi không có đồ vá lốp. Phải đợi ngày mai lên thị trấn mua mới được, tiệm sửa xe đóng cửa sớm rồi."
+Bị gọi, anh giật mình thoát khỏi dòng suy nghĩ: “Tôi không kiêng gì.”
 
-Người đàn ông ngẩng đầu nhìn bầu trời giăng kín mây đen, cau mày.
+“Ai bảo không?” Thái Bác Minh cười khẩy: “Chẳng anh phải không ăn cay sao?”
 
-"A Lan, ăn cơm thôi."
+Hạ Tranh khựng lại, vì vài chuyện từ rất lâu trước kia, nhiều năm nay anh hầu như không đụng đến đồ cay. Nhưng đã lâu rồi anh không còn nhớ đến người đó nữa, trong dòng chảy thời gian, gương mặt ấy thậm chí đã trở nên hơi mờ nhạt – sao đêm nay lại nhớ tới?
 
-Lúc này, một ông lão lẩy bẩy từ trong nhà đi ra. tay bưng một tô mì thịt dê lớn. Ông thấy Lý Trác Diệu đang đứng trong sân, lập tức nhiệt tình chào đón, khuôn mặt tràn đầy vẻ thân thiện chất phác của người miền núi.
+Anh không phản bác, thuận theo nói: “Vậy tôi gọi món cá hấp lá sen.”
 
-"Có khách đến à? Mưa to thế này, ngồi xuống đây cùng ăn rồi hãy đi, canh dê ấm lắm."
+Bất chợt, một tia chớp tím trắng xé ngang trời, tiếp theo là tiếng sấm rền vang, khiến cả nhóm đang cười đùa giật mình.
 
-Ông lão đặt tô mì thịt dê xuống, rồi đi về phía Lý Trác Diệu.
+Trương Tiểu Mẫn lại trêu Chu Trác không xem dự báo thời tiết, mấy hôm trước bọn họ đã hẹn tan làm cùng đến đây, ai ngờ đến chiều trời lại trở nên âm u.
 
-"Không không, chú ơi, như vậy thì ngại lắm."
+Chu Trác cười, nâng chén trà thay rượu: “Luật sư Trương, tôi nhận tội, tự phạt một ly.”
 
-Cậu từ chối.
+“Đây!” Trương Tiểu Mẫn vỗ tay: “Có đầy đủ nhân chứng, anh đừng hòng chối!”
 
-"Ăn xong đã rồi tính."
+Ngoài trời mưa gió không ngớt, trong phòng bắt đầu mở tiệc sôi nổi, một khung cửa sổ chia đôi hai thế giới nóng lạnh.
 
-Người đàn ông nhìn Lý Trác Diệu, đôi mắt anh đen tuyền, như thể được chất mực từ màn đêm sâu thẳm nhất nhuộm thành. Thấy Lý Trác Diệu có vẻ do dự, anh lại bổ sung một câu.
+Lâm Hướng Bắc vẫn đứng dưới ô run rẩy, ngẩng đầu nhìn tòa nhà lộng lẫy ánh vàng và đèn hoa rực rỡ, lòng chỉ nhớ đến chiếc chuông nhỏ tròn trịa treo trên tay lái, đó là chiến lợi phẩm hôm nay của cậu.
 
-"Trong thời gian ngắn xe của cậu cũng chưa đi được."
-
-"Ừm. Cảm ơn."
-
-Lý Trác Diệu nhận ra mình không thể tìm được lý do nào để từ chối anh - người đàn ông có tên gọi thân mật là A Lan này.
-
-"Vậy, tên đầy đủ của anh là gì?"
-
-Rất nhiều chữ Hán nhanh chóng lướt qua trong tâm trí cậu, cậu dự đoán tên của người đàn ông này, rốt cuộc là những chữ nào mới thích hợp để đại diện cho con người anh.
-
-"Tôi tên là Chu Sở Lan. Chữ Sở trong nước Sở, chữ Lan trong gợn sóng lan ra."
-
-"Tôi tên là Lý Trác Diệu. Chữ Trác trong tài giỏi xuất chúng, chữ Diệu (曜) có bộ Nhật (日)." Cậu đáp ngay.
-
-Khi nói câu này, Lý Trác Diệu nhìn về phía đối phương, hơi căng thẳng. Cậu cảm thấy người đàn ông trước mặt có vẻ khá xa cách với người lạ, không biết việc mình tự ý giới thiệu bản thân có khiến đối phương khó chịu không.
-
-Chu Sở Lan kéo một chiếc ghế nhựa màu đỏ ở bên cạnh sang, dùng tay áo lau qua vài lần, rồi đẩy đến trước mặt Lý Trác Diệu.
-
-"Ngồi đây đi, không bẩn đâu." Anh nhẹ nhàng nói.
-
-Lý Trác Diệu nói cảm ơn rồi ngồi xuống. Ba của Chu Sở Lan bắt đầu nhiệt tình trò chuyện với Lý Trác Diệu, Chu Sở Lan đứng bên cạnh lặng lẽ xếp đặt bát đũa. Anh đưa cho Lý Trác Diệu chiếc bát sứ duy nhất, còn mình và ba dùng loại bát thép thường thấy ở nông thôn.
-
-"Cháu trai, cháu từ nơi khác đến à? Nhìn không giống người bản địa."
-
-"Đúng thế chú ạ, cháu là người Quảng Đông."
-
-"Đến đây du lịch à?"
-
-"Không ạ, chúng cháu đến đây quay chương trình."
-
-"Ồ? Chương trình gì, là loại chiếu trên TV ấy à?"
-
-"Vâng, có lẽ sẽ chiếu trên kênh Nam Bắc vào dịp Tết năm sau."
-
-"Ba, trong bếp còn món gì không?" Chu Sở Lan bỗng ngẩng đầu, ngắt lời ông lão.
-
-"Trong tủ lạnh chẳng còn gì, hôm nay mưa nên ba không lên thị trấn mua."
-
-"Không sao, con vào xem thử."
-
-Chu Sở Lan đứng dậy đi vào bếp, trong bếp lập tức phát ra tiếng xắt thức ăn và tiếng muôi khua leng keng.
-
-"Tuổi già rồi, ở đây hiếm khi có người ngoài đến. Không nhịn được nên hỏi nhiều quá."
-
-Ông lão thở dài.
-
-Một lúc sau, Chu Sở Lan bưng một cái khay ra, trên đó có một đĩa thịt bò kho, một đĩa rau diếp trộn, một đĩa lạc rang.
-
-"Ăn tạm vậy nhé." Anh vừa bày đĩa vừa nói.
-
-Chỉ một lát sau, chiếc bàn nhỏ đã được bày đầy ắp thức ăn.
-
-Anh đưa tay cầm lấy bát của Lý Trác Diệu, dùng đôi đũa bên cạnh Lý Trác Diệu gắp đầy một bát mì thịt dê lớn, còn múc hơn nửa số thịt dê ở đáy nồi xếp lên trên, rồi phủ thêm mấy lát thịt bò.
-
-Trong nồi chỉ còn lại lác đác vài miếng thịt dê, chẳng được bao nhiêu.
-
-"Đây, của cậu. Khi còn nóng thì mau ăn đi."
-
-Bát cơm của anh trông hơi đạm bạc, chỉ có hai ba lát thịt dê mỏng.
-
-"Tôi không thích ăn thịt dê lắm. Anh ăn đi."
-
-Lý Trác Diệu gắp vài miếng thịt dê thái lát dày trong bát mình, đặt vào bát của Chu Sở Lan.
-
-"À. Vùng chúng tôi thích ăn mì thịt dê, có lẽ cậu không quen." Anh dùng đũa chầm chậm trộn mì trong bát, hơi nóng bốc lên che khuất biểu cảm trên khuôn mặt.
-
-"Không, tôi không có ý đó..." Lúc này Lý Trác Diệu mới nhận ra mình đã nói sai. Cậu vốn định nói, tại sao thịt dê toàn ở trong bát mình, thế thì anh ăn gì chứ. Nhưng lời vừa đến miệng, lại cảm thấy khô khan không sao nói ra được.
-
-Lý Trác Diệu đã có triển vọng từ khi còn trẻ, lại xuất thân trong gia đình giàu có, là một người rất kiêu ngạo. Thường xuyên vì ăn nói thẳng thừng mà đắc tội người khác, nhưng từ trước đến nay cậu chẳng bao giờ để ý. Chỉ có lần này, cậu hiếm khi cảm thấy bất an vì mình vừa nói sai, nhưng lại không biết phải giải thích thế nào.
-
-"Không ăn nữa thì mì nguội mất."
-
-Lý Trác Diệu vội vàng cúi đầu uống một ngụm canh trong bát, ngay ngụm đầu tiên đã khiến cậu kinh ngạc.
-
-Cậu chưa bao giờ ăn tô mì thịt dê nào ngon đến thế, nước dùng thơm phức, sợi mì cũng mềm trơn vừa phải, trôi tuột xuống cổ họng, thịt dê không hề có mùi hôi, cả lớp lá bạc hà và hành lá xắt nhỏ rắc trên bề mặt đều có thể coi là điểm nhấn hoàn hảo.
-
-"Thêm cái này không, dầu mộc khương tử." Chu Sở Lan với tay lấy chai dầu nhựa trắng nhỏ ở góc bàn, rồi đưa cho cậu.
-
-Lý Trác Diệu cầm lấy chai dầu, lại gần ngửi một chút, lập tức cau mày.
-
-"Sao lại có mùi bột giặt vậy?"
-
-"..."
-
-Chu Sở Lan lấy lại chai dầu từ tay Lý Trác Diệu, rót vài giọt dầu mộc khương tử vào bát, xé hai lá bạc hà bỏ vào, rồi rưới một lớp dầu ớt lên trên. Đỏ xanh xen kẽ, trông cực kỳ đẹp mắt.
-
-Anh bưng bát lên hít hà một chút, rồi dùng đũa đảo mì theo vòng tròn, lá bạc hà, hành lá xắt nhỏ và dầu ớt trong bát xoay đều hết đỏ lại xanh, sau đó gắp một đũa mì thật lớn lên không trung cho nguội, thổi hai cái mới bắt đầu ăn.
-
-Chẳng rõ vì sao, cách ăn mì này lại khiến Lý Trác Diệu cảm thấy vô cùng quen thuộc.
-
-Cậu mơ hồ nhớ ra, trong ký ức có một người, cũng từng ăn như vậy.
-
-Biểu cảm trên khuôn mặt Lý Trác Diệu dần dần đông cứng lại.
-
-Cậu ngắm nhìn gương mặt Chu Sở Lan, sống mũi cao thẳng, làn da màu đồng cổ hơi ửng đỏ toát lên dáng vẻ khỏe khoắn, xương mày rất cao, hốc mắt hơi sâu, nhưng đuôi mắt lại xếch lên một chút.
-
-Cảm giác kỳ lạ khó tả đột ngột dâng lên từ tận đáy lòng.
-
-"Chu Sở Lan, trước kia, có phải tôi từng gặp anh ở đâu rồi không?"
+(1) Chú thích:  “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.

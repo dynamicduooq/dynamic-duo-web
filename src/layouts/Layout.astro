@@ -167,7 +167,7 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             display: grid;
             grid-template-columns: 1fr 280px;
             gap: 0;
-            max-width: 1400px;
+            max-width: full-width;
             margin: 0 auto;
             padding: 0 16px;
             align-items: start;
@@ -325,7 +325,7 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             transition: background 0.3s ease;
         }
         .footer-inner {
-            max-width: 1400px; margin: 0 auto; padding: 0 16px;
+            max-width: full-width; margin: 0 auto; padding: 0 16px;
             display: grid; grid-template-columns: 1fr auto 1fr;
             gap: 28px; align-items: start;
         }
@@ -343,7 +343,7 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         }
         .social-ic:hover { background: var(--sky-light); transform: translateY(-2px); }
         .ft-bottom {
-            max-width: 1400px; margin: 26px auto 0; padding: 16px 16px 0;
+            max-width: full-width; margin: 26px auto 0; padding: 16px 16px 0;
             border-top: 1px solid var(--border);
             text-align: center; font-size: .7rem; color: var(--text-dim); letter-spacing: 1px;
         }

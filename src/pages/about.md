@@ -19,14 +19,14 @@ date: 2026-05-02
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 36px 0; text-align: center;">
     <div style="background: var(--sky-pale); padding: 24px 20px; border-radius: var(--r-md); border: 1px solid var(--sky-light);">
-        <div style="font-size: 2.5rem; margin-bottom: 12px;">🐧</div>
+        <img src="https://symbols.vn/wp-content/uploads/2022/02/Hinh-Ga-Chibi-sieu-dang-yeu-cute.jpg" alt="Avatar Xê" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: var(--sh-soft); margin: 0 auto 12px auto; display: block;" />
         <h3 style="margin: 0 0 6px; color: var(--sky-dark); font-size: 1rem;">Xê</h3>
-        <p style="font-size: 13px; color: var(--text-mid); font-style: italic; margin: 0;">Editor · Chân chạy vặt nhà cá</p>
+        <p style="font-size: 13px; color: var(--text-mid); font-style: italic; margin: 0;">Editor · Làm màu</p>
     </div>
     <div style="background: var(--sky-pale); padding: 24px 20px; border-radius: var(--r-md); border: 1px solid var(--sky-light);">
-        <div style="font-size: 2.5rem; margin-bottom: 12px;">🐟</div>
+        <img src="https://hoichimtroi.com/wp-content/uploads/2025/10/khi-chibi-27.jpg" alt="Avatar Gờ" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: var(--sh-soft); margin: 0 auto 12px auto; display: block;" />
         <h3 style="margin: 0 0 6px; color: var(--sky-dark); font-size: 1rem;">Gờ</h3>
-        <p style="font-size: 13px; color: var(--text-mid); font-style: italic; margin: 0;">Editor · Chân lấp hố đại dương</p>
+        <p style="font-size: 13px; color: var(--text-mid); font-style: italic; margin: 0;">Editor · Làm thinh</p>
     </div>
 </div>
 

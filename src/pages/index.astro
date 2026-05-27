@@ -15,7 +15,7 @@ import settings from '../data/settings.json';
             >
             <h1 id="hero-text-fallback" style="display:none;font-size:2.5rem;margin:0 0 16px;color:var(--sky-dark)">Dynamic Duo</h1>
             <img 
-                src="/dynamic-duo-web/images/logo1.png" 
+                src="/dynamic-duo-web/images/logo" 
                 alt="Avatar" 
                 class="hero-avatar"
             >
@@ -266,7 +266,7 @@ import settings from '../data/settings.json';
     <style>
         /* ─── HERO ─── */
         .hero {
-            background: linear-gradient(180deg, var(--dark-sky) 0%, var(--cream) 100%);
+            background: linear-gradient(180deg, var(--sky-pale) 0%, var(--cream) 100%);
             padding: 80px 20px 60px; text-align: center; position: relative; overflow: hidden;
         }
         .hero::before {
@@ -302,36 +302,24 @@ import settings from '../data/settings.json';
         .ticker-item { color: rgba(255,255,255,.9); font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; padding: 0 36px; }
         @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ─── PAGE BODY — dùng lại từ Layout ─── */
+        /* ─── PAGE BODY — dùng lại từ Layout ─── */
         .page-body {
-            width: 94%; /* Nới rộng sát 2 bên lề */
-            max-width: 1300px; /* Độ rộng tối đa để không bị loãng trên màn hình to */
             display: grid;
-            grid-template-columns: 1fr 320px; /* Cột nội dung và cột sidebar */
-            gap: 40px; /* Tạo khoảng cách thoáng đãng giữa 2 cột */
-            margin: 40px auto 80px;
-            padding: 40px 48px; /* Khoảng đệm từ viền trắng đẩy chữ vào trong */
-            
-            background: #ffffff; /* ✨ NỀN TRẮNG CHO ĐOẠN GIỮA */
-            border-radius: var(--r-lg, 20px); /* Bo góc khối trắng */
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Đổ bóng nhẹ */
+            grid-template-columns: 1fr 280px;
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
             align-items: start;
         }
-
-        /* Xóa padding cũ vì khối .page-body màu trắng đã bao bọc tất cả rồi */
-        .main-content { padding: 0; min-width: 0; }
-        .sidebar { padding: 0; position: sticky; top: 88px; max-height: calc(100vh - 100px); overflow-y: auto; }
-
+        .main-content { padding: 40px 32px 60px 0; min-width: 0; }
+        .sidebar { padding: 40px 0 60px 24px; position: sticky; top: 72px; max-height: calc(100vh - 80px); overflow-y: auto; }
         @media (max-width: 900px) {
-            .page-body { 
-                grid-template-columns: 1fr; /* Gộp thành 1 cột trên điện thoại */
-                padding: 24px 20px; 
-                width: 96%; 
-            }
-            .main-content { padding: 0; }
-            .sidebar { padding: 40px 0 0 0; position: static; max-height: none; }
+            .page-body { grid-template-columns: 1fr; padding: 0 16px; }
+            .main-content { padding: 24px 0 40px; }
+            .sidebar { padding: 0 0 40px; position: static; max-height: none; }
         }
-      
+
         /* ─── SECTION LABELS ─── */
         .sec-label { font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--sky); margin-bottom: 8px; }
         .sec-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 6px; text-align: left; }
@@ -478,15 +466,14 @@ import settings from '../data/settings.json';
         .np-label { font-size: .68rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
         .np-song { font-size: .82rem; color: var(--sky-dark); font-style: italic; }
 
-/* ─── CALENDAR ─── */
-.cal-header { text-align: center; font-size: .85rem; font-weight: 700; color: var(--sky-dark); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.cal-day-header { text-align: center; font-size: .7rem; color: var(--text-dim); font-weight: bold; padding-bottom: 5px; }
-.cal-day { display: flex; align-items: center; justify-content: center; height: 28px; width: 28px; margin: 0 auto; font-size: .75rem; color: var(--text-mid); border-radius: 50%; cursor: default; transition: var(--t); }
-.cal-day.today { background: var(--sky); color: white; font-weight: bold; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4); }
-.cal-day.has-post { background: var(--sky-pale); color: var(--sky); font-weight: bold; border: 1px solid var(--sky-light); cursor: pointer; }
-.cal-day.has-post:hover { background: var(--sky-light); color: var(--sky-dark); }
-.cal-day.empty { background: transparent; border: none; }
+        /* ─── CALENDAR ─── */
+        .cal-header { text-align: center; font-size: .8rem; font-weight: 600; color: var(--sky-dark); margin-bottom: 8px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+        .cal-day-header { text-align: center; font-size: .65rem; color: var(--text-dim); padding: 3px 0; font-weight: 600; }
+        .cal-day { text-align: center; font-size: .72rem; color: var(--text-mid); padding: 4px 2px; border-radius: 6px; cursor: default; }
+        .cal-day.today { background: var(--sky); color: white; font-weight: 700; border-radius: 50%; }
+        .cal-day.has-post { background: var(--sky-pale); color: var(--sky); font-weight: 600; }
+        .cal-day.empty { }
     </style>
 
     <script is:inline>
@@ -548,40 +535,31 @@ import settings from '../data/settings.json';
     }), { threshold: .1 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// ─── CALENDAR ───
-document.addEventListener('DOMContentLoaded', () => {
-    const calC = document.getElementById('calContent');
-    if (!calC) return; // Nếu trang không có widget lịch thì bỏ qua, không báo lỗi
+    // ─── CALENDAR ───
+    (function buildCal() {
+        const now = new Date();
+        const yr = now.getFullYear(), mo = now.getMonth();
+        const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+        const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const firstDay = new Date(yr, mo, 1).getDay();
+        const offset = (firstDay === 0) ? 6 : firstDay - 1;
+        const daysInMonth = new Date(yr, mo + 1, 0).getDate();
+        const today = now.getDate();
+        const postDays = new Set([2, 4, 17, 18]);
 
-    const now = new Date();
-    const yr = now.getFullYear(), mo = now.getMonth();
-    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    
-    // Tính toán ngày đầu tiên của tháng
-    const firstDay = new Date(yr, mo, 1).getDay();
-    const offset = (firstDay === 0) ? 6 : firstDay - 1; // Điều chỉnh Chủ nhật (0) thành cuối tuần
-    const daysInMonth = new Date(yr, mo + 1, 0).getDate();
-    const today = now.getDate();
-    
-    // Giả lập các ngày có up truyện (Ví dụ: mùng 2, 4, 17, 18)
-    const postDays = new Set([2, 4, 17, 18]);
-
-    let html = `<div class="cal-header">${monthNames[mo]} ${yr}</div><div class="cal-grid">`;
-    days.forEach(d => html += `<div class="cal-day-header">${d}</div>`);
-    
-    for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
-    
-    for (let d = 1; d <= daysInMonth; d++) {
-        let cls = 'cal-day';
-        if (d === today) cls += ' today';
-        else if (postDays.has(d)) cls += ' has-post';
-        html += `<div class="${cls}">${d}</div>`;
-    }
-    html += '</div>';
-    
-    calC.innerHTML = html;
-});
+        let html = `<div class="cal-header">${monthNames[mo]} ${yr}</div><div class="cal-grid">`;
+        days.forEach(d => html += `<div class="cal-day-header">${d}</div>`);
+        for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
+        for (let d = 1; d <= daysInMonth; d++) {
+            let cls = 'cal-day';
+            if (d === today) cls += ' today';
+            else if (postDays.has(d)) cls += ' has-post';
+            html += `<div class="${cls}">${d}</div>`;
+        }
+        html += '</div>';
+        const calC = document.getElementById('calContent');
+        if (calC) calC.innerHTML = html;
+    })();
 
     // ─── FRONTPAGE IMAGE FALLBACK ───
     const fpImg = document.querySelector('.frontpage-img');

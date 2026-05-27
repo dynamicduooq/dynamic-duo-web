@@ -23,7 +23,8 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<Layout title={`Thể loại: ${tag}`}>
+<Layout title={`Thể loại: ${tag}`} fullWidth={true}>
+  <div style="width:92%;max-width:860px;margin:40px auto 80px;background:var(--bg-content);padding:40px 48px;border-radius:var(--r-lg);box-shadow:var(--sh-soft);border:1px solid var(--border);">
   <style>
     .tag-page-header {
       text-align: center;

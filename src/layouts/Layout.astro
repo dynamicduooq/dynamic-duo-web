@@ -1,5 +1,5 @@
 ---
-const { frontmatter } = Astro.props;
+const { frontmatter, fullWidth = false } = Astro.props;
 import settings from '../data/settings.json';
 
 const currentPath = Astro.url?.pathname ?? '';
@@ -433,14 +433,19 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         </div>
     </nav>
 
-    <div class="page-wrapper">
-        {frontmatter?.tags && (
-            <div style="max-width:860px;margin:0 auto 0;padding:16px 16px 0;text-align:center;">
-                {frontmatter.tags.map((tag: string) => (
-                    <a href={`/dynamic-duo-web/tags/${tag}`} class="tag-badge"># {tag}</a>
-                ))}
-            </div>
-        )}
+{fullWidth ? (
+            /* ── TRANG RỘNG (index, danh mục): không bọc container ── */
+            <slot />
+        ) : (
+            /* ── TRANG THƯỜNG (chương truyện, tag...): bọc container ── */
+            <div class="container">
+                {frontmatter?.tags && (
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        {frontmatter.tags.map(tag => (
+                            <a href={`/dynamic-duo-web/tags/${tag}`} class="tag-badge"># {tag}</a>
+                        ))}
+                    </div>
+                )}
 
         {isNovelPage && chapters.length > 0 && (
             <div style="text-align:center;padding:20px 16px 0;position:relative;">

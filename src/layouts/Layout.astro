@@ -5,31 +5,30 @@ import settings from '../data/settings.json';
 const currentPath = Astro.url?.pathname ?? '';
 let currentTruyenId = frontmatter?.truyen_id;
 
-const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true }));
 let chapters = [];
 if (currentTruyenId) {
+    const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true }));
     chapters = allPosts
-        .filter(post => {
-            const postFileName = (post.url || '').split('/').pop() || '';
-            const postTruyenId = post.frontmatter?.truyen_id || (postFileName.includes('-') ? postFileName.split('-')[0] : null);
+        .filter((post: any) => {
+            const postTruyenId = post.frontmatter?.truyen_id;
             return postTruyenId === currentTruyenId;
         })
-        .sort((a, b) => {
-            const parseChapter = (post) => {
+        .sort((a: any, b: any) => {
+            const parseChapter = (post: any) => {
                 if (post.frontmatter?.chuong !== undefined) return post.frontmatter.chuong;
                 const match = (post.url || '').match(/chuong-(\d+)/i);
-                return match ? parseInt(match[1]) : (post.url?.includes('index') ? 0 : 999);
+                return match ? parseInt(match[1]) : 999;
             };
             return parseChapter(a) - parseChapter(b);
         });
 }
 
-// Trang chương truyện = có trường chuong trong frontmatter
+// Chỉ hiện inline comment & chapter nav khi là trang chương truyện
 const isNovelPage = frontmatter?.chuong !== undefined;
 ---
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,33 +39,52 @@ const isNovelPage = frontmatter?.chuong !== undefined;
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600;1,7..72,300;1,7..72,400&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
     
     <style is:global>
-        :root {
+        /* ─── BIẾN MÀU: LIGHT MODE ─── */
+        :root, [data-theme="light"] {
             --sky: #0ea5e9;
             --sky2: #0284c7;
             --sky-dark: #0369a1;
             --sky-light: #bae6fd;
             --sky-pale: #f0f9ff;
-            --cream: #fafcff;
+            --cream: #f8fbff;
             --bg-content: #ffffff;
-            --text-main: #334155;
+            --bg-sidebar: #f4f9fe;
+            --text-main: #1e293b;
             --text-mid: #64748b;
             --text-dim: #94a3b8;
+            --border: rgba(186,230,253,.55);
+            --nav-bg: rgba(255,255,255,.95);
+            --nav-border: rgba(186,230,253,.5);
             --sh-card: 0 4px 15px rgba(2,132,199,0.12);
-            --sh-soft: 0 2px 8px rgba(0,0,0,0.08);
-            --r-sm: 6px;
+            --sh-soft: 0 2px 8px rgba(0,0,0,0.06);
+            --r-sm: 8px;
             --r-md: 12px;
             --r-lg: 16px;
             --r-pill: 999px;
-            --t: all 0.2s ease;
+            --t: all 0.22s ease;
         }
 
-        *, *::before, *::after { box-sizing: border-box; }
-
-        html, body {
-            margin: 0; padding: 0;
-            width: 100%;
-            overflow-x: hidden;
+        /* ─── BIẾN MÀU: DARK MODE ─── */
+        [data-theme="dark"] {
+            --sky: #38bdf8;
+            --sky2: #0ea5e9;
+            --sky-dark: #7dd3fc;
+            --sky-light: #0c4a6e;
+            --sky-pale: #0a2236;
+            --cream: #0d1117;
+            --bg-content: #111827;
+            --bg-sidebar: #0f172a;
+            --text-main: #e2e8f0;
+            --text-mid: #94a3b8;
+            --text-dim: #64748b;
+            --border: rgba(56,189,248,.18);
+            --nav-bg: rgba(13,17,23,.95);
+            --nav-border: rgba(56,189,248,.15);
+            --sh-card: 0 4px 15px rgba(0,0,0,0.35);
+            --sh-soft: 0 2px 8px rgba(0,0,0,0.25);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background: var(--cream);
@@ -74,9 +92,13 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             font-family: 'Newsreader', serif;
             font-size: 18px;
             line-height: 1.9;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        h1, h2, h3, h4 { font-family: 'Merriweather', serif; color: var(--sky-dark); text-align: center; }
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; color: var(--sky-dark); }
         a { color: inherit; text-decoration: none; }
         
         ::-webkit-scrollbar { width: 5px; }
@@ -87,17 +109,17 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 500;
             display: flex; align-items: center; justify-content: space-between;
-            height: 56px; padding: 0 32px;
-            background: rgba(255,255,255,.96); backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(186,230,253,.5);
-            box-shadow: 0 2px 12px rgba(2,132,199,.08);
+            height: 56px; padding: 0 28px;
+            background: var(--nav-bg); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--nav-border);
+            box-shadow: 0 2px 12px rgba(2,132,199,.07);
+            transition: background 0.3s ease;
         }
         .nav-logo {
             font-family: 'Literata', serif; font-weight: 600; font-size: .95rem;
             color: var(--sky-dark); white-space: nowrap; letter-spacing: .5px;
         }
         .nav-links { display: flex; align-items: center; gap: 2px; }
-        
         .nav-item { position: relative; }
         .nav-item > a, .nav-btn {
             font-family: 'Newsreader', serif; font-size: .76rem; font-weight: 400;
@@ -106,20 +128,17 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             display: inline-flex; align-items: center; gap: 5px;
             transition: var(--t); cursor: pointer; background: none; border: none; white-space: nowrap;
         }
-        .nav-item > a:hover, .nav-btn:hover,
-        .nav-item:hover > a, .nav-item:hover > .nav-btn {
+        .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn {
             background: var(--sky-pale); color: var(--sky);
         }
-
         .dropdown-content {
             position: absolute; top: calc(100% + 8px); left: 50%;
             transform: translateX(-50%) translateY(8px);
-            min-width: 230px; background: #fff;
-            border: 1px solid rgba(186,230,253,.7); border-radius: var(--r-md);
-            box-shadow: 0 16px 48px rgba(2,132,199,.13), 0 2px 8px rgba(2,132,199,.06);
-            padding: 8px 6px;
-            opacity: 0; visibility: hidden; pointer-events: none;
-            transition: opacity .22s ease, transform .22s ease; z-index: 600;
+            min-width: 230px; background: var(--bg-content);
+            border: 1px solid var(--border); border-radius: var(--r-md);
+            box-shadow: 0 16px 48px rgba(2,132,199,.13);
+            padding: 8px 6px; opacity: 0; visibility: hidden;
+            pointer-events: none; transition: opacity .22s ease, transform .22s ease; z-index: 600;
         }
         .nav-item:hover .dropdown-content {
             opacity: 1; visibility: visible; pointer-events: auto;
@@ -128,73 +147,54 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         .dd-section-title { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 6px 12px 3px; }
         .dd-item { display: flex; align-items: center; gap: 7px; padding: 7px 12px; font-size: .82rem; color: var(--text-mid); border-radius: var(--r-sm); transition: var(--t); }
         .dd-item:hover { background: var(--sky-pale); color: var(--sky); }
-        .dd-divider { height: 1px; background: rgba(186,230,253,.45); margin: 5px 8px; }
+        .dd-divider { height: 1px; background: var(--border); margin: 5px 8px; }
 
-        /* ─── LAYOUT CHÍNH - full width ─── */
-        .site-body {
-            margin-top: 56px;
-            min-height: calc(100vh - 56px);
-            width: 100%;
+        /* ─── NÚT DARK MODE ─── */
+        .theme-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--sky-pale); border: 1px solid var(--border);
+            cursor: pointer; font-size: 1rem; display: flex; align-items: center;
+            justify-content: center; transition: var(--t); margin-left: 8px;
+            color: var(--text-mid);
         }
+        .theme-btn:hover { background: var(--sky-light); transform: rotate(20deg); }
 
-        /* Layout khi ĐỌC TRUYỆN: bài viết + comment sidebar */
-        .novel-layout {
+        /* ─── LAYOUT CHÍNH: rộng hơn, sát lề hơn ─── */
+        .page-wrapper { margin-top: 56px; min-height: 70vh; }
+
+        /* Layout cho trang chủ và danh mục: 2 cột, sidebar ra ngoài */
+        .page-body {
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 280px;
             gap: 0;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 32px 24px 60px;
+            padding: 0 16px;
             align-items: start;
         }
+        .main-content { padding: 40px 32px 60px 0; min-width: 0; }
+        .sidebar { padding: 40px 0 60px 24px; position: sticky; top: 72px; max-height: calc(100vh - 80px); overflow-y: auto; }
 
-        /* Layout trang bình thường: full width với max-width cân đối */
-        .page-layout {
-            max-width: 880px;
-            margin: 0 auto;
-            padding: 32px 24px 60px;
-        }
-
-        /* ─── KHUNG NỘI DUNG ─── */
+        /* Layout cho trang truyện: container đơn, rộng hơn */
         .container {
-            background: rgba(255,255,255,0.98);
-            padding: 40px 50px;
-            border-radius: var(--r-lg);
-            box-shadow: var(--sh-soft);
-            border: 1px solid rgba(186,230,253,.5);
+            max-width: 860px; margin: 0 auto 60px;
+            background: var(--bg-content);
+            padding: 44px 56px; border-radius: var(--r-lg);
+            box-shadow: var(--sh-soft); border: 1px solid var(--border);
+        }
+        @media (max-width: 900px) {
+            .page-body { grid-template-columns: 1fr; padding: 0 16px; }
+            .main-content { padding: 24px 0 40px; }
+            .sidebar { padding: 0 0 40px; position: static; max-height: none; }
+            .container { padding: 28px 20px; }
         }
 
-        /* ─── COMMENT SIDEBAR (chỉ trang truyện) ─── */
-        .comment-sidebar {
-            position: sticky;
-            top: 72px;
-            max-height: calc(100vh - 90px);
-            overflow-y: auto;
-            padding: 20px 16px;
-            background: rgba(255,255,255,0.95);
-            border-radius: var(--r-lg);
-            border: 1px solid rgba(186,230,253,.5);
-            box-shadow: var(--sh-soft);
-            margin-left: 20px;
-        }
-
-        .comment-sidebar h3 {
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-dim);
-            margin: 0 0 14px;
-            text-align: center;
-        }
-
-        .comment-sidebar::-webkit-scrollbar { width: 3px; }
-        .comment-sidebar::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
-
-        /* ─── MARKDOWN STYLES ─── */
+        /* ─── MARKDOWN / TRUYỆN ─── */
         blockquote {
-            font-style: italic; font-size: .9rem; color: var(--text-mid); line-height: 1.75;
-            border-left: 3px solid var(--sky-light); padding: 15px 20px;
-            margin: 20px 0; background: var(--sky-pale); border-radius: 0 12px 12px 0;
+            font-style: italic; font-size: .9rem; color: var(--text-mid);
+            line-height: 1.75; border-left: 3px solid var(--sky-light);
+            padding: 15px 20px; margin: 20px 0;
+            background: var(--sky-pale); border-radius: 0 12px 12px 0;
         }
         hr { border: none; text-align: center; margin: 40px 0; }
         hr::after { content: "𓆝 𓆟 𓆞 𓆝 𓆟"; color: var(--sky-light); font-size: 20px; letter-spacing: 5px; }
@@ -207,9 +207,9 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         }
         .tag-badge:hover { background: var(--sky-pale); }
 
-        /* ─── DROPDOWN CHƯƠNG ─── */
+        /* ─── CHAPTER DROPDOWN ─── */
         .chapter-dropdown summary {
-            display: block; padding: 12px 20px;
+            display: block; padding: 10px 20px;
             background: var(--sky-pale); border: 1.5px solid var(--sky-light);
             border-radius: var(--r-pill); color: var(--sky-dark);
             font-size: 14px; font-weight: bold; cursor: pointer;
@@ -231,26 +231,101 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         }
         .chapter-list a:hover { background: var(--sky-pale); color: var(--sky); }
 
-        /* ─── ĐIỀU HƯỚNG CHƯƠNG ─── */
-        .chapter-nav {
-            display: flex; justify-content: space-between; align-items: center;
-            gap: 16px; margin-top: 40px; padding-top: 24px;
-            border-top: 1px dashed var(--sky-light);
+        /* ─── INLINE COMMENT (chỉ hiện trên trang truyện) ─── */
+        .inline-comment-trigger {
+            display: inline-block;
+            cursor: pointer;
+            color: var(--sky);
+            font-size: 0.7rem;
+            vertical-align: super;
+            margin-left: 2px;
+            opacity: 0.5;
+            transition: var(--t);
+            user-select: none;
         }
-        .chapter-nav a {
-            padding: 8px 18px; border: 1.5px solid var(--sky-light);
-            border-radius: var(--r-pill); font-size: 0.82rem; color: var(--sky-dark);
-            transition: var(--t); background: var(--sky-pale);
+        .inline-comment-trigger:hover { opacity: 1; }
+
+        /* Popup comment hiện bên phải màn hình */
+        .comment-popup {
+            position: fixed;
+            top: 50%;
+            right: 24px;
+            transform: translateY(-50%);
+            width: 320px;
+            max-height: 80vh;
+            background: var(--bg-content);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: 0 20px 60px rgba(2,132,199,.18);
+            z-index: 400;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .chapter-nav a:hover { background: var(--sky-light); color: white; }
+        .comment-popup.open { display: flex; }
+        .comment-popup-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px; border-bottom: 1px solid var(--border);
+            background: var(--sky-pale);
+        }
+        .comment-popup-title {
+            font-family: 'Literata', serif; font-size: .88rem;
+            color: var(--sky-dark); font-weight: 600;
+        }
+        .comment-popup-close {
+            cursor: pointer; color: var(--text-dim);
+            font-size: 1.1rem; line-height: 1; padding: 2px 6px;
+            border-radius: var(--r-pill); transition: var(--t);
+            background: none; border: none;
+        }
+        .comment-popup-close:hover { background: var(--border); color: var(--text-main); }
+        .comment-popup-body { flex: 1; overflow-y: auto; padding: 16px; }
+        .comment-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .comment-item {
+            background: var(--sky-pale); border-radius: var(--r-md);
+            padding: 10px 13px; font-size: .83rem; border: 1px solid var(--border);
+        }
+        .comment-item .ci-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .ci-author { font-weight: 600; color: var(--sky-dark); font-size: .8rem; }
+        .ci-time { font-size: .72rem; color: var(--text-dim); }
+        .ci-text { color: var(--text-main); line-height: 1.55; }
+        .ci-reply-btn {
+            background: none; border: none; color: var(--sky); cursor: pointer;
+            font-size: .75rem; padding: 2px 0; margin-top: 4px; transition: var(--t);
+        }
+        .ci-reply-btn:hover { text-decoration: underline; }
+        .reply-list { margin-top: 8px; padding-left: 12px; border-left: 2px solid var(--sky-light); display: flex; flex-direction: column; gap: 8px; }
+        .reply-item { font-size: .8rem; }
+        .comment-form { border-top: 1px solid var(--border); padding: 12px 16px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; background: var(--bg-content);
+            border: 1px solid var(--border); border-radius: var(--r-md);
+            padding: 8px 12px; font-family: 'Newsreader', serif; font-size: .83rem;
+            color: var(--text-main); margin-bottom: 8px; resize: none; transition: var(--t);
+        }
+        .comment-form input:focus, .comment-form textarea:focus {
+            outline: none; border-color: var(--sky);
+        }
+        .comment-form-actions { display: flex; justify-content: flex-end; gap: 8px; align-items: center; }
+        .btn-submit-cmt {
+            background: var(--sky); color: #fff; border: none;
+            border-radius: var(--r-pill); padding: 6px 16px; cursor: pointer;
+            font-size: .8rem; font-family: 'Newsreader', serif; transition: var(--t);
+        }
+        .btn-submit-cmt:hover { background: var(--sky2); }
+        .cmt-ref-text { font-size: .73rem; color: var(--text-dim); font-style: italic; background: var(--sky-pale); padding: 4px 8px; border-radius: 6px; margin-bottom: 8px; display: none; }
 
         /* ─── FOOTER ─── */
         footer {
-            background: #fff; border-top: 1px solid rgba(186,230,253,.4);
-            padding: 44px 32px 26px; margin-top: auto; width: 100%;
+            background: var(--bg-content); border-top: 1px solid var(--border);
+            padding: 44px 20px 26px; margin-top: auto;
+            transition: background 0.3s ease;
         }
         .footer-inner {
-            max-width: 1200px; margin: 0 auto;
+            max-width: 1400px; margin: 0 auto; padding: 0 16px;
             display: grid; grid-template-columns: 1fr auto 1fr;
             gap: 28px; align-items: start;
         }
@@ -262,34 +337,48 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         .ft-social { display: flex; flex-direction: column; gap: 7px; align-items: flex-end; }
         .social-ic {
             width: 34px; height: 34px; border-radius: 50%;
-            border: 1px solid var(--sky-light); display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--sky-light); display: flex;
+            align-items: center; justify-content: center;
             font-size: .88rem; color: var(--sky); background: var(--sky-pale); transition: var(--t);
         }
         .social-ic:hover { background: var(--sky-light); transform: translateY(-2px); }
         .ft-bottom {
-            max-width: 1200px; margin: 26px auto 0; padding-top: 16px;
-            border-top: 1px solid rgba(186,230,253,.3);
+            max-width: 1400px; margin: 26px auto 0; padding: 16px 16px 0;
+            border-top: 1px solid var(--border);
             text-align: center; font-size: .7rem; color: var(--text-dim); letter-spacing: 1px;
         }
 
-        /* ─── NÚT CUỘN (lên đầu & xuống cuối) ─── */
-        .scroll-btns {
+        /* ─── NÚT CUỘN ─── */
+        .back-top {
             position: fixed; bottom: 24px; right: 22px; z-index: 300;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .scroll-btn {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--sky); color: #fff; border: none; cursor: pointer;
             font-size: 1rem; box-shadow: var(--sh-card);
             opacity: 0; pointer-events: none; transition: var(--t);
             display: flex; align-items: center; justify-content: center;
         }
-        .scroll-btn.show { opacity: 1; pointer-events: auto; }
-        .scroll-btn:hover { transform: translateY(-3px); background: var(--sky2); }
+        .back-top.show { opacity: 1; pointer-events: auto; }
+        .back-top:hover { transform: translateY(-3px); background: var(--sky2); }
 
-        /* luôn hiện nút xuống cuối (khi chưa ở cuối trang) */
-        .scroll-btn-down { opacity: 1 !important; pointer-events: auto !important; }
-        .scroll-btn-down.hide { opacity: 0 !important; pointer-events: none !important; }
+        /* ─── WIDGET / SIDEBAR ─── */
+        .widget {
+            background: var(--bg-content); border: 1px solid var(--border);
+            border-radius: var(--r-lg); padding: 20px; margin-bottom: 20px;
+            box-shadow: var(--sh-soft);
+        }
+        .widget-title {
+            font-family: 'Literata', serif; font-size: .82rem; font-weight: 600;
+            color: var(--sky-dark); letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .widget-divider { text-align: center; color: var(--text-dim); font-size: .8rem; margin-bottom: 10px; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag-cloud a {
+            display: inline-block; padding: 4px 10px; font-size: .77rem;
+            background: var(--sky-pale); border: 1px solid var(--border);
+            border-radius: var(--r-pill); color: var(--sky); cursor: pointer; transition: var(--t);
+        }
+        .tag-cloud a:hover { background: var(--sky-light); color: white; }
     </style>
 </head>
 <body>
@@ -300,7 +389,6 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             <div class="nav-item">
                 <a href="/dynamic-duo-web/">Trang chủ</a>
             </div>
-            
             <div class="nav-item">
                 <button class="nav-btn">Cá dưới nước <span>▾</span></button>
                 <div class="dropdown-content">
@@ -312,7 +400,6 @@ const isNovelPage = frontmatter?.chuong !== undefined;
                     <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang" class="dd-item">✦ Hạ cháy đồng hoang</a>
                 </div>
             </div>
-            
             <div class="nav-item">
                 <button class="nav-btn">Cá trên bàn <span>▾</span></button>
                 <div class="dropdown-content">
@@ -324,79 +411,58 @@ const isNovelPage = frontmatter?.chuong !== undefined;
                     <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
                 </div>
             </div>
-            
             <div class="nav-item">
                 <a href="/dynamic-duo-web/ca-tren-troi">Cá trên trời</a>
             </div>
+
+            <!-- Nút đổi theme -->
+            <button class="theme-btn" id="themeToggle" title="Đổi chế độ sáng/tối" aria-label="Toggle dark mode">🌙</button>
         </div>
     </nav>
 
-    <div class="site-body">
-        {isNovelPage ? (
-            <div class="novel-layout">
-                <!-- CỘT TRÁI: Nội dung truyện -->
-                <div>
-                    <div class="container">
-                        {frontmatter?.tags && (
-                            <div style="text-align: center; margin-bottom: 25px;">
-                                {frontmatter.tags.map(tag => (
-                                    <a href={`/dynamic-duo-web/tags/${tag}`} class="tag-badge"># {tag}</a>
-                                ))}
-                            </div>
-                        )}
+    <div class="page-wrapper">
+        {frontmatter?.tags && (
+            <div style="max-width:860px;margin:0 auto 0;padding:16px 16px 0;text-align:center;">
+                {frontmatter.tags.map((tag: string) => (
+                    <a href={`/dynamic-duo-web/tags/${tag}`} class="tag-badge"># {tag}</a>
+                ))}
+            </div>
+        )}
 
-                        {chapters.length > 0 && (
-                            <div style="text-align: center; margin-bottom: 30px; position: relative;">
-                                <details class="chapter-dropdown">
-                                    <summary>⚓ Chọn chương ▾</summary>
-                                    <div class="chapter-list">
-                                        {chapters.map((chap) => (
-                                            <a href={chap.url}>{chap.frontmatter.title}</a>
-                                        ))}
-                                    </div>
-                                </details>
-                            </div>
-                        )}
-
-                        <slot />
-
-                        {chapters.length > 0 && (
-                            <div style="text-align: center; margin-top: 40px; position: relative;">
-                                <details class="chapter-dropdown">
-                                    <summary>⚓ Chọn chương ▾</summary>
-                                    <div class="chapter-list">
-                                        {chapters.map((chap) => (
-                                            <a href={chap.url}>{chap.frontmatter.title}</a>
-                                        ))}
-                                    </div>
-                                </details>
-                            </div>
-                        )}
-
-                        {/* Điều hướng chương trước/sau */}
-                        {(() => {
-                            const idx = chapters.findIndex(c => c.url === currentPath);
-                            const prev = chapters[idx - 1];
-                            const next = chapters[idx + 1];
-                            return (prev || next) && (
-                                <div class="chapter-nav">
-                                    {prev
-                                        ? <a href={prev.url}>← {prev.frontmatter.title}</a>
-                                        : <span></span>
-                                    }
-                                    {next
-                                        ? <a href={next.url}>{next.frontmatter.title} →</a>
-                                        : <span></span>
-                                    }
-                                </div>
-                            );
-                        })()}
+        {isNovelPage && chapters.length > 0 && (
+            <div style="text-align:center;padding:20px 16px 0;position:relative;">
+                <details class="chapter-dropdown">
+                    <summary>⚓ Chọn chương ▾</summary>
+                    <div class="chapter-list">
+                        {chapters.map((chap: any) => (
+                            <a href={chap.url}>{chap.frontmatter.title}</a>
+                        ))}
                     </div>
-                </div>
+                </details>
+            </div>
+        )}
 
-                <!-- CỘT PHẢI: Comment sidebar - CHỈ hiện ở trang truyện -->
-                <div class="comment-sidebar">
-                    <h3>💬 Bình luận</h3>
+        <!-- Nội dung trang (slot) -->
+        <div class="container">
+            <slot />
+        </div>
+
+        {isNovelPage && chapters.length > 0 && (
+            <div style="text-align:center;padding:0 16px 20px;position:relative;">
+                <details class="chapter-dropdown">
+                    <summary>⚓ Chọn chương ▾</summary>
+                    <div class="chapter-list">
+                        {chapters.map((chap: any) => (
+                            <a href={chap.url}>{chap.frontmatter.title}</a>
+                        ))}
+                    </div>
+                </details>
+            </div>
+        )}
+
+        {isNovelPage && (
+            <div style="max-width:860px;margin:0 auto 60px;padding:0 16px;">
+                <div style="border-top:1px dashed var(--border);padding-top:30px;">
                     <script src="https://giscus.app/client.js"
                             data-repo="dynamicduooq/dynamic-duo-web"
                             data-repo-id="R_kgDOSn8PYg"
@@ -414,29 +480,39 @@ const isNovelPage = frontmatter?.chuong !== undefined;
                     </script>
                 </div>
             </div>
-        ) : (
-            <!-- TRANG BÌNH THƯỜNG: không có comment -->
-            <div class="page-layout">
-                <div class="container">
-                    {frontmatter?.tags && (
-                        <div style="text-align: center; margin-bottom: 25px;">
-                            {frontmatter.tags.map(tag => (
-                                <a href={`/dynamic-duo-web/tags/${tag}`} class="tag-badge"># {tag}</a>
-                            ))}
-                        </div>
-                    )}
-                    <slot />
-                </div>
-            </div>
         )}
     </div>
+
+    <!-- INLINE COMMENT POPUP — chỉ render trên trang truyện -->
+    {isNovelPage && (
+        <div class="comment-popup" id="inlineCommentPopup">
+            <div class="comment-popup-header">
+                <span class="comment-popup-title" id="popupTitle">💬 Bình luận đoạn văn</span>
+                <button class="comment-popup-close" id="closePopup">✕</button>
+            </div>
+            <div class="comment-popup-body">
+                <div class="cmt-ref-text" id="cmt-ref-text"></div>
+                <div class="comment-list" id="inlineCmtList">
+                    <!-- Các comment sẽ render ở đây -->
+                    <div style="text-align:center;color:var(--text-dim);font-size:.83rem;padding:20px 0;">Chưa có bình luận nào. Hãy là người đầu tiên! 🌊</div>
+                </div>
+                <div class="comment-form" id="inlineCmtForm">
+                    <input type="text" id="cmtAuthor" placeholder="Tên của cậu (hoặc để trống)" maxlength="40" />
+                    <textarea id="cmtText" rows="3" placeholder="Viết bình luận về đoạn văn này..."></textarea>
+                    <div class="comment-form-actions">
+                        <button class="btn-submit-cmt" id="submitCmt">Gửi ✈</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )}
 
     <footer>
         <div class="footer-inner">
             <div class="ft-brand">
                 <span class="ft-logo">dynamic duo 𓆝.°•</span>
                 <p>paired dreams, boundless gleam.</p>
-                <p style="margin-top:5px;font-size:.74rem">✉ dynamicduoq@gmail.com</p>
+                <p style="margin-top:5px;font-size:.74rem">✉ dynamicduoo.q@gmail.com</p>
             </div>
             <div class="ft-links">
                 <a href="/dynamic-duo-web/">Trang chủ</a>
@@ -453,29 +529,181 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
     </footer>
 
-    <!-- Nút cuộn: lên đầu + xuống cuối -->
-    <div class="scroll-btns">
-        <button class="scroll-btn" id="btnTop" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-        <button class="scroll-btn scroll-btn-down" id="btnBottom" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>
-    </div>
+    <button class="back-top" id="backTop" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
 
     <script is:inline>
-        const btnTop = document.getElementById('btnTop');
-        const btnBottom = document.getElementById('btnBottom');
+    // ─── DARK MODE: đọc preference từ localStorage, áp dụng ngay ───
+    (function() {
+        const saved = localStorage.getItem('dd-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
 
-        function updateScrollBtns() {
-            const scrollY = window.scrollY;
-            const maxScroll = document.body.scrollHeight - window.innerHeight;
+    <script is:inline>
+    // ─── THEME TOGGLE ───
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+        // Sync icon với theme hiện tại
+        function syncThemeIcon() {
+            const current = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = current === 'dark' ? '☀️' : '🌙';
+        }
+        syncThemeIcon();
 
-            // Nút LÊN ĐẦU: hiện khi cuộn xuống > 300px
-            btnTop.classList.toggle('show', scrollY > 300);
+        themeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('dd-theme', next);
+            syncThemeIcon();
 
-            // Nút XUỐNG CUỐI: ẩn khi đã ở gần cuối trang (< 100px từ đáy)
-            btnBottom.classList.toggle('hide', scrollY > maxScroll - 100);
+            // Cập nhật giscus theme nếu có
+            const giscusFrame = document.querySelector('iframe.giscus-frame');
+            if (giscusFrame) {
+                giscusFrame.contentWindow.postMessage({
+                    giscus: { setConfig: { theme: next === 'dark' ? 'dark' : 'light' } }
+                }, 'https://giscus.app');
+            }
+        });
+    }
+
+    // ─── NÚT CUỘN ───
+    window.addEventListener('scroll', () => {
+        const bt = document.getElementById('backTop');
+        if (bt) bt.classList.toggle('show', scrollY > 300);
+    });
+
+    // ─── INLINE COMMENTS (chỉ chạy nếu có popup) ───
+    const popup = document.getElementById('inlineCommentPopup');
+    if (popup) {
+        // Storage key theo URL
+        const storageKey = 'dd-inline-cmts-' + window.location.pathname;
+        let comments = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        let currentParagraphId = null;
+        let replyingTo = null;
+
+        // Thêm nút comment vào từng đoạn văn bản trong .container
+        function initInlineComments() {
+            const container = document.querySelector('.container');
+            if (!container) return;
+            const paragraphs = container.querySelectorAll('p, h2, h3, h4');
+            paragraphs.forEach((p, i) => {
+                const pid = 'p-' + i;
+                p.setAttribute('data-pid', pid);
+                const trigger = document.createElement('span');
+                trigger.className = 'inline-comment-trigger';
+                trigger.title = 'Bình luận đoạn này';
+                trigger.innerHTML = '💬';
+                const cmtCount = comments[pid] ? comments[pid].length : 0;
+                if (cmtCount > 0) {
+                    trigger.innerHTML = '💬' + cmtCount;
+                    trigger.style.opacity = '0.85';
+                }
+                trigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openPopup(pid, p.textContent.slice(0, 60) + '…');
+                });
+                p.appendChild(trigger);
+            });
         }
 
-        window.addEventListener('scroll', updateScrollBtns, { passive: true });
-        updateScrollBtns(); // chạy lần đầu
+        function openPopup(pid, refText) {
+            currentParagraphId = pid;
+            replyingTo = null;
+            document.getElementById('popupTitle').textContent = '💬 Bình luận đoạn văn';
+            const refEl = document.getElementById('cmt-ref-text');
+            refEl.textContent = '"' + refText + '"';
+            refEl.style.display = 'block';
+            renderComments(pid);
+            popup.classList.add('open');
+        }
+
+        function renderComments(pid) {
+            const list = document.getElementById('inlineCmtList');
+            const cmts = comments[pid] || [];
+            if (cmts.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:.83rem;padding:20px 0">Chưa có bình luận nào. Hãy là người đầu tiên! 🌊</div>';
+                return;
+            }
+            list.innerHTML = '';
+            cmts.forEach((cmt, idx) => {
+                const item = document.createElement('div');
+                item.className = 'comment-item';
+                const repliesHtml = (cmt.replies || []).map(r => `
+                    <div class="reply-item">
+                        <span class="ci-author">${r.author || 'Ẩn danh'}</span>: ${r.text}
+                    </div>
+                `).join('');
+                item.innerHTML = `
+                    <div class="ci-header">
+                        <span class="ci-author">${cmt.author || 'Ẩn danh'}</span>
+                        <span class="ci-time">${cmt.time || ''}</span>
+                    </div>
+                    <div class="ci-text">${cmt.text}</div>
+                    ${repliesHtml ? '<div class="reply-list">' + repliesHtml + '</div>' : ''}
+                    <button class="ci-reply-btn" data-idx="${idx}">↩ Trả lời</button>
+                `;
+                item.querySelector('.ci-reply-btn').addEventListener('click', () => {
+                    replyingTo = idx;
+                    document.getElementById('cmtText').placeholder = 'Trả lời ' + (cmt.author || 'Ẩn danh') + '...';
+                    document.getElementById('cmtText').focus();
+                    document.getElementById('popupTitle').textContent = '↩ Đang trả lời ' + (cmt.author || 'Ẩn danh');
+                });
+                list.appendChild(item);
+            });
+        }
+
+        document.getElementById('closePopup').addEventListener('click', () => {
+            popup.classList.remove('open');
+            replyingTo = null;
+        });
+
+        document.getElementById('submitCmt').addEventListener('click', () => {
+            const text = document.getElementById('cmtText').value.trim();
+            if (!text || !currentParagraphId) return;
+            const author = document.getElementById('cmtAuthor').value.trim() || 'Ẩn danh';
+            const time = new Date().toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit' });
+
+            if (!comments[currentParagraphId]) comments[currentParagraphId] = [];
+
+            if (replyingTo !== null) {
+                if (!comments[currentParagraphId][replyingTo].replies) {
+                    comments[currentParagraphId][replyingTo].replies = [];
+                }
+                comments[currentParagraphId][replyingTo].replies.push({ author, text, time });
+            } else {
+                comments[currentParagraphId].push({ author, text, time, replies: [] });
+            }
+
+            localStorage.setItem(storageKey, JSON.stringify(comments));
+            document.getElementById('cmtText').value = '';
+            replyingTo = null;
+            document.getElementById('popupTitle').textContent = '💬 Bình luận đoạn văn';
+            document.getElementById('cmtText').placeholder = 'Viết bình luận về đoạn văn này...';
+            renderComments(currentParagraphId);
+
+            // Cập nhật số đếm trên trigger
+            const triggers = document.querySelectorAll('.inline-comment-trigger');
+            triggers.forEach(t => {
+                const p = t.parentElement;
+                const pid = p?.getAttribute('data-pid');
+                if (pid && comments[pid]) {
+                    t.innerHTML = '💬' + comments[pid].length;
+                    t.style.opacity = '0.85';
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (popup.classList.contains('open') && !popup.contains(e.target) && !e.target.classList.contains('inline-comment-trigger')) {
+                popup.classList.remove('open');
+            }
+        });
+
+        initInlineComments();
+    }
     </script>
 </body>
 </html>

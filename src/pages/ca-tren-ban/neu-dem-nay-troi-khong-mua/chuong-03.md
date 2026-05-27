@@ -1,8 +1,7 @@
 ---
-layout: ../../../layouts/Layout.astro
-title: "Chương 1: \"Có phải đã gặp ở đâu rồi không\""
+title: "Chương 1: \\"Có phải đã gặp ở đâu rồi không\\""
 truyen_id: "ndntkm"
-chuong: 3
+chuong: 1
 date: "2026-05-30"
 tags:
   - "nếu đêm nay trời không mưa"

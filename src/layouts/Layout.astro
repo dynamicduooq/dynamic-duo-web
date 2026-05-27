@@ -1,5 +1,5 @@
 ---
-const { frontmatter } = Astro.props;
+const { frontmatter, fullWidth = false } = Astro.props;
 import settings from '../data/settings.json';
 
 const currentPath = Astro.url?.pathname ?? '';
@@ -307,6 +307,8 @@ if (currentTruyenId && isNovelPage) {
     }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
+    #backTop    { bottom: 70px; }
+    #scrollDown { bottom: 24px; }
   </style>
 </head>
 <body>
@@ -370,6 +372,10 @@ if (currentTruyenId && isNovelPage) {
 </div>
 
 <div class="page-wrapper">
+    {fullWidth ? (
+        <slot />
+    ) : (
+
   <div class="container">
 
     {/* Tags */}
@@ -466,6 +472,7 @@ if (currentTruyenId && isNovelPage) {
     )}
 
   </div>
+    )}
 </div>
 
 <!-- FOOTER -->

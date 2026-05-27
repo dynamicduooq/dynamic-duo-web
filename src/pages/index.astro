@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import settings from '../data/settings.json';
 
 const ndntkmPosts  = Object.values(import.meta.glob('./ca-tren-ban/neu-dem-nay-troi-khong-mua/*.md',   { eager: true })) as any[];
 const tnctcstPosts = Object.values(import.meta.glob('./ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/*.md', { eager: true })) as any[];
@@ -14,7 +13,7 @@ const qhbcpCount   = countChaps(qhbcpPosts);
 const hcdhCount    = countChaps(hcdhPosts);
 ---
 
-<Layout title="Trang chủ">
+<Layout title="Trang chủ" fullWidth={true}>
 <style>
 /* ─── TICKER ─── */
 .ticker-wrap {

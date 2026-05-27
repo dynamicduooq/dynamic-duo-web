@@ -2,103 +2,131 @@
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const allPosts = Object.values(
-    import.meta.glob('../**/*.md', { eager: true })
-  ) as any[];
-
-  const uniqueTags = [
-    ...new Set(
-      allPosts
-        .flatMap((p: any) => p.frontmatter?.tags || [])
-        .filter(Boolean)
-    ),
-  ] as string[];
+  const allPosts = Object.values(import.meta.glob('../**/*.md', { eager: true }));
+  const uniqueTags = [...new Set(allPosts.map((post: any) => post.frontmatter?.tags || []).flat())];
 
   return uniqueTags.map((tag) => {
-    const filtered = allPosts.filter(
-      (p: any) =>
-        p.frontmatter?.tags?.includes(tag) &&
-        p.url &&
-        p.frontmatter?.chuong !== undefined &&
-        p.frontmatter?.chuong !== 0
+    const filteredPosts = allPosts.filter((post: any) =>
+        post.frontmatter?.tags?.includes(tag) &&
+        post.url &&
+        !post.url.endsWith('/ca-duoi-nuoc') &&
+        !post.url.endsWith('/ca-tren-ban')
     );
-    return { params: { tag }, props: { posts: filtered } };
+    return {
+      params: { tag },
+      props: { posts: filteredPosts }
+    };
   });
 }
 
 const { tag } = Astro.params;
-const { posts } = Astro.props as { posts: any[] };
-
-const grouped: Record<string, any[]> = {};
-for (const p of posts) {
-  const id = p.frontmatter?.truyen_id || 'other';
-  if (!grouped[id]) grouped[id] = [];
-  grouped[id].push(p);
-}
-for (const id in grouped) {
-  grouped[id].sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
-}
-
-const storyNames: Record<string, string> = {
-  ndntkm: 'Nếu đêm nay trời không mưa',
-  tnctsct: 'Tôi nghĩ chúng tôi sắp chia tay',
-  qhbcp: 'Quan hệ bạn cùng phòng',
-  hcdh: 'Hạ cháy đồng hoang',
-  vdv: 'Vật dễ vỡ',
-  tdxt: 'Thiếu đế xuân tâm',
-};
+const { posts } = Astro.props;
 ---
 
-<Layout title={`#${tag}`} frontmatter={{ title: `# ${tag}` }}>
+<Layout title={`Thể loại: ${tag}`}>
   <style>
-    .tag-hero { text-align: center; margin-bottom: 32px; }
-    .tag-hero-badge {
-      display: inline-block; padding: 6px 20px;
-      background: var(--sky-pale); border: 2px solid var(--sky-light);
-      border-radius: var(--r-pill); font-size: 1rem; color: var(--sky-dark);
-      font-family: 'Merriweather', serif; margin-bottom: 8px;
+    .tag-page-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed var(--sky-light);
     }
-    .tag-count { font-size: .82rem; color: var(--text-dim); }
-    .group-title {
-      font-family: 'Literata', serif; font-size: .9rem; font-weight: 600;
-      color: var(--sky-dark); padding: 10px 14px;
-      background: var(--sky-pale); border-radius: var(--r-sm);
-      margin: 22px 0 8px;
+    .tag-page-header h1 {
+      font-family: 'Merriweather', serif;
+      color: var(--sky-dark);
+      font-size: 1.5rem;
+      margin: 0 0 6px;
+      text-align: center;
     }
-    .chap-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 14px; border-bottom: 1px dashed rgba(186,230,253,.4);
-      color: var(--text-main); transition: var(--t); border-radius: var(--r-sm);
+    .tag-page-header p {
+      font-size: .82rem;
+      color: var(--text-dim);
+      font-style: italic;
+      margin: 0;
+      text-align: center;
     }
-    .chap-row:hover { background: var(--sky-pale); color: var(--sky); }
-    .chap-row:last-child { border-bottom: none; }
-    .chap-num { font-size: .72rem; color: var(--text-dim); width: 36px; flex-shrink: 0; }
-    .chap-name { font-size: .88rem; flex: 1; }
-    .empty-state { text-align: center; padding: 40px; color: var(--text-dim); font-style: italic; }
-    .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: .8rem; color: var(--sky); margin-bottom: 20px; }
-    .back-link:hover { text-decoration: underline; }
+    .tag-post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+      margin: 0;
+    }
+    .tag-post-item {
+      list-style: none;
+      border-bottom: 1px dashed var(--border);
+      padding: 16px 0;
+    }
+    .tag-post-item:last-child { border-bottom: none; }
+    .tag-post-link {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      text-decoration: none;
+      transition: var(--t);
+    }
+    .tag-post-link:hover .tpl-title { color: var(--sky); }
+    .tpl-title {
+      font-family: 'Merriweather', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--sky2);
+      transition: var(--t);
+      line-height: 1.4;
+    }
+    .tpl-date {
+      font-size: .75rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      margin-top: 3px;
+      font-family: sans-serif;
+    }
+    .tag-empty {
+      font-style: italic;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 40px;
+      font-size: .9rem;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .8rem;
+      color: var(--sky);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 6px 14px;
+      margin-bottom: 28px;
+      transition: var(--t);
+    }
+    .back-link:hover { background: var(--sky-pale); border-color: var(--sky); }
   </style>
 
-  <a href="/dynamic-duo-web/" class="back-link">← Trang chủ</a>
+  <a href="/dynamic-duo-web/" class="back-link">← Về trang chủ</a>
 
-  <div class="tag-hero">
-    <div class="tag-hero-badge">🏷️ #{tag}</div>
-    <div class="tag-count">{posts.length} chương thuộc thể loại này</div>
+  <div class="tag-page-header">
+    <h1>🏷️ #{tag}</h1>
+    <p>{posts.length} chương / truyện thuộc thể loại này</p>
   </div>
 
-  {posts.length === 0 && (
-    <div class="empty-state">𓆝 Chưa có chương nào thuộc thể loại này.</div>
-  )}
-
-  {Object.entries(grouped).map(([id, chaps]) => (
-    <div>
-      <div class="group-title">📖 {storyNames[id] || id} ({chaps.length} chương)</div>
-      {chaps.map((p) => (
-        <a href={p.url} class="chap-row">
-          <span class="chap-num">C{p.frontmatter?.chuong}</span>
-          <span class="chap-name">{p.frontmatter?.title || `Chương ${p.frontmatter?.chuong}`}</span>
-        </a>
+  {posts.length > 0 ? (
+    <ul class="tag-post-list">
+      {posts.map((post: any) => (
+        <li class="tag-post-item">
+          <a href={post.url} class="tag-post-link">
+            <span class="tpl-title">{post.frontmatter?.title || 'Chương truyện'}</span>
+            {post.frontmatter?.date && (
+              <span class="tpl-date">
+                📅 {new Date(post.frontmatter.date).toLocaleDateString('vi-VN')}
+              </span>
+            )}
+          </a>
+        </li>
       ))}
-    </div>
-  ))}
+    </ul>
+  ) : (
+    <p class="tag-empty">𓆝 Chưa có chương truyện nào thuộc thể loại này.</p>
+  )}
 </Layout>

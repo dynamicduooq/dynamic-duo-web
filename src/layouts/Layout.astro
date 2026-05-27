@@ -159,34 +159,47 @@ const isNovelPage = frontmatter?.chuong !== undefined;
         }
         .theme-btn:hover { background: var(--sky-light); transform: rotate(20deg); }
 
-        /* ─── LAYOUT CHÍNH: rộng hơn, sát lề hơn ─── */
+/* ─── LAYOUT CHÍNH: rộng hơn, sát lề hơn ─── */
         .page-wrapper { margin-top: 56px; min-height: 70vh; }
 
-        /* Layout cho trang chủ và danh mục: 2 cột, sidebar ra ngoài */
+        /* Layout cho trang chủ và danh mục: 2 cột */
         .page-body {
             display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 0;
-            max-width: full-width;
-            margin: 0 auto;
-            padding: 0 16px;
+            grid-template-columns: 1fr 280px; /* Cột nội dung và cột sidebar */
+            gap: 40px; /* Khoảng cách giữa 2 cột */
+            width: 94%; /* Tràn ra 94% màn hình (sát lề) */
+            max-width: 1300px; /* Giới hạn tối đa để màn hình to không bị loãng */
+            margin: 40px auto; 
+            padding: 40px 48px; /* Khoảng đệm bên trong khối trắng */
+            background: #ffffff; /* ✨ NỀN TRẮNG CHO ĐOẠN GIỮA */
+            border-radius: var(--r-lg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Bóng đổ cực mờ cho khối trắng nổi lên */
             align-items: start;
         }
-        .main-content { padding: 40px 32px 60px 0; min-width: 0; }
-        .sidebar { padding: 40px 0 60px 24px; position: sticky; top: 72px; max-height: calc(100vh - 80px); overflow-y: auto; }
+
+        /* Bỏ padding lồi lõm cũ vì .page-body đã tạo khung trắng bọc ngoài rồi */
+        .main-content { padding: 0; min-width: 0; }
+        .sidebar { padding: 0; position: sticky; top: 88px; max-height: calc(100vh - 100px); overflow-y: auto; }
 
         /* Layout cho trang truyện: container đơn, rộng hơn */
         .container {
-            max-width: 860px; margin: 0 auto 60px;
-            background: var(--bg-content);
+            width: 94%; /* Đồng bộ độ rộng với trang chủ */
+            max-width: 950px; /* Nới rộng từ 860px lên 950px */
+            margin: 40px auto 60px;
+            background: var(--bg-content, #ffffff);
             padding: 44px 56px; border-radius: var(--r-lg);
-            box-shadow: var(--sh-soft); border: 1px solid var(--border);
+            box-shadow: var(--sh-soft); border: 1px solid var(--border-color, #bae6fd);
         }
+
         @media (max-width: 900px) {
-            .page-body { grid-template-columns: 1fr; padding: 0 16px; }
-            .main-content { padding: 24px 0 40px; }
-            .sidebar { padding: 0 0 40px; position: static; max-height: none; }
-            .container { padding: 28px 20px; }
+            .page-body { 
+                grid-template-columns: 1fr; /* Gộp thành 1 cột trên điện thoại */
+                padding: 24px 20px; 
+                width: 96%; 
+            }
+            .main-content { padding: 0; }
+            .sidebar { padding: 40px 0 0 0; position: static; max-height: none; }
+            .container { padding: 28px 20px; width: 96%; }
         }
 
         /* ─── MARKDOWN / TRUYỆN ─── */
@@ -325,7 +338,7 @@ const isNovelPage = frontmatter?.chuong !== undefined;
             transition: background 0.3s ease;
         }
         .footer-inner {
-            max-width: full-width; margin: 0 auto; padding: 0 16px;
+            max-width: 92%; margin: 0 auto; padding: 0 16px;
             display: grid; grid-template-columns: 1fr auto 1fr;
             gap: 28px; align-items: start;
         }

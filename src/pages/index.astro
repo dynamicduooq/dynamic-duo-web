@@ -302,24 +302,36 @@ import settings from '../data/settings.json';
         .ticker-item { color: rgba(255,255,255,.9); font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; padding: 0 36px; }
         @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        /* ─── PAGE BODY — dùng lại từ Layout ─── */
+/* ─── PAGE BODY — dùng lại từ Layout ─── */
         .page-body {
+            width: 94%; /* Nới rộng sát 2 bên lề */
+            max-width: 1300px; /* Độ rộng tối đa để không bị loãng trên màn hình to */
             display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 0;
-            max-width: full-width;
-            margin: 0 auto;
-            padding: 0 16px;
+            grid-template-columns: 1fr 320px; /* Cột nội dung và cột sidebar */
+            gap: 40px; /* Tạo khoảng cách thoáng đãng giữa 2 cột */
+            margin: 40px auto 80px;
+            padding: 40px 48px; /* Khoảng đệm từ viền trắng đẩy chữ vào trong */
+            
+            background: #ffffff; /* ✨ NỀN TRẮNG CHO ĐOẠN GIỮA */
+            border-radius: var(--r-lg, 20px); /* Bo góc khối trắng */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Đổ bóng nhẹ */
             align-items: start;
         }
-        .main-content { padding: 40px 32px 60px 0; min-width: 0; }
-        .sidebar { padding: 40px 0 60px 24px; position: sticky; top: 72px; max-height: calc(100vh - 80px); overflow-y: auto; }
-        @media (max-width: 900px) {
-            .page-body { grid-template-columns: 1fr; padding: 0 16px; }
-            .main-content { padding: 24px 0 40px; }
-            .sidebar { padding: 0 0 40px; position: static; max-height: none; }
-        }
 
+        /* Xóa padding cũ vì khối .page-body màu trắng đã bao bọc tất cả rồi */
+        .main-content { padding: 0; min-width: 0; }
+        .sidebar { padding: 0; position: sticky; top: 88px; max-height: calc(100vh - 100px); overflow-y: auto; }
+
+        @media (max-width: 900px) {
+            .page-body { 
+                grid-template-columns: 1fr; /* Gộp thành 1 cột trên điện thoại */
+                padding: 24px 20px; 
+                width: 96%; 
+            }
+            .main-content { padding: 0; }
+            .sidebar { padding: 40px 0 0 0; position: static; max-height: none; }
+        }
+      
         /* ─── SECTION LABELS ─── */
         .sec-label { font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--sky); margin-bottom: 8px; }
         .sec-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 6px; text-align: left; }

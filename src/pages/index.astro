@@ -1,221 +1,528 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Lấy số chương đã đăng cho mỗi truyện
-const ndntkmPosts = Object.values(import.meta.glob('./ca-tren-ban/neu-dem-nay-troi-khong-mua/*.md', { eager: true })) as any[];
+const ndntkmPosts  = Object.values(import.meta.glob('./ca-tren-ban/neu-dem-nay-troi-khong-mua/*.md',   { eager: true })) as any[];
 const tnctcstPosts = Object.values(import.meta.glob('./ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/*.md', { eager: true })) as any[];
-const qhbcpPosts   = Object.values(import.meta.glob('./ca-duoi-nuoc/quan-he-ban-cung-phong/*.md',  { eager: true })) as any[];
-const hcdhPosts    = Object.values(import.meta.glob('./ca-duoi-nuoc/ha-chay-dong-hoang/*.md',     { eager: true })) as any[];
-
-const countChaps = (posts: any[]) => posts.filter(p => p.frontmatter?.chuong && p.frontmatter.chuong !== 0).length;
+const qhbcpPosts   = Object.values(import.meta.glob('./ca-duoi-nuoc/quan-he-ban-cung-phong/*.md',   { eager: true })) as any[];
+const hcdhPosts    = Object.values(import.meta.glob('./ca-duoi-nuoc/ha-chay-dong-hoang/*.md',      { eager: true })) as any[];
+const countChaps   = (posts: any[]) => posts.filter(p => p.frontmatter?.chuong && p.frontmatter.chuong !== 0).length;
 
 const stories = [
-  {
-    id: 'qhbcp',
-    title: 'Quan hệ bạn cùng phòng',
-    author: 'Hạnh Lan',
-    desc: 'Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.',
-    cover: '/dynamic-duo-web/images/biaqhbcp.png',
-    href: '/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/',
-    firstChap: '/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/',
-    cat: 'ongoing', catLabel: '🌊 Cá dưới nước',
-    tags: ['đam mỹ', 'hiện đại', 'niên hạ', 'trai thẳng'],
-    done: countChaps(qhbcpPosts), total: 72,
-  },
-  {
-    id: 'hcdh',
-    title: 'Hạ cháy đồng hoang',
-    author: 'Hỉ Thượng Mi Sao',
-    desc: 'Tình yêu là bản năng ẩn sau miền hoang tàn của ký ức.',
-    cover: '/dynamic-duo-web/images/biahcdh.png',
-    href: '/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/',
-    firstChap: '/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/',
-    cat: 'ongoing', catLabel: '🌊 Cá dưới nước',
-    tags: ['đam mỹ', 'hiện đại', 'chua xót', 'mất trí nhớ'],
-    done: countChaps(hcdhPosts), total: 109,
-  },
-  {
-    id: 'ndntkm',
-    title: 'Nếu đêm nay trời không mưa',
-    author: 'Tam Đạo',
-    desc: 'Tình cờ gặp lại mối tình đầu từng đá anh — lần này thật sự không còn yêu nữa.',
-    cover: '/dynamic-duo-web/images/biandntkm.png',
-    href: '/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/',
-    firstChap: '/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-01/',
-    cat: 'completed', catLabel: '🍽️ Cá trên bàn',
-    tags: ['đam mỹ', 'hiện đại', 'HE', 'gương vỡ lại lành'],
-    done: countChaps(ndntkmPosts), total: 76,
-  },
-  {
-    id: 'tnctsct',
-    title: 'Tôi nghĩ chúng tôi sắp chia tay',
-    author: 'Hạ Nhất Thiên',
-    desc: 'Khủng hoảng năm thứ 8. Hai người lớn nhát gan.',
-    cover: '/dynamic-duo-web/images/biatnctsct.png',
-    href: '/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/',
-    firstChap: '/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-01/',
-    cat: 'completed', catLabel: '🍽️ Cá trên bàn',
-    tags: ['đam mỹ', 'hiện đại', 'HE', 'chua xót'],
-    done: countChaps(tnctcstPosts), total: 74,
-  },
+  { id:'qhbcp',   title:'Quan hệ bạn cùng phòng',          author:'Hạnh Lan',       zh:'',
+    desc:'Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.',
+    cover:'/dynamic-duo-web/images/biaqhbcp.png',
+    href:'/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/',
+    firstChap:'/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/',
+    cat:'ongoing', catLabel:'🌊 Đang tiến hành',
+    tags:['đam mỹ','hiện đại','niên hạ','trai thẳng','yêu thầm'],
+    done: countChaps(qhbcpPosts), total: 72 },
+  { id:'hcdh',    title:'Hạ cháy đồng hoang',               author:'Hỉ Thượng Mi Sao', zh:'',
+    desc:'Tình yêu là bản năng ẩn sau miền hoang tàn của ký ức.',
+    cover:'/dynamic-duo-web/images/biatdxt.png',
+    href:'/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/',
+    firstChap:'/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/',
+    cat:'ongoing', catLabel:'🌊 Đang tiến hành',
+    tags:['đam mỹ','hiện đại','chua xót','mất trí nhớ','đồng quê'],
+    done: countChaps(hcdhPosts), total: 109 },
+  { id:'ndntkm',  title:'Nếu đêm nay trời không mưa',       author:'Tam Đạo',        zh:'如果今夜不下雨',
+    desc:'Tình cờ gặp lại mối tình đầu từng đá anh — lần này thật sự không còn yêu nữa.',
+    cover:'/dynamic-duo-web/images/biandntkm.png',
+    href:'/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/',
+    firstChap:'/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-01/',
+    cat:'completed', catLabel:'✅ Hoàn thành',
+    tags:['đam mỹ','hiện đại','HE','gương vỡ lại lành','drama motip cũ'],
+    done: countChaps(ndntkmPosts), total: 76 },
+  { id:'tnctsct', title:'Tôi nghĩ chúng tôi sắp chia tay', author:'Hạ Nhất Thiên',  zh:'我觉得我们快分手了',
+    desc:'Khủng hoảng năm thứ 8. Hai người lớn nhát gan.',
+    cover:'/dynamic-duo-web/images/biatnctsct.png',
+    href:'/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/',
+    firstChap:'/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-01/',
+    cat:'completed', catLabel:'✅ Hoàn thành',
+    tags:['đam mỹ','hiện đại','HE','chua xót','1v1'],
+    done: countChaps(tnctcstPosts), total: 74 },
+  { id:'vdv',  title:'Vật dễ vỡ',         author:'??', zh:'',
+    desc:'Chương sẽ được cập nhật sớm.',
+    cover:'/dynamic-duo-web/images/biavdv.png',
+    href:'/dynamic-duo-web/ca-tren-ban/vat-de-vo/',
+    firstChap:'/dynamic-duo-web/ca-tren-ban/vat-de-vo/',
+    cat:'upcoming', catLabel:'🌤️ Sắp đào',
+    tags:['đam mỹ'], done: 0, total: 0 },
+  { id:'tdxt', title:'Thiếu đế xuân tâm', author:'??', zh:'',
+    desc:'Chương sẽ được cập nhật sớm.',
+    cover:'/dynamic-duo-web/images/biatdxt.png',
+    href:'/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/',
+    firstChap:'/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/',
+    cat:'upcoming', catLabel:'🌤️ Sắp đào',
+    tags:['đam mỹ','cổ đại'], done: 0, total: 0 },
 ];
 
 const allTags = [...new Set(stories.flatMap(s => s.tags))].sort();
 ---
 
 <Layout frontmatter={{ title: 'Trang chủ' }}>
-  <style>
-    /* ── HERO ── */
-    .hero { text-align: center; padding: 30px 0 44px; }
-    .hero-logo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 3px solid var(--sky-light); box-shadow: 0 4px 20px rgba(14,165,233,.15); margin-bottom: 16px; }
-    .hero-title { font-family: 'Literata', serif; font-size: 1.9rem; font-weight: 600; color: var(--sky-dark); margin: 0 0 5px; }
-    .hero-tagline { font-size: .88rem; color: var(--text-dim); font-style: italic; margin: 0 0 22px; }
-    .hero-banner { width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--r-lg); box-shadow: var(--sh-soft); }
+<style>
+/* ─── TICKER ─── */
+.ticker-wrap{
+  overflow:hidden;
+  background:linear-gradient(90deg,rgba(224,242,254,.5),rgba(240,249,255,.7),rgba(224,242,254,.5));
+  border-top:1px solid var(--sky-light);border-bottom:1px solid var(--sky-light);
+  padding:8px 0;margin-bottom:0;
+}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker 38s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{
+  display:inline-flex;align-items:center;gap:22px;
+  font-size:.75rem;color:var(--sky2);letter-spacing:1.5px;padding:0 22px;
+}
+.ticker-item::after{content:'𓆝';color:var(--sky-light);margin-left:22px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    /* ── SECTION HEADER ── */
-    .sec-hd { display: flex; align-items: center; gap: 10px; margin: 44px 0 18px; }
-    .sec-hd h2 { font-family: 'Merriweather', serif; font-size: .88rem; color: var(--sky-dark); letter-spacing: 2px; text-transform: uppercase; margin: 0; text-align: left; white-space: nowrap; }
-    .sec-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--sky-light), transparent); }
-    .sec-link { font-size: .74rem; color: var(--sky); white-space: nowrap; transition: var(--t); }
-    .sec-link:hover { text-decoration: underline; }
+/* ─── PAGE BODY: 2 CỘT ─── */
+.home-body{
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:28px;
+  align-items:start;
+  padding:32px 0 80px;
+}
+@media(max-width:860px){
+  .home-body{grid-template-columns:1fr}
+  .sidebar-col{display:none}
+}
 
-    /* ── TAG FILTER ── */
-    .tag-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; justify-content: center; }
-    .filter-btn {
-      padding: 4px 14px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill);
-      font-size: .76rem; color: var(--text-mid); cursor: pointer; transition: var(--t);
-      background: #fff; font-family: 'Newsreader', serif;
-    }
-    .filter-btn:hover { border-color: var(--sky); color: var(--sky); background: var(--sky-pale); }
-    .filter-btn.active { background: var(--sky); color: #fff; border-color: var(--sky); }
-    .filter-btn.all-btn.active { background: var(--sky); color: #fff; }
+/* ─── SIDEBAR ─── */
+.sidebar-col{
+  position:sticky;top:72px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.widget{
+  background:rgba(240,249,255,.65);
+  border:1px solid rgba(186,230,253,.7);
+  border-radius:18px;padding:18px 14px;
+}
+.widget-title{
+  font-family:'Merriweather',serif;font-size:.72rem;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--sky);text-align:center;margin-bottom:12px;
+}
 
-    /* ── CARDS ── */
-    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    @media (max-width: 540px) { .story-grid { grid-template-columns: 1fr; } }
+/* Profile */
+.profile-avatar{
+  width:80px;height:80px;border-radius:50%;overflow:hidden;
+  margin:0 auto 10px;border:3px solid var(--sky-light);
+  background:var(--sky-pale);display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+}
+.profile-name{font-family:'Merriweather',serif;color:var(--sky-dark);font-size:.95rem;text-align:center;margin-bottom:4px}
+.profile-tagline{font-size:.8rem;color:var(--text-mid);font-style:italic;text-align:center;line-height:1.5;margin-bottom:6px}
+.profile-deco{text-align:center;font-size:1rem;letter-spacing:3px;color:var(--sky-light)}
 
-    .story-card {
-      border: 1px solid rgba(186,230,253,.5); border-radius: var(--r-md);
-      overflow: hidden; background: #fff; transition: var(--t);
-      display: flex; flex-direction: column;
-    }
-    .story-card:hover { box-shadow: var(--sh-card); transform: translateY(-3px); }
-    .story-card[data-hidden="true"] { display: none; }
+/* Tag cloud */
+.tag-cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.tag-cloud-btn{
+  display:inline-block;padding:3px 10px;
+  background:#fff;color:var(--sky);border-radius:var(--r-pill);
+  font-size:.73rem;border:1px dashed var(--sky-light);
+  font-family:'Newsreader',serif;transition:var(--t);cursor:pointer;
+  white-space:nowrap;
+}
+.tag-cloud-btn:hover,.tag-cloud-btn.active{background:var(--sky-pale);border-style:solid;color:var(--sky2)}
 
-    .card-img-wrap { position: relative; }
-    .card-cover { width: 100%; height: 175px; object-fit: cover; display: block; background: var(--sky-pale); }
-    .card-cat-badge {
-      position: absolute; top: 10px; left: 10px;
-      font-size: .62rem; letter-spacing: 1.2px; text-transform: uppercase;
-      padding: 3px 10px; border-radius: var(--r-pill); font-weight: 600;
-      backdrop-filter: blur(8px);
-    }
-    .card-cat-badge.ongoing { background: rgba(254,249,195,.9); color: #854d0e; }
-    .card-cat-badge.completed { background: rgba(220,252,231,.9); color: #166534; }
+/* Category tree */
+.cat-tree{font-size:.8rem;color:var(--text-mid)}
+.cat-tree ul{list-style:none;padding-left:14px;margin-top:4px}
+.cat-tree>ul{padding-left:0}
+.cat-tree a{color:var(--text-mid);transition:color .2s;display:block;padding:2px 0}
+.cat-tree a:hover{color:var(--sky)}
+.cat-tree summary{
+  cursor:pointer;font-size:.8rem;color:var(--sky-dark);font-weight:600;
+  padding:3px 0;list-style:none;display:flex;align-items:center;gap:5px;
+}
+.cat-tree summary::-webkit-details-marker{display:none}
+.cat-tree summary::before{content:'▸';font-size:.6rem;transition:transform .2s;color:var(--sky)}
+.cat-tree details[open]>summary::before{transform:rotate(90deg)}
+.cat-tree li{margin:2px 0}
+.cat-count{font-size:.68rem;color:var(--text-dim);margin-left:4px}
 
-    .card-body { padding: 13px 15px 15px; flex: 1; display: flex; flex-direction: column; }
-    .card-title { font-family: 'Merriweather', serif; font-size: .9rem; color: var(--sky-dark); margin: 0 0 3px; line-height: 1.4; }
-    .card-author { font-size: .72rem; color: var(--text-dim); font-style: italic; margin: 0 0 8px; }
-    .card-desc { font-size: .82rem; color: var(--text-mid); line-height: 1.6; margin: 0 0 9px; flex: 1; }
-    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-    .card-tag { font-size: .65rem; padding: 2px 7px; border: 1px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky); background: var(--sky-pale); }
-    .card-progress { font-size: .7rem; color: var(--text-dim); margin-bottom: 10px; }
-    .card-prog-bar { height: 3px; background: rgba(186,230,253,.35); border-radius: 2px; overflow: hidden; margin-top: 3px; }
-    .card-prog-fill { height: 100%; background: var(--sky-light); border-radius: 2px; }
-    .card-btns { display: flex; gap: 6px; }
-    .card-btn-outline { flex: 1; text-align: center; padding: 7px 8px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky-dark); font-size: .76rem; transition: var(--t); }
-    .card-btn-outline:hover { background: var(--sky-pale); color: var(--sky); }
-    .card-btn-fill { flex: 1; text-align: center; padding: 7px 8px; background: var(--sky); border: 1.5px solid var(--sky); border-radius: var(--r-pill); color: #fff; font-size: .76rem; transition: var(--t); }
-    .card-btn-fill:hover { background: var(--sky2); border-color: var(--sky2); }
+/* Quote */
+.quote-body{font-style:italic;font-size:.82rem;color:var(--text-mid);line-height:1.75;border-left:3px solid var(--sky-light);padding-left:12px;margin:0}
+.quote-src{font-size:.68rem;color:var(--text-dim);margin-top:8px;letter-spacing:.5px;text-align:right}
 
-    /* ── UPCOMING ── */
-    .upcoming-box {
-      background: var(--sky-pale); border: 1.5px dashed var(--sky-light);
-      border-radius: var(--r-md); padding: 22px 24px; text-align: center;
-    }
-    .upcoming-box p { color: var(--text-mid); font-size: .88rem; font-style: italic; margin: 0 0 10px; }
-  </style>
+/* ─── MAIN COL ─── */
+.main-col{min-width:0}
 
-  <!-- HERO -->
-  <div class="hero">
-    <img src="/dynamic-duo-web/images/logo1.png" alt="Logo" class="hero-logo" onerror="this.style.display='none'" />
-    <h1 class="hero-title">dynamic duo 𓆝.°•</h1>
-    <p class="hero-tagline">paired dreams, boundless gleam.</p>
-    <img src="/dynamic-duo-web/images/banner.png" alt="Banner" class="hero-banner" onerror="this.style.display='none'" />
+/* Section header */
+.sec-hd{display:flex;align-items:center;gap:10px;margin:28px 0 14px}
+.sec-hd h2{font-family:'Merriweather',serif;font-size:.82rem;color:var(--sky-dark);letter-spacing:2px;text-transform:uppercase;margin:0;text-align:left;white-space:nowrap}
+.sec-line{flex:1;height:1px;background:linear-gradient(to right,var(--sky-light),transparent)}
+.sec-link{font-size:.72rem;color:var(--sky);white-space:nowrap;transition:var(--t)}
+.sec-link:hover{text-decoration:underline}
+
+/* ─── FILTER BAR ─── */
+.filter-bar{
+  background:#fff;border:1px solid rgba(186,230,253,.5);
+  border-radius:16px;padding:12px 14px;
+  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+  margin-bottom:16px;
+}
+.fl-label{font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);flex-shrink:0}
+.fl-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1}
+.chip{
+  display:inline-flex;align-items:center;gap:3px;padding:3px 11px;
+  border-radius:var(--r-pill);font-size:.71rem;cursor:pointer;
+  transition:var(--t);border:1.5px solid rgba(186,230,253,.5);
+  background:var(--sky-pale);color:var(--text-mid);user-select:none;white-space:nowrap;
+  font-family:'Newsreader',serif;
+}
+.chip:hover{background:var(--sky-light);color:var(--sky-dark)}
+.chip.active{background:var(--sky);color:#fff;border-color:var(--sky)}
+.chip.all-chip.active{background:var(--sky);color:#fff}
+.fl-count{font-size:.68rem;background:var(--sky-pale);color:var(--sky);padding:1px 8px;border-radius:var(--r-pill);border:1px solid var(--sky-light);white-space:nowrap;margin-left:auto}
+
+/* ─── STORY GRID ─── */
+.stories-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:14px;margin-bottom:36px;
+}
+.sc{
+  background:#fff;border:1px solid rgba(186,230,253,.5);
+  border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(2,132,199,.06);
+  transition:var(--t);display:flex;flex-direction:column;position:relative;
+}
+.sc:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(2,132,199,.12);border-color:var(--sky-light)}
+.sc[data-hidden="true"]{display:none}
+.sc-img{width:100%;padding-top:148%;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3))}
+.sc-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.sc:hover .sc-img img{transform:scale(1.05)}
+.sc-badge{
+  position:absolute;top:8px;right:8px;font-size:.58rem;letter-spacing:1px;
+  text-transform:uppercase;padding:2px 7px;border-radius:var(--r-pill);backdrop-filter:blur(8px);
+}
+.badge-ongoing{background:rgba(2,132,199,.82);color:#fff}
+.badge-completed{background:rgba(5,150,105,.82);color:#fff}
+.badge-upcoming{background:rgba(100,116,139,.7);color:#fff}
+.sc-body{padding:11px 12px 13px;flex:1;display:flex;flex-direction:column}
+.sc-title{font-family:'Merriweather',serif;font-size:.83rem;color:var(--sky-dark);margin:0 0 3px;line-height:1.35}
+.sc-author{font-size:.68rem;color:var(--text-dim);font-style:italic;margin:0 0 6px}
+.sc-desc{font-size:.76rem;color:var(--text-mid);line-height:1.55;margin:0 0 8px;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:7px}
+.sc-tag{font-size:.6rem;padding:1px 6px;border:1px solid var(--sky-light);border-radius:var(--r-pill);color:var(--sky);background:var(--sky-pale)}
+.sc-prog{margin-bottom:8px}
+.sc-prog-label{font-size:.64rem;color:var(--text-dim);margin-bottom:2px}
+.sc-prog-bar{height:3px;background:rgba(186,230,253,.35);border-radius:2px;overflow:hidden}
+.sc-prog-fill{height:100%;background:linear-gradient(to right,var(--sky-light),var(--sky));border-radius:2px}
+.sc-btns{display:flex;gap:5px}
+.sc-btn-o{flex:1;text-align:center;padding:5px 4px;border:1.5px solid var(--sky-light);border-radius:var(--r-pill);color:var(--sky-dark);font-size:.69rem;transition:var(--t)}
+.sc-btn-o:hover{background:var(--sky-pale);color:var(--sky)}
+.sc-btn-f{flex:1;text-align:center;padding:5px 4px;background:var(--sky);border:1.5px solid var(--sky);border-radius:var(--r-pill);color:#fff;font-size:.69rem;transition:var(--t)}
+.sc-btn-f:hover{background:var(--sky2);border-color:var(--sky2)}
+
+/* Upcoming placeholder */
+.sc-upcoming-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;opacity:.15;color:var(--sky)}
+
+/* ─── NOTICE ─── */
+.notice-box{
+  background:linear-gradient(135deg,rgba(224,242,254,.6),rgba(240,249,255,.8));
+  border:1px solid rgba(186,230,253,.6);border-radius:18px;
+  padding:22px 22px;margin-bottom:28px;
+  position:relative;overflow:hidden;
+}
+.notice-box::before{
+  content:'𓆝 𓆟 𓆞';
+  position:absolute;right:18px;top:14px;
+  font-size:1.3rem;letter-spacing:6px;color:rgba(186,230,253,.7);
+  pointer-events:none;
+}
+.notice-title{font-family:'Merriweather',serif;font-size:.82rem;color:var(--sky-dark);letter-spacing:1px;margin-bottom:10px;text-align:left}
+.notice-body{font-size:.85rem;color:var(--text-mid);line-height:1.85;font-style:italic}
+.notice-body strong{color:var(--sky-dark);font-style:normal}
+
+/* ─── DARK MODE ─── */
+.dark-mode-btn{
+  background:none;border:1.5px solid var(--sky-light);border-radius:var(--r-pill);
+  color:var(--sky);padding:4px 14px;font-size:.75rem;cursor:pointer;
+  transition:var(--t);font-family:'Newsreader',serif;display:flex;align-items:center;gap:5px;
+  margin:0 auto;
+}
+.dark-mode-btn:hover{background:var(--sky-pale)}
+
+/* DARK THEME */
+[data-theme="dark"]{
+  --sky:#38bdf8;--sky2:#7dd3fc;--sky-dark:#bae6fd;
+  --sky-light:#1e4a6e;--sky-pale:#0f2a40;
+  --cream:#0b1929;--text-main:#e0f2fe;
+  --text-mid:#94a3b8;--text-dim:#4a6080;
+}
+[data-theme="dark"] body{background:var(--cream)}
+[data-theme="dark"] .widget{background:rgba(15,42,64,.8);border-color:rgba(30,74,110,.7)}
+[data-theme="dark"] .filter-bar,[data-theme="dark"] .sc,[data-theme="dark"] .notice-box{background:rgba(15,30,50,.85);border-color:rgba(30,74,110,.6)}
+[data-theme="dark"] .tag-cloud-btn{background:rgba(15,30,50,.8);color:var(--sky)}
+[data-theme="dark"] .chip{background:rgba(15,42,64,.9);color:var(--text-mid)}
+[data-theme="dark"] nav,[data-theme="dark"] .mobile-menu{background:rgba(11,25,41,.97)}
+[data-theme="dark"] .sc-body,[data-theme="dark"] .sc-title{color:var(--sky-dark)}
+</style>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nếu đêm nay trời không mưa — Hoàn thành · 76 chương</span>
+    <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay — Hoàn thành · 74 chương</span>
+    <span class="ticker-item">Quan hệ bạn cùng phòng — Đang tiến hành 🌊</span>
+    <span class="ticker-item">Hạ cháy đồng hoang — Đang tiến hành 🌊</span>
+    <span class="ticker-item">paired dreams, boundless gleam ·</span>
+    <span class="ticker-item">Vật dễ vỡ · Thiếu đế xuân tâm — Sắp đào 🌤️</span>
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nếu đêm nay trời không mưa — Hoàn thành · 76 chương</span>
+    <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay — Hoàn thành · 74 chương</span>
+    <span class="ticker-item">Quan hệ bạn cùng phòng — Đang tiến hành 🌊</span>
+    <span class="ticker-item">Hạ cháy đồng hoang — Đang tiến hành 🌊</span>
+    <span class="ticker-item">paired dreams, boundless gleam ·</span>
+    <span class="ticker-item">Vật dễ vỡ · Thiếu đế xuân tâm — Sắp đào 🌤️</span>
   </div>
+</div>
 
-  <!-- TAG FILTER -->
-  <div class="tag-filter" id="tagFilter">
-    <button class="filter-btn all-btn active" data-tag="all">Tất cả</button>
-    {allTags.map(tag => (
-      <button class="filter-btn" data-tag={tag}># {tag}</button>
-    ))}
-  </div>
+<div class="home-body">
 
-  <!-- CÁ DƯỚI NƯỚC -->
-  <div class="sec-hd">
-    <h2>🐠 Cá dưới nước</h2>
-    <div class="sec-line"></div>
-    <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="sec-link">Xem tất cả →</a>
-  </div>
+  <!-- MAIN COLUMN -->
+  <div class="main-col">
 
-  <div class="story-grid" id="storyGrid">
-    {stories.map(s => {
-      const pct = Math.min(100, Math.round((s.done / s.total) * 100));
-      return (
-        <div class="story-card" data-tags={s.tags.join(',')}>
-          <div class="card-img-wrap">
-            <a href={s.href}>
-              <img src={s.cover} alt={s.title} class="card-cover" onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
-            </a>
-            <span class={`card-cat-badge ${s.cat}`}>{s.catLabel}</span>
+    <!-- NOTICE -->
+    <div class="notice-box">
+      <div class="notice-title">📢 Thông báo từ nhà cá</div>
+      <div class="notice-body">
+        Chào mừng đến với <strong>dynamic duo 𓆝.°•</strong> — nhà mới của chúng mình!
+        Hiện tại đang tiến hành edit <strong>Quan hệ bạn cùng phòng</strong> và <strong>Hạ cháy đồng hoang</strong>.
+        Tủ hoàn thành có <strong>Nếu đêm nay trời không mưa</strong> (76c) và <strong>Tôi nghĩ chúng tôi sắp chia tay</strong> (74c).
+        Ghé thăm thường xuyên để không bỏ lỡ chương mới nhé! 🌊
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="sec-hd">
+      <h2>📚 Tủ truyện</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="filter-bar">
+      <span class="fl-label">Lọc</span>
+      <div class="fl-chips" id="filterChips">
+        <button class="chip all-chip active" data-tag="all">Tất cả</button>
+        <button class="chip" data-cat="ongoing">🌊 Đang làm</button>
+        <button class="chip" data-cat="completed">✅ Xong</button>
+        <button class="chip" data-cat="upcoming">🌤️ Sắp đào</button>
+        {allTags.slice(0,8).map(t => (
+          <button class="chip" data-tag={t}># {t}</button>
+        ))}
+      </div>
+      <span class="fl-count" id="flCount">{stories.length} truyện</span>
+    </div>
+
+    <!-- CARDS -->
+    <div class="stories-grid" id="storiesGrid">
+      {stories.map(s => {
+        const pct = s.total > 0 ? Math.min(100, Math.round((s.done/s.total)*100)) : 0;
+        return (
+          <div class="sc" data-tags={s.tags.join(',')} data-cat={s.cat}>
+            <div class="sc-img">
+              {s.cat === 'upcoming'
+                ? (<div class="sc-upcoming-ph">☁️</div>)
+                : (<a href={s.href}>
+                    <img src={s.cover} alt={s.title} loading="lazy" onerror="this.parentElement.innerHTML='<div class=sc-upcoming-ph>📖</div>'" />
+                  </a>)
+              }
+              <span class={`sc-badge badge-${s.cat}`}>{
+                s.cat === 'ongoing' ? '🌊 Đang làm'
+                : s.cat === 'completed' ? '✅ Xong'
+                : '🌤️ Sắp đào'
+              }</span>
+            </div>
+            <div class="sc-body">
+              <h3 class="sc-title">
+                {s.cat !== 'upcoming' ? <a href={s.href} style="color:inherit">{s.title}</a> : s.title}
+              </h3>
+              <p class="sc-author">{s.author}</p>
+              <p class="sc-desc">{s.desc}</p>
+              <div class="sc-tags">
+                {s.tags.slice(0,3).map(t => <span class="sc-tag"># {t}</span>)}
+              </div>
+              {s.total > 0 && (
+                <div class="sc-prog">
+                  <div class="sc-prog-label">{s.done}/{s.total}c · {pct}%</div>
+                  <div class="sc-prog-bar"><div class="sc-prog-fill" style={`width:${pct}%`}></div></div>
+                </div>
+              )}
+              {s.cat !== 'upcoming' ? (
+                <div class="sc-btns">
+                  <a href={s.href} class="sc-btn-o">Trang truyện</a>
+                  <a href={s.firstChap} class="sc-btn-f">Đọc →</a>
+                </div>
+              ) : (
+                <div style="font-size:.72rem;color:var(--text-dim);font-style:italic;text-align:center;padding:4px 0">Sắp cập nhật...</div>
+              )}
+            </div>
           </div>
-          <div class="card-body">
-            <h3 class="card-title">{s.title}</h3>
-            <p class="card-author">{s.author}</p>
-            <p class="card-desc">{s.desc}</p>
-            <div class="card-tags">
-              {s.tags.map(t => <span class="card-tag"># {t}</span>)}
-            </div>
-            <div class="card-progress">
-              📖 {s.done}/{s.total} chương ({pct}%)
-              <div class="card-prog-bar"><div class="card-prog-fill" style={`width:${pct}%`}></div></div>
-            </div>
-            <div class="card-btns">
-              <a href={s.href} class="card-btn-outline">Trang truyện</a>
-              <a href={s.firstChap} class="card-btn-fill">Đọc →</a>
-            </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
+        );
+      })}
+    </div>
 
-  <!-- CÁ TRÊN TRỜI -->
-  <div class="sec-hd" style="margin-top:44px">
-    <h2>🌤️ Cá trên trời</h2>
-    <div class="sec-line"></div>
-    <a href="/dynamic-duo-web/ca-tren-troi/" class="sec-link">Xem →</a>
-  </div>
-  <div class="upcoming-box">
-    <p>☁️ Đang đặt gạch... những chú cá đang bay trên mây, sắp hạ cánh.</p>
-    <a href="/dynamic-duo-web/ca-tren-troi/" style="font-size:.82rem;color:var(--sky)">Xem danh sách sắp đào →</a>
-  </div>
+  </div><!-- /main-col -->
 
-  <script is:inline>
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.story-card');
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tag = btn.dataset.tag;
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        cards.forEach(card => {
-          if (tag === 'all') { card.setAttribute('data-hidden','false'); return; }
-          const ct = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
-          card.setAttribute('data-hidden', ct.includes(tag.toLowerCase()) ? 'false' : 'true');
-        });
-      });
+  <!-- SIDEBAR -->
+  <aside class="sidebar-col">
+
+    <!-- Profile widget -->
+    <div class="widget">
+      <div class="widget-title">✦ Về nhà cá</div>
+      <div class="profile-avatar">🐋</div>
+      <div class="profile-name">dynamic duo</div>
+      <div class="profile-tagline">paired dreams,<br/>boundless gleam.</div>
+      <div class="profile-deco">𓆝 𓆟 𓆞</div>
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+        <a href="/dynamic-duo-web/about/" style="font-size:.74rem;color:var(--sky);border:1px solid var(--sky-light);padding:3px 12px;border-radius:var(--r-pill);transition:var(--t)" onmouseover="this.style.background='var(--sky-pale)'" onmouseout="this.style.background=''">About us →</a>
+      </div>
+    </div>
+
+    <!-- Dark mode toggle -->
+    <div class="widget" style="padding:14px">
+      <button class="dark-mode-btn" id="darkBtn">🌙 Chế độ tối</button>
+    </div>
+
+    <!-- Tag cloud -->
+    <div class="widget">
+      <div class="widget-title">🏷️ Tags</div>
+      <div class="tag-cloud" id="tagCloud">
+        {allTags.map(t => (
+          <button class="tag-cloud-btn" data-tag={t}># {t}</button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Category tree -->
+    <div class="widget">
+      <div class="widget-title">📂 Danh mục</div>
+      <div class="cat-tree">
+        <ul>
+          <li>
+            <details open>
+              <summary>🐠 Cá dưới nước</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng<span class="cat-count">1c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang<span class="cat-count">1c</span></a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🍽️ Cá trên bàn</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa<span class="cat-count">76c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay<span class="cat-count">74c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ<span class="cat-count">sắp</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm<span class="cat-count">sắp</span></a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🌤️ Cá trên trời</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách sắp đào →</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="widget">
+      <div class="widget-title">✨ Góc nhỏ</div>
+      <blockquote class="quote-body">
+        "Cảm ơn các bạn đã ghé thăm. Chúng mình không dám hứa hẹn nhiều, chỉ cố gắng edit thật kỹ từng chương."
+      </blockquote>
+      <div class="quote-src">— Xê &amp; Gờ, 2026</div>
+    </div>
+
+    <!-- Contact -->
+    <div class="widget" style="text-align:center">
+      <div class="widget-title">✉ Liên hệ</div>
+      <p style="font-size:.78rem;color:var(--text-mid);margin-bottom:8px">dynamicduoo.q@gmail.com</p>
+      <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.74rem;color:var(--sky)">🌐 WordPress cũ</a>
+    </div>
+
+  </aside>
+</div><!-- /home-body -->
+
+<script is:inline>
+// ── FILTER LOGIC ──
+const allCards = document.querySelectorAll('.sc');
+const chips = document.querySelectorAll('.chip');
+const flCount = document.getElementById('flCount');
+let activeTag = 'all', activeCat = null;
+
+function updateFilter() {
+  let visible = 0;
+  allCards.forEach(card => {
+    const cTags = (card.dataset.tags||'').split(',').map(t=>t.trim().toLowerCase());
+    const cCat  = (card.dataset.cat||'').toLowerCase();
+    const tagOk = activeTag === 'all' || cTags.includes(activeTag.toLowerCase());
+    const catOk = !activeCat || cCat === activeCat;
+    const show  = tagOk && catOk;
+    card.setAttribute('data-hidden', show ? 'false' : 'true');
+    if(show) visible++;
+  });
+  flCount.textContent = visible + ' truyện';
+}
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    if(chip.dataset.tag) {
+      activeTag = chip.dataset.tag;
+      activeCat = null;
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    } else if(chip.dataset.cat) {
+      activeCat = activeCat === chip.dataset.cat ? null : chip.dataset.cat;
+      activeTag = 'all';
+      chips.forEach(c => { if(c.dataset.cat) c.classList.remove('active'); });
+      if(activeCat) chip.classList.add('active');
+      document.querySelector('.all-chip').classList.remove('active');
+    }
+    updateFilter();
+  });
+});
+
+// Tag cloud → filter
+document.querySelectorAll('.tag-cloud-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tag-cloud-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // sync chip
+    activeTag = btn.dataset.tag;
+    activeCat = null;
+    chips.forEach(c => {
+      c.classList.toggle('active', c.dataset.tag === activeTag);
     });
-  </script>
+    updateFilter();
+    // scroll to stories
+    document.getElementById('storiesGrid')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// ── DARK MODE ──
+const darkBtn = document.getElementById('darkBtn');
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
+  darkBtn.textContent = dark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
+  localStorage.setItem('dd-theme', dark ? 'dark' : 'light');
+}
+darkBtn.addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+});
+// Restore on load
+(function(){
+  const saved = localStorage.getItem('dd-theme');
+  if(saved === 'dark') applyTheme(true);
+})();
+</script>
 </Layout>

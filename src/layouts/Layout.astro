@@ -291,11 +291,43 @@ if (currentTruyenId && isNovelPage) {
     }
     .scroll-btn.show { opacity: 1; pointer-events: auto; }
     .scroll-btn:hover { transform: translateY(-3px); background: var(--sky2); }
+
+    /* ── DARK MODE ── */
+    [data-theme="dark"] {
+      --sky:       #38bdf8;
+      --sky2:      #7dd3fc;
+      --sky-dark:  #bae6fd;
+      --sky-light: #1e4a6e;
+      --sky-pale:  #0f2a40;
+      --cream:     #0b1829;
+      --text-main: #e0f2fe;
+      --text-mid:  #94a3b8;
+      --text-dim:  #4a6080;
+    }
+    [data-theme="dark"] body { background: #0b1829; }
+    [data-theme="dark"] nav { background: rgba(11,24,41,.97); border-color: rgba(30,74,110,.6); }
+    [data-theme="dark"] .mobile-menu { background: rgba(11,24,41,.99); border-color: rgba(30,74,110,.5); }
+    [data-theme="dark"] .dropdown-content { background: #0f2236; border-color: rgba(30,74,110,.7); }
+    [data-theme="dark"] .container { background: rgba(13,28,50,.98); border-color: rgba(30,74,110,.5); }
+    [data-theme="dark"] .dd-item:hover { background: rgba(30,74,110,.5); }
+    [data-theme="dark"] .chap-dropdown-list { background: #0f2236; border-color: var(--sky-light); }
+    [data-theme="dark"] .chap-dropdown-list a:hover { background: rgba(30,74,110,.6); }
+    [data-theme="dark"] .chap-select-btn { background: rgba(15,42,64,.8); border-color: var(--sky-light); }
+    [data-theme="dark"] .inline-panel { background: rgba(15,42,64,.9); }
+    [data-theme="dark"] .inline-panel textarea { background: #0b1829; color: var(--text-main); border-color: var(--sky-light); }
+    [data-theme="dark"] footer { background: #0d1e36; border-color: rgba(30,74,110,.4); }
+    [data-theme="dark"] blockquote { background: rgba(15,42,64,.7); }
   </style>
+  <script is:inline>
+    // Restore dark mode before paint to avoid flash
+    (function(){
+      const t = localStorage.getItem('dd-theme');
+      if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    })();
+  </script>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav id="navbar">
   <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
   <div class="nav-links">
@@ -335,7 +367,6 @@ if (currentTruyenId && isNovelPage) {
   </button>
 </nav>
 
-<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
   <div class="mobile-section-title">Cá dưới nước</div>
@@ -439,7 +470,6 @@ if (currentTruyenId && isNovelPage) {
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="ft-brand">
@@ -464,7 +494,6 @@ if (currentTruyenId && isNovelPage) {
   <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
 </footer>
 
-<!-- SCROLL BUTTONS -->
 <div class="scroll-btns">
   <button class="scroll-btn" id="scrollTop" title="Lên đầu" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
   <button class="scroll-btn" id="scrollBot" title="Xuống cuối" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>

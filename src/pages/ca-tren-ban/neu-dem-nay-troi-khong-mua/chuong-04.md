@@ -1,8 +1,7 @@
 ---
-layout: ../../../layouts/Layout.astro
 title: "Chương 2"
 truyen_id: "ndntkm"
-chuong: 4
+chuong: 2
 date: "2026-05-17"
 tags:
   - "nếu đêm nay trời không mưa"

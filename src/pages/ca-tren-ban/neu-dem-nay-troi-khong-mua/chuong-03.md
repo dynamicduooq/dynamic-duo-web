@@ -1,17 +1,14 @@
 ---
-layout: ../../../layouts/Layout.astro
-title: "Chương 1"
+title: "Chương 1: \\\"Có phải đã gặp ở đâu rồi không\\\""
 truyen_id: "ndntkm"
 chuong: 1
-date: "2026-05-02"
+date: "2026-05-30"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
   - "hiện đại"
   - "HE"
 ---
-
-## **Chương 1**
 
 Dự báo thời tiết nói đêm nay sẽ có mưa.
 
@@ -73,7 +70,7 @@ Thời buổi kinh tế khó khăn, ngay cả việc làm nhân viên đỗ xe c
 
 Lâm Hướng Bắc còn nhớ lúc phỏng vấn, tính cả cậu là bốn người, trừ cậu ra ai cũng có kinh nghiệm. Lúc đó cậu không hy vọng gì, vậy mà quản lý lại chọn cậu, khiến mấy người kia tức tối không phục.
 
-Sau này vào làm mới nghe một đồng nghiệp buôn chuyện, bảo đây là quy tắc tuyển dụng ngầm của khách sạn Kim Sa: thích chọn người trông ưa nhìn -- Lâm Hướng Bắc cứ thế mơ mơ màng màng kiếm được bát cơm nhờ vào khuôn mặt.
+Sau này vào làm mới nghe một đồng nghiệp buôn chuyện, bảo đây là quy tắc tuyển dụng ngầm của khách sạn Kim Sa: thích chọn người trông ưa nhìn — Lâm Hướng Bắc cứ thế mơ mơ màng màng kiếm được bát cơm nhờ vào khuôn mặt.
 
 Cậu làm việc được hơn nửa tháng, chăm chỉ không chút sai sót, nhưng mấy hôm nay vì thức khuya uống rượu, nghỉ ngơi không đủ, cậu hay ngáp vặt. Bởi vậy nên quản lý không hài lòng, gọi riêng cậu ra nói chuyện, yêu cầu cậu phải thể hiện tinh thần tốt nhất với khách.
 
@@ -115,11 +112,7 @@ Hạ Tranh thu tầm mắt lại, khẽ cười: “Không có gì, đi thôi.�
 
 Phòng riêng ở tầng năm, phía trong, bàn lớn đủ bảy người, vừa khít nhóm đến hôm nay.
 
-Họ đều làm việc tại văn phòng Luật sư Quân Bình - một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác\*, Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
-
-_Chú thích_
-
-_(\*) “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty._
+Họ đều làm việc tại văn phòng Luật sư Quân Bình – một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác (1), Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
 
 Chu Trác có gia thế, mối quan hệ rộng, thầy của Hạ Tranh lại là cây đại thụ trong ngành, nổi danh “Luật sư số một Đài Bắc”. Một người có lợi thế bẩm sinh, một người được chống lưng bởi nhân vật có quyền uy, cộng thêm năng lực chuyên môn xuất sắc, trong ngành luật sư chênh lệch lớn về nguồn khách và thu nhập, họ thực sự là những ngôi sao đang lên, tài năng trẻ xuất chúng.
 
@@ -137,7 +130,7 @@ Bị gọi, anh giật mình thoát khỏi dòng suy nghĩ: “Tôi không kiên
 
 “Ai bảo không?” Thái Bác Minh cười khẩy: “Chẳng anh phải không ăn cay sao?”
 
-Hạ Tranh khựng lại, vì vài chuyện từ rất lâu trước kia, nhiều năm nay anh hầu như không đụng đến đồ cay. Nhưng đã lâu rồi anh không còn nhớ đến người đó nữa, trong dòng chảy thời gian, gương mặt ấy thậm chí đã trở nên hơi mờ nhạt - sao đêm nay lại nhớ tới?
+Hạ Tranh khựng lại, vì vài chuyện từ rất lâu trước kia, nhiều năm nay anh hầu như không đụng đến đồ cay. Nhưng đã lâu rồi anh không còn nhớ đến người đó nữa, trong dòng chảy thời gian, gương mặt ấy thậm chí đã trở nên hơi mờ nhạt – sao đêm nay lại nhớ tới?
 
 Anh không phản bác, thuận theo nói: “Vậy tôi gọi món cá hấp lá sen.”
 
@@ -152,3 +145,5 @@ Chu Trác cười, nâng chén trà thay rượu: “Luật sư Trương, tôi n
 Ngoài trời mưa gió không ngớt, trong phòng bắt đầu mở tiệc sôi nổi, một khung cửa sổ chia đôi hai thế giới nóng lạnh.
 
 Lâm Hướng Bắc vẫn đứng dưới ô run rẩy, ngẩng đầu nhìn tòa nhà lộng lẫy ánh vàng và đèn hoa rực rỡ, lòng chỉ nhớ đến chiếc chuông nhỏ tròn trịa treo trên tay lái, đó là chiến lợi phẩm hôm nay của cậu.
+
+(1) Chú thích:  “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.

@@ -1,563 +1,698 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import settings from '../data/settings.json';
+
+const ndntkmPosts  = Object.values(import.meta.glob('./ca-tren-ban/neu-dem-nay-troi-khong-mua/*.md',   { eager: true })) as any[];
+const tnctcstPosts = Object.values(import.meta.glob('./ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/*.md', { eager: true })) as any[];
+const qhbcpPosts   = Object.values(import.meta.glob('./ca-duoi-nuoc/quan-he-ban-cung-phong/*.md',   { eager: true })) as any[];
+const hcdhPosts    = Object.values(import.meta.glob('./ca-duoi-nuoc/ha-chay-dong-hoang/*.md',      { eager: true })) as any[];
+const countChaps   = (posts: any[]) => posts.filter((p: any) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0).length;
+
+const ndntkmCount  = countChaps(ndntkmPosts);
+const tnctcstCount = countChaps(tnctcstPosts);
+const qhbcpCount   = countChaps(qhbcpPosts);
+const hcdhCount    = countChaps(hcdhPosts);
 ---
 
 <Layout title="Trang chủ">
-    <section class="hero" id="hero">
-        <div class="hero-inner">
-            <div class="hero-eyebrow">⋆✴︎˚｡⋆</div>
-            <img 
-                src="/dynamic-duo-web/images/namexoanen.png" 
-                alt="Dynamic Duo" 
-                class="hero-name-img"
-                onerror="this.style.display='none'; document.getElementById('hero-text-fallback').style.display='block'"
-            >
-            <h1 id="hero-text-fallback" style="display:none;font-size:2.5rem;margin:0 0 16px;color:var(--sky-dark)">Dynamic Duo</h1>
-            <img 
-                src="/dynamic-duo-web/images/logo1" 
-                alt="Avatar" 
-                class="hero-avatar"
-            >
-            <p class="hero-tag">𓆝.°• paired dreams, boundless gleam.</p>
-            <div class="hero-div"><hr><span>𓆝.°•</span><hr></div>
-            <p class="hero-desc">Ở đây chúng mình có hai người, và chúng mình có những câu chuyện tình yêu sâu sắc <em style="color:var(--text-mid)">(cũ rích)</em>.</p>
-            <div class="hero-cta">
-                <a href="/dynamic-duo-web/ca-tren-ban" class="btn btn-primary">🐠 Xem truyện</a>
-                <a href="/dynamic-duo-web/about" class="btn btn-ghost">Về chúng mình →</a>
-            </div>
-        </div>
-    </section>
+<style>
+/* ─── TICKER ─── */
+.ticker-wrap {
+  overflow:hidden; padding:7px 0;
+  background:linear-gradient(90deg,rgba(224,242,254,.5),rgba(240,249,255,.7),rgba(224,242,254,.5));
+  border-top:1px solid var(--sky-light); border-bottom:1px solid var(--sky-light);
+}
+.ticker-track { display:flex; white-space:nowrap; animation:ticker 40s linear infinite; }
+.ticker-track:hover { animation-play-state:paused; }
+.ticker-item {
+  display:inline-flex; align-items:center; padding:0 20px;
+  font-size:.74rem; color:var(--sky2); letter-spacing:1.5px;
+}
+.ticker-item::after { content:'𓆝'; color:var(--sky-light); margin-left:20px; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-    <div class="ticker-wrap">
-        <div class="ticker-track">
-            <span class="ticker-item">✧ Chào mừng cậu đến với bể cá</span>
-            <span class="ticker-item">𓆝 dynamic duo</span>
-            <span class="ticker-item">paired dreams, boundless gleam</span>
-            <span class="ticker-item">Nếu đêm nay trời không mưa</span>
-            <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay</span>
-            <span class="ticker-item">Quan hệ bạn cùng phòng</span>
-            <span class="ticker-item">Hạ cháy đồng hoang</span>
-            <span class="ticker-item">✧ Chào mừng cậu đến với bể cá</span>
-            <span class="ticker-item">𓆝 dynamic duo</span>
-            <span class="ticker-item">paired dreams, boundless gleam</span>
-        </div>
+/* ─── PAGE SHELL: 2 CỘT ─── */
+.home-shell {
+  display:grid;
+  grid-template-columns:1fr 260px;
+  gap:24px;
+  max-width:1160px;
+  margin:0 auto;
+  padding:28px 32px 80px;
+}
+@media(max-width:960px) { .home-shell{grid-template-columns:1fr; padding:20px 18px 60px;} .sidebar-col{display:none;} }
+
+/* ─── HERO ─── */
+.hero {
+  text-align:center;
+  padding:32px 0 28px;
+}
+.hero-name-img {
+  max-width:420px; width:100%;
+  margin:0 auto 18px; display:block;
+  filter:drop-shadow(0 2px 8px rgba(2,132,199,.18));
+}
+.hero-banner-wrap {
+  position:relative; border-radius:16px; overflow:hidden;
+  max-height:200px; margin:0 auto;
+}
+.hero-banner-wrap img { width:100%; height:200px; object-fit:cover; display:block; }
+.hero-banner-wrap::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 20%, rgba(2,70,130,.55) 100%);
+  pointer-events:none;
+}
+.hero-banner-caption {
+  position:absolute; bottom:14px; left:0; right:0;
+  text-align:center; z-index:2;
+  font-family:'Literata',serif; font-size:1.05rem; font-weight:600;
+  color:#fff; letter-spacing:.5px; text-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.hero-tagline {
+  font-size:.88rem; color:var(--text-dim); font-style:italic; margin:12px 0 0;
+}
+
+/* ─── SECTION HEADER ─── */
+.sec-hd { display:flex; align-items:center; gap:10px; margin:32px 0 14px; }
+.sec-hd h2 {
+  font-family:'Merriweather',serif; font-size:.82rem; color:var(--sky-dark);
+  letter-spacing:2px; text-transform:uppercase; margin:0; text-align:left; white-space:nowrap;
+}
+.sec-line { flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
+.sec-link { font-size:.72rem; color:var(--sky); white-space:nowrap; }
+.sec-link:hover { text-decoration:underline; }
+
+/* ─── FILTER BAR ─── */
+.filter-bar {
+  background:#fff; border:1px solid rgba(186,230,253,.5);
+  border-radius:14px; padding:11px 14px;
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  margin-bottom:16px;
+}
+[data-theme="dark"] .filter-bar { background:rgba(15,34,64,.85); }
+.fl-label { font-size:.66rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); flex-shrink:0; }
+.fl-chips { display:flex; flex-wrap:wrap; gap:4px; flex:1; }
+.chip {
+  display:inline-flex; align-items:center; gap:3px; padding:3px 11px;
+  border-radius:var(--r-pill); font-size:.71rem; cursor:pointer;
+  transition:var(--t); border:1.5px solid rgba(186,230,253,.5);
+  background:var(--sky-pale); color:var(--text-mid); user-select:none;
+  font-family:'Newsreader',serif; white-space:nowrap;
+}
+.chip:hover { background:var(--sky-light); color:var(--sky-dark); }
+.chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
+.fl-count { font-size:.68rem; background:var(--sky-pale); color:var(--sky); padding:2px 9px; border-radius:var(--r-pill); border:1px solid var(--sky-light); white-space:nowrap; margin-left:auto; }
+
+/* ─── STORY GRID: HÀNG NGANG ─── */
+.stories-grid {
+  display:flex; flex-direction:column; gap:10px;
+}
+.sc {
+  display:flex; gap:0;
+  background:#fff; border:1px solid rgba(186,230,253,.45);
+  border-radius:14px; overflow:hidden;
+  transition:var(--t); box-shadow:0 2px 8px rgba(2,132,199,.05);
+}
+[data-theme="dark"] .sc { background:rgba(13,26,50,.9); }
+.sc:hover { box-shadow:0 6px 24px rgba(2,132,199,.12); transform:translateY(-2px); }
+.sc[data-hidden="true"] { display:none; }
+
+.sc-cover-wrap {
+  position:relative; flex-shrink:0; width:80px; overflow:hidden;
+  background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
+}
+.sc-cover-wrap img { width:80px; height:100%; object-fit:cover; display:block; min-height:100px; }
+.sc-status {
+  position:absolute; top:6px; left:0;
+  font-size:.55rem; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 6px; border-radius:0 4px 4px 0;
+  font-weight:700;
+}
+.status-ongoing { background:rgba(2,132,199,.85); color:#fff; }
+.status-complete { background:rgba(5,150,105,.85); color:#fff; }
+.status-upcoming { background:rgba(100,116,139,.75); color:#fff; }
+
+.sc-body {
+  padding:12px 14px 12px; flex:1; display:flex; flex-direction:column; gap:4px;
+  min-width:0;
+}
+.sc-shelf { font-size:.64rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
+.sc-title {
+  font-family:'Merriweather',serif; font-size:.88rem; color:var(--sky-dark);
+  margin:0; line-height:1.35;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.sc-meta { font-size:.68rem; color:var(--text-dim); font-style:italic; }
+.sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
+.sc-tag { font-size:.6rem; padding:1px 6px; border:1px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky); background:var(--sky-pale); }
+.sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
+.sc-chapters { font-size:.68rem; color:var(--text-dim); }
+.sc-link {
+  font-size:.72rem; padding:4px 12px;
+  background:var(--sky); color:#fff; border-radius:var(--r-pill);
+  transition:var(--t); flex-shrink:0;
+}
+.sc-link:hover { background:var(--sky2); }
+.sc-link.secondary { background:var(--sky-pale); color:var(--sky-dark); }
+.sc-link.secondary:hover { background:var(--sky-light); }
+
+/* ─── NOTICE / LƯU Ý ─── */
+.notice-section { margin-top:36px; }
+.notice-container {
+  background:linear-gradient(135deg,rgba(240,249,255,.7),rgba(255,255,255,.9));
+  border:1px solid rgba(186,230,253,.6); border-radius:18px; overflow:hidden;
+}
+[data-theme="dark"] .notice-container { background:rgba(12,26,50,.8); }
+.notice-big-title {
+  text-align:center; padding:24px 20px 16px;
+  border-bottom:1px dashed rgba(186,230,253,.5);
+}
+.notice-big-title h2 { font-family:'Literata',serif; font-size:1.5rem; color:var(--sky-dark); margin:0 0 4px; }
+.notice-big-title h2 em { font-style:italic; color:var(--sky); }
+.notice-big-title p { font-size:.78rem; color:var(--text-dim); letter-spacing:2px; margin:0; }
+.notice-block { padding:16px 22px; border-bottom:1px dashed rgba(186,230,253,.4); }
+.notice-block:last-of-type { border-bottom:none; }
+.notice-block-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.notice-icon { font-size:1.1rem; }
+.notice-block-title { font-family:'Merriweather',serif; font-size:.85rem; color:var(--sky-dark); font-weight:600; }
+.notice-body { font-size:.84rem; color:var(--text-mid); line-height:1.8; margin:0; }
+.notice-body strong { color:var(--sky-dark); }
+.notice-deco { text-align:center; font-size:1.1rem; margin-top:10px; letter-spacing:4px; color:var(--sky-light); }
+.notice-wave {
+  padding:18px 22px; text-align:center;
+  background:linear-gradient(135deg,rgba(186,230,253,.15),rgba(240,249,255,.3));
+  font-size:.84rem; color:var(--text-mid); font-style:italic; line-height:1.75;
+}
+
+/* ─── RECENT ─── */
+.recent-list { display:flex; flex-direction:column; gap:6px; }
+.recent-item {
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  background:#fff; border:1px solid rgba(186,230,253,.4); border-radius:10px;
+  transition:var(--t); color:var(--text-main);
+}
+[data-theme="dark"] .recent-item { background:rgba(13,26,50,.9); }
+.recent-item:hover { background:var(--sky-pale); border-color:var(--sky-light); transform:translateX(3px); }
+.recent-icon { font-size:1rem; flex-shrink:0; }
+.ri-body { flex:1; min-width:0; }
+.ri-story { font-size:.68rem; color:var(--text-dim); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.ri-title { font-size:.84rem; color:var(--sky-dark); font-weight:600; }
+.recent-arrow { color:var(--sky); font-size:.9rem; }
+
+/* ─── SIDEBAR ─── */
+.sidebar-col { display:flex; flex-direction:column; gap:16px; }
+.sidebar-col > .widget { position:sticky; top:72px; }
+.sidebar-col > .widget + .widget { position:static; }
+.widget {
+  background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7);
+  border-radius:18px; padding:16px 14px;
+}
+[data-theme="dark"] .widget { background:rgba(15,42,64,.8); border-color:rgba(30,74,110,.7); }
+.widget-title {
+  font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px;
+}
+/* Profile */
+.profile-avatar {
+  width:76px; height:76px; border-radius:50%; overflow:hidden;
+  margin:0 auto 10px; border:3px solid var(--sky-light);
+  background:var(--sky-pale); display:flex; align-items:center; justify-content:center;
+  font-size:2.2rem;
+}
+.profile-name { font-family:'Merriweather',serif; color:var(--sky-dark); font-size:.92rem; text-align:center; margin-bottom:3px; }
+.profile-tagline { font-size:.78rem; color:var(--text-mid); font-style:italic; text-align:center; line-height:1.5; margin-bottom:6px; }
+.profile-deco { text-align:center; font-size:.95rem; letter-spacing:3px; color:var(--sky-light); }
+/* Tag cloud */
+.tag-cloud { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; }
+.tc-btn {
+  display:inline-block; padding:3px 9px;
+  background:#fff; color:var(--sky); border-radius:var(--r-pill);
+  font-size:.71rem; border:1px dashed var(--sky-light);
+  transition:var(--t); cursor:pointer;
+}
+[data-theme="dark"] .tc-btn { background:rgba(15,30,50,.8); }
+.tc-btn:hover, .tc-btn.active { background:var(--sky-pale); border-style:solid; }
+/* Category tree */
+.cat-tree { font-size:.78rem; color:var(--text-mid); }
+.cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
+.cat-tree>ul { padding-left:0; }
+.cat-tree a { color:var(--text-mid); transition:color .2s; display:block; padding:2px 0; }
+.cat-tree a:hover { color:var(--sky); }
+.cat-tree summary {
+  cursor:pointer; font-size:.8rem; color:var(--sky-dark); font-weight:600;
+  padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px;
+}
+.cat-tree summary::-webkit-details-marker { display:none; }
+.cat-tree summary::before { content:'▸'; font-size:.6rem; transition:transform .2s; color:var(--sky); }
+.cat-tree details[open]>summary::before { transform:rotate(90deg); }
+.cat-count { font-size:.65rem; color:var(--text-dim); margin-left:4px; }
+/* Dark mode btn */
+.dark-btn {
+  width:100%; padding:7px; background:none;
+  border:1.5px solid var(--sky-light); border-radius:var(--r-pill);
+  color:var(--sky); font-size:.76rem; cursor:pointer; transition:var(--t);
+  font-family:'Newsreader',serif; display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.dark-btn:hover { background:var(--sky-pale); }
+/* Quote */
+.quote-body { font-style:italic; font-size:.8rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding-left:10px; margin:0; }
+.quote-src { font-size:.66rem; color:var(--text-dim); margin-top:7px; text-align:right; }
+/* no results */
+.no-results { display:none; text-align:center; padding:28px; color:var(--text-dim); font-style:italic; }
+.no-results.show { display:block; }
+.hidden { display:none !important; }
+
+/* ─── reveal ─── */
+.reveal { opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+</style>
+
+<!-- TICKER (chỉnh nội dung tại đây) -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nếu đêm nay trời không mưa · Hoàn thành · {ndntkmCount} chương</span>
+    <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay · Hoàn thành · {tnctcstCount} chương</span>
+    <span class="ticker-item">Quan hệ bạn cùng phòng · Đang tiến hành 🌊</span>
+    <span class="ticker-item">Hạ cháy đồng hoang · Đang tiến hành 🌊</span>
+    <span class="ticker-item">paired dreams, boundless gleam</span>
+    <span class="ticker-item">Vật dễ vỡ · Thiếu đế xuân tâm · Sắp đào 🌤️</span>
+    <!-- Lặp lại để không bị hở -->
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nếu đêm nay trời không mưa · Hoàn thành · {ndntkmCount} chương</span>
+    <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay · Hoàn thành · {tnctcstCount} chương</span>
+    <span class="ticker-item">Quan hệ bạn cùng phòng · Đang tiến hành 🌊</span>
+    <span class="ticker-item">Hạ cháy đồng hoang · Đang tiến hành 🌊</span>
+    <span class="ticker-item">paired dreams, boundless gleam</span>
+    <span class="ticker-item">Vật dễ vỡ · Thiếu đế xuân tâm · Sắp đào 🌤️</span>
+  </div>
+</div>
+
+<div class="home-shell">
+  <!-- ── MAIN COLUMN ── -->
+  <div class="main-col">
+
+    <!-- HERO -->
+    <div class="hero">
+      <img
+        src="/dynamic-duo-web/images/namexoanen.png"
+        alt="dynamic duo"
+        class="hero-name-img"
+        onerror="this.style.display='none'"
+      />
+      <div class="hero-banner-wrap">
+        <img
+          src="/dynamic-duo-web/images/banner.png"
+          alt="Dynamic Duo Banner"
+          onerror="this.src='/dynamic-duo-web/images/frontpage.png'"
+        />
+        <div class="hero-banner-caption">paired dreams, boundless gleam.</div>
+      </div>
+      <p class="hero-tagline">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
-    <div class="page-body">
-        <main class="main-content">
-
-            <!-- ─── PHẦN LƯU Ý / NGUYÊN TẮC ─── -->
-            <section class="notice-section reveal" id="notice">
-                <div class="sec-label">𓆝 lưu ý</div>
-                
-                <!-- Ảnh frontpage lớn -->
-                <div class="frontpage-img-wrap">
-                    <img 
-                        src="/dynamic-duo-web/images/frontpage.png" 
-                        alt="Dynamic Duo — Về bể cá, gu truyện, bản edit, lịch đăng"
-                        class="frontpage-img"
-                    >
-                </div>
-
-                <!-- Fallback text nếu ảnh không load -->
-                <div class="notice-container" id="notice-fallback">
-                    <div class="notice-big-title">
-                        <h2>Dynamic <em>Duo</em></h2>
-                        <p>𓆝.°• paired dreams, boundless gleam •°.𓆝</p>
-                    </div>
-                    <div class="notice-grid">
-                        <div class="notice-block">
-                            <div class="notice-block-header"><span class="notice-icon">🪸</span><span class="notice-block-title">Về bể cá</span></div>
-                            <p class="notice-body">Nhà có <strong>hai người</strong>, để tính và thoải mái về xưng hô. Chúng mình vô cùng hoan nghênh những lời góp ý để hoàn thiện hơn, nhưng trái tim mong manh, mong cậu ghé qua đừng buông lời nặng nề •ᴗ•</p>
-                            <div class="notice-deco">🐟 🐡 🐠 🫧</div>
-                        </div>
-                        <div class="notice-block">
-                            <div class="notice-block-header"><span class="notice-icon">📚</span><span class="notice-block-title">Về gu truyện trong nhà</span></div>
-                            <p class="notice-body">Truyện được chọn hoàn toàn theo gu của chúng mình. Đa số sẽ có <strong>thủy tinh</strong> và các tình tiết <strong>drama cũ rích</strong>, không phù hợp với <strong>tất cả mọi người</strong>.<br>Chúng mình sẽ cố gắng <strong>cảnh báo</strong> trước.</p>
-                            <div class="notice-deco">🌿 🪸 🌿</div>
-                        </div>
-                        <div class="notice-block">
-                            <div class="notice-block-header"><span class="notice-icon">⚠️</span><span class="notice-block-title">Về bản edit</span></div>
-                            <p class="notice-body">Chúng mình đang chập chững học tiếng Trung, các bản edit có dùng các <strong>công cụ hỗ trợ</strong>. Độ chính xác không thể cam đoan 100% so với bản gốc, nhưng chúng mình sẽ luôn cố gắng trau chuốt.</p>
-                        </div>
-                        <div class="notice-block">
-                            <div class="notice-block-header"><span class="notice-icon">🌊</span><span class="notice-block-title">Về lịch đăng</span></div>
-                            <p class="notice-body">Hiện nhà <strong>chưa có lịch up truyện</strong> cố định, nhưng sẽ cố gắng duy trì tiến độ đều đặn nhất (~1-2 chương/ngày).<br><strong>Tần suất</strong> có thể thay đổi linh hoạt.</p>
-                            <div class="notice-deco">⚓ 🦈 🐋</div>
-                        </div>
-                    </div>
-                    <div class="notice-wave">
-                        <p>Chào mừng các cậu ghé chơi.<br>Mong rằng cậu sẽ để lại góc nhỏ này thật nhiều bông hoa rực rỡ... ᗒ᳨ᗕ</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ─── TRUYỆN ĐƯỢC GHIM ─── -->
-            <section class="reveal">
-                <div class="sec-label">✦ nổi bật</div>
-                <h2 class="sec-title">Truyện được ghim</h2>
-                <div class="featured-card">
-                    <div class="fc-cover">
-                        <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa">
-                    </div>
-                    <div class="fc-info">
-                        <span class="fc-badge">✧ Editor's pick</span>
-                        <h3 class="fc-title">Nếu đêm nay trời không mưa</h3>
-                        <div class="fc-zh">(如果今夜不下雨)</div>
-                        <p class="fc-desc">Một câu chuyện về tình yêu, sự mất mát và những điều còn lại sau cơn mưa...</p>
-                        <div class="fc-meta">⋆ Tam Đạo &nbsp;|&nbsp; Editor: Dynamic Duo &nbsp;|&nbsp; 74 chương + NT</div>
-                        <div class="fc-actions">
-                            <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua" class="btn btn-primary" style="font-size:.78rem;padding:8px 16px">Đọc truyện →</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ─── TẤT CẢ TRUYỆN + LỌC TAG ─── -->
-            <section class="reveal">
-                <div class="sec-label">𓆝 bể cá</div>
-                <h2 class="sec-title">Tất cả truyện</h2>
-                <p class="sec-sub">tất cả những chú cá của chúng mình</p>
-
-                <div class="filter-bar">
-                    <span class="fl-label">Lọc (AND):</span>
-                    <div class="filter-groups">
-                        <div class="filter-group">
-                            <span class="chip" data-f="duoi-nuoc" onclick="toggleChip(this)">🐠 Cá dưới nước</span>
-                            <span class="chip" data-f="tren-ban" onclick="toggleChip(this)">🍽️ Cá trên bàn</span>
-                            <span class="chip" data-f="tren-troi" onclick="toggleChip(this)">☁️ Cá trên trời</span>
-                        </div>
-                        <div class="filter-group">
-                            <span class="chip" data-f="nien-ha" onclick="toggleChip(this)"># Niên hạ</span>
-                            <span class="chip" data-f="nien-thuong" onclick="toggleChip(this)"># Niên thượng</span>
-                        </div>
-                        <div class="filter-group">
-                            <span class="chip" data-f="dam-thuy-tinh" onclick="toggleChip(this)">💧 Dằm</span>
-                            <span class="chip" data-f="manh-thuy-tinh" onclick="toggleChip(this)">🔷 Mảnh</span>
-                        </div>
-                        <div class="filter-group">
-                            <span class="chip" data-f="he" onclick="toggleChip(this)">HE</span>
-                            <span class="chip" data-f="hien-dai" onclick="toggleChip(this)"># Hiện đại</span>
-                            <span class="chip" data-f="co-dai" onclick="toggleChip(this)"># Cổ đại</span>
-                        </div>
-                        <span class="chip chip-clear" onclick="clearChips()">✕ Xóa lọc</span>
-                    </div>
-                    <span class="filter-count" id="fCount">4 truyện</span>
-                </div>
-
-                <div class="stories-grid" id="stGrid">
-                    <article class="story-card" data-tags="duoi-nuoc dam-my hien-dai nien-ha">
-                        <div class="sc-cover"><img src="/dynamic-duo-web/images/biaqhbcp.png" alt=""><span class="sc-status status-ongoing">Đang đăng</span></div>
-                        <div class="sc-body">
-                            <div class="sc-shelf">🐠 Cá dưới nước</div>
-                            <h3 class="sc-title">Quan hệ bạn cùng phòng</h3>
-                            <div class="sc-meta">⋆ Hạnh Lan | Editor: Dynamic Duo</div>
-                            <div class="sc-tags"><span class="sc-tag" onclick="filterByTag('nien-ha')"># Niên hạ</span><span class="sc-tag" onclick="filterByTag('hien-dai')"># Hiện đại</span></div>
-                            <div class="sc-footer"><span class="sc-chapters">On-going</span><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong" class="sc-link">Đọc →</a></div>
-                        </div>
-                    </article>
-
-                    <article class="story-card" data-tags="duoi-nuoc dam-my hien-dai dam-thuy-tinh">
-                        <div class="sc-cover"><img src="/dynamic-duo-web/images/logo2.png" alt=""><span class="sc-status status-upcoming">Sắp ra mắt</span></div>
-                        <div class="sc-body">
-                            <div class="sc-shelf">🐠 Cá dưới nước</div>
-                            <h3 class="sc-title">Hạ cháy đồng hoang</h3>
-                            <div class="sc-meta">⋆ Hỉ Thượng Mi Sao | Edit: Dynamic Duo</div>
-                            <div class="sc-tags"><span class="sc-tag" onclick="filterByTag('dam-thuy-tinh')"># Dằm thủy tinh</span></div>
-                            <div class="sc-footer"><span class="sc-chapters">Sắp ra mắt</span><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang" class="sc-link">Xem →</a></div>
-                        </div>
-                    </article>
-
-                    <article class="story-card" data-tags="tren-ban dam-my hien-dai nien-thuong manh-thuy-tinh he">
-                        <div class="sc-cover"><img src="/dynamic-duo-web/images/biandntkm.png" alt=""><span class="sc-status status-complete">Hoàn thành</span></div>
-                        <div class="sc-body">
-                            <div class="sc-shelf">🍽️ Cá trên bàn</div>
-                            <h3 class="sc-title">Nếu đêm nay trời không mưa</h3>
-                            <div class="sc-meta">⋆ Tam Đạo | Editor: Dynamic Duo</div>
-                            <div class="sc-tags"><span class="sc-tag" onclick="filterByTag('nien-thuong')"># Niên thượng</span><span class="sc-tag" onclick="filterByTag('he')">HE</span></div>
-                            <div class="sc-footer"><span class="sc-chapters">74 chương + NT</span><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua" class="sc-link">Đọc →</a></div>
-                        </div>
-                    </article>
-
-                    <article class="story-card" data-tags="tren-ban dam-my hien-dai nien-thuong manh-thuy-tinh">
-                        <div class="sc-cover"><img src="/dynamic-duo-web/images/biatnctsct.png" alt=""><span class="sc-status status-complete">Hoàn thành</span></div>
-                        <div class="sc-body">
-                            <div class="sc-shelf">🍽️ Cá trên bàn</div>
-                            <h3 class="sc-title">Tôi nghĩ chúng tôi sắp chia tay</h3>
-                            <div class="sc-meta">⋆ Hạ Nhất Thiên | Editor: Dynamic Duo</div>
-                            <div class="sc-tags"><span class="sc-tag" onclick="filterByTag('nien-thuong')"># Niên thượng</span></div>
-                            <div class="sc-footer"><span class="sc-chapters">74 chương</span><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay" class="sc-link">Đọc →</a></div>
-                        </div>
-                    </article>
-
-                    <div class="no-results" id="noRes">𓆝 Không tìm thấy truyện phù hợp với tất cả các tag đã chọn.</div>
-                </div>
-            </section>
-
-            <!-- ─── MỚI CẬP NHẬT ─── -->
-            <section class="reveal">
-                <div class="sec-label">🕊 cập nhật</div>
-                <h2 class="sec-title">Mới cập nhật</h2>
-                <div class="recent-list">
-                    <a href="#" class="recent-item">
-                        <span class="recent-icon">📖</span>
-                        <div class="ri-body"><div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div><div class="ri-title">Chương 74 (Kết)</div></div>
-                        <span class="recent-arrow">→</span>
-                    </a>
-                    <a href="#" class="recent-item">
-                        <span class="recent-icon">📖</span>
-                        <div class="ri-body"><div class="ri-story">Nếu đêm nay trời không mưa</div><div class="ri-title">Ngoại truyện 3</div></div>
-                        <span class="recent-arrow">→</span>
-                    </a>
-                </div>
-            </section>
-        </main>
-
-        <aside class="sidebar">
-            <div class="widget profile-widget">
-                <div class="profile-avatar">
-                    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnF3MmJraDR0MXhmODhreXJkNmtvaHhndmJtYTUxc3U0aTMwY3MzciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OalJFGFBD4D2xn61qb/giphy.gif" alt="">
-                </div>
-                <div class="profile-name">dynamicduo</div>
-                <p class="profile-tagline">paired dreams, boundless gleam ⋆.˚</p>
-                <div class="profile-deco">𓆝.°•</div>
-                <a href="/dynamic-duo-web/about" class="profile-about-btn">About us →</a>
-            </div>
-
-            <div class="widget">
-                <div class="widget-title">🏷 Tags</div>
-                <div class="widget-divider">˗ˏˋ ★ ˎˊ˗</div>
-                <div class="tag-cloud">
-                    <a onclick="filterByTagScroll('hien-dai');return false"># Hiện đại</a>
-                    <a onclick="filterByTagScroll('nien-ha');return false"># Niên hạ</a>
-                    <a onclick="filterByTagScroll('nien-thuong');return false"># Niên thượng</a>
-                    <a onclick="filterByTagScroll('he');return false">HE</a>
-                    <a onclick="filterByTagScroll('dam-thuy-tinh');return false"># Dằm</a>
-                    <a onclick="filterByTagScroll('manh-thuy-tinh');return false"># Mảnh</a>
-                </div>
-            </div>
-
-            <div class="widget">
-                <div class="now-playing">
-                    <div class="vinyl">
-                        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRudnN5ZTlzaWs2ejdiYzd1MW1vOHl6bnp6N2xjdDlobGcwYm84ayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Yq2DaPfhTMb3GEZWju/giphy.gif" alt="">
-                    </div>
-                    <div class="np-info">
-                        <div class="np-label">Now Playing ♫</div>
-                        <div class="np-song">Atlantis — Seafret</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="widget" id="calWidget">
-                <div class="widget-title">Lịch</div>
-                <div id="calContent"></div>
-            </div>
-
-            <div class="widget quote-widget">
-                <div class="widget-title">Quote of the day</div>
-                <blockquote style="font-size:.82rem;border-left:2px solid var(--sky-light);padding:10px 14px;margin:8px 0;font-style:italic;color:var(--text-mid)">"There is no fear in love. But perfect love drives out fear."</blockquote>
-                <div class="quote-source" style="font-size:.72rem;color:var(--text-dim);text-align:right">— 1 John 4:18</div>
-            </div>
-        </aside>
+    <!-- FILTER + STORIES -->
+    <div class="sec-hd">
+      <h2>📚 Tủ truyện</h2>
+      <div class="sec-line"></div>
     </div>
 
-    <style>
-        /* ─── HERO ─── */
-        .hero {
-            background: linear-gradient(180deg, var(--sky-pale) 0%, var(--cream) 100%);
-            padding: 80px 20px 60px; text-align: center; position: relative; overflow: hidden;
-        }
-        .hero::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(186,230,253,.4) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .hero-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-        .hero-eyebrow { font-size: 1.1rem; color: var(--sky); letter-spacing: 3px; margin-bottom: 16px; }
-        .hero-name-img { max-width: 100%; width: 420px; margin: 0 auto 20px; display: block; filter: drop-shadow(0 4px 10px rgba(2,132,199,.15)); }
-        .hero-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; box-shadow: 0 8px 24px rgba(2,132,199,.2); object-fit: cover; margin: 0 auto 20px; display: block; }
-        .hero-tag { font-size: .88rem; color: var(--text-mid); letter-spacing: 2px; margin: 0 0 16px; }
-        .hero-div { display: flex; align-items: center; gap: 12px; margin: 8px 0 16px; }
-        .hero-div hr { flex: 1; border: none; border-top: 1px dashed var(--sky-light); }
-        .hero-div span { color: var(--sky-light); font-size: .85rem; white-space: nowrap; }
-        .hero-desc { font-size: .95rem; color: var(--text-mid); line-height: 1.75; margin: 0 0 24px; }
-        .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    <div class="filter-bar">
+      <span class="fl-label">Lọc</span>
+      <div class="fl-chips" id="filterChips">
+        <button class="chip active" data-tag="all">Tất cả</button>
+        <button class="chip" data-cat="duoi-nuoc">🐠 Đang làm</button>
+        <button class="chip" data-cat="tren-ban">🍽️ Xong</button>
+        <button class="chip" data-cat="upcoming">🌤️ Sắp đào</button>
+        <button class="chip" data-tag="đam mỹ"># đam mỹ</button>
+        <button class="chip" data-tag="HE"># HE</button>
+        <button class="chip" data-tag="chua xót"># chua xót</button>
+        <button class="chip" data-tag="niên hạ"># niên hạ</button>
+        <button class="chip" data-tag="mất trí nhớ"># mất trí nhớ</button>
+        <button class="chip" data-tag="gương vỡ lại lành"># gương vỡ lại lành</button>
+      </div>
+      <span class="fl-count" id="flCount">6 truyện</span>
+    </div>
 
-        /* ─── BUTTONS ─── */
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: var(--r-pill); font-size: .85rem; font-family: 'Newsreader', serif; transition: var(--t); font-weight: 600; cursor: pointer; }
-        .btn-primary { background: var(--sky); color: #fff; box-shadow: 0 4px 14px rgba(14,165,233,.3); }
-        .btn-primary:hover { background: var(--sky2); transform: translateY(-2px); }
-        .btn-ghost { background: transparent; color: var(--sky); border: 1.5px solid var(--sky-light); }
-        .btn-ghost:hover { background: var(--sky-pale); }
+    <div class="stories-grid" id="storiesGrid">
 
-        /* ─── TICKER ─── */
-        .ticker-wrap { overflow: hidden; background: var(--sky); padding: 8px 0; }
-        .ticker-track {
-            display: flex; gap: 0; white-space: nowrap;
-            animation: ticker 28s linear infinite;
-        }
-        .ticker-track:hover { animation-play-state: paused; }
-        .ticker-item { color: rgba(255,255,255,.9); font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; padding: 0 36px; }
-        @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      <!-- QHBCP -->
+      <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-ongoing">Đang đăng</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🐠 Cá dưới nước</div>
+          <h3 class="sc-title">Quan hệ bạn cùng phòng</h3>
+          <div class="sc-meta">Hạnh Lan · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># niên hạ</span>
+            <span class="sc-tag"># đam mỹ</span>
+            <span class="sc-tag"># trai thẳng</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {qhbcpCount}/72 chương</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        /* ─── PAGE BODY — dùng lại từ Layout ─── */
-        .page-body {
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 0;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 16px;
-            align-items: start;
-        }
-        .main-content { padding: 40px 32px 60px 0; min-width: 0; }
-        .sidebar { padding: 40px 0 60px 24px; position: sticky; top: 72px; max-height: calc(100vh - 80px); overflow-y: auto; }
-        @media (max-width: 900px) {
-            .page-body { grid-template-columns: 1fr; padding: 0 16px; }
-            .main-content { padding: 24px 0 40px; }
-            .sidebar { padding: 0 0 40px; position: static; max-height: none; }
-        }
+      <!-- HCDH -->
+      <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biatdxt.png" alt="Hạ cháy đồng hoang" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-ongoing">Đang đăng</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🐠 Cá dưới nước</div>
+          <h3 class="sc-title">Hạ cháy đồng hoang</h3>
+          <div class="sc-meta">Hỉ Thượng Mi Sao · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># mất trí nhớ</span>
+            <span class="sc-tag"># chua xót</span>
+            <span class="sc-tag"># đồng quê</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {hcdhCount}/109 chương</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        /* ─── SECTION LABELS ─── */
-        .sec-label { font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--sky); margin-bottom: 8px; }
-        .sec-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 6px; text-align: left; }
-        .sec-sub { font-size: .82rem; color: var(--text-dim); font-style: italic; margin: 0 0 20px; }
+      <!-- NDNTKM -->
+      <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-complete">Hoàn thành</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🍽️ Cá trên bàn</div>
+          <h3 class="sc-title">Nếu đêm nay trời không mưa</h3>
+          <div class="sc-meta">Tam Đạo · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># HE</span>
+            <span class="sc-tag"># gương vỡ lại lành</span>
+            <span class="sc-tag"># drama motip cũ</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {ndntkmCount} chương (full)</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        /* ─── REVEAL ANIMATION ─── */
-        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s ease; margin-bottom: 56px; }
-        .reveal.visible { opacity: 1; transform: none; }
+      <!-- TNCTSCT -->
+      <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biatnctsct.png" alt="Tôi nghĩ chúng tôi sắp chia tay" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-complete">Hoàn thành</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🍽️ Cá trên bàn</div>
+          <h3 class="sc-title">Tôi nghĩ chúng tôi sắp chia tay</h3>
+          <div class="sc-meta">Hạ Nhất Thiên · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># HE</span>
+            <span class="sc-tag"># chua xót</span>
+            <span class="sc-tag"># 1v1</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {tnctcstCount} chương (full)</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        /* ─── NOTICE / FRONTPAGE ─── */
-        .notice-section { }
-        .frontpage-img-wrap {
-            border-radius: 20px; overflow: hidden;
-            max-width: 480px; margin: 0 auto 32px;
-        }
-        .frontpage-img { width: 100%; display: block; }
+      <!-- VDV -->
+      <div class="sc" data-cat="upcoming" data-tags="đam mỹ">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:80px">☁️</div>
+        <div class="sc-body">
+          <div class="sc-shelf">🌤️ Sắp đào</div>
+          <h3 class="sc-title">Vật dễ vỡ</h3>
+          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
+          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span></div>
+          <div class="sc-footer">
+            <span class="sc-chapters">Sắp cập nhật</span>
+            <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="sc-link secondary">Xem →</a>
+          </div>
+        </div>
+      </div>
 
-        /* Fallback text notice */
-        .notice-container { display: none; } /* ẩn mặc định, hiện khi ảnh lỗi */
-        .notice-big-title { text-align: center; margin-bottom: 28px; }
-        .notice-big-title h2 { font-size: 2rem; margin-bottom: 6px; }
-        .notice-big-title p { color: var(--text-dim); font-size: .85rem; }
-        .notice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-        @media (max-width: 700px) { .notice-grid { grid-template-columns: 1fr; } }
-        .notice-block {
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-lg); padding: 18px 20px;
-            box-shadow: var(--sh-soft);
-        }
-        .notice-block-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .notice-icon { font-size: 1.1rem; }
-        .notice-block-title { font-family: 'Merriweather', serif; font-size: .92rem; font-weight: 700; color: var(--sky-dark); }
-        .notice-body { font-size: .85rem; color: var(--text-mid); line-height: 1.7; margin: 0; }
-        .notice-deco { text-align: center; margin-top: 10px; font-size: .9rem; opacity: .6; }
-        .notice-wave { text-align: center; background: linear-gradient(135deg, var(--sky-pale), #e0f2fe); border: 1px solid var(--sky-light); border-radius: var(--r-lg); padding: 20px; font-style: italic; color: var(--sky-dark); font-size: .88rem; line-height: 1.75; }
+      <!-- TDXT -->
+      <div class="sc" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:80px">☁️</div>
+        <div class="sc-body">
+          <div class="sc-shelf">🌤️ Sắp đào</div>
+          <h3 class="sc-title">Thiếu đế xuân tâm</h3>
+          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
+          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># cổ đại</span></div>
+          <div class="sc-footer">
+            <span class="sc-chapters">Sắp cập nhật</span>
+            <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="sc-link secondary">Xem →</a>
+          </div>
+        </div>
+      </div>
 
-        /* ─── FEATURED CARD ─── */
-        .featured-card {
-            display: grid; grid-template-columns: 200px 1fr; gap: 28px;
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-lg); padding: 24px;
-            box-shadow: var(--sh-soft); align-items: center;
-        }
-        @media (max-width: 600px) { .featured-card { grid-template-columns: 1fr; } }
-        .fc-cover img { width: 100%; border-radius: var(--r-md); object-fit: cover; aspect-ratio: 2/3; }
-        .fc-info { }
-        .fc-badge { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sky); background: var(--sky-pale); border: 1px solid var(--sky-light); border-radius: var(--r-pill); padding: 3px 10px; display: inline-block; margin-bottom: 10px; }
-        .fc-title { font-family: 'Merriweather', serif; font-size: 1.25rem; color: var(--sky-dark); margin: 0 0 4px; text-align: left; }
-        .fc-zh { font-size: .8rem; color: var(--text-dim); font-style: italic; margin-bottom: 10px; }
-        .fc-desc { font-size: .88rem; color: var(--text-mid); line-height: 1.7; margin: 0 0 12px; }
-        .fc-meta { font-size: .76rem; color: var(--text-dim); margin-bottom: 16px; }
-        .fc-actions { }
+      <div class="no-results" id="noRes">𓆝 Không tìm thấy truyện phù hợp.</div>
+    </div>
 
-        /* ─── FILTER BAR ─── */
-        .filter-bar {
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-lg); padding: 16px 20px;
-            margin-bottom: 24px; display: flex; flex-wrap: wrap;
-            gap: 10px; align-items: center;
-        }
-        .fl-label { font-size: .75rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
-        .filter-groups { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
-        .filter-group { display: flex; gap: 6px; }
-        .chip {
-            display: inline-flex; align-items: center; padding: 5px 13px;
-            font-size: .77rem; border-radius: var(--r-pill); cursor: pointer;
-            background: var(--sky-pale); border: 1px solid var(--border);
-            color: var(--text-mid); transition: var(--t); user-select: none;
-        }
-        .chip:hover { background: var(--sky-light); color: white; border-color: var(--sky-light); }
-        .chip.active { background: var(--sky); color: white; border-color: var(--sky); }
-        .chip-clear { background: #fee2e2; border-color: #fecaca; color: #dc2626; }
-        .chip-clear:hover { background: #dc2626; color: white; }
-        .filter-count { font-size: .75rem; color: var(--text-dim); font-style: italic; white-space: nowrap; }
+    <!-- LƯU Ý / NGUYÊN TẮC -->
+    <div class="notice-section reveal">
+      <div class="sec-hd" style="margin-top:36px">
+        <h2>📌 Lưu ý</h2>
+        <div class="sec-line"></div>
+      </div>
+      <div class="notice-container">
+        <div class="notice-big-title">
+          <h2>Dynamic <em>Duo</em></h2>
+          <p>𓆝.°• paired dreams, boundless gleam •°.𓆝</p>
+        </div>
+        <div class="notice-block">
+          <div class="notice-block-header"><span class="notice-icon">🪸</span><span class="notice-block-title">Về bể cá</span></div>
+          <p class="notice-body">Nhà có <strong>hai người</strong>, để tính và thoải mái về xưng hô. Chúng mình vô cùng hoan nghênh lời góp ý để hoàn thiện hơn, nhưng trái tim mong manh, mong cậu ghé qua đừng buông lời nặng nề •ᴗ•</p>
+          <div class="notice-deco">🐟 🐡 🐠 🫧</div>
+        </div>
+        <div class="notice-block">
+          <div class="notice-block-header"><span class="notice-icon">📚</span><span class="notice-block-title">Về gu truyện trong nhà</span></div>
+          <p class="notice-body">Truyện được chọn hoàn toàn theo gu của chúng mình. Đa số sẽ có <strong>thủy tinh</strong> và các tình tiết <strong>drama cũ rích</strong>, không phù hợp với <strong>tất cả mọi người</strong>. Chúng mình sẽ cố gắng cảnh báo trước.</p>
+          <div class="notice-deco">🌿 🪸 🌿</div>
+        </div>
+        <div class="notice-block">
+          <div class="notice-block-header"><span class="notice-icon">⚠️</span><span class="notice-block-title">Về bản edit</span></div>
+          <p class="notice-body">Chúng mình đang chập chững học tiếng Trung, các bản edit có dùng <strong>công cụ hỗ trợ</strong>. Độ chính xác không thể cam đoan 100% so với bản gốc. Nhưng chúng mình sẽ luôn cố gắng trau chuốt câu chữ mượt mà nhất.</p>
+        </div>
+        <div class="notice-block">
+          <div class="notice-block-header"><span class="notice-icon">🌊</span><span class="notice-block-title">Về lịch đăng</span></div>
+          <p class="notice-body">Hiện nhà <strong>chưa có lịch up cố định</strong>, nhưng sẽ cố gắng duy trì tiến độ đều đặn nhất có thể.</p>
+          <div class="notice-deco">⚓ 🦈 🐋</div>
+        </div>
+        <div class="notice-wave">Chào mừng các cậu ghé chơi. Mong rằng cậu sẽ để lại góc nhỏ này thật nhiều bông hoa rực rỡ... ᗒ᳨ᗕ</div>
+      </div>
+    </div>
 
-        /* ─── STORIES GRID ─── */
-        .stories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .story-card {
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-lg); overflow: hidden;
-            box-shadow: var(--sh-soft); transition: var(--t);
-        }
-        .story-card:hover { transform: translateY(-4px); box-shadow: var(--sh-card); }
-        .story-card.hidden { display: none; }
-        .sc-cover { position: relative; aspect-ratio: 2/3; overflow: hidden; }
-        .sc-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
-        .story-card:hover .sc-cover img { transform: scale(1.04); }
-        .sc-status { position: absolute; top: 10px; left: 10px; font-size: .68rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: var(--r-pill); font-weight: 600; }
-        .status-ongoing { background: #dbeafe; color: #1d4ed8; }
-        .status-complete { background: #dcfce7; color: #15803d; }
-        .status-upcoming { background: #fef9c3; color: #a16207; }
-        .sc-body { padding: 14px; }
-        .sc-shelf { font-size: .7rem; color: var(--text-dim); margin-bottom: 5px; }
-        .sc-title { font-family: 'Merriweather', serif; font-size: .92rem; color: var(--sky-dark); margin: 0 0 6px; text-align: left; line-height: 1.4; }
-        .sc-meta { font-size: .73rem; color: var(--text-dim); margin-bottom: 8px; }
-        .sc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-        .sc-tag { font-size: .7rem; background: var(--sky-pale); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 2px 8px; color: var(--sky); cursor: pointer; transition: var(--t); }
-        .sc-tag:hover { background: var(--sky); color: white; }
-        .sc-footer { display: flex; align-items: center; justify-content: space-between; }
-        .sc-chapters { font-size: .72rem; color: var(--text-dim); }
-        .sc-link { font-size: .75rem; color: var(--sky); font-weight: 600; }
-        .sc-link:hover { text-decoration: underline; }
-        .no-results { display: none; grid-column: 1/-1; text-align: center; color: var(--text-dim); font-style: italic; padding: 40px 0; }
-        .no-results.show { display: block; }
+    <!-- MỚI CẬP NHẬT -->
+    <div class="sec-hd reveal" style="margin-top:36px">
+      <h2>🕊 Mới cập nhật</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="recent-list reveal">
+      <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-74/" class="recent-item">
+        <span class="recent-icon">📖</span>
+        <div class="ri-body">
+          <div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div>
+          <div class="ri-title">Chương 74 (Kết)</div>
+        </div>
+        <span class="recent-arrow">→</span>
+      </a>
+      <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-76/" class="recent-item">
+        <span class="recent-icon">📖</span>
+        <div class="ri-body">
+          <div class="ri-story">Nếu đêm nay trời không mưa</div>
+          <div class="ri-title">Ngoại truyện 3</div>
+        </div>
+        <span class="recent-arrow">→</span>
+      </a>
+    </div>
 
-        /* ─── RECENT LIST ─── */
-        .recent-list { display: flex; flex-direction: column; gap: 10px; }
-        .recent-item {
-            display: flex; align-items: center; gap: 14px;
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-md); padding: 14px 18px; transition: var(--t);
-        }
-        .recent-item:hover { background: var(--sky-pale); transform: translateX(4px); }
-        .recent-icon { font-size: 1.2rem; }
-        .ri-body { flex: 1; min-width: 0; }
-        .ri-story { font-size: .77rem; color: var(--text-dim); margin-bottom: 2px; }
-        .ri-title { font-size: .9rem; color: var(--sky-dark); font-weight: 600; font-family: 'Merriweather', serif; }
-        .recent-arrow { color: var(--sky); font-size: 1rem; }
+  </div><!-- /main-col -->
 
-        /* ─── SIDEBAR WIDGETS ─── */
-        .widget {
-            background: var(--bg-content); border: 1px solid var(--border);
-            border-radius: var(--r-lg); padding: 20px; margin-bottom: 20px;
-            box-shadow: var(--sh-soft);
-        }
-        .widget-title { font-family: 'Literata', serif; font-size: .82rem; font-weight: 600; color: var(--sky-dark); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
-        .widget-divider { text-align: center; color: var(--text-dim); font-size: .8rem; margin-bottom: 10px; }
-        .profile-widget { text-align: center; }
-        .profile-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; margin: 0 auto 12px; border: 3px solid var(--sky-light); }
-        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-name { font-family: 'Literata', serif; font-size: .95rem; font-weight: 600; color: var(--sky-dark); margin-bottom: 4px; }
-        .profile-tagline { font-size: .78rem; color: var(--text-dim); font-style: italic; margin: 0 0 8px; }
-        .profile-deco { color: var(--sky-light); font-size: .85rem; margin-bottom: 10px; }
-        .profile-about-btn { display: inline-block; font-size: .75rem; color: var(--sky); border: 1px solid var(--sky-light); border-radius: var(--r-pill); padding: 5px 14px; transition: var(--t); }
-        .profile-about-btn:hover { background: var(--sky-pale); }
-        .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
-        .tag-cloud a { display: inline-block; padding: 4px 10px; font-size: .77rem; background: var(--sky-pale); border: 1px solid var(--border); border-radius: var(--r-pill); color: var(--sky); cursor: pointer; transition: var(--t); }
-        .tag-cloud a:hover { background: var(--sky); color: white; }
-        .now-playing { display: flex; align-items: center; gap: 12px; }
-        .vinyl { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
-        .vinyl img { width: 100%; height: 100%; object-fit: cover; }
-        .np-label { font-size: .68rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
-        .np-song { font-size: .82rem; color: var(--sky-dark); font-style: italic; }
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar-col">
+    <!-- Profile (sticky) -->
+    <div class="widget">
+      <div class="widget-title">✦ Về nhà cá</div>
+      <div class="profile-avatar">
+        <img src="/dynamic-duo-web/images/logo1.png" alt="logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentElement.textContent='🐋'" />
+      </div>
+      <div class="profile-name">dynamic duo</div>
+      <p class="profile-tagline">paired dreams,<br/>boundless gleam ⋆.˚</p>
+      <div class="profile-deco">𓆝.°•</div>
+      <div style="margin-top:10px;text-align:center">
+        <a href="/dynamic-duo-web/about/" style="font-size:.73rem;color:var(--sky);border:1px solid var(--sky-light);padding:3px 12px;border-radius:var(--r-pill);transition:var(--t)" onmouseover="this.style.background='var(--sky-pale)'" onmouseout="this.style.background=''">About us →</a>
+      </div>
+    </div>
 
-        /* Calendar */
-        .cal-header { text-align: center; font-size: .78rem; font-weight: 700; color: var(--sky-dark); margin-bottom: 8px; letter-spacing: 1px; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-        .cal-day-header { text-align: center; font-size: .6rem; color: var(--text-dim); font-weight: 700; padding: 2px 0; letter-spacing: .5px; }
-        .cal-day { text-align: center; font-size: .7rem; color: var(--text-mid); padding: 4px 2px; border-radius: 4px; line-height: 1.2; }
-        .cal-day.empty { }
-        .cal-day.today { background: var(--sky); color: #fff; font-weight: 700; border-radius: 50%; }
-        .cal-day.has-post { background: var(--sky-pale); color: var(--sky); font-weight: 700; border: 1px solid var(--sky-light); border-radius: 50%; }
-    </style>
+    <!-- Dark mode -->
+    <div class="widget" style="padding:12px">
+      <button class="dark-btn" onclick="window.__ddToggleTheme()" id="darkBtnIdx">🌙 Chế độ tối</button>
+    </div>
 
-    <script is:inline>
-    // ─── TAG FILTER (AND logic) ───
-    let active = new Set();
+    <!-- Tag cloud -->
+    <div class="widget">
+      <div class="widget-title">🏷️ Tags</div>
+      <div class="tag-cloud" id="tagCloud">
+        <button class="tc-btn" data-tag="đam mỹ"># đam mỹ</button>
+        <button class="tc-btn" data-tag="hiện đại"># hiện đại</button>
+        <button class="tc-btn" data-tag="cổ đại"># cổ đại</button>
+        <button class="tc-btn" data-tag="HE"># HE</button>
+        <button class="tc-btn" data-tag="chua xót"># chua xót</button>
+        <button class="tc-btn" data-tag="niên hạ"># niên hạ</button>
+        <button class="tc-btn" data-tag="mất trí nhớ"># mất trí nhớ</button>
+        <button class="tc-btn" data-tag="gương vỡ lại lành"># gương vỡ lại lành</button>
+        <button class="tc-btn" data-tag="drama motip cũ"># drama motip cũ</button>
+        <button class="tc-btn" data-tag="trai thẳng"># trai thẳng</button>
+      </div>
+    </div>
 
-    function toggleChip(el) {
-        const f = el.dataset.f;
-        if (active.has(f)) {
-            active.delete(f);
-            el.classList.remove('active');
-        } else {
-            active.add(f);
-            el.classList.add('active');
-        }
-        applyFilter();
+    <!-- Category tree -->
+    <div class="widget">
+      <div class="widget-title">📂 Danh mục</div>
+      <div class="cat-tree">
+        <ul>
+          <li>
+            <details open>
+              <summary>🐠 Cá dưới nước</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng<span class="cat-count">{qhbcpCount}c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang<span class="cat-count">{hcdhCount}c</span></a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🍽️ Cá trên bàn</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa<span class="cat-count">{ndntkmCount}c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay<span class="cat-count">{tnctcstCount}c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ<span class="cat-count">sắp</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm<span class="cat-count">sắp</span></a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🌤️ Cá trên trời</summary>
+              <ul><li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách →</a></li></ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="widget">
+      <div class="widget-title">✨ Góc nhỏ</div>
+      <blockquote class="quote-body">"Cảm ơn các bạn đã ghé thăm. Chúng mình không dám hứa hẹn nhiều, chỉ cố gắng edit thật kỹ từng chương."</blockquote>
+      <div class="quote-src">— Xê &amp; Gờ, 2026</div>
+    </div>
+
+    <!-- Contact -->
+    <div class="widget" style="text-align:center">
+      <div class="widget-title">✉ Liên hệ</div>
+      <p style="font-size:.76rem;color:var(--text-mid);margin-bottom:6px">dynamicduoo.q@gmail.com</p>
+      <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.72rem;color:var(--sky)">🌐 WordPress cũ</a>
+    </div>
+  </aside>
+
+</div><!-- /home-shell -->
+
+<script is:inline>
+/* ─── FILTER ─── */
+const allCards = document.querySelectorAll('.sc');
+const chips = document.querySelectorAll('#filterChips .chip');
+const flCount = document.getElementById('flCount');
+let activeTags = new Set(), activeCat = null;
+
+function applyFilter() {
+  let vis = 0;
+  allCards.forEach(card => {
+    const cCat  = card.dataset.cat || '';
+    const cTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
+    const catOk = !activeCat || cCat === activeCat;
+    const tagOk = activeTags.size === 0 || [...activeTags].some(t => cTags.includes(t.toLowerCase()));
+    const show  = catOk && tagOk;
+    card.classList.toggle('hidden', !show);
+    if (show) vis++;
+  });
+  flCount.textContent = vis + ' truyện';
+  const nr = document.getElementById('noRes');
+  if (nr) nr.classList.toggle('show', vis === 0);
+}
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (chip.dataset.tag) {
+      const tag = chip.dataset.tag;
+      if (tag === 'all') {
+        activeTags.clear(); activeCat = null;
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      } else {
+        document.querySelector('[data-tag="all"]')?.classList.remove('active');
+        if (activeTags.has(tag)) { activeTags.delete(tag); chip.classList.remove('active'); }
+        else { activeTags.add(tag); chip.classList.add('active'); }
+        if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
+      }
+    } else if (chip.dataset.cat) {
+      const cat = chip.dataset.cat;
+      chips.forEach(c => c.dataset.cat && c.classList.remove('active'));
+      if (activeCat === cat) { activeCat = null; }
+      else { activeCat = cat; chip.classList.add('active'); }
     }
+    applyFilter();
+  });
+});
 
-    function filterByTag(f) {
-        const chip = document.querySelector(`[data-f="${f}"]`);
-        if (chip && !active.has(f)) toggleChip(chip);
-    }
+/* tag cloud → filter */
+document.querySelectorAll('#tagCloud .tc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#tagCloud .tc-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTags.clear(); activeTags.add(btn.dataset.tag); activeCat = null;
+    chips.forEach(c => {
+      if (c.dataset.tag) c.classList.toggle('active', c.dataset.tag === btn.dataset.tag || c.dataset.tag === 'all' && activeTags.size === 0);
+    });
+    applyFilter();
+    document.getElementById('storiesGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
 
-    function filterByTagScroll(f) {
-        document.getElementById('stGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const chip = document.querySelector(`[data-f="${f}"]`);
-        if (chip && !active.has(f)) toggleChip(chip);
-    }
+/* ─── DARK MODE BUTTON ─── */
+const darkBtnIdx = document.getElementById('darkBtnIdx');
+function syncDarkBtn() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (darkBtnIdx) darkBtnIdx.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
+}
+syncDarkBtn();
+darkBtnIdx?.addEventListener('click', () => { window.__ddToggleTheme(); syncDarkBtn(); });
 
-    function clearChips() {
-        active.clear();
-        document.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
-        applyFilter();
-    }
-
-    function applyFilter() {
-        const cards = document.querySelectorAll('.story-card');
-        let vis = 0;
-        cards.forEach(card => {
-            if (!active.size) {
-                card.classList.remove('hidden');
-                vis++;
-                return;
-            }
-            // Lấy toàn bộ tags từ data-tags (space-separated)
-            const cardTags = (card.dataset.tags || '').split(' ').map(t => t.trim());
-            // AND logic: tất cả active tags đều phải có trong cardTags
-            const match = [...active].every(f => cardTags.includes(f));
-            card.classList.toggle('hidden', !match);
-            if (match) vis++;
-        });
-        document.getElementById('fCount').textContent = vis + ' truyện';
-        document.getElementById('noRes').classList.toggle('show', vis === 0);
-    }
-
-    // ─── SCROLL REVEAL ───
-    const obs = new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-    }), { threshold: .1 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-    /* ── CALENDAR ── */
-    (function buildCal() {
-        const now = new Date();
-        const yr = now.getFullYear(), mo = now.getMonth();
-        const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        // Thứ Hai là ngày đầu tuần
-        const firstDay = new Date(yr, mo, 1).getDay();
-        const offset = (firstDay === 0) ? 6 : firstDay - 1;
-        const daysInMonth = new Date(yr, mo + 1, 0).getDate();
-        const today = now.getDate();
-        const postDays = new Set([2, 4, 17, 18]);
-        const days = ['T2','T3','T4','T5','T6','T7','CN'];
- 
-        let html = `<div class="cal-header">${monthNames[mo]} ${yr}</div><div class="cal-grid">`;
-        days.forEach(d => html += `<div class="cal-day-header">${d}</div>`);
-        for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
-        for (let d = 1; d <= daysInMonth; d++) {
-            let cls = 'cal-day';
-            if (d === today) cls += ' today';
-            else if (postDays.has(d)) cls += ' has-post';
-            html += `<div class="${cls}">${d}</div>`;
-        }
-        html += '</div>';
-        const calC = document.getElementById('calContent');
-        if (calC) calC.innerHTML = html;
-    })();
-    </script>
+/* ─── REVEAL ─── */
+const obs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+}), { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </Layout>

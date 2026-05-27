@@ -1,81 +1,85 @@
 ---
-layout: ../../../layouts/Layout.astro
-title: "Quan hệ bạn cùng phòng"
-date: 2026-05-03
-categories: 
-  - "⚡-vun"
-  - "dam-thuy-tinh"
-  - "hien-dai"
-  - "nien-ha"
-tags: 
-  - "he"
-  - "thuy-tinh"
-  - "trai-thang"
-  - "yeu-tham"
-truyen_id: "qhbcp"
-chuong: 0
+import Layout from '../../../layouts/Layout.astro';
+
+const allPosts = Object.values(
+  import.meta.glob('./*.md', { eager: true })
+) as any[];
+const chapters = allPosts
+  .filter((p) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0)
+  .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
+
+const total = 72;
+const pct = Math.round((chapters.length / total) * 100);
 ---
 
-<img src="/dynamic-duo-web/images/biaqhbcp.png" style="width: 250px; border-radius: 15px; box-shadow: var(--sh-card); display: block; margin: 0 auto 30px auto;" />
+<Layout frontmatter={{
+  title: 'Quan hệ bạn cùng phòng',
+  description: 'Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.',
+  tags: ['đam mỹ', 'hiện đại', 'niên hạ', 'trai thẳng', 'yêu thầm', 'thủy tinh']
+}}>
+  <style>
+    .story-cover { width: 200px; border-radius: 12px; box-shadow: var(--sh-card); display: block; margin: 0 auto 28px; }
+    .status-badge { display: inline-block; padding: 3px 14px; border-radius: var(--r-pill); font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; background: #fef9c3; color: #854d0e; margin: 8px 0 16px; }
+    .progress-bar-wrap { max-width: 320px; margin: 12px auto; }
+    .progress-label { font-size: .76rem; color: var(--text-dim); text-align: center; margin-bottom: 5px; }
+    .progress-bar { height: 6px; background: rgba(186,230,253,.4); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(to right, var(--sky-light), var(--sky)); border-radius: 3px; }
+    .intro-block { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.5); border-radius: var(--r-md); padding: 20px 24px; margin: 24px 0; font-size: .9rem; color: var(--text-mid); line-height: 1.8; }
+    .intro-block h4 { font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sky-dark); text-align: left; margin: 0 0 10px; }
+    .char-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; text-align: center; margin: 20px 0; }
+    .char-name { font-family: 'Merriweather', serif; font-size: .95rem; color: var(--sky-dark); }
+    .char-role { font-size: .72rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+    .toc-section { margin-top: 32px; }
+    .toc-title { font-family: 'Merriweather', serif; font-size: .88rem; color: var(--sky-dark); letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px dashed var(--sky-light); }
+    .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+    @media (max-width: 480px) { .toc-grid { grid-template-columns: 1fr; } }
+    .toc-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--r-sm); font-size: .84rem; color: var(--text-mid); transition: var(--t); border: 1px solid transparent; }
+    .toc-item:hover { background: var(--sky-pale); color: var(--sky); border-color: rgba(186,230,253,.5); }
+    .toc-num { font-size: .7rem; color: var(--text-dim); width: 28px; flex-shrink: 0; font-family: monospace; }
+    .read-btn { display: block; text-align: center; margin: 28px auto 0; padding: 12px 32px; background: var(--sky); color: #fff; border-radius: var(--r-pill); font-size: .9rem; font-family: 'Newsreader', serif; transition: var(--t); max-width: 220px; }
+    .read-btn:hover { background: var(--sky2); transform: translateY(-2px); }
+  </style>
 
-## Quan hệ bạn cùng phòng
-*(室友关系)*
+  <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Bìa truyện" class="story-cover"
+    onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
 
-**⋆ Tác giả:** Hạnh Lan
-**⋆ Editor:** Dynamic Duo
-**⋆ Thể loại:** Đam mỹ, Hiện đại, Chua xót
-**⋆ Tình trạng:** Cá dưới nước
+  <div style="text-align:center">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Quan hệ bạn cùng phòng</h2>
+    <span class="status-badge">🌊 Đang tiến hành</span>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Tác giả:</strong> Hạnh Lan</div>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Editor:</strong> Dynamic Duo</div>
+    <div style="font-size:.9rem;color:var(--text-mid);margin:4px 0"><strong style="color:var(--sky-dark)">Thể loại:</strong> Đam mỹ · Hiện đại · Niên hạ</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label">📖 Tiến độ: {pct}% ({chapters.length}/{total} chương)</div>
+      <div class="progress-bar"><div class="progress-fill" style={`width:${pct}%`}></div></div>
+    </div>
+  </div>
 
-Tiến độ lấp hố: 1.3% (1/72 Chương)
+  <div class="char-grid">
+    <div><div class="char-name">??</div><div class="char-role">Công</div></div>
+    <div style="font-size:1.2rem;color:var(--sky-light)">✧ ✖ ✧</div>
+    <div><div class="char-name">??</div><div class="char-role">Thụ</div></div>
+  </div>
 
-> *Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.*
+  <div class="intro-block">
+    <h4>📖 Giới thiệu</h4>
+    <p>Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.</p>
+    <p>Câu chuyện về hai người ở chung phòng, khoảng cách tuổi tác, và những cảm xúc mà không ai dám nói trước.</p>
+  </div>
 
-#### 🏠 Giới thiệu
+  {chapters.length > 0 && (
+    <a href={chapters[0].url} class="read-btn">Đọc từ Chương 1 →</a>
+  )}
 
-Bạch Hiểu Dương là một mọt sách tiêu chuẩn.
-Mái tóc mềm mại rủ xuống tận mi mắt, trên sống mũi đeo một cặp kính gọng đen cục mịch.
-Tính cách cũng chẳng dễ chịu: tính toán chi li, cô độc hướng nội; chuyện gì cũng phải phân chia rạch ròi, rất sợ nợ nần ai.
-
-"Chào cậu, tôi là Hiểu Dương."
-Còn chưa kịp hoàn hồn sau màn giới thiệu bản thân bài bản y như sách giáo khoa này, thì đã thấy anh đẩy gọng kính trên sống mũi, nghiêm túc nói tiếp:
-"Đồ của cậu tôi sẽ không đụng vào, có mất thứ gì thì đừng tìm tôi."
-
-Đoạn Dữ: "...?"
-
-"Không phải là không cho cậu ăn, nhưng cậu phải nói với tôi một tiếng. Tôi làm thêm cho cậu một phần cũng được, cậu đừng ăn phần của tôi."
-
-Đoạn Dữ: "...?"
-
-"Sao cậu lại mua nhiều thế? Tôi chỉ nói cưa đôi tiền, không có ý bảo cậu trả hết, cậu..."
-
-Rốt cuộc hắn cũng không nhịn nổi nữa, rút ví vung một xấp tiền đô lên người Bạch Hiểu Dương. "Tiền học phí một năm của anh đủ mua giấy của cả mấy cái siêu thị rồi đấy, bày đặt giả bộ tiết kiệm làm gì."
-
-Bạch Hiểu Dương không đáp lời, chỉ là sau khi Đoạn Dữ đóng sầm cửa bỏ đi, mới lẳng lặng nhặt từng tờ tiền rơi trên đất lên, xếp lại ngay ngắn rồi nhét xuống dưới gối của hắn.
-
----
-Một thời gian sau, Đoạn Dữ dần nhận ra, con người này không hề giả tạo như hắn tưởng.
-Thực ra tính cách cũng rất được, khuôn mặt sau khi tháo kính xuống nhìn ngày càng thuận mắt... thậm chí còn hơi đáng yêu.
-
-#### 💫 Lưu ý
-
-* Giai đoạn đầu công mỏ hỗn + tính tình nóng nảy + thành kiến / Thụ tính cách hơi khó gần, không được lòng người.
-* Thụ có khiếm khuyết - Cận thị + điếc tai trái (do tác động của con người, không phải bẩm sinh).
-
-### ☄️ Góc dò mìn
-
-Biển sâu nước lạnh, hãy mặc áo phao và đọc kỹ trước khi lặn nhé!
-# Công trước đó là trai thẳng
-# Có cảnh công hôn phụ nữ
-# Có các yếu tố liên quan đến bệnh tâm lý
-
-*Nhấp vào Logo bên trên để quay lại bờ nếu bạn thấy không hợp gu ⚓*
-
-### ✰ Thiết lập nhân vật
-
-**Đoạn Dữ (CÔNG):** Thiếu gia nhà giàu, mỏ hỗn cục súc, trước thì chê bai sau lại tự vả.
-✧ ✖ ✧
-**Bạch Hiểu Dương (THỤ):** Nhân vật ngoài lề, vừa học vừa làm, mang chấn thương tâm lý.
-
----
-## 🌊 Mục lục
-*(Danh sách chương sẽ được tự động cập nhật ở dưới)*
+  <div class="toc-section">
+    <div class="toc-title">🌊 Mục lục ({chapters.length} chương đã đăng)</div>
+    <div class="toc-grid">
+      {chapters.map((c) => (
+        <a href={c.url} class="toc-item">
+          <span class="toc-num">C{c.frontmatter?.chuong}</span>
+          <span>{c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

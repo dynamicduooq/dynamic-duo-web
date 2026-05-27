@@ -1,8 +1,9 @@
 ---
-title: "Chương 1: \\\"Có phải đã gặp ở đâu rồi không\\\""
+layout: ../../../layouts/Layout.astro
+title: "Chương 3"
 truyen_id: "ndntkm"
-chuong: 1
-date: "2026-05-30"
+chuong: 3
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -10,140 +11,170 @@ tags:
   - "HE"
 ---
 
-Dự báo thời tiết nói đêm nay sẽ có mưa.
+## **Chương** 3
 
-Lâm Hướng Bắc, vốn chẳng thích mưa, nhất là mưa mùa đông, vừa tỉnh dậy đã thấy những hạt mưa nhỏ li ti lạnh buốt đóng đầy khung cửa sổ, còn có chiều hướng ngày càng dữ dội không thể cản nổi.
+Lâm Hướng Bắc cảm thấy bản thân có một năng lực rất xấu, đó là làm rối tung mọi chuyện.
 
-“Chán chết mất.”
+Khi cậu lấy hết can đảm để đề nghị nghỉ việc với quản lý, gương mặt người đàn ông nghẹn lại như miếng gan lợn đen để cả tuần, cắt ra có thể bày đầy một đĩa.
 
-Cậu lẩm bẩm, nheo mắt tắt chuông báo thức đang kêu inh ỏi bên gối, xoay người kéo góc chăn trùm kín đầu, hít sâu vài hơi rồi mới chậm rãi ngồi dậy. Tay cậu xoa xoa trán một hồi, cố gắng xua đi cảm giác khó chịu sau cơn say xỉn đêm qua.
+Lúc đó đã gần đến giờ tan ca, cửa ra vào không còn nhiều khách, quản lý mắng cậu một trận té tát ngay trước mặt mọi người: “Tiểu Lâm, lúc đầu chính cậu nói rất cần công việc này, dù cậu không có kinh nghiệm chúng tôi vẫn phá lệ nhận cậu vào, giờ mới được mấy ngày mà đã muốn nghỉ, còn trẻ tuổi sao lại không có chữ tín thế hả?”
 
-Màn hình điện thoại sáng lên sau một tiếng “đing”, cậu lặng lẽ nhìn tin nhắn gửi đến từ dãy số quen thuộc, rồi lật úp nó xuống như đang trốn tránh.
+Cô tiếp tân cũng nhìn cậu với ánh mắt đồng cảm.
 
-Dù không muốn rời giường đến đâu cũng phải dậy thôi. Lâm Hướng Bắc vơ đại một chiếc áo len mặc vào, tĩnh điện kêu xẹt xẹt khiến mái tóc vốn đã rối bù sau giấc ngủ lại dựng đứng lên trông rất buồn cười.
+Lâm Hướng Bắc tự biết mình đuối lý, cúi đầu không cãi lại, đợi người đàn ông mắng đến khô cả họng phải uống nước để làm thấm giọng, cậu mới chen vào nói: “Tôi làm được hai mươi mốt ngày, nhưng chỉ xin nửa tháng lương thôi.”
 
-Mở cửa phòng, phòng khách không được ánh nắng chiếu tới trông như một khoang tàu lạnh lẽo ẩm ướt, dưới bầu trời âm u càng khó phân biệt ngày đêm. Hai cánh cửa phòng khác vẫn đang đóng chặt.
+Quản lý trừng mắt: “Cậu vi phạm hợp đồng trước, còn dám đòi lương à?”
 
-Cậu bước vào nhà vệ sinh trong lúc vẫn còn buồn ngủ, cúi xuống nhìn sàn nhà loang lổ vết ố vàng, không khỏi nhíu mày, cậu muốn dọn dẹp, nhưng vì vội ra ngoài nên đành nhắm mắt làm ngơ.
+Lâm Hướng Bắc nghẹn lời, khẽ phản bác: “Cũng không thể để tôi làm việc không công chứ.”
 
-Vòi nước trong căn hộ cho thuê ở làng đô thị không có nước nóng, cứ như nối thẳng vào tủ lạnh đông đá, dòng nước chảy ào ào mang theo cái lạnh thấu xương.
+Khách dùng bữa xong lục tục đi ra sảnh lớn, quản lý bực bội vẫy tay: “Khách sắp ra rồi, muốn đi thì đi đi, đừng đứng đây cản trở.”
 
-Lâm Hướng Bắc vội vã đánh răng, ngẩng đầu nhìn mình trong tấm gương vuông dán trên tường bằng keo không in dấu, mặt gương lốm đốm bọt trắng. Da cậu trắng bệch, quầng thâm dưới mắt đen sì, rõ ràng là một gương mặt không được nghỉ ngơi đủ, cuộc sống chẳng hề như ý. Cậu không suy nghĩ gì vốc một vốc nước lạnh rửa mặt, hít vào một hơi, tay trái đột nhiên siết chặt thành nắm đấm.
+“Vậy tiền lương của tôi…”
 
-Tay trái cậu từng bị thương rất nặng, nhìn bên ngoài không khác bình thường là bao nhưng không thể làm việc tỉ mỉ, cũng không nâng nổi vật nặng, xem như đã tàn phế một nửa. Vậy mà lại không đủ tiêu chuẩn để làm giấy chứng nhận khuyết tật nhận trợ cấp xã hội, đáng sợ hơn, cứ đến ngày mưa, nó lại đau nhức như có sâu đục vào kẽ xương, ê ẩm khó chịu. Có xoay kiểu gì, xoa bóp ra sao, chườm lạnh chườm nóng cũng chẳng ăn thua, chỉ có thể để mặc cơn đau lan từ cổ tay lên cả cánh tay.
+Người này đúng là trong mắt chỉ biết đến tiền, vì chưa tới hai nghìn tệ mà trơ trẽn thế này!
 
-Cậu thật sự rất ghét trời mưa!
+“Tôi sẽ làm việc với phòng tài vụ công ty, về đợi thông báo đi.”
 
-Một dấu chấm than chưa đủ diễn tả cảm xúc của cậu, phải thêm một cái nữa!
+Lâm Hướng Bắc thở phào nhẹ nhõm, mỉm cười cảm kích cúi người xuống: “Cảm ơn quản lý.”
 
-“Tối nay con không về.” Cậu gõ ngón tay lên cánh cửa kim loại màu bạc trắng, trong buổi trưa quá mức yên ắng, âm thanh rất nhỏ ấy lại trở nên chói tai: “Sáng mai tự nhớ đi bệnh viện tái khám đi.”
+Việc tối nay gặp Hà Tranh là điều nằm ngoài dự đoán, nhìn thấy anh khiến cậu có một cảm giác hoảng hốt, như thể đang ngủ gục trên bàn giữa buổi trưa nắng chói chang, tỉnh dậy trời đã xám xịt đầy mưa, đầu óc rối như tơ vò, mơ màng không phân biệt được thời gian đến nỗi thấy xe khách đến mà quên cả tiến lên tiếp đón.
 
-Nói xong câu đó, cậu vội mở cửa, cẩn thận bước xuống cầu thang ẩm ướt dọc theo chân tường.
+Việc xin nghỉ là quyết định bốc đồng, lý do rất đơn giản, chỉ là vì một chút lòng tự trọng đáng thương, ít nhất cậu cũng không muốn để Hà Tranh đến Kim Sa dùng bữa lại thấy cậu trong tình cảnh sa sút thế này. Vui thì cũng có vui, niềm vui ấy nhỏ nhoi mà mãnh liệt, giống như một giọt nước lạnh nhỏ vào chảo dầu đang sôi, rất nhanh đã bị áp lực cuộc sống lấn át. Lúc này Lâm Hướng Bắc không có nhiều thời gian để nghĩ ngợi hoài niệm quá khứ, cậu đang vội vàng đến nơi làm việc tiếp theo.
 
-Chiếc xe điện được đặt ở trạm sạc gần đó, cách một con hẻm nhỏ, Lâm Hướng Bắc ham nhanh, không che ô mà chạy thẳng một mạch tới, tóc cũng chỉ hơi ướt. Trong cốp xe có áo mưa, là loại nhựa xanh phổ thông nhất. Cậu nhanh chóng khoác lên, nhìn mưa rơi tí tách không ngừng, trong lòng chỉ thấy vô cùng bực bội.
+May là trời đã tạnh mưa, cậu vơ vội chiếc áo mưa chưa khô, cuộn tròn nhét vào cốp dưới yên xe, chân dài vòng qua chống xuống đất, dùng ngón tay khẽ gảy chiếc chuông đồng vàng đã bong tróc sơn, chính cậu đã cứu cái vật nhỏ này khỏi số phận bị ném vào thùng rác, như thể giữa cậu và nó – hai kẻ cùng bám rễ trong vũng bùn – có một mối duyên kỳ lạ, sống nương tựa vào nhau.
 
-Ai có kinh nghiệm đều biết đi xe điện vào ngày mưa khổ sở thế nào.
+Muselbar tọa lạc ở khu thương mại đắc địa của thành phố Thâm Quyến, mở cửa suốt đêm.
 
-Gió táp mưa xối chẳng thể ngăn quyết tâm đi làm của Lâm Hướng Bắc: Tư bản chẳng quan tâm lý do gì, cứ trễ là trừ lương.
+Lâm Hướng Bắc là một trong những nhân viên pha chế ở đây, cậu chăm chỉ hơn ai hết, gần như không có ngày nghỉ, hôm nào cũng đến chấm công vào đúng mười hai giờ đêm, nhưng đêm nay vì phải xử lý chuyện nghỉ việc nên đến muộn hơn một chút.
 
-Giáng sinh vừa qua chưa lâu, dọc đường, mấy cửa hàng đầu tư lớn để trang trí mặt tiền vẫn còn giữ lại những món đồ màu mè để tận dụng nốt. Những cây thông Noel đẫm nước, ông già Noel áo đỏ râu trắng, con tuần lộc ngốc nghếch, dải ruy băng đủ màu sắc và đèn ngôi sao nhấp nháy đồng hành cùng Lâm Hướng Bắc.
+Vừa cởi bộ đồng phục của nhân viên đỗ xe ra đã lại thay sang áo sơ mi trắng ghi lê đen đồng phục, cánh cửa phòng thay đồ không thể ngăn được tiếng nhạc chát chúa từ sàn nhảy, cậu hơi mệt, chỉ cho phép mình năm phút rảnh rỗi để thở, rồi lại mở tấm cửa kim loại ra, trước mặt đụng phải một nhân viên tiếp khách ăn mặc mỏng manh đang say bí tỉ.
 
-Cậu rẽ qua một góc, vô tình nhìn thấy một cây thông đã bị vặt trụi gần hết đồ trang trí, không hiểu sao lại thò tay ra khỏi áo mưa, giật lấy một chiếc chuông đồng nhỏ đã bong sơn nhét vào túi. Đến khi cậu tìm được một mái hiên che cho chiếc xe điện, chiếc chuông to vừa một bàn tay buộc dây đỏ ấy đã đổi chủ, được cậu treo lên tay lái.
+Lâm Hướng Bắc đỡ đối phương một tay.
 
-Lâm Hướng Bắc khẽ gảy nó vài cái, một chút niềm vui thời thơ ấu lâu rồi không thấy chợt ùa về.
+Nhân viên tiếp khách của Muselbar có cả nam lẫn nữ, tính phí theo giờ, các hoạt động vui chơi trong vùng xám\* rất linh hoạt, cộng thêm hoa hồng từ rượu bán ra, những người dám lăn xả thường kiếm được kha khá, nhưng nếu không phải thiếu tiền đến cùng cực, Lâm Hướng Bắc sẽ không chọn công việc này, chưa nói đến việc ngày đêm đảo lộn làm hỏng cơ thể mà khi gặp phải quấy rối còn phải nhịn nhục cười đùa.
 
-Cậu làm nhân viên đỗ xe ở khách sạn cao cấp nổi tiếng Kim Sa tại Thâm Quyến theo ca, từ 5 giờ chiều đến 11 giờ đêm. Nhưng đây không phải công việc duy nhất của cậu.
+_Chú thích_
 
-Đầu tiên, cậu quẹt thẻ, đi qua lối nhân viên vào phòng thay đồ, mặc bộ đồng phục màu xám xanh đồng bộ được phát. Vừa kéo khóa xong, một đồng nghiệp ở bếp sau đã đẩy cửa vào chào: “Đến rồi à, Tiểu Lâm.”
+_(\*) Nơi nằm giữa vùng sáng và vùng tối, không kinh doanh theo cách không hoàn toàn hợp pháp hay minh bạch theo chuẩn mực thông thường, nhưng cũng không vi phạm pháp luật rõ ràng, có thể lách luật._
 
-Lâm Hướng Bắc gọi “anh Vương”, cất áo khoác vừa cởi ra, thuận miệng đáp: “Mưa rồi, lạnh thật đấy.”
+Ông chủ là con nhà giàu đời thứ ba ở Thâm Quyến, họ Diêu tên Phong Lượng, ngại cái tên quê mùa, mọi người đều gọi anh ta là Colin.
 
-Cái lạnh ở Thâm Quyến không nằm ở nhiệt độ, mà ở cái ẩm ướt len lỏi khắp nơi. Đi ngoài đường như sống trong một tuýp kem đánh răng bạc hà khổng lồ, gió thổi bọt kem tung tóe, phết lên mặt, lên da, không tránh khỏi thấy lạnh buốt.
+Lâm Hướng Bắc lướt thấy thông tin tuyển dụng trên mạng xã hội, nhắm mắt bấm bụng đến phỏng vấn, Colin vừa gặp cậu đã thân thiết choàng vai, ngay đêm đó bèn bảo nhân viên dẫn cậu làm quen với môi trường.
 
-Mấy ngày mưa này nhiệt độ giảm mạnh, nhưng khách sạn càng cao cấp, quy định lại càng nghiêm ngặt: dù thế nào nhân viên cũng không được mặc thêm áo khoác bên ngoài đồng phục. Người khổ nhất là các cô lễ tân ở cửa, váy ngắn đồng phục đen, tất mỏng, giày cao gót, đứng ở chỗ gió lùa vài tiếng liền. So với họ, Lâm Hướng Bắc được mặc áo len bên trong đồng phục đã là may mắn lắm rồi.
+Lâm Hướng Bắc mới đến hoàn toàn không quen với không gian ồn ào náo nhiệt, học cách cúi người châm thuốc, thêm đá cho khách, bị sờ tay, lông tơ trên người dựng đứng như mèo, cứng đờ không biết phản ứng ra sao, trong đầu chỉ có mỗi câu “cậu làm không nổi việc này”. Nhưng chưa kịp tìm Colin nói rõ, vị khách đã sờ tay cậu kia lại tính doanh thu bán một chai rượu ngoại trị giá một nghìn rưỡi vào phần của cậu -- Lâm Hướng Bắc có thể được hưởng một trăm rưỡi tiền hoa hồng!
 
-Kim đồng hồ qua 5 giờ, lượng khách dần đông lên.
+Mười năm qua, Lâm Hướng Bắc không có bằng tốt nghiệp cấp ba lại có tiền án, đã từng làm rất nhiều việc.
 
-Lâm Hướng Bắc khởi động cơ thể tại chỗ, “hăm dọa” bàn tay trái đang âm ỉ đau “cố lên chút đi”, nở một nụ cười tiêu chuẩn rồi mau chóng bước tới chỗ một chiếc xe sang vừa dừng, hơi cúi người giơ tay: “Chào anh, mời đi lối này.”
+Từ lúc rời khỏi quê hương, cậu chưa từng nói với bất kỳ ai chuyện ngồi tù, bản thân cũng không muốn nhớ lại.
 
-Thời buổi kinh tế khó khăn, ngay cả việc làm nhân viên đỗ xe cũng cạnh tranh khốc liệt, công việc này không dễ kiếm.
+Sau khi ra tù, cậu đến Quảng Châu - nơi được gọi là thánh địa của dân đi làm, tìm một nhà máy bao ăn ở, tiếc là lúc đó tay trái cậu gần như không thể dùng được, không theo kịp tiến độ dây chuyền, chỉ mấy ngày sau quản lý đã kết toán lương rồi đuổi cậu đi.
 
-Lâm Hướng Bắc còn nhớ lúc phỏng vấn, tính cả cậu là bốn người, trừ cậu ra ai cũng có kinh nghiệm. Lúc đó cậu không hy vọng gì, vậy mà quản lý lại chọn cậu, khiến mấy người kia tức tối không phục.
+Sáu năm ở Quảng Châu, Lâm Hướng Bắc từng làm phục vụ, phát tờ rơi, giao đồ ăn, làm bảo vệ, còn bày cả quầy hàng rong, đều là những việc vất vả chỉ đủ sống qua ngày, trừ đi tiền nhà và chi phí sinh hoạt hàng ngày thì không còn bao nhiêu.
 
-Sau này vào làm mới nghe một đồng nghiệp buôn chuyện, bảo đây là quy tắc tuyển dụng ngầm của khách sạn Kim Sa: thích chọn người trông ưa nhìn — Lâm Hướng Bắc cứ thế mơ mơ màng màng kiếm được bát cơm nhờ vào khuôn mặt.
+Ba năm trước ngồi xe khách đến Thâm Quyến, trước sau cũng chỉ quanh quẩn mấy công việc ấy.
 
-Cậu làm việc được hơn nửa tháng, chăm chỉ không chút sai sót, nhưng mấy hôm nay vì thức khuya uống rượu, nghỉ ngơi không đủ, cậu hay ngáp vặt. Bởi vậy nên quản lý không hài lòng, gọi riêng cậu ra nói chuyện, yêu cầu cậu phải thể hiện tinh thần tốt nhất với khách.
+Lúc đó kinh tế livestream thịnh hành, trên mạng rầm rộ lan truyền rằng đó là một trong những cơ hội để vượt giai cấp cho người bình thường, Lâm Hướng Bắc có đôi chút nhan sắc cũng học theo người ta đăng ảnh selfie lên mạng để mở livestream, kỹ thuật chụp ảnh của cậu tệ đến mức không thể cứu vãn, ảnh còn không bằng một nửa người thật, livestream co ro trong căn phòng thuê nhỏ, cậu đối diện với ống kính, cảm thấy ngứa ngày khó chịu như bị kim châm, nhìn chằm chằm vào những bình luận lác đác lướt qua ngượng ngùng nói lời chào.
 
-Lâm Hướng Bắc nào dám cãi, cười trừ xin lỗi, lúc buồn ngủ lại lén véo đùi mình, kết quả chẳng đuổi được cơn buồn ngủ, chỉ làm mắt cay xè rơi mấy giọt nước.
+Trong phiên livestream đầu tiên, số người xem trực tiếp chưa bao giờ vượt quá hai chữ số, hai tiếng kiếm được mười ba tệ tám hào.
 
-Cậu cầm ô đưa xe khách vào chỗ đỗ xe sâu nhất, mưa xiên xiên làm ướt nửa bên áo, giày tất cũng thấm nước, lạnh run người. Nhưng cậu vẫn cười, nụ cười hơi cứng nhắc, cậu phải cười.
+Tiền không kiếm được, hộp thư lại nhận được một đống tin nhắn riêng kỳ quặc.
 
-“Tiểu Lâm.” Đồng nghiệp gọi: “Vào lau nước trên người đi, tôi thay cậu một lúc.”
+“Bay khắp cả nước được không? Giá cụ thể thế nào?”
 
-Lâm Hướng Bắc cười cảm ơn, lần này là thật lòng, mắt cong cong lộ chút ngây ngô chất phác, dường như đây mới là con người thật của cậu: “Cảm ơn anh.”
+“Trai đẹp cùng thành phố, hẹn không?”
 
-Một chiếc xe chạy tới làm nước bắn tung tóe trên đường. Lâm Hướng Bắc chạy chậm lại, đồng nghiệp vẫy tay: “Đi đi.”
+“Anh đẹp trai quá, muốn liếm chân anh.”
 
-Cậu mới khuất sau góc rẽ.
+“Em bao nhiêu tuổi rồi, có bán đồ dùng rồi không?”
 
-Dưới ánh đèn đường vàng vọt trong cơn mưa lất phất, một chàng trai cao gầy chống ô đen bước xuống từ ghế sau xe, đứng thẳng, vòng sang mở cửa cho đồng nghiệp nữ bên kia.
+Vào trang cá nhân toàn là đàn ông, Lâm Hướng Bắc tức đến bốc khói, trả lời chỉ có mấy từ “Cút đi, đồ điên, chết đi”, cảm thấy vẫn chưa hả giận, lại sao chép thêm một đống văn bản chửi người trên mạng gửi qua từng cái một.
 
-“Hạ Tranh.” Cửa kính ghế lái hạ xuống, Chu Trác thò đầu ra: “Mấy cậu vào trước đi, tôi với A Minh đi tìm chỗ đỗ xe.”
+Vì chửi tục, tài khoản của cậu bị báo cáo ác ý, bị khóa vĩnh viễn, mà quà tặng không đạt tới mức tiền có thể rút, hai tiếng làm không công còn bị quấy rối vô số lần, từ đó Lâm Hướng Bắc dập tắt ý định làm giàu qua mạng, chân thành dựa vào sức lao động nuôi sống bản thân.
 
-“Được, lát gặp.”
+Cho đến một năm trước, cha của Lâm Hướng Bắc - Lâm Học Khôn được chẩn đoán bị suy thận giai đoạn cuối.
 
-Hạ Tranh cùng vài đồng nghiệp chen dưới hai chiếc ô đi về phía sảnh lớn. Trương Tiểu Mẫn đứng cạnh anh nói: “Chu Trác cũng thật là, tụ tập mà không xem dự báo thời tiết trước, mưa này làm hỏng cả lớp trang điểm của tôi rồi.”
+Lâm Hướng Bắc không có chút tiền tích lũy nào, lập tức bị đè bẹp.
 
-Giọng điệu trách móc, nhưng chỉ là đùa, không có ý oán giận. Mọi người cười phá lên, tiếng cười vô tư xua tan cái ảm đạm của cơn mưa.
+Mối quan hệ của cậu với Lâm Học Khôn rất bình thường, cậu đi qua lại giữa Quảng Châu và Thâm Quyến để làm việc, thỉnh thoảng gửi tiền cho Lâm Học Khôn cũng xa quê làm công ở nơi khác, cha con một năm không gặp quá hai lần, nếu không phải Lâm Học Khôn ngất ở chỗ làm được đưa đến bệnh viện, bệnh viện dùng điện thoại của Lâm Học Khôn gọi cho cậu, cậu sẽ không biết tình trạng bệnh của Lâm Học Khôn đã nguy kịch đến vậy.
 
-Các cô lễ tân đứng ở cửa đặt tay trước bụng, đồng thanh ngọt ngào: “Chào mừng quý khách đến với khách sạn Kim Sa.”
+Không thay thận thì chỉ còn nước chờ chết.
 
-Nhóm thanh niên tinh thần phấn chấn bước qua cửa xoay, nhân viên dẫn đường lập tức tiến tới, cười hỏi: “Chào anh chị, xin hỏi có đặt bàn trước không?”
+Lâm Hướng Bắc đón Lâm Học Khôn đến Thâm Quyến, hai cha con đối mặt với chi phí y tế cao ngất bó tay không biết làm sao, Lâm Học Khôn lau nước mắt già nua nói muốn từ bỏ điều trị.
 
-Hạ Tranh đứng gần, đọc mã đặt bàn đã giữ, vừa dứt lời, từ cửa lớn cách đó một đoạn vang lên giọng nói hơi cao vút: “Không ở đúng vị trí của mình, hấp ta hấp tấp chạy lung tung làm gì?”
+Lâm Hướng Bắc nghiến răng nói dù thế nào cũng phải giữ mạng cho Lâm Học Khôn, nói thì dễ nhưng làm mới khó, những ngày gom tiền đó đi đến đâu trời cũng xám xịt, ánh nắng chiếu xuống mà không cảm nhận được chút hơi ấm nào.
 
-Theo tiếng động, anh nhìn ra ngoài qua cánh cửa xoay màu vàng kim, thấy một người trông như quản lý đang mắng nhân viên. Tầm nhìn hạn chế, bóng dáng màu xám xanh bị che khuất phần lớn, không thấy rõ mặt, nhưng dường như có một cảm giác mơ hồ thúc giục anh nhìn kỹ hơn.
+Cậu vay tiền khắp các bạn bè đồng nghiệp quen biết, lại vét hết những khoản vay trên mạng có thể vay được để Lâm Học Khôn làm lọc máu, nhưng vẫn không đủ, thiếu nguyên một trăm tám mươi nghìn, đây mới chỉ là tiền phẫu thuật, chi phí sau đó là một cái hố không đáy.
 
-Hạ Tranh hơi xoay người, vai bị vỗ một cái. Trương Tiểu Mẫn hỏi: “Nhìn gì thế?”
+Tìm đâu ra số tiền này đây?
 
-Bị cắt ngang, anh thấy người quản lý đã nhận ra việc mắng nhân viên trước cửa là bất lịch sự, vội vẫy tay đuổi người đi.
+Trải qua hơn nửa năm khổ sở, cuối cùng cũng đợi được nguồn thận, Lâm Hướng Bắc hết đường xoay xở đành phải vay nặng lãi.
 
-Hạ Tranh thu tầm mắt lại, khẽ cười: “Không có gì, đi thôi.”
+Người cho vay có biệt danh là anh Đại Phi, chiều nay vừa nhắn tin nhắc Lâm Hướng Bắc trả tiền, đến giờ Lâm Hướng Bắc vẫn chưa trả lời.
 
-Phòng riêng ở tầng năm, phía trong, bàn lớn đủ bảy người, vừa khít nhóm đến hôm nay.
+Ba tháng qua, Lâm Hướng Bắc vay chỗ này đắp chỗ kia, tiền trả chẳng được bao nhiêu, lãi thì ngày càng chồng chất, cứ tiếp tục thế này, sớm muộn gì cậu cũng bị anh Đại Phi đánh gãy nốt cái tay còn lại.
 
-Họ đều làm việc tại văn phòng Luật sư Quân Bình – một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác (1), Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
+Vì vậy dù không quen với bầu không khí ở Muselbar, Lâm Hướng Bắc vẫn chọn ở lại, dùng gần hết hai mươi ba nghìn tiền lương tháng trước để trả nợ.
 
-Chu Trác có gia thế, mối quan hệ rộng, thầy của Hạ Tranh lại là cây đại thụ trong ngành, nổi danh “Luật sư số một Đài Bắc”. Một người có lợi thế bẩm sinh, một người được chống lưng bởi nhân vật có quyền uy, cộng thêm năng lực chuyên môn xuất sắc, trong ngành luật sư chênh lệch lớn về nguồn khách và thu nhập, họ thực sự là những ngôi sao đang lên, tài năng trẻ xuất chúng.
+Colin từng khuyên cậu, với điều kiện của cậu nếu chịu chơi với khách một chút, thu nhập sẽ tăng gấp bội.
 
-Nhân viên mang thực đơn lên, gọi hai món chính, Chu Trác và Thái Bác Minh đỗ xe xong cũng vào phòng.
+Chơi cái gì thì không cần nói cũng hiểu -- gần đó có khách sạn, thường xuyên thấy khách trong quán dẫn nhân viên tiếp khách ra vào.
 
-Phòng bật máy sưởi ấm, Chu Trác phủi nước trên người, ngồi xuống nói: “May mà vừa nãy cậu nhân viên đỗ xe cầm ô đưa bọn tôi đến cửa, không thì ướt hết. Tôi bảo cậu ta lát nữa đưa thêm một đoạn đường.” Anh ấy chỉ thuận miệng nhắc tới: “Mọi người gọi món chưa?”
+Một khi đã kiếm được tiền nhanh thì rất khó quay lại được con đường đúng đắn, trong cái chảo nhuộm lớn này, Lâm Hướng Bắc cũng không biết mình có thể kiên trì giữ vững ranh giới đến khi nào, từ lúc đầu bị sờ tay đã muốn bỏ chạy đến giờ có thể ép bản thân thích ứng với việc bị khách trêu chọc, cậu chỉ mất hai tuần.
 
-“Sao mà không đợi anh được chứ?” Trương Tiểu Mẫn hơi nhổm dậy đưa thực đơn cho Chu Trác: “Xem đi.”
+Khói thuốc phả vào mặt, cậu nhíu mày ho sặc sụa, bị kéo vào bàn uống rượu cũng chỉ giãy giụa một chút tượng trưng.
 
-Nhưng Hạ Tranh vẫn nghĩ về nhân viên bị mắng lúc nãy, dáng người cao gầy, tay áo đồng phục rộng lộ ra cổ tay trắng mảnh khảnh, có phải nhân viên đỗ xe Chu Trác nhắc đến không?
+“Sao hôm nay đến muộn thế?” Khách quen Hoàng Kính Nam một tay đặt lên vai cậu, một tay cầm ly thủy tinh đầy rượu: “Uống hết ly này đi, chai này tính cho cậu.”
 
-“Hạ Tranh, Hạ Tranh?”
+Thời buổi này đồng tính không phải chuyện gì hiếm thấy, cả Muselbar đều biết Hoàng Kính Nam theo đuổi Lâm Hướng Bắc rất lâu rồi, phần lớn tiền hoa hồng rượu của Lâm Hướng Bắc đều đến từ gã, là khách hàng không thể đắc tội.
 
-Bị gọi, anh giật mình thoát khỏi dòng suy nghĩ: “Tôi không kiêng gì.”
+Lâm Hướng Bắc đã uống thuốc giải rượu trước, không nói gì, nhận ly rượu ngửa đầu uống cạn.
 
-“Ai bảo không?” Thái Bác Minh cười khẩy: “Chẳng anh phải không ăn cay sao?”
+Hoàng Kính Nam vui vẻ cười lớn, tay từ vai chuyển xuống ôm eo: “Thích nhất kiểu không õng ẹo này của cậu.”
 
-Hạ Tranh khựng lại, vì vài chuyện từ rất lâu trước kia, nhiều năm nay anh hầu như không đụng đến đồ cay. Nhưng đã lâu rồi anh không còn nhớ đến người đó nữa, trong dòng chảy thời gian, gương mặt ấy thậm chí đã trở nên hơi mờ nhạt – sao đêm nay lại nhớ tới?
+Rượu là rượu mạnh, cảm giác bỏng rát nhanh chóng lan từ cổ họng xuống dạ dày, Lâm Hướng Bắc uống vội, lập tức ho khan, Hoàng Kính Nam nhân cơ hội áp sát bên tai cậu, thổi một hơi: “Gọi cho cậu bao nhiêu rượu rồi, bao giờ mới cho tôi chút mặt mũi ra ngoài ăn bữa cơm?”
 
-Anh không phản bác, thuận theo nói: “Vậy tôi gọi món cá hấp lá sen.”
+Lâm Hướng Bắc giả vờ không nghe thấy, gượng cười nói: “Anh Hoàng, tôi đi làm việc trước.”
 
-Bất chợt, một tia chớp tím trắng xé ngang trời, tiếp theo là tiếng sấm rền vang, khiến cả nhóm đang cười đùa giật mình.
+Hoàng Kính Nam mất hứng, rõ ràng rất không hài lòng với việc Lâm Hướng Bắc từ chối hết lần này đến lần khác, mặt xị xuống, nói Lâm Hướng Bắc không hoảng là nói dối, nhưng cũng đành giả vờ như không nhận ra, đứng dậy nhanh chóng đi vòng ra khỏi bàn.
 
-Trương Tiểu Mẫn lại trêu Chu Trác không xem dự báo thời tiết, mấy hôm trước bọn họ đã hẹn tan làm cùng đến đây, ai ngờ đến chiều trời lại trở nên âm u.
+Một đêm đáng sợ nhưng không xảy ra chuyện gì quá đáng, bốn giờ sáng Muselbar vẫn náo nhiệt như cũ.
 
-Chu Trác cười, nâng chén trà thay rượu: “Luật sư Trương, tôi nhận tội, tự phạt một ly.”
+Ở trong bầu không khí vẩn đục suốt một thời gian dài, Lâm Hướng Bắc tranh thủ lúc rảnh ra cửa sau hóng gió.
 
-“Đây!” Trương Tiểu Mẫn vỗ tay: “Có đầy đủ nhân chứng, anh đừng hòng chối!”
+Áp lực quá lớn, cậu nhiễm thói quen hút thuốc, một bao thuốc giá rẻ hơn mười tệ, cạch một tiếng bật lửa bùng lên, vừa châm thuốc, phía sau vang lên một tiếng quát lớn: “Lâm Hướng Bắc.”
 
-Ngoài trời mưa gió không ngớt, trong phòng bắt đầu mở tiệc sôi nổi, một khung cửa sổ chia đôi hai thế giới nóng lạnh.
+Bị đòi nợ đòi nhiều, chỉ nghe thấy giọng nói này cậu đã sợ hãi muốn chạy theo bản năng, nhưng bọn họ đã nắm rõ nơi làm việc và chỗ ở của cậu, cậu còn có thể chạy đi đâu được?
 
-Lâm Hướng Bắc vẫn đứng dưới ô run rẩy, ngẩng đầu nhìn tòa nhà lộng lẫy ánh vàng và đèn hoa rực rỡ, lòng chỉ nhớ đến chiếc chuông nhỏ tròn trịa treo trên tay lái, đó là chiến lợi phẩm hôm nay của cậu.
+Lâm Hướng Bắc đứng cứng người tại chỗ, điếu thuốc kẹp trong kẽ tay, quay đầu lại: “Anh Đại Phi.”
 
-(1) Chú thích:  “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.
+Người đàn ông hơi mập dẫn theo hai tên tay chân ép sát về phía cậu: “Mày giỏi lắm, tin nhắn không trả lời, điện thoại cũng không nghe, tao đành phải đến tìm mày, sao, không muốn trả tiền à?”
+
+Tên tay chân đá một cú vào bụng Lâm Hướng Bắc, lưng cậu đau đớn đập vào tường, cong người ôm bụng ngẩng đầu khó nhọc nói: “Cho tôi thêm vài ngày nữa, đợi cuối tháng lương phát xuống…”
+
+Điếu thuốc trong tay bị giật lấy, đầu thuốc lập lòe đổi hướng dí vào vai Lâm Hướng Bắc, giọng cậu ngưng bặt, thay bằng tiếng kêu đau đớn, mùi khét lan tỏa quanh chóp mũi.
+
+Lâm Hướng Bắc đánh nhau rất giỏi, nhưng đó đã là chuyện rất lâu trước kia, tình trạng cơ thể hiện tại của cậu không đủ để giúp cậu thoát khỏi vòng vây, cậu né một cái, tay trái tay phải đều bị giữ chặt, anh Đại Phi ném điếu thuốc đã tắt xuống rãnh nước, chọc tay vào thái dương cậu: “Đừng nói nhảm, có bao nhiêu trả bấy nhiêu.”
+
+Lâm Hướng Bắc đưa điện thoại cho họ lướt lên lướt xuống kiểm tra, nói hết nước hết cái mới khiến họ tin cậu thật sự không có tiền.
+
+Anh Đại Phi gãi đầu như bắt rận: “Thế này đi, cuối tháng cũng được, thêm ba nghìn.”
+
+Cho vay nặng lãi chẳng theo quy tắc gì, đòi nợ cũng không từ thủ đoạn nào, Lâm Hướng Bắc nóng lòng muốn thoát thân đành phải đồng ý.
+
+Cậu nhìn người đàn ông nghênh ngang rời đi, dựa vào tường thở hổn hển để xoa dịu cảm giác đau nhói ở vai và bụng, hoàn toàn không thở nổi nữa.
+
+Cũng không phải cố ý để cuộc sống thành ra thế này.
+
+Giọng nói trong trẻo, đầy giận dữ của thiếu niên vẫn văng vẳng bên tai.
+
+“Lâm Hướng Bắc, em đừng hối hận.”
+
+Không có mưa, nhưng trước mắt Lâm Hướng Bắc lại trở nên ướt đẫm.
+
+\--
+
+**_Lời tác giả:_**
+
+Gửi Tiểu Bắc:
+
+Đứa trẻ yêu quý, hôm nay có khóc không?

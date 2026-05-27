@@ -1,9 +1,9 @@
 ---
 layout: ../../../layouts/Layout.astro
-title: "Chương 53"
+title: "Chương 55"
 truyen_id: "ndntkm"
 chuong: 55
-date: "2026-05-18"
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,162 +11,158 @@ tags:
   - "HE"
 ---
 
-## **Chương **53
+## **Chương** 55
 
-Khi mấy người Hạ Tranh đến văn phòng luật Quân Bình, hai đối tác cấp cao đã có mặt ở đó.
+Cuối xuân, trời tối muộn, đã hơn sáu giờ mà mặt trời vẫn chưa lặn hẳn, chân trời vàng nhạt, còn đường chân trời xa xa đã biến thành một vệt sáng vàng rực.
 
-Bầu không khí trong phòng họp vô cùng căng thẳng, trên bàn đặt một chiếc laptop đang mở trang hộp thư chung của văn phòng luật, hiển thị một email mới nhất, nội dung rõ ràng liên quan đến Hạ Tranh.
+Quần áo phơi trên ban công đã khô hết nóng rực, tỏa ra một mùi hương ấm áp.
 
-Email không chỉ tiết lộ việc anh có một người cha là kẻ giết người, mà còn tố cáo anh là một người đồng tính có lối sống phóng túng, có quan hệ với Lâm Hướng Bắc, người từng ngồi tù vì buôn bán hàng cấm, sau đó làm nhân viên tiếp khách không lành mạnh tại quán bar.
+Trong bếp liên tục vang lên hàng loạt những tiếng động, tiếng dao cắt rau sột soạt, nồi hầm sôi lục bục, máy hút khói rì rì, những âm thanh này hòa quyện vào nhau, liên tục không ngừng, tạo nên bầu không khí nhộn nhịp đặc trưng của một gia đình ấm cúng.
 
-Hai bản án pháp lý, video Lâm Hướng Bắc say xỉn trong quán bar, và hình ảnh Hạ Tranh và Lâm Hướng Bắc đi vào cùng một khu chung cư được đính kèm làm bằng chứng.
+Tít--
 
-Mặc dù lỗi lầm của thế hệ cha mẹ không liên quan đến con cái, và việc qua lại với ai là vấn đề đời tư cá nhân của Hạ Tranh, nhưng với tư cách là một luật sư sống bằng pháp luật, nếu không xử lý tốt, hai vấn đề này chắc chắn sẽ gây ảnh hưởng không nhỏ đến sự nghiệp và danh tiếng của anh.
+Lâm Hướng Bắc nghe thấy tín hiệu Hạ Tranh về nhà, tay đang cắt rau khẽ khựng lại, chẳng mấy chốc, sau lưng đã vang đến tiếng bước chân nhẹ nhàng, cậu quay đầu mỉm cười nói: “Sắp ăn được rồi.”
 
-Hơn nữa, email này không những được gửi cho mọi luật sư trong văn phòng mà cả mấy khách hàng hiện đang làm việc với Hạ Tranh cũng nhận được.
+Trong nhà hầu hết thời gian đều là Hạ Tranh nấu ăn, dạo gần đây Hạ Tranh bận việc, Lâm Hướng Bắc ở nhà cả ngày, thỉnh thoảng cũng nổi hứng chuẩn bị bữa tối. Tuy tay nghề của cậu không thể so được với Hạ Tranh, nhưng một bữa ăn được chuẩn bị bằng cả tấm lòng sẽ không thể quá tệ được.
 
-Chẳng cần đợi đến ngày mai, ngay lúc này, trong nhóm chat không có Hạ Tranh, mọi người đã xôn xao, tất nhiên, sau cơn sốc ban đầu, phần lớn đều thể hiện sự bất bình thay cho anh.
+Bữa tối hôm nay rõ ràng mang ý nghĩa đặc biệt, vì so với những ngày bình thường thì bàn ăn quá thịnh soạn. Lâm Hướng Bắc gần như muốn trình diễn tất cả những món sở trường của mình cho Hạ Tranh xem, chẳng khác nào sợ rằng, qua hôm nay sẽ không còn cơ hội nào nữa.
 
-“Địa chỉ mail gửi đã bị xóa.” Chu Trác kiểm tra xong, tức giận đập bàn: “Rõ ràng là nhắm vào Hạ Tranh, dù thế nào cũng phải tìm ra kẻ này.”
+Hạ Tranh dường như không nhận ra sự khác biệt, một tay ôm lấy eo Lâm Hướng Bắc, hôn lên má cậu một cái, cảm thán: “Giỏi quá, không có em tôi không biết phải sống thế nào đây.”
 
-Thái Bác Minh nói: “Tôi có một người bạn là kỹ sư dữ liệu, để tôi sẽ hỏi xem cậu ấy có cách nào không.”
+Lâm Hướng Bắc cảm thấy lời nói của Hạ Tranh có ẩn ý, nhưng lúc này tâm trí cậu đang rối như tơ vò, chỉ ngượng ngùng đẩy Hạ Tranh ra: “Đừng đùa nữa, anh đi múc canh ra đi.”
 
-“Sao tự nhiên lại xảy ra chuyện này?” Trương Tiểu Mẫn phẫn nộ: “Dùng chiêu bẩn thế này, đúng là hèn hạ!”
+Sáu món ăn gia đình, ba món mặn hai món chay một món canh, bày đầy nửa bàn ăn.
 
-Nghề luật sư có tính chất rủi ro cao, thỉnh thoảng sẽ lại xuất hiện mấy vụ tấn công trả thù. Năm ngoái, một đối tác của Quân Bình đã bị bên đối tụng đánh gãy một xương sườn trong lúc đại diện khởi kiện một vụ tranh chấp tình cảm, mặc dù sau đó đã được bồi thường nhưng đến giờ vẫn còn ám ảnh.
+Hôm nay Lâm Hướng Bắc ít nói lạ thường, chỉ liên tục ân cần gắp thức ăn vào bát Hạ Tranh, rồi chăm chú nhìn Hạ Tranh ăn hết từng món cậu tỉ mỉ nấu.
 
-Tình cảnh Hạ Tranh phải đối mặt rõ ràng còn nghiêm trọng hơn, nhưng đây đều là những sự thật không thể phủ nhận, việc cấp bách hiện tại chỉ có thể là tìm ra kẻ chủ mưu đứng sau hành động này rồi mới có thể tiến hành bước tiếp theo.
+Cậu có cả bụng lời muốn nói, nhưng không thể đoán chắc Hạ Tranh có thể sẽ phản ứng thế nào, là ngạc nhiên, tức giận, hay bình tĩnh. Dù là phản ứng nào, cậu cũng không muốn ảnh hưởng đến tâm trạng của Hạ Tranh, phải để anh ăn no đã rồi mới nói chuyện.
 
-Mấy ngườiTrương Tiếu Mẫn không thể ngờ rằng, hôm nay đang vui vẻ đi ra ngoài chúc mừng Hạ Tranh, tự dưng lại có sấm sét động trời như vậy giáng xuống đầu, mọi người đều cảm thấy hơi buồn bã.
+Hôm nay Hạ Tranh cũng không nói nhiều, Lâm Hướng Bắc gắp cho anh bao nhiêu thì anh ăn bấy nhiêu, cho đến khi Lâm Hướng Bắc nhận ra dạ dày con người có giới hạn mới miễn cưỡng dừng việc gắp đồ lại.
 
-Chu Trác với tư cách là tiền bối, trịnh trọng vỗ vai anh: “Hạ Tranh, chúng tôi đều biết rõ cậu là người thế nào, chúng ta vừa là đồng nghiệp, vừa là đối tác, lại còn là bạn bè, chuyện này dù thế nào chúng tôi cũng sẽ tìm cách giúp cậu.”
+Hai người như thường lệ chia nhau công việc, một người dọn bếp, một người xuống lầu đổ rác nhà bếp, mọi thứ không có gì thay đổi. Thậm chí sau khi tắm xong, Hạ Tranh đã vào phòng làm việc, Lâm Hướng Bắc còn ngồi một mình trên ghế sofa ngẩn người gần nửa tiếng, cuối cùng mới nhớ ra không thể kéo dài thêm nữa.
 
-“Đúng vậy.” Trương Tiếu Mẫn nói: “Chúng ta đã xử lý rất nhiều vụ kiện cho người khác, còn có tình huống nào chưa từng thấy chứ, đừng khách sáo với chúng tôi.”
+Trên đời không có bữa tiệc nào là không tàn, dù cậu có tranh thủ từng giây từng phút trân trọng thời gian ở bên nhau, kim đồng hồ cũng không ngừng chuyển động.
 
-Thái Bác Minh đùa giỡn hùa theo: “Cứ sai khiến mấy đứa bọn tôi như tụi trâu ngựa là được.”
+Cậu uống trước một cốc nước lạnh, cố làm dịu trái tim đang xao động, làm vậy chẳng có mấy hiệu quả, dù vậy, cậu vẫn thấp thỏm đứng ở cửa phòng làm việc.
 
-Trương Tiếu Mẫn đấm anh ta một cái: “Anh mới là trâu ngựa!”
+Kỳ lạ là, Hạ Tranh mà cậu tưởng đang bận việc lại chỉ ngồi im lặng sau bàn, thậm chí còn chưa mở máy tính, như thể đang đợi cậu.
 
-Mọi người bật cười, không khí nặng nề trong phòng họp cuối cùng cũng dịu đi đôi chút.
+Tim Lâm Hướng Bắc thắt lại, chậm rãi bước vào nói: “Em có chuyện muốn nói với anh.”
 
-Hạ Tranh nhìn nhóm đồng nghiệp đã làm việc cùng nhau nhiều năm, trong lòng vô cùng trân trọng và xúc động, hết sức cảm kích: “Cảm ơn mọi người.”
+Thật ra trong lòng cậu, địa điểm nói chuyện lý tưởng nhất là ghế sofa, còn phòng làm việc, vì là nơi để học tập và làm việc, nên luôn có cảm giác quá lạnh lẽo.
 
-“Không còn sớm nữa, mọi người hãy về nhà đi, sắp tới còn có trận chiến phải đánh đấy.”
+Cậu kéo ghế ngồi xuống, Hạ Tranh ngồi nghiêm chỉnh đối diện bàn cũng có cảm giác hơi lạnh lùng.
 
-Mọi người nói rồi đi xuống lầu, Chu Trác phụ trách lái xe, hạ cửa kính xuống nói: “Nói với người yêu cậu một tiếng, bữa tối hôm nay chưa ăn xong, lần sau tôi sẽ mời bù lại.”
+Lâm Hướng Bắc rõ ràng đã chuẩn bị rất nhiều lời, nhưng mãi vẫn không mở miệng, chỉ làm thật nhiều động tác trì hoãn. Đầu tiên là đặt hai tay lên bàn, vài giây sau, đan chéo đặt trước bụng, sau một lúc nữa, lại nắm chặt lấy nhau đặt vào giữa hai đùi, kẹp chặt.
 
-Hạ Tranh không định kể với bất cứ ai về việc Lâm Hướng Bắc từng thụ án, nhưng sự việc không như mong muốn, không ngờ lại bị tiết lộ theo cách bất ngờ như vậy, khiến anh không kịp trở tay.
+Hạ Tranh vẫn đang chăm chú nhìn cậu, thời gian chờ đợi quá dài, nhưng anh dường như nhìn thấu được nỗi giằng xé trong lòng cậu, không có ý định thúc giục.
 
-Hơn ai hết, anh mong Lâm Hướng Bắc có thể hòa nhập vào vòng tròn xã hội của mình, mà giờ đây, vì tin tưởng vào sự lựa chọn của Hạ Tranh, mọi người đều đã ngầm nhất trí không ai nhắc đến quá khứ sai lầm của Lâm Hướng Bắc.
+“Em…” Miệng của Lâm Hướng Bắc và những lời cậu sắp nói đang âm thầm tranh đấu với nhau, tầm quan trọng của việc lựa lời để nói hiện rõ trên khuôn mặt.
 
-Thật may mắn biết bao khi có được một nhóm đồng minh như vậy.
+Cuối cùng cậu cũng khó khăn mở lời, giọng rất nhẹ, nhưng không khác gì ném một quả bom khổng lồ xuống mặt đất yên tĩnh: “Em nghĩ, chúng ta tách ra sẽ tốt hơn.”
 
-Trời bắt đầu mưa phùn, cần gạt nước kêu kẽo kẹt, xe đã vào bãi đỗ xe, nhưng Hạ Tranh không vội xuống, ngồi yên trên ghế lái khoảng mười mấy phút để ổn định lại tâm trạng đang dao động vì sự cố bất ngờ trước khi về nhà.
+Cẩn thận đến mức không dùng hai từ “chia tay”.
 
-Lâm Hướng Bắc vừa nghe thấy tiếng nhập mật khẩu đã vội vã chạy ra phòng khách.
+Hạ Tranh kiên nhẫn chờ đợi để nghe một câu như vậy, lông mày nhíu chặt, khẽ nâng cằm lên, thở ra nặng nề, nhắm mắt lại. Biểu cảm của anh nằm giữa sự thất vọng tột độ và “quả nhiên là thế“, khi mở mắt ra, ánh mắt sắc bén bắn thẳng vào gương mặt hơi tái nhợt của Lâm Hướng Bắc.
 
-“Anh về rồi.”
+Anh gần như lạnh lùng cười giễu: “Vậy bữa tối hôm nay là bữa tiệc chia tay à?”
 
-Hạ Tranh hơi cúi người cởi giày, Lâm Hướng Bắc tự nguyện đặt đôi giày da anh thay ra vào tủ giày, ngước mặt lên hỏi: “Bên ngoài có mưa phải không?”
+Ngừng lại một chút, cho Lâm Hướng Bắc một cơ hội lựa chọn: “Em đã quyết định rồi đến thông báo cho tôi một tiếng, hay là đến bàn bạc với tôi?”
 
-“Có mưa nhỏ.” Hạ Tranh bình tĩnh: “Em về lúc mấy giờ vậy?”
+Bàn bạc thường có chỗ để cứu vãn. Hạ Tranh tựa vào lưng ghế, hai chân dài thoải mái bắt chéo vào nhau, là một tư thế rất thoải mái, nhưng các khớp ngón tay đặt trên đầu gối lại âm thầm siết chặt.
 
-“Mới về được nửa tiếng.” Lâm Hướng Bắc đi đến bàn ăn, mở hai túi đựng hộp nhựa ra: “Tối nay anh hầu như chưa ăn gì đã đi, có đói không? Em đã mang vài món về, để em hâm nóng trong lò vi sóng cho anh ăn đêm nhé?”
+Lâm Hướng Bắc đã tưởng tượng rất nhiều viễn cảnh, nhưng không có viễn cảnh nào là Hạ Tranh bình tĩnh đến đáng sợ, khiến cậu không thể ứng phó như vậy. Cậu cảm thấy có một cơn gió lạnh thổi qua gáy, làn da ở đó ngay lập tức nổi lên một lớp da gà. Nhưng cửa sổ đóng chặt, gió không thể lùa vào được, đó chỉ là ảo giác của cậu.
 
-Hạ Tranh vòng qua ôm eo Lâm Hướng Bắc từ phía sau, hôn lên má cậu một cái, thở dài rất sâu rồi nói: “Đừng bận rộn nữa, tôi không ăn được.”
+Cậu cứng đầu nói tiếp: “Em đã sắp xếp xong hành lý rồi.”
 
-Lâm Hướng Bắc quay đầu lại một chút: “Sao lại như vậy được? Để em bóc vài con tôm cho anh ăn lót dạ đi, anh buông tay ra đã.”
+Hành lý chỉ là cách nói lịch sự: vài bộ quần áo cũ cậu mang tới, còn lại, không động đến thêm một món nào Hạ Tranh mua cho.
 
-Hạ Tranh đặt cằm lên vai cậu: “Không buông.”
+Làm bất cứ việc gì cũng phải có lý do, trước khi Hạ Tranh kịp hỏi, cậu đã tự giác nói: “Những chuyện gần đây xảy ra với anh, em biết cả rồi.”
 
-Cậu không biết Hạ Tranh đã trở nên giỏi ăn vạ như vậy từ bao giờ, lại thương anh đi làm về rồi còn bị gọi đi tăng ca khẩn cấp, vùng vẫy vài cái tượng trưng nhưng không vùng ra được, đành để anh ôm mình, dù sao cũng không ảnh hưởng đến việc bóc tôm.
+Trong mắt cậu lộ ra sự phẫn nộ và đau buồn sâu sắc: “Em cũng biết là Hoàng Kính Nam gây ra, biết anh không nói với em là để em không phải lo lắng, nhưng em không thể giả vờ ngốc nghếch coi như không có chuyện gì xảy ra được.”
 
-Lâm Hướng Bắc nhanh chóng gỡ bỏ cái đầu béo và bộ áo giáp mềm của chú tôm, đưa thịt tôm mọng nước và đầy đặn đến miệng Hạ Tranh, “a” một tiếng.
+Cậu càng nói càng kích động, chân đạp xuống đất, nửa thân trên hơi nghiêng về phía trước, đưa ra kết luận: “Đến lúc này, em càng không thể liên lụy đến anh!”
 
-Hạ Tranh ngậm miếng tôm trong miệng, nhưng ánh mắt vẫn luôn dõi theo khuôn mặt yên bình của Lâm Hướng Bắc không dời, cứ vậy ăn năm, sáu con, anh mới luyến tiếc buông tay ra: “Đủ rồi.”
+Hạ Tranh không đưa ra bất kỳ phản hồi nào, đổi tư thế ngồi, bỏ chân đang bắt chéo xuống.
 
-Thấy anh thực sự không có hứng ăn, Lâm Hướng Bắc không ép nữa, đặt tất cả thức ăn vào tủ lạnh để bảo quản, đi vào bếp rửa tay, cất giọng nói: “Bộ đồ ngủ em đã gấp gọn đặt trên giường rồi, anh đi tắm đi.”
+Lâm Hướng Bắc còn lời muốn nói: “Em đã lén tìm hiểu rồi, ngay cả khi em thực sự có thể thi đỗ ngành Luật, em cũng hoàn toàn không đủ điều kiện làm việc ở văn phòng luật, phải không?”
 
-Vì có một tổ ấm ấm áp, giọng cậu mang theo sự nhẹ nhàng và tươi sáng của một người được sống trong môi trường an toàn tuyệt đối -- Hạ Tranh sẽ không để bất kỳ gió mưa nào gây nguy hại gì cho Lâm Hướng Bắc.
+Từ trước đến nay cậu vẫn luôn tự lừa mình, như đi trên một lớp băng mỏng, tưởng rằng chỉ cần đủ cẩn thận là có thể đến được cuối con sông băng, ôm lấy mùa xuân ấm áp, nhưng những kẻ ôm tâm lý may mắn cuối cùng đều sẽ bị hiện thực tàn khốc tát cho tỉnh lại.
 
-Hôm nay Lâm Hướng Bắc được ra ngoài hóng gió nên vô cùng vui vẻ, nói chuyện nhiều hơn hẳn, mặc dù đã không còn sớm nhưng vẫn chẳng buồn ngủ.
+Cậu đang chờ Hạ Tranh phản bác lời của mình, nhưng sự thật đã chắc chắn thì không thể nào đảo ngược.
 
-Hạ Tranh nằm nghiêng, một tay chống đầu lặng lẽ nhìn biểu cảm sống động của Lâm Hướng Bắc, một lúc sau ngồi dậy hôn nhẹ lên đôi môi mấp máy của cậu.
+“Thật ra em học rất vất vả, các điều luật nhiều đến mức không thể nhớ hết, câu hỏi nào cũng cực kỳ khó.” Lâm Hướng Bắc thất vọng cúi đầu: “Em chỉ không muốn anh thất vọng, nên em mới làm ra vẻ rất hứng thú thôi.”
 
-Lâm Hướng Bắc khẽ kêu lên một tiếng, tay Hạ Tranh luồn vào từ vạt áo ngủ mềm mại, giọng khàn khàn: “Nói tiếp đi.”
+Câu này không hoàn toàn là dối trá, nửa thật nửa giả.
 
-Đầu ngón tay khô ráo từ từ di chuyển lên trên, xoay vòng quanh.
+Lâm Hướng Bắc không dám nhìn vào mắt Hạ Tranh, nói cho đối phương kế hoạch của mình: “Em đã nghĩ kỹ rồi, em vẫn sẽ đi làm để từ từ trả lại số tiền anh đã cho em mượn. Nhà hàng của Hạ Lạc đang tuyển người, lương thưởng cũng không tệ, có cậu ấy giới thiệu em có thể đi làm ngay mà không cần phỏng vấn.”
 
-Hạ Tranh hiểu rõ cơ thể Lâm Hướng Bắc, biết chỗ nào của cậu không chịu nổi sự trêu chọc.
+Cậu lại đầy áy náy và chân thành nói: “Xin lỗi, Hạ Tranh, em nợ anh quá nhiều, em lại còn làm hại anh. Em không biết phải làm thế nào để giúp anh, nhưng em cảm thấy…”
 
-Giọng Lâm Hướng Bắc bắt đầu trở nên đứt quãng, nói ít, thở nhiều, vì ngồi xếp bằng nên phải hạ mắt xuống mới có thể nhìn rõ biểu cảm của Hạ Tranh, đôi mắt Hạ Tranh sâu thẳm khó dò, còn có một chút ý cười nguy hiểm.
+Đầu cậu đã cúi thấp đến không thể thấp hơn, hai tay nắm chặt thành nắm đấm, một lần nữa thông báo quyết định đau đớn của mình: “Chúng ta tách ra sẽ tốt hơn.”
 
-Thường thì vào lúc này, chắc chắn là không thể nói tiếp được nữa.
+Không khí như đông cứng lại, cơn gió lạnh không biết đến từ đâu càng trở nên mạnh hơn, Lâm Hướng Bắc không khỏi rùng mình.
 
-Một góc áo bị vén lên.
+Cậu nghe thấy một tiếng thở dài rất nhẹ.
 
-“Cắn lấy.”
+Một lúc lâu sau, Hạ Tranh đột ngột hỏi bằng, giọng anh rất trầm: “Là tôi đối xử với em chưa đủ tốt sao?”
 
-Lâm Hướng Bắc làm theo, bị đẩy dựa vào mép giường, Hạ Tranh hôn xuống, không phải môi cậu, mà là một nơi nào đó khác.
+Câu hỏi bất ngờ khiến Lâm Hướng Bắc vội vàng ngẩng đầu lên, kiên quyết phủ nhận: “Tất nhiên là không phải!”
 
-Cậu cảm thấy rất xấu hổ, tuy nhiên chỉ có một bên được chăm sóc, bên bị bỏ rơi đang lặng lẽ phản kháng theo cách của mình dưới mắt Hạ Tranh.
+Cậu nhìn rõ biểu cảm của Hạ Tranh trong ánh sáng trắng lạnh, không đúng, Hạ Tranh không có biểu cảm. Không cười, không giận, như một bức tượng đẹp đẽ ba chiều nhưng không có sức sống, nhưng dưới mạch máu của anh, có những cảm xúc dữ dội đang âm thầm cuộn trào.
 
-Lâm Hướng Bắc muốn kêu, áo lập tức rơi xuống, phủ lên Hạ Tranh.
+Trong chốc lát, Hạ Tranh chống hai tay lên mép bàn chậm rãi đứng dậy, Lâm Hướng Bắc buộc phải ngước mặt nhìn anh.
 
-Cậu chỉ có thể nhìn thấy đỉnh đầu Hạ Tranh từ cổ áo, nhưng vẫn cảm nhận rất rõ từng động tác.
+Trong một thoáng, Lâm Hướng Bắc rất nghi ngờ, cậu vừa nói cả đống lời nhưng Hạ Tranh chẳng nghe lọt được chữ nào, bởi vì Hạ Tranh lại tiếp tục hỏi cậu: “Vậy tại sao em luôn nghĩ đến việc chạy trốn?”
 
-Khi khuôn mặt Hạ Tranh lại lần nữa xuất hiện trong tầm nhìn của Lâm Hướng Bắc, tóc anh rối bời, đôi môi ướt át hơi hé mở, cho cậu chiêm ngưỡng “kiệt tác” của anh.
+Lâm Hướng Bắc đã nói rất rõ lý do, nhưng rõ ràng, Hạ Tranh chỉ nhớ câu nói về việc tách ra.
 
-Đã đỏ rực. Như một đỉnh núi màu hồng nhạt nhô lên từ cánh đồng tuyết phẳng lặng. Một màu sắc tuyệt đẹp.
+Lâm Hướng Bắc cũng hoảng loạn đứng dậy, vội vàng nói: “Không phải em muốn chạy trốn…”
 
-Dưới ánh mắt cười như không cười của Hạ Tranh, mặt Lâm Hướng Bắc đã đỏ bừng từ tai xuống đến cổ.
+Hạ Tranh di chuyển vòng qua bàn, nắm lấy cậu, bước chân anh nhanh nhẹn và vội vã, cậu hoàn toàn không kịp tránh, lại bị ấn vai ngồi xuống ghế.
 
-“Thích không?”
+Hạ Tranh xoay chiếc ghế, để Lâm Hướng Bắc đối diện với anh, nhốt cậu lại. Vì góc nhìn, anh cúi xuống nhìn Lâm Hướng Bắc, cuối cùng trên mặt cũng không còn là biểu cảm thờ ơ nữa, gân xanh ở thái dương hơi giật giật, như thể đang cố gắng kiềm chế điều gì đó -- trong khi anh quyết tâm muốn đồng hành cùng Lâm Hướng Bắc đi hết quãng đường này, Lâm Hướng Bắc lại đang nghĩ cách rời xa anh.
 
-Lâm Hướng Bắc thấy ngứa, nhưng lại ngại chà xát trước mặt Hạ Tranh, làm bộ trừng mắt nhìn anh, kéo chăn trùm kín đầu mình: “Em không nói chuyện với anh nữa, em buồn ngủ rồi.”
+Mỗi ngày trôi qua thật khác biệt.
 
-Hạ Tranh dứt khoát ôm trọn cả người lẫn chăn của cậu, ôm rất chặt, đến mức còn nảy ra nỗi lo nếu siết chặt quá đà có thể làm người ta nghẹt thở, nhưng vẫn cứng đầu không chịu buông tay.
+Mười năm qua, cuộc sống của Hạ Tranh bị lấp đầy trong bài vở và công việc nhàm chán vô vị, nghiêm túc đến mức đáng sợ, nhưng vì sự xuất hiện của Lâm Hướng Bắc, thoáng chốc, tất cả các giác quan của anh như thể đã sống lại.
 
-Mãi đến khi Lâm Hướng Bắc thiếu oxy không thể không ló đầu ra khỏi chăn, dựa vào hõm cổ anh thở hổn hển, anh mới thấy chút thỏa mãn -- trước cơn bão sắp tới, anh mang tâm lý bệnh hoạn u ám, nhất quyết phải giữ Lâm Hướng Bắc trong lòng bàn tay mình.
+Anh để ý đến một bông hoa bình thường, một ngọn cỏ không ai quan tâm, thậm chí cả không khí trong suốt dao động bởi cái vỗ cánh của ong mật, hàng triệu vi sinh vật lẩn khuất trong góc.
 
-Lâm Hướng Bắc thấy Hạ Tranh tối nay hơi khác thường, nhưng Hạ Tranh cứ hôn cậu, hôn mãi, hôn đến mức đầu óc cậu choáng váng, hoàn toàn không thể huy động năng lực suy nghĩ chẳng còn sót lại bao nhiêu, chỉ có thể thụ động chịu đựng những nụ hôn quá mức mãnh liệt.
+Anh cảm nhận mọi thứ có thể cảm nhận, bao gồm cả trái tim đang reo lên trong lồng ngực, ở nơi sâu thẳm nhất của sự tĩnh lặng.
 
-Không được phép trốn.
+Nhưng Lâm Hướng Bắc nói muốn tách ra, câu nói đã tổn thương sâu sắc đến anh, muốn đẩy anh trở lại thế giới vô thanh vô sắc kia, nỗi sợ hãi của anh như một bóng ma ập đến.
 
-Khuôn mặt Lâm Hướng Bắc đã đỏ bừng vì nín thở, đôi mắt mở to hơi ươn ướt, r*n r* đáng thương cũng không thể đánh thức được chút lòng trắc ẩn của Hạ Tranh đang thất thường, khi tách ra, cậu gần như ngất đi. Trong trạng thái nửa mê nửa tỉnh, cậu nghĩ, suýt nữa mình đã chết ngạt trên giường vì hôn!
+Tại sao lại đối xử với anh tàn nhẫn như vậy? Một lần, hai lần.
 
-Nhưng không sao -- chính Hạ Tranh đã cho cậu cuộc đời thứ hai, dù lúc này có mất đi hơi thở, cậu cũng sẽ chết trong hạnh phúc.
+Hạ Tranh khẽ hít vào một hơi, như không chịu nổi mà than phiền: “Lâm Hướng Bắc, em thực sự có tài làm người ta phát điên.”
 
-Ba ngày tiếp theo, Hạ Tranh đều đi sớm về muộn.
+Đồng tử của anh vụn vỡ dao động: “Tại sao vừa gặp một chút khó khăn, em không nghĩ đến việc đối mặt cùng tôi, mà lại dứt khoát vứt bỏ tôi? Em coi tôi là người như thế nào, muốn đến thì đến, muốn đi thì đi à?”
 
-Nhờ sự giúp đỡ của bạn Thái Bác Minh, họ đã tìm thấy địa chỉ IP của địa chỉ gửi email, nhưng không thể xác định chính xác một khu vực nào đó, vì vậy hướng đi này đã bế tắc.
+Trong bất kỳ trò chơi nào, người thua luôn nhớ rõ hơn kẻ thắng, trong tình yêu càng là như thế.
 
-Trong lúc chuyện không có tiến triển mới, hai khách hàng đã cử trợ lý đến hỏi về tính xác thực trong nội dung email của Hạ Tranh đang bị cuốn vào vòng xoáy tai tiếng, lời nói của họ lộ rõ nỗi lo liệu việc này có ảnh hưởng đến tiến trình vụ án không.
+Trong lòng Lâm Hướng Bắc dữ dội gào lên, không phải, không phải, không phải!
 
-Anh hiểu mối lo ngại của các bên đương sự, không nói nhiều, chủ động đề xuất chuyển vụ án cho các luật sư giàu kinh nghiệm khác xử lý.
+Hé miệng, chưa kịp phát ra âm thanh, Hạ Tranh đã ra dấu im lặng: “Em đã nói đủ rồi, giờ nên nghe tôi nói một chút.”
 
-Đây là cuộc khủng hoảng nghề nghiệp lớn nhất kể từ khi Hạ Tranh hành nghề, nhưng theo lời Chu Trác, lời đồn đại chỉ có tác dụng trong thời gian ngắn, thực lực mới là yếu tố quyết định, thời gian lâu dài, mọi người sẽ chỉ nhớ đến thành tích xuất sắc của Hạ Tranh, ai rảnh đến mức đi soi mói gia thế và mối quan hệ tình cảm của anh chứ?
+Anh chậm rãi nửa quỳ xuống trước mặt Lâm Hướng Bắc, động tác thay đổi, góc nhìn đang từ nhìn xuống dần dần trở thành ngang tầm, rồi khi ổn định tư thế, anh cố định ở trạng thái hơi ngước lên. Anh nhìn khuôn mặt trắng trẻo của Lâm Hướng Bắc từ dưới lên, hai tay nắm chặt cánh tay của Lâm Hướng Bắc, dường như chỉ cần buông ra, Lâm Hướng Bắc sẽ thoát khỏi lòng bàn tay anh.
 
-Hạ Tranh cũng giữ suy nghĩ tích cực, dự định nhân cơ hội này bước chậm lại một chút, xin nghỉ một khoảng thời gian, ở nhà kèm Lâm Hướng Bắc học bài.
+“Em muốn tôi thế nào nữa đây?” Anh nhìn chăm chú vào ánh mắt đau khổ bối rối của Lâm Hướng Bắc: “Đừng nhìn tôi bằng ánh mắt đó nữa, khi em nhìn tôi, tôi luôn nghĩ phải làm sao để đối xử với em tốt hơn một chút, lại sợ đối xử quá tốt em sẽ không biết trân trọng, giờ xem ra những gì tôi nghĩ không sai chút nào.”
 
-Nhưng có vẻ cái bóng đen vô danh này dường như không có ý định buông tha anh.
+Anh nói rất nhẹ, rất chậm, nhưng rất rõ ràng: “Lâm Hướng Bắc, lương tâm của em bị chó tha đi mất rồi à? Tôi đối xử tốt với em, không phải để em nói những lời khó nghe như cảm ơn, trả tiền, không muốn liên lụy tôi, muốn tách ra với tôi, có phải em nghĩ mình rất sáng suốt không? Mình làm thế là vì muốn tốt cho Hạ Tranh, nên mới rời xa anh ấy, đúng không? Trong lòng em nghĩ thế, đúng không?”
 
-Cục Tư pháp nhận được một lá thư tố cáo nặc danh, trong thư cáo buộc Hạ Tranh có liên quan đến tố tụng giả mạo trong một vụ án tài chính vào năm ngoái, nếu cáo buộc là đúng sự thật, Hạ Tranh sẽ phải đối mặt với những hình phạt như phạt tiền, thu hồi chứng chỉ hành nghề và thậm chí là trách nhiệm hình sự. Trong thời gian điều tra, Hạ Tranh buộc phải tạm dừng hành nghề.
+Môi của Lâm Hướng Bắc không còn chút máu, mắt đã hơi ươn ướt, kinh ngạc nhìn Hạ Tranh mất kiểm soát, không nói được lời nào.
 
-Điều kỳ lạ là, bên đương sự của vụ án đó lại đột nhiên mất liên lạc, khó tránh nghi ngờ rằng họ đã bị mua chuộc.
+“Đừng áp đặt suy nghĩ của em lên tôi, tôi không quan tâm hôm nay em đã quyết tâm rời đi hay đến bàn bạc với tôi, tôi đều không đồng ý.”
 
-Trương Tiếu Mẫn tức đến đỏ mặt: “Hoàn toàn vô căn cứ! Vụ án này tuy ban đầu có một chút vấn đề với bằng chứng, nhưng cuối cùng cũng đã giải quyết êm xuôi và kết thúc rồi. Đây rõ ràng là một cái bẫy từ đầu đến cuối!”
+Anh ngừng lại khoảng mười mấy giây, để câu nói này thấm sâu vào tận đáy lòng Lâm Hướng Bắc, để Lâm Hướng Bắc thấm thía nhận ra sự thật rằng cậu không thể đi được.
 
-Dù kết quả điều tra cuối cùng có trả lại sự trong sạch cho Hạ Tranh, thì trong khoảng thời gian này, những tổn hại do lời vu khống gây ra cũng là thật.
+Rồi nhìn sâu vào mắt cậu, nói: “Tôi biết em đã đi tìm Khương Tầm.”
 
-Thoáng chốc, không khí u ám bao trùm, mọi người đều không hiểu Hạ Tranh đã đắc tội với ai mà lại bị chơi xấu quy mô lớn như vậy.
+Lâm Hướng Bắc kinh ngạc từ từ mở to mắt, cảm thấy trước mặt Hạ Tranh đã có thể độc lập gánh vác mọi việc, cậu như trở thành một người trong suốt, liếc mắt một cái là có thể nhìn thấu. Trái tim điên cuồng của cậu, linh hồn bất an của cậu, suy nghĩ vụng về của cậu, tất cả đều hiển hiện ở đó, chẳng thể giấu đi đâu được.
 
-Tuy bây giờ Khương Tầm đã được người khác hướng dẫn, và cũng có chút bất mãn với sự tuyệt tình của Hạ Tranh, nhưng vì công lý, cậu ta vẫn tức giận đến phát điên.
+\--
 
-Đáng tiếc đây không phải là Tân Bắc, cậu ta không thể làm nũng nhờ anh trai đang làm ở viện kiểm sát giúp đỡ, hơn nữa anh trai cậu ta luôn không quá ủng hộ việc cậu ta qua lại với Hạ Tranh, thậm chí còn vì điều đó mà hiếm khi nổi giận với cậu ta, lần này đến Thâm Quyến cũng là anh trai cậu ta phản đối kịch liệt nhất, nếu biết chuyện này chắc chắn sẽ muốn cậu ta về nhà ngay lập tức.
+**_Lời tác giả:_**
 
-Đến đây mọi thứ có vẻ như đã rơi vào ngõ cụt, cho đến ba ngày sau, trong lúc mọi người đang đồng tâm hiệp lực dùng các mối quan hệ lâu năm để điều tra, sự việc cuối cùng đã có một chút manh mối.
-
-“Là một tên nhà giàu ăn chơi trác táng giở trò, họ Hoàng.”
-
-Chu Trác phẫn nộ thốt ra cái tên đó -- Hoàng Kính Nam.
+Kỳ quan thứ tám của thế giới xuất hiện: Luật sư Hạ mở miệng nói rồi!

@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 1"
 truyen_id: "ndntkm"
-chuong: 2
-date: "2026-05-17"
+chuong: 1
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -115,10 +115,11 @@ Hạ Tranh thu tầm mắt lại, khẽ cười: “Không có gì, đi thôi.�
 
 Phòng riêng ở tầng năm, phía trong, bàn lớn đủ bảy người, vừa khít nhóm đến hôm nay.
 
-Họ đều làm việc tại văn phòng Luật sư Quân Bình - một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác*, Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
+Họ đều làm việc tại văn phòng Luật sư Quân Bình - một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác\*, Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
 
-*Chú thích*
-*(*) “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.*
+_Chú thích_
+
+_(\*) “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty._
 
 Chu Trác có gia thế, mối quan hệ rộng, thầy của Hạ Tranh lại là cây đại thụ trong ngành, nổi danh “Luật sư số một Đài Bắc”. Một người có lợi thế bẩm sinh, một người được chống lưng bởi nhân vật có quyền uy, cộng thêm năng lực chuyên môn xuất sắc, trong ngành luật sư chênh lệch lớn về nguồn khách và thu nhập, họ thực sự là những ngôi sao đang lên, tài năng trẻ xuất chúng.
 

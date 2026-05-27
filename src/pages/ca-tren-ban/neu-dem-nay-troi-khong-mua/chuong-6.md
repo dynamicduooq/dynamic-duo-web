@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 6"
 truyen_id: "ndntkm"
-chuong: 8
-date: "2026-05-17"
+chuong: 6
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,7 +11,7 @@ tags:
   - "HE"
 ---
 
-## **Chương **6
+## **Chương** 6
 
 Mò kim đáy bể tìm ai đó trong biển người mênh mông không hề dễ dàng, nhưng một khi người đó đã lộ diện và để lại dấu vết, việc nắm bắt động thái của đối phương không phải là việc quá khó.
 
@@ -141,8 +141,8 @@ Một vị khách chạy vào nhà vệ sinh, huỳnh huỵch đẩy cửa phòn
 
 Có người ngoài chen vào không tiện nói tiếp, Lâm Hướng Bắc cũng không biết nên đối mặt Hạ Tranh với dáng vẻ thế nào, vội vàng lẩm bẩm một câu “Đi đây” rồi bước nhanh rời đi, để lại cho Hạ Tranh một bóng lưng như kẻ phạm tội bỏ trốn.
 
---
+\--
 
-***Lời tác giả:***
+**_Lời tác giả:_**
 
 Chúc mừng luật sư Hạ và Tiểu Bắc vinh dự đạt giải nhất trong cuộc thi đôi tình nhân cứng miệng.

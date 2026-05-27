@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Ngoại truyện 1-5"
 truyen_id: "ndntkm"
-chuong: 70
-date: "2026-05-18"
+chuong: 68
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -75,7 +75,7 @@ Lâm Hướng Bắc còn chưa kịp phản ứng đã bị đè xuống giườ
 
 Hạ Tranh kéo chiếc khăn quàng cổ cậu đang đeo xuống, lại trở tay cởi quần áo cậu, vì nhớ lại hình ảnh mình vừa tận mắt nhìn thấy Lâm Hướng Bắc hôn môi thiếu niên ở công viên, lòng trắng trong mắt anh hiện lên những tia máu đỏ ngầu như mạng nhện.
 
-Anh đã mất đi sự tu dưỡng và khuôn phép thường ngày, mặc kệ Lâm Hướng Bắc giãy giụa, l*t s*ch cậu, cứ thế tra xét cơ thể Lâm Hướng Bắc từng chút một như thể đang kiểm tra một miếng ngọc quý thượng đẳng.
+Anh đã mất đi sự tu dưỡng và khuôn phép thường ngày, mặc kệ Lâm Hướng Bắc giãy giụa, l_t s_ch cậu, cứ thế tra xét cơ thể Lâm Hướng Bắc từng chút một như thể đang kiểm tra một miếng ngọc quý thượng đẳng.
 
 Lâm Hướng Bắc hoảng sợ trước sự thô bạo của anh, tay chân khua khoắng loạn xạ. Để tìm lại lý trí cho Hạ Tranh, đầu tiên cậu gọi anh trai không có kết quả, lại gọi ba hết lần này đến lần khác.
 

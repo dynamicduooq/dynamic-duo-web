@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Ngoại truyện 1-3"
 truyen_id: "ndntkm"
-chuong: 68
-date: "2026-05-18"
+chuong: 64
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -21,7 +21,7 @@ Là Hạ Tranh đang cẩn thận kiểm tra cơ thể đã từ từ trưởng 
 
 Không có bất kỳ kỹ thuật nào, chỉ là tùy ý tìm kiếm.
 
-Lâm Hướng Bắc mềm nhũn như nước, ngã vào lòng Hạ Tranh, dù mím chặt môi, vẫn có những tiếng r*n r* vụn vặt thoát ra từ cổ họng. Hơi thở nóng hổi phả vào sau tai Hạ Tranh, khuấy động từng tầng gợn sóng.
+Lâm Hướng Bắc mềm nhũn như nước, ngã vào lòng Hạ Tranh, dù mím chặt môi, vẫn có những tiếng r_n r_ vụn vặt thoát ra từ cổ họng. Hơi thở nóng hổi phả vào sau tai Hạ Tranh, khuấy động từng tầng gợn sóng.
 
 Hạ Tranh biết rất rõ, cho dù lúc này anh muốn làm gì, Lâm Hướng Bắc đều sẽ không từ chối.
 

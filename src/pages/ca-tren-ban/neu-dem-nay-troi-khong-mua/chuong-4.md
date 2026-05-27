@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 4"
 truyen_id: "ndntkm"
-chuong: 6
-date: "2026-05-17"
+chuong: 4
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,7 +11,7 @@ tags:
   - "HE"
 ---
 
-## **Chương **4
+## **Chương** 4
 
 Hạ Tranh và Lâm Hướng Bắc đều sinh ra ở một huyện nhỏ tên là Lệ Hà, trước khi trưởng thành thậm chí còn chưa từng ra khỏi huyện.
 
@@ -37,10 +37,11 @@ Lâm Hướng Bắc bắt đầu căm hận người mẹ đã bỏ đi, hận n
 
 Trường học chỉ mang đến cho cậu những ký ức tồi tệ, miễn cưỡng lên cấp ba, cậu bắt đầu chán học, trốn học, cả ngày ngồi lì trong tiệm net ngầm chuyên đón tiếp trẻ vị thành niên.
 
-Lúc đó, dù phim “Người Trong Giang Hồ“* đã chiếu được vài năm, nhưng làn sóng nghĩa khí giang hồ vẫn lan tỏa khắp khu vực gần cảng, ở huyện nhỏ nơi luật pháp chưa phổ cập sâu rộng lại càng phổ biến hơn, những hiện tượng như chia bè kéo phái, thiếu niên bất lương đánh nhau gây rối, băng nhóm đua xe đi cướp vàng, vũ trường và KTV rao bán đồ phi pháp dù đã bị cấm nhưng vẫn xuất hiện không ngừng.
+Lúc đó, dù phim “Người Trong Giang Hồ“\* đã chiếu được vài năm, nhưng làn sóng nghĩa khí giang hồ vẫn lan tỏa khắp khu vực gần cảng, ở huyện nhỏ nơi luật pháp chưa phổ cập sâu rộng lại càng phổ biến hơn, những hiện tượng như chia bè kéo phái, thiếu niên bất lương đánh nhau gây rối, băng nhóm đua xe đi cướp vàng, vũ trường và KTV rao bán đồ phi pháp dù đã bị cấm nhưng vẫn xuất hiện không ngừng.
 
-*Chú thích*
-*(*) Một bộ phim Hồng Kông nổi tiếng phát sóng năm 1996.*
+_Chú thích_
+
+_(\*) Một bộ phim Hồng Kông nổi tiếng phát sóng năm 1996._
 
 Lâm Hướng Bắc ngủ qua đêm ở tiệm net, vô tình chứng kiến một vụ ẩu đả lớn, không hiểu sao đám người gây sự lại coi cậu là một trong những mục tiêu.
 

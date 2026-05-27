@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 3"
 truyen_id: "ndntkm"
-chuong: 5
-date: "2026-05-17"
+chuong: 3
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,7 +11,7 @@ tags:
   - "HE"
 ---
 
-## **Chương **3
+## **Chương** 3
 
 Lâm Hướng Bắc cảm thấy bản thân có một năng lực rất xấu, đó là làm rối tung mọi chuyện.
 
@@ -51,10 +51,11 @@ Vừa cởi bộ đồng phục của nhân viên đỗ xe ra đã lại thay sa
 
 Lâm Hướng Bắc đỡ đối phương một tay.
 
-Nhân viên tiếp khách của Muselbar có cả nam lẫn nữ, tính phí theo giờ, các hoạt động vui chơi trong vùng xám* rất linh hoạt, cộng thêm hoa hồng từ rượu bán ra, những người dám lăn xả thường kiếm được kha khá, nhưng nếu không phải thiếu tiền đến cùng cực, Lâm Hướng Bắc sẽ không chọn công việc này, chưa nói đến việc ngày đêm đảo lộn làm hỏng cơ thể mà khi gặp phải quấy rối còn phải nhịn nhục cười đùa.
+Nhân viên tiếp khách của Muselbar có cả nam lẫn nữ, tính phí theo giờ, các hoạt động vui chơi trong vùng xám\* rất linh hoạt, cộng thêm hoa hồng từ rượu bán ra, những người dám lăn xả thường kiếm được kha khá, nhưng nếu không phải thiếu tiền đến cùng cực, Lâm Hướng Bắc sẽ không chọn công việc này, chưa nói đến việc ngày đêm đảo lộn làm hỏng cơ thể mà khi gặp phải quấy rối còn phải nhịn nhục cười đùa.
 
-*Chú thích*
-*(*) Nơi nằm giữa vùng sáng và vùng tối, không kinh doanh theo cách không hoàn toàn hợp pháp hay minh bạch theo chuẩn mực thông thường, nhưng cũng không vi phạm pháp luật rõ ràng, có thể lách luật.*
+_Chú thích_
+
+_(\*) Nơi nằm giữa vùng sáng và vùng tối, không kinh doanh theo cách không hoàn toàn hợp pháp hay minh bạch theo chuẩn mực thông thường, nhưng cũng không vi phạm pháp luật rõ ràng, có thể lách luật._
 
 Ông chủ là con nhà giàu đời thứ ba ở Thâm Quyến, họ Diêu tên Phong Lượng, ngại cái tên quê mùa, mọi người đều gọi anh ta là Colin.
 
@@ -170,9 +171,9 @@ Giọng nói trong trẻo, đầy giận dữ của thiếu niên vẫn văng v�
 
 Không có mưa, nhưng trước mắt Lâm Hướng Bắc lại trở nên ướt đẫm.
 
---
+\--
 
-***Lời tác giả:***
+**_Lời tác giả:_**
 
 Gửi Tiểu Bắc:
 

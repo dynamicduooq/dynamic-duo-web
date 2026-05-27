@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Ngoại truyện 2-1"
 truyen_id: "ndntkm"
-chuong: 71
-date: "2026-05-18"
+chuong: 69
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -41,10 +41,11 @@ Tuy nhiên trong đám người như thế lại có một trường hợp đặ
 
 Thứ nhất, anh có một người cha là kẻ giết người, thường bị gọi đùa là “sát thủ nhí” một cách ác ý, nghe nói anh thừa hưởng khuynh hướng bạo lực của cha, hồi cấp hai đánh nhau với bạn học làm đối phương gãy một cái xương sườn, từ đó mọi người đều tránh anh như tránh tà.
 
-Thứ hai, anh quanh năm đứng đầu khối, là sao Văn Khúc* chính hiệu. Vốn dĩ năm ngoái trường học đã mong đợi anh làm rạng danh nhà trường, kết quả anh lại đột ngột đau dạ dày ngay trong phòng thi, thành tích tụt dốc không phanh, đành phải học lại một năm.
+Thứ hai, anh quanh năm đứng đầu khối, là sao Văn Khúc\* chính hiệu. Vốn dĩ năm ngoái trường học đã mong đợi anh làm rạng danh nhà trường, kết quả anh lại đột ngột đau dạ dày ngay trong phòng thi, thành tích tụt dốc không phanh, đành phải học lại một năm.
 
-*Chú thích*
-*(*) Trong Tử vi, sao Văn Khúc là biểu tượng của tài trí, nghệ thuật và sự thành công nhờ học vấn.*
+_Chú thích_
+
+_(\*) Trong Tử vi, sao Văn Khúc là biểu tượng của tài trí, nghệ thuật và sự thành công nhờ học vấn._
 
 Lâm Hướng Bắc và Hạ Tranh là người của hai thế giới. Hoa gấm rực rỡ chẳng liên quan gì đến tối tăm ảm đạm, hai người chưa từng tiếp xúc, nhưng vì danh tiếng đều lan xa, từ nhỏ đã mơ hồ có ấn tượng về nhau.
 

@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Ngoại truyện 1-1"
 truyen_id: "ndntkm"
-chuong: 66
-date: "2026-05-18"
+chuong: 64
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -13,8 +13,9 @@ tags:
 
 ## Ngoại truyện tuyến If 1 - Bé ngoan 1
 
-***Lời editor***
-*Ngoại truyện tuyến If - Bé ngoan có nhắc đến mối quan hệ chênh lệch tuổi tác khá xa (trong đó Lâm Hướng Bắc mới là vị thành niên) và còn có một số yếu tố gây khó chịu khác, các bạn cân nhắc trước khi đọc nhé!*
+**_Lời editor_**
+
+_Ngoại truyện tuyến If - Bé ngoan có nhắc đến mối quan hệ chênh lệch tuổi tác khá xa (trong đó Lâm Hướng Bắc mới là vị thành niên) và còn có một số yếu tố gây khó chịu khác, các bạn cân nhắc trước khi đọc nhé!_
 
 Lâm Hướng Bắc đang nằm ngủ ngon lành thì bỗng bị một thanh niên xa lạ xách cổ áo từ quán net tối tăm, mờ mịt lôi ra ngoài trời nắng chói chang.
 

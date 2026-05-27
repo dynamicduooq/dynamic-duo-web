@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Ngoại truyện 2-3"
 truyen_id: "ndntkm"
-chuong: 73
-date: "2026-05-18"
+chuong: 71
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"

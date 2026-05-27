@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 5"
 truyen_id: "ndntkm"
-chuong: 7
-date: "2026-05-17"
+chuong: 5
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,12 +11,13 @@ tags:
   - "HE"
 ---
 
-## **Chương **5
+## **Chương** 5
 
-Khu CBD* là nơi sầm uất nhất thành phố Thâm Quyến với những tòa nhà chọc trời san sát, tập trung nhiều tinh hoa của xã hội. Văn phòng luật sư Quân Bình tọa lạc trong tòa nhà chọc trời ở trung tâm khu thương mại, từ tầng cao nhất có thể phóng tầm mắt ngắm nhìn toàn cảnh thành phố Thâm Quyến hoa lệ, cảm giác như nắm trọn mạch sống của cả thành phố trong lòng bàn tay.
+Khu CBD\* là nơi sầm uất nhất thành phố Thâm Quyến với những tòa nhà chọc trời san sát, tập trung nhiều tinh hoa của xã hội. Văn phòng luật sư Quân Bình tọa lạc trong tòa nhà chọc trời ở trung tâm khu thương mại, từ tầng cao nhất có thể phóng tầm mắt ngắm nhìn toàn cảnh thành phố Thâm Quyến hoa lệ, cảm giác như nắm trọn mạch sống của cả thành phố trong lòng bàn tay.
 
-*Chú thích*
-*(*) Khu CBD (Central Business District): là khu vực tập trung cao độ các hoạt động kinh tế, tài chính, thương mại, dịch vụ và hành chính của một đô thị.*
+_Chú thích_
+
+_(\*) Khu CBD (Central Business District): là khu vực tập trung cao độ các hoạt động kinh tế, tài chính, thương mại, dịch vụ và hành chính của một đô thị._
 
 “Luật sư Hạ, chào buổi sáng.”
 
@@ -152,8 +153,8 @@ Thời gian đứng về phía anh, chứng minh anh đã đúng.
 
 Lời khuyên đầy bi phẫn im lặng suốt bao năm đã hóa thành một câu hỏi không lời: Vật đổi sao dời rồi, Lâm Hướng Bắc có từng hối hận chút nào không?
 
---
+\--
 
-***Lời tác giả:***
+**_Lời tác giả:_**
 
 Luật sư Hạ: Xin mọi người yên tâm, tôi hoàn toàn không còn yêu nữa, tất cả đều nằm trong kế hoạch của tôi, đừng lo, tôi có nhịp độ của riêng mình.

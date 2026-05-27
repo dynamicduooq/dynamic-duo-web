@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 7"
 truyen_id: "ndntkm"
-chuong: 9
-date: "2026-05-17"
+chuong: 7
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -31,10 +31,11 @@ Quá trình thế nào cậu không nhớ rõ lắm, hoàn toàn mơ hồ tin v�
 
 Năm đó là năm thứ tư kể từ khi Lâm Hướng Bắc và Hạ Tranh chia tay, cậu hai mươi hai tuổi.
 
-Sinh viên tên là Triệu Tuấn, mắt một mí, đuôi mắt hơi xếch, môi mỏng, sau này Lâm Hướng Bắc tình cờ thấy người ta phân tích trên mạng rằng tổ hợp ngũ quan này là điển hình của mấy tên đàn ông thực dụng* -- giỏi dụ dỗ người khác, cũng giỏi “ăn thịt” người, sự thật chứng minh, đôi khi huyền học cũng có cái lý của nó.
+Sinh viên tên là Triệu Tuấn, mắt một mí, đuôi mắt hơi xếch, môi mỏng, sau này Lâm Hướng Bắc tình cờ thấy người ta phân tích trên mạng rằng tổ hợp ngũ quan này là điển hình của mấy tên đàn ông thực dụng\* -- giỏi dụ dỗ người khác, cũng giỏi “ăn thịt” người, sự thật chứng minh, đôi khi huyền học cũng có cái lý của nó.
 
-*Chú thích*
-*(*) Nguyên văn là “Phượng hoàng nam” (凤凰男): chỉ người tuy “thoát nghèo” từ vùng quê lên thành phố nhưng vẫn giữ tư duy hẹp hòi, lợi dụng người khác (thường là phụ nữ) để đạt lợi ích.*
+_Chú thích_
+
+_(\*) Nguyên văn là “Phượng hoàng nam” (凤凰男): chỉ người tuy “thoát nghèo” từ vùng quê lên thành phố nhưng vẫn giữ tư duy hẹp hòi, lợi dụng người khác (thường là phụ nữ) để đạt lợi ích._
 
 Lâm Hướng Bắc mang một sự ngưỡng mộ mù quáng với đại học xa vời, sau khi hẹn hò với Triệu Tuấn, không chỉ một lần muốn đối phương dẫn cậu đi dạo quanh khu đại học, xem tòa nhà giảng đường, ký túc xá trông thế nào, nhưng Triệu Tuấn luôn tìm cớ từ chối, sau nhiều lần, Lâm Hướng Bắc cũng đoán được thái độ tiêu cực của anh ta.
 
@@ -160,8 +161,8 @@ Mưa càng lúc càng dữ dội, Lâm Hướng Bắc lên xe máy của Chung T
 
 Tràn đầy sức sống và nhiệt huyết, như thể dù trời nắng to hay mưa bão, mỗi ngày mai trong miệng thiếu niên Lâm Hướng Bắc đều tươi sáng, đáng để mong đợi.
 
---
+\--
 
-***Lời tác giả:***
+**_Lời tác giả:_**
 
 Tiểu Hạ: Thứ nhất, tôi không phải là “Này”.

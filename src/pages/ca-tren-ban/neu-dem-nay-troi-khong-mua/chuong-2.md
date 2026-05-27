@@ -2,8 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 2"
 truyen_id: "ndntkm"
-chuong: 4
-date: "2026-05-17"
+chuong: 2
+date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"
@@ -11,7 +11,7 @@ tags:
   - "HE"
 ---
 
-## **Chương **2
+## **Chương** 2
 
 Bữa cơm diễn ra rất vui vẻ, ăn uống no nê.
 
@@ -161,8 +161,8 @@ Hạ Tranh khựng lại, hạ mắt khẽ bật ra một tiếng cười rất 
 
 Hẳn nào nói “tạm biệt” với anh, hóa ra đã chuẩn bị tinh thần không gặp lại. Cần gì chứ.
 
---
+\--
 
-***Lời tác giả:***
+**_Lời tác giả:_**
 
 Luật sư Hạ: Tìm kiếm mãi mà không thấy tung tích của “vợ” đâu...

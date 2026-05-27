@@ -1,7 +1,8 @@
 ---
-title: "NĐNTKM - Chương 51"
-date: 2026-05-18
-tags: 
+title: "Chương 51"
+truyen_id: "ndntkm"
+date: "2026-05-18"
+tags:
   - "neu-dem-nay-troi-khong-mua"
 ---
 

@@ -1,8 +1,10 @@
 ---
 // src/pages/admin/index.astro
+// Trang admin: đăng nhập + quản lý truyện/chương qua GitHub API
 ---
+
 <!DOCTYPE html>
-<html lang="vi" data-theme="">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,218 +12,215 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Literata:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root{
-      --sky:#0ea5e9;--sky2:#0284c7;--sky-dark:#0369a1;
-      --sky-light:#bae6fd;--sky-pale:#f0f9ff;
-      --bg:#fafcff;--bg2:#fff;--border:rgba(186,230,253,.6);
-      --text:#1e3a5f;--text-mid:#64748b;--text-dim:#94a3b8;
-      --red:#ef4444;--green:#22c55e;--amber:#f59e0b;
-      --r-sm:6px;--r-md:12px;--r-lg:20px;--r-pill:999px;--t:all .2s ease;
+    :root {
+      --sky: #0ea5e9; --sky2: #0284c7; --sky-dark: #0369a1;
+      --sky-light: #bae6fd; --sky-pale: #f0f9ff;
+      --cream: #fafcff; --text-main: #1e3a5f; --text-mid: #64748b; --text-dim: #94a3b8;
+      --r-sm: 6px; --r-md: 12px; --r-lg: 20px; --r-pill: 999px;
+      --t: all .2s ease;
+      --red: #ef4444; --green: #22c55e; --amber: #f59e0b;
     }
-    [data-theme="dark"]{
-      --sky:#38bdf8;--sky2:#7dd3fc;--sky-dark:#bae6fd;
-      --sky-light:#1e4a6e;--sky-pale:#0f2a40;
-      --bg:#0b1829;--bg2:#0d1e36;--border:rgba(30,74,110,.6);
-      --text:#e0f2fe;--text-mid:#94a3b8;--text-dim:#4a6080;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);font-family:'Newsreader',serif;font-size:15px;color:var(--text);min-height:100vh}
-    a{color:inherit;text-decoration:none}
-    input,select,textarea,button{font-family:inherit}
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: var(--cream); font-family: 'Newsreader', serif; font-size: 16px; color: var(--text-main); }
 
     /* ── TOPBAR ── */
-    .topbar{
-      position:sticky;top:0;z-index:100;background:var(--bg2);
-      border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;
-      padding:0 20px;height:50px;box-shadow:0 2px 8px rgba(14,165,233,.07);
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid var(--sky-light);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 52px;
+      box-shadow: 0 2px 8px rgba(14,165,233,.08);
     }
-    .topbar-logo{font-family:'Literata',serif;font-weight:600;font-size:.9rem;color:var(--sky-dark)}
-    .topbar-right{display:flex;align-items:center;gap:8px}
-    .topbar-user{font-size:.75rem;color:var(--text-mid)}
-    .btn{padding:5px 14px;border-radius:var(--r-pill);font-size:.78rem;cursor:pointer;transition:var(--t);border:1.5px solid transparent;font-family:'Newsreader',serif;display:inline-flex;align-items:center;gap:4px}
-    .btn-sky{background:var(--sky);color:#fff;border-color:var(--sky)}
-    .btn-sky:hover{background:var(--sky2)}
-    .btn-outline{background:var(--bg2);color:var(--sky-dark);border-color:var(--border)}
-    .btn-outline:hover{background:var(--sky-pale);border-color:var(--sky);color:var(--sky)}
-    .btn-red{background:var(--red);color:#fff;border-color:var(--red)}
-    .btn-red:hover{opacity:.85}
-    .btn-amber{background:var(--amber);color:#fff;border-color:var(--amber)}
-    .btn-sm{padding:3px 10px;font-size:.72rem}
+    .topbar-logo { font-family: 'Literata', serif; font-weight: 600; font-size: .95rem; color: var(--sky-dark); }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-user { font-size: .8rem; color: var(--text-mid); }
+    .btn { padding: 6px 16px; border-radius: var(--r-pill); font-size: .82rem; font-family: 'Newsreader', serif; cursor: pointer; transition: var(--t); border: 1.5px solid transparent; }
+    .btn-sky { background: var(--sky); color: #fff; border-color: var(--sky); }
+    .btn-sky:hover { background: var(--sky2); border-color: var(--sky2); }
+    .btn-outline { background: #fff; color: var(--sky-dark); border-color: var(--sky-light); }
+    .btn-outline:hover { background: var(--sky-pale); border-color: var(--sky); color: var(--sky); }
+    .btn-red { background: var(--red); color: #fff; border-color: var(--red); }
+    .btn-red:hover { opacity: .85; }
+    .btn-sm { padding: 4px 12px; font-size: .76rem; }
 
     /* ── LAYOUT ── */
-    .admin-layout{display:flex;min-height:calc(100vh - 50px)}
-    .sidebar{
-      width:210px;flex-shrink:0;background:var(--bg2);
-      border-right:1px solid var(--border);padding:14px 0;
+    .admin-layout { display: flex; min-height: calc(100vh - 52px); }
+    .sidebar {
+      width: 220px; flex-shrink: 0;
+      background: #fff; border-right: 1px solid var(--sky-light);
+      padding: 20px 0;
     }
-    .sb-sec{padding:5px 14px;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-top:10px}
-    .sb-link{
-      display:block;padding:8px 18px;font-size:.8rem;color:var(--text-mid);
-      cursor:pointer;transition:var(--t);border-left:3px solid transparent;
+    .sidebar-section { padding: 6px 16px; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-top: 12px; }
+    .sidebar-link {
+      display: block; padding: 9px 20px;
+      font-size: .84rem; color: var(--text-mid);
+      cursor: pointer; transition: var(--t);
+      border-left: 3px solid transparent;
     }
-    .sb-link:hover,.sb-link.active{background:var(--sky-pale);color:var(--sky);border-left-color:var(--sky)}
-    .main{flex:1;padding:24px 28px;max-width:980px;overflow:hidden}
-    @media(max-width:700px){.sidebar{display:none}.main{padding:16px}}
+    .sidebar-link:hover, .sidebar-link.active {
+      background: var(--sky-pale); color: var(--sky); border-left-color: var(--sky);
+    }
+    .main { flex: 1; padding: 28px 32px; max-width: 960px; }
 
-    /* ── LOGIN ── */
-    #loginScreen{
-      position:fixed;inset:0;z-index:200;background:var(--bg);
-      display:flex;align-items:center;justify-content:center;
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
     }
-    .login-card{
-      width:370px;background:var(--bg2);border:1px solid var(--border);
-      border-radius:var(--r-lg);padding:36px 32px;
-      box-shadow:0 8px 40px rgba(14,165,233,.12);text-align:center;
+    .login-card {
+      width: 380px; background: #fff;
+      border: 1px solid var(--sky-light);
+      border-radius: var(--r-lg); padding: 40px 36px;
+      box-shadow: 0 8px 40px rgba(14,165,233,.12);
+      text-align: center;
     }
-    .login-logo{font-family:'Literata',serif;font-size:1.3rem;font-weight:600;color:var(--sky-dark);margin-bottom:4px}
-    .login-sub{font-size:.78rem;color:var(--text-dim);font-style:italic;margin-bottom:24px}
-    .field{margin-bottom:14px;text-align:left}
-    .field label{display:block;font-size:.74rem;color:var(--text-mid);margin-bottom:4px}
-    .field input,.field select,.field textarea{
-      width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);
-      font-size:.88rem;color:var(--text);background:var(--bg);transition:var(--t);
+    .login-logo { font-family: 'Literata', serif; font-size: 1.4rem; font-weight: 600; color: var(--sky-dark); margin-bottom: 6px; }
+    .login-sub { font-size: .82rem; color: var(--text-dim); font-style: italic; margin-bottom: 28px; }
+    .field { margin-bottom: 16px; text-align: left; }
+    .field label { display: block; font-size: .78rem; color: var(--text-mid); margin-bottom: 5px; letter-spacing: .5px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 14px;
+      border: 1.5px solid var(--sky-light); border-radius: var(--r-md);
+      font-family: 'Newsreader', serif; font-size: .9rem; color: var(--text-main);
+      background: #fff; transition: var(--t);
     }
-    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
-    .field textarea{resize:vertical;min-height:100px;line-height:1.7}
-    .err-msg{background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--r-sm);padding:7px 11px;font-size:.76rem;color:var(--red);margin-bottom:10px;display:none}
-    .login-note{font-size:.7rem;color:var(--text-dim);margin-top:12px;line-height:1.55}
-    .login-note a{color:var(--sky)}
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+    }
+    .field textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+    .login-note { font-size: .74rem; color: var(--text-dim); margin-top: 16px; line-height: 1.5; }
+    .login-note a { color: var(--sky); }
+    .error-msg { background: #fef2f2; border: 1px solid #fca5a5; border-radius: var(--r-sm); padding: 8px 12px; font-size: .8rem; color: var(--red); margin-bottom: 12px; display: none; }
 
     /* ── SECTIONS ── */
-    .section{display:none}
-    .section.active{display:block}
-    .sec-title{font-family:'Literata',serif;font-size:1.1rem;font-weight:600;color:var(--sky-dark);margin:0 0 18px}
+    .section { display: none; }
+    .section.active { display: block; }
+    .section-title { font-family: 'Literata', serif; font-size: 1.2rem; font-weight: 600; color: var(--sky-dark); margin: 0 0 20px; }
 
-    /* ── STAT CARDS ── */
-    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:24px}
-    .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 14px;text-align:center}
-    .stat-num{font-family:'Literata',serif;font-size:1.6rem;font-weight:600;color:var(--sky-dark)}
-    .stat-label{font-size:.7rem;color:var(--text-dim);margin-top:3px}
-
-    /* ── STORY LIST ── */
-    .story-item{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:14px 16px;background:var(--bg2);border:1px solid var(--border);
-      border-radius:var(--r-md);margin-bottom:10px;gap:12px;flex-wrap:wrap;
+    /* ── CHAPTER LIST ── */
+    .story-select-bar {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 20px;
     }
-    .story-item-info h3{font-family:'Literata',serif;font-size:.95rem;color:var(--sky-dark);margin:0 0 3px}
-    .story-item-info p{font-size:.72rem;color:var(--text-dim);margin:0}
-    .story-item-btns{display:flex;gap:6px;flex-shrink:0}
-
-    /* ── CHAPTER TABLE ── */
-    .chap-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-    .chap-table{width:100%;border-collapse:collapse}
-    .chap-table th{text-align:left;padding:7px 10px;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);border-bottom:2px solid var(--border)}
-    .chap-table td{padding:9px 10px;border-bottom:1px solid rgba(186,230,253,.2);font-size:.8rem;color:var(--text-mid);vertical-align:middle}
-    .chap-table tr:hover td{background:var(--sky-pale)}
-    .chap-check{width:16px;height:16px;cursor:pointer;accent-color:var(--sky)}
-    .chap-num{font-weight:600;color:var(--sky-dark);width:40px}
-    .chap-title-cell{color:var(--text);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .chap-actions{display:flex;gap:5px;white-space:nowrap}
-    .bulk-bar{
-      background:var(--sky);color:#fff;border-radius:var(--r-md);padding:10px 16px;
-      display:none;align-items:center;gap:10px;margin-bottom:12px;font-size:.8rem;flex-wrap:wrap;
+    .chap-table { width: 100%; border-collapse: collapse; }
+    .chap-table th {
+      text-align: left; padding: 8px 12px;
+      font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text-dim); border-bottom: 2px solid var(--sky-light);
     }
-    .bulk-bar.show{display:flex}
+    .chap-table td {
+      padding: 10px 12px; border-bottom: 1px solid rgba(186,230,253,.3);
+      font-size: .84rem; color: var(--text-mid);
+      vertical-align: middle;
+    }
+    .chap-table tr:hover td { background: var(--sky-pale); }
+    .chap-num { font-weight: 600; color: var(--sky-dark); width: 50px; }
+    .chap-title-cell { color: var(--text-main); }
+    .chap-date { font-size: .74rem; color: var(--text-dim); white-space: nowrap; }
+    .chap-actions { display: flex; gap: 6px; white-space: nowrap; }
 
     /* ── EDITOR ── */
-    .editor-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-    .editor-back{cursor:pointer;color:var(--sky);font-size:.8rem;flex-shrink:0}
-    .editor-back:hover{text-decoration:underline}
-    .editor-title{font-family:'Literata',serif;font-size:1rem;font-weight:600;color:var(--sky-dark);flex:1}
-    .editor-status{font-size:.72rem;color:var(--text-dim)}
-    .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-    @media(max-width:600px){.meta-grid{grid-template-columns:1fr}}
-    .toolbar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
-    .tool-btn{
-      padding:4px 9px;background:var(--sky-pale);border:1px solid var(--border);
-      border-radius:var(--r-sm);font-size:.73rem;color:var(--sky-dark);
-      cursor:pointer;transition:var(--t);
+    .editor-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; flex-wrap: wrap;
     }
-    .tool-btn:hover{background:var(--sky-light)}
-    .content-editor{
-      width:100%;min-height:420px;border:1.5px solid var(--border);border-radius:var(--r-md);
-      padding:14px 18px;font-size:.9rem;line-height:1.9;color:var(--text);
-      resize:vertical;transition:var(--t);background:var(--bg);
-    }
-    .content-editor:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
-    .word-count{font-size:.68rem;color:var(--text-dim);text-align:right;margin-top:3px}
-    .preview-panel{
-      display:none;border:1.5px solid var(--border);border-radius:var(--r-md);
-      padding:22px 26px;background:var(--bg2);margin-top:-4px;
-      line-height:1.9;font-size:.9rem;min-height:200px;color:var(--text);
-    }
+    .editor-back { cursor: pointer; color: var(--sky); font-size: .84rem; }
+    .editor-back:hover { text-decoration: underline; }
+    .editor-title { font-family: 'Literata', serif; font-size: 1.1rem; font-weight: 600; color: var(--sky-dark); flex: 1; }
+    .editor-status { font-size: .76rem; color: var(--text-dim); }
 
-    /* ── UPLOAD PANEL ── */
-    .upload-zone{
-      border:2px dashed var(--sky-light);border-radius:var(--r-md);
-      padding:32px 20px;text-align:center;background:var(--sky-pale);
-      cursor:pointer;transition:var(--t);
-    }
-    .upload-zone:hover,.upload-zone.drag{border-color:var(--sky);background:rgba(186,230,253,.2)}
-    .upload-zone p{color:var(--text-mid);font-size:.84rem;margin:6px 0}
-    .upload-preview{margin-top:14px;font-size:.8rem;color:var(--text-mid)}
-    .progress-wrap{margin-top:12px}
-    .progress-bar{height:6px;background:rgba(186,230,253,.3);border-radius:3px;overflow:hidden}
-    .progress-fill{height:100%;background:var(--sky);border-radius:3px;transition:width .3s}
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    @media (max-width: 600px) { .meta-grid { grid-template-columns: 1fr; } }
 
-    /* ── STORY META EDITOR ── */
-    .story-meta-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-md);padding:18px 20px;margin-bottom:14px}
-    .story-meta-card h3{font-family:'Literata',serif;font-size:.95rem;color:var(--sky-dark);margin:0 0 14px}
+    .content-editor-wrap { position: relative; }
+    .content-editor {
+      width: 100%; min-height: 500px;
+      border: 1.5px solid var(--sky-light); border-radius: var(--r-md);
+      padding: 16px 20px; font-family: 'Newsreader', serif;
+      font-size: .95rem; line-height: 1.9; color: var(--text-main);
+      resize: vertical; transition: var(--t);
+    }
+    .content-editor:focus { outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.1); }
+
+    .toolbar {
+      display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;
+    }
+    .tool-btn {
+      padding: 5px 10px; background: var(--sky-pale); border: 1px solid var(--sky-light);
+      border-radius: var(--r-sm); font-size: .78rem; color: var(--sky-dark);
+      cursor: pointer; transition: var(--t); font-family: 'Newsreader', serif;
+    }
+    .tool-btn:hover { background: var(--sky-light); }
+
+    /* word count */
+    .word-count { font-size: .72rem; color: var(--text-dim); text-align: right; margin-top: 4px; }
 
     /* ── TOAST ── */
-    .toast{
-      position:fixed;bottom:20px;right:20px;z-index:500;
-      padding:11px 18px;border-radius:var(--r-md);font-size:.8rem;
-      box-shadow:0 4px 16px rgba(0,0,0,.15);pointer-events:none;
-      opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 500;
+      padding: 12px 20px; border-radius: var(--r-md);
+      font-size: .84rem; font-family: 'Newsreader', serif;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+      opacity: 0; transform: translateY(12px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
     }
-    .toast.show{opacity:1;transform:translateY(0)}
-    .toast.success{background:#dcfce7;color:#166534;border:1px solid #86efac}
-    .toast.error{background:#fef2f2;color:var(--red);border:1px solid #fca5a5}
-    .toast.info{background:var(--sky-pale);color:var(--sky-dark);border:1px solid var(--sky-light)}
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .toast.error { background: #fef2f2; color: var(--red); border: 1px solid #fca5a5; }
+    .toast.info { background: var(--sky-pale); color: var(--sky-dark); border: 1px solid var(--sky-light); }
 
     /* ── SPINNER ── */
-    .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── CONFIRM ── */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;display:none;align-items:center;justify-content:center}
-    .overlay.open{display:flex}
-    .dialog{background:var(--bg2);border-radius:var(--r-lg);padding:26px;max-width:360px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.15)}
-    .dialog h3{font-family:'Literata',serif;font-size:1rem;color:var(--text);margin:0 0 7px}
-    .dialog p{font-size:.82rem;color:var(--text-mid);margin:0 0 18px;line-height:1.6}
-    .dialog-btns{display:flex;gap:8px;justify-content:flex-end}
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 40px 20px; color: var(--text-dim); font-style: italic; }
 
-    /* ── TABS ── */
-    .tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:18px}
-    .tab{padding:7px 16px;font-size:.78rem;cursor:pointer;color:var(--text-mid);border-radius:var(--r-sm) var(--r-sm) 0 0;transition:var(--t);border-bottom:2px solid transparent;margin-bottom:-2px}
-    .tab:hover{color:var(--sky);background:var(--sky-pale)}
-    .tab.active{color:var(--sky);border-bottom-color:var(--sky);font-weight:600}
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
+    /* ── STAT CARDS ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .stat-card { background: #fff; border: 1px solid var(--sky-light); border-radius: var(--r-md); padding: 18px 16px; text-align: center; }
+    .stat-num { font-family: 'Literata', serif; font-size: 1.8rem; font-weight: 600; color: var(--sky-dark); }
+    .stat-label { font-size: .74rem; color: var(--text-dim); margin-top: 4px; }
 
-    /* DARK toggle in topbar */
-    .theme-toggle{background:none;border:1.5px solid var(--border);border-radius:var(--r-pill);color:var(--text-mid);padding:3px 10px;font-size:.74rem;cursor:pointer;transition:var(--t)}
-    .theme-toggle:hover{background:var(--sky-pale);color:var(--sky)}
+    /* ── CONFIRM DIALOG ── */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 300; display: none; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .dialog { background: #fff; border-radius: var(--r-lg); padding: 28px 28px 24px; max-width: 380px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+    .dialog h3 { margin: 0 0 8px; font-family: 'Literata', serif; font-size: 1.05rem; color: var(--text-main); }
+    .dialog p { font-size: .86rem; color: var(--text-mid); margin: 0 0 20px; line-height: 1.6; }
+    .dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
   </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">dynamic duo ⚙</div>
+    <div class="login-logo">dynamic duo 𓆝.°•</div>
     <div class="login-sub">Admin Panel</div>
-    <div class="err-msg" id="loginErr"></div>
-    <div class="field"><label>GitHub Token (quyền repo)</label><input type="password" id="tokenInput" placeholder="ghp_..." /></div>
-    <div class="field"><label>Mật khẩu Admin</label><input type="password" id="passInput" placeholder="Mật khẩu" /></div>
-    <button class="btn btn-sky" style="width:100%;margin-top:4px" id="loginBtn">Đăng nhập</button>
-    <div class="login-note">
-      Token tạo tại <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> (chọn quyền <strong>repo</strong>).<br/>
-      Mật khẩu admin: đổi field <code>ADMIN_PASSWORD</code> trong script dưới đây.
+    <div class="error-msg" id="loginError"></div>
+    <div class="field">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
     </div>
+    <div class="field">
+      <label>Mật khẩu Admin</label>
+      <input type="password" id="passInput" placeholder="Nhập mật khẩu" />
+    </div>
+    <button class="btn btn-sky" style="width:100%;margin-top:4px" id="loginBtn">
+      Đăng nhập
+    </button>
+    <p class="login-note">
+      Token cần quyền <strong>repo</strong>. Tạo tại
+      <a href="https://github.com/settings/tokens" target="_blank">GitHub → Settings → Tokens</a>.<br/>
+      Mật khẩu admin được đặt trong file <code>src/data/settings.json</code> (field <code>admin_password</code>).
+    </p>
   </div>
 </div>
 
@@ -232,7 +231,7 @@
     <p id="confirmMsg"></p>
     <div class="dialog-btns">
       <button class="btn btn-outline" id="confirmCancel">Huỷ</button>
-      <button class="btn btn-red" id="confirmOk">Xác nhận</button>
+      <button class="btn btn-red" id="confirmOk">Xoá</button>
     </div>
   </div>
 </div>
@@ -240,78 +239,71 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- APP -->
+<!-- MAIN APP -->
 <div id="app" style="display:none">
+  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-logo">⚙ Admin · dynamic duo</div>
     <div class="topbar-right">
-      <button class="theme-toggle" id="themeBtn">🌙</button>
       <a href="/dynamic-duo-web/" target="_blank" class="btn btn-outline btn-sm">← Web</a>
-      <span class="topbar-user" id="topUser"></span>
-      <button class="btn btn-outline btn-sm" id="logoutBtn">Thoát</button>
+      <span class="topbar-user" id="topbarUser"></span>
+      <button class="btn btn-outline btn-sm" id="logoutBtn">Đăng xuất</button>
     </div>
   </div>
+
   <div class="admin-layout">
+    <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="sb-sec">Tổng quan</div>
-      <div class="sb-link active" data-s="dashboard">📊 Dashboard</div>
-      <div class="sb-sec">Truyện</div>
-      <div class="sb-link" data-s="ongoing">🌊 Cá dưới nước</div>
-      <div class="sb-link" data-s="completed">🍽️ Cá trên bàn</div>
-      <div class="sb-link" data-s="upcoming">🌤️ Sắp đào</div>
-      <div class="sb-sec">Công cụ</div>
-      <div class="sb-link" data-s="quick-post">✏️ Đăng nhanh</div>
-      <div class="sb-link" data-s="bulk-upload">📦 Upload hàng loạt</div>
-      <div class="sb-link" data-s="new-story">📚 Thêm truyện</div>
+      <div class="sidebar-section">Tổng quan</div>
+      <div class="sidebar-link active" data-section="dashboard">📊 Dashboard</div>
+      <div class="sidebar-section">Truyện</div>
+      <div class="sidebar-link" data-section="ongoing">🌊 Cá dưới nước</div>
+      <div class="sidebar-link" data-section="completed">🍽️ Cá trên bàn</div>
+      <div class="sidebar-link" data-section="upcoming">🌤️ Cá trên trời</div>
+      <div class="sidebar-section">Công cụ</div>
+      <div class="sidebar-link" data-section="new-chapter">✏️ Đăng chương mới</div>
+      <div class="sidebar-link" data-section="new-story">📚 Thêm truyện</div>
     </div>
+
+    <!-- MAIN -->
     <div class="main">
 
       <!-- DASHBOARD -->
       <div class="section active" id="sec-dashboard">
-        <div class="sec-title">📊 Dashboard</div>
-        <div class="stat-grid">
-          <div class="stat-card"><div class="stat-num" id="stOngoing">–</div><div class="stat-label">Đang làm</div></div>
-          <div class="stat-card"><div class="stat-num" id="stDone">–</div><div class="stat-label">Hoàn thành</div></div>
-          <div class="stat-card"><div class="stat-num" id="stChaps">–</div><div class="stat-label">Tổng chương</div></div>
-          <div class="stat-card"><div class="stat-num" id="stUpcoming">–</div><div class="stat-label">Sắp đào</div></div>
+        <div class="section-title">📊 Dashboard</div>
+        <div class="stat-grid" id="statGrid">
+          <div class="stat-card"><div class="stat-num" id="statOngoing">–</div><div class="stat-label">Đang tiến hành</div></div>
+          <div class="stat-card"><div class="stat-num" id="statCompleted">–</div><div class="stat-label">Hoàn thành</div></div>
+          <div class="stat-card"><div class="stat-num" id="statChaps">–</div><div class="stat-label">Tổng chương</div></div>
+          <div class="stat-card"><div class="stat-num" id="statUpcoming">–</div><div class="stat-label">Sắp đào</div></div>
         </div>
-        <div id="dashRecent"></div>
+        <div id="recentList"><div class="empty">Đang tải...</div></div>
       </div>
 
-      <!-- ONGOING -->
+      <!-- ONGOING (CA DUOI NUOC) -->
       <div class="section" id="sec-ongoing">
-        <div class="sec-title">🌊 Cá dưới nước</div>
-        <div id="ongoingList"></div>
+        <div class="section-title">🌊 Cá dưới nước — Truyện đang tiến hành</div>
+        <div id="ongoingStoryList"></div>
       </div>
 
-      <!-- COMPLETED -->
+      <!-- COMPLETED (CA TREN BAN) -->
       <div class="section" id="sec-completed">
-        <div class="sec-title">🍽️ Cá trên bàn</div>
-        <div id="completedList"></div>
+        <div class="section-title">🍽️ Cá trên bàn — Truyện hoàn thành</div>
+        <div id="completedStoryList"></div>
       </div>
 
       <!-- UPCOMING -->
       <div class="section" id="sec-upcoming">
-        <div class="sec-title">🌤️ Sắp đào</div>
-        <div id="upcomingList"></div>
+        <div class="section-title">🌤️ Cá trên trời — Sắp đào</div>
+        <div class="empty" style="margin-top:20px">Chỉnh sửa file <code>src/pages/ca-tren-troi/index.astro</code> để cập nhật danh sách.</div>
       </div>
 
-      <!-- CHAPTER LIST -->
-      <div class="section" id="sec-chap-list">
+      <!-- CHAPTER LIST (embedded) -->
+      <div class="section" id="sec-chapter-list">
         <div class="editor-header">
           <span class="editor-back" id="chapListBack">← Quay lại</span>
           <div class="editor-title" id="chapListTitle">Danh sách chương</div>
           <button class="btn btn-sky btn-sm" id="addChapBtn">+ Thêm chương</button>
-        </div>
-        <!-- Bulk bar -->
-        <div class="bulk-bar" id="bulkBar">
-          <span id="bulkCount">0 đã chọn</span>
-          <button class="btn btn-red btn-sm" id="bulkDeleteBtn">🗑 Xoá hàng loạt</button>
-          <button class="btn btn-outline btn-sm" id="bulkUnselectBtn" style="color:#fff;border-color:rgba(255,255,255,.4)">Bỏ chọn tất cả</button>
-        </div>
-        <div class="chap-toolbar">
-          <button class="btn btn-outline btn-sm" id="selectAllBtn">☑ Chọn tất cả</button>
-          <input type="text" id="chapSearch" placeholder="Tìm chương..." style="padding:5px 12px;border:1.5px solid var(--border);border-radius:var(--r-pill);font-size:.78rem;color:var(--text);background:var(--bg);width:200px" />
         </div>
         <div id="chapTableWrap"></div>
       </div>
@@ -324,73 +316,78 @@
           <span class="editor-status" id="editorStatus"></span>
           <button class="btn btn-sky" id="saveBtn">💾 Lưu & Deploy</button>
         </div>
-        <div class="tabs" id="editorTabs">
-          <div class="tab active" data-tab="write">✏️ Soạn thảo</div>
-          <div class="tab" data-tab="meta">⚙ Thông tin</div>
-          <div class="tab" data-tab="preview">👁 Preview</div>
+
+        <div class="meta-grid">
+          <div class="field">
+            <label>Tiêu đề chương</label>
+            <input type="text" id="ef-title" placeholder="VD: Chương 5 - Tên chương" />
+          </div>
+          <div class="field">
+            <label>Số chương (dùng để sắp xếp)</label>
+            <input type="number" id="ef-chuong" min="0" placeholder="5" />
+          </div>
+          <div class="field">
+            <label>Mã truyện (truyen_id)</label>
+            <input type="text" id="ef-truyen-id" placeholder="VD: ndntkm" readonly style="background:#f8fafc" />
+          </div>
+          <div class="field">
+            <label>Ngày đăng</label>
+            <input type="date" id="ef-date" />
+          </div>
         </div>
-        <div class="tab-panel active" id="tab-write">
+        <div class="field">
+          <label>Tags (cách nhau bằng dấu phẩy)</label>
+          <input type="text" id="ef-tags" placeholder="đam mỹ, hiện đại, HE" />
+        </div>
+
+        <div class="field">
+          <label>Nội dung chương (Markdown)</label>
           <div class="toolbar">
-            <button class="tool-btn" data-wrap="**" data-end="**"><b>B</b></button>
-            <button class="tool-btn" data-wrap="*" data-end="*"><i>I</i></button>
-            <button class="tool-btn" data-ins="&#10;---&#10;">── HR ──</button>
-            <button class="tool-btn" data-ins="&#10;> ">❝ Quote</button>
-            <button class="tool-btn" data-ins="&#10;## ">H2</button>
-            <button class="tool-btn" data-ins="&#10;#### ">H4</button>
+            <button class="tool-btn" data-wrap="**" data-wrap-end="**">B</button>
+            <button class="tool-btn" data-wrap="*" data-wrap-end="*"><i>I</i></button>
+            <button class="tool-btn" data-insert="&#10;---&#10;">── HR ──</button>
+            <button class="tool-btn" data-insert="&#10;> ">❝ Quote</button>
+            <button class="tool-btn" data-insert="&#10;## ">H2</button>
+            <button class="tool-btn" data-insert="&#10;#### ">H4</button>
+            <button class="tool-btn" id="previewToggleBtn">👁 Preview</button>
           </div>
           <textarea class="content-editor" id="ef-content" placeholder="Dán nội dung chương vào đây..."></textarea>
-          <div class="word-count" id="wordCount">0 ký tự · 0 từ</div>
+          <div class="word-count" id="wordCount">0 ký tự</div>
         </div>
-        <div class="tab-panel" id="tab-meta">
-          <div class="meta-grid">
-            <div class="field"><label>Tiêu đề chương</label><input type="text" id="ef-title" placeholder="Chương 5 – Tên chương" /></div>
-            <div class="field"><label>Số chương</label><input type="number" id="ef-chuong" min="0" /></div>
-            <div class="field"><label>Mã truyện (truyen_id)</label><input type="text" id="ef-tid" readonly style="background:var(--sky-pale)" /></div>
-            <div class="field"><label>Ngày đăng</label><input type="date" id="ef-date" /></div>
-          </div>
-          <div class="field"><label>Tags (phẩy)</label><input type="text" id="ef-tags" /></div>
-        </div>
-        <div class="tab-panel" id="tab-preview">
-          <div class="preview-panel" id="previewPanel" style="display:block"></div>
-        </div>
+
+        <!-- Preview panel -->
+        <div id="previewPanel" style="display:none;border:1.5px solid var(--sky-light);border-radius:var(--r-md);padding:24px 28px;background:#fff;margin-top:-8px;line-height:1.9;font-size:.95rem;min-height:200px;"></div>
       </div>
 
-      <!-- STORY META EDITOR -->
-      <div class="section" id="sec-story-meta">
-        <div class="editor-header">
-          <span class="editor-back" id="metaBack">← Quay lại</span>
-          <div class="editor-title" id="metaTitle">Thông tin truyện</div>
-          <button class="btn btn-sky" id="metaSaveBtn">💾 Lưu thông tin</button>
+      <!-- NEW STORY FORM -->
+      <div class="section" id="sec-new-story">
+        <div class="section-title">📚 Thêm truyện mới</div>
+        <div class="field"><label>Tên truyện</label><input type="text" id="ns-title" placeholder="VD: Vạn dặm vân" /></div>
+        <div class="meta-grid">
+          <div class="field"><label>Mã truyện (slug, không dấu)</label><input type="text" id="ns-slug" placeholder="VD: van-dam-van" /></div>
+          <div class="field"><label>Tác giả</label><input type="text" id="ns-author" placeholder="VD: Tam Đạo" /></div>
         </div>
-        <div class="story-meta-card">
-          <h3>Thông tin cơ bản</h3>
-          <div class="meta-grid">
-            <div class="field"><label>Tên truyện</label><input type="text" id="sm-title" /></div>
-            <div class="field"><label>Tác giả</label><input type="text" id="sm-author" /></div>
-            <div class="field"><label>Tổng chương dự kiến</label><input type="number" id="sm-total" /></div>
-            <div class="field"><label>Trạng thái</label>
-              <select id="sm-status">
-                <option value="ongoing">🌊 Đang tiến hành</option>
-                <option value="completed">✅ Hoàn thành</option>
-                <option value="upcoming">🌤️ Sắp đào</option>
-              </select>
-            </div>
+        <div class="meta-grid">
+          <div class="field">
+            <label>Phân loại</label>
+            <select id="ns-cat">
+              <option value="ca-duoi-nuoc">🌊 Cá dưới nước (Đang tiến hành)</option>
+              <option value="ca-tren-ban">🍽️ Cá trên bàn (Hoàn thành)</option>
+            </select>
           </div>
-          <div class="field"><label>Đường dẫn ảnh bìa</label><input type="text" id="sm-cover" placeholder="/dynamic-duo-web/images/..." /></div>
-          <div class="field"><label>Mô tả ngắn</label><textarea id="sm-desc" style="min-height:70px"></textarea></div>
-          <div class="field"><label>Tags</label><input type="text" id="sm-tags" /></div>
+          <div class="field"><label>Tags</label><input type="text" id="ns-tags" placeholder="đam mỹ, hiện đại, HE" /></div>
         </div>
-        <div class="story-meta-card">
-          <h3>Nội dung trang giới thiệu</h3>
-          <div class="field"><label>Nội dung giới thiệu (Markdown)</label><textarea id="sm-body" style="min-height:200px"></textarea></div>
-        </div>
+        <div class="field"><label>Mô tả ngắn</label><textarea id="ns-desc" style="min-height:80px" placeholder="Câu tagline của truyện..."></textarea></div>
+        <div class="field"><label>Nội dung giới thiệu (Markdown)</label><textarea id="ns-body" style="min-height:200px" placeholder="Mô tả chi tiết, nhân vật, mục lục..."></textarea></div>
+        <button class="btn btn-sky" id="createStoryBtn">🚀 Tạo trang truyện & Deploy</button>
       </div>
 
-      <!-- QUICK POST -->
-      <div class="section" id="sec-quick-post">
-        <div class="sec-title">✏️ Đăng chương nhanh</div>
-        <div class="field"><label>Chọn truyện</label>
-          <select id="qp-story">
+      <!-- NEW CHAPTER SHORTCUT -->
+      <div class="section" id="sec-new-chapter">
+        <div class="section-title">✏️ Đăng chương mới nhanh</div>
+        <div class="field">
+          <label>Chọn truyện</label>
+          <select id="nc-story">
             <option value="ca-duoi-nuoc/quan-he-ban-cung-phong|qhbcp">Quan hệ bạn cùng phòng</option>
             <option value="ca-duoi-nuoc/ha-chay-dong-hoang|hcdh">Hạ cháy đồng hoang</option>
             <option value="ca-tren-ban/neu-dem-nay-troi-khong-mua|ndntkm">Nếu đêm nay trời không mưa</option>
@@ -400,819 +397,675 @@
           </select>
         </div>
         <div class="meta-grid">
-          <div class="field"><label>Tiêu đề</label><input type="text" id="qp-title" /></div>
-          <div class="field"><label>Số chương</label><input type="number" id="qp-chuong" min="1" /></div>
+          <div class="field"><label>Tiêu đề chương</label><input type="text" id="nc-title" placeholder="VD: Chương 7 - Tên chương" /></div>
+          <div class="field"><label>Số chương</label><input type="number" id="nc-chuong" min="1" placeholder="7" /></div>
         </div>
-        <div class="field"><label>Tags</label><input type="text" id="qp-tags" placeholder="đam mỹ, hiện đại" /></div>
+        <div class="field"><label>Tags (cách nhau bằng dấu phẩy)</label><input type="text" id="nc-tags" placeholder="đam mỹ, hiện đại" /></div>
         <div class="field">
-          <label>Nội dung</label>
+          <label>Nội dung chương</label>
           <div class="toolbar">
-            <button class="tool-btn" data-wrap2="**" data-end2="**"><b>B</b></button>
-            <button class="tool-btn" data-wrap2="*" data-end2="*"><i>I</i></button>
-            <button class="tool-btn" data-ins2="&#10;---&#10;">── HR</button>
-            <button class="tool-btn" data-ins2="&#10;> ">❝</button>
+            <button class="tool-btn" data-target="nc-content" data-wrap="**" data-wrap-end="**">B</button>
+            <button class="tool-btn" data-target="nc-content" data-wrap="*" data-wrap-end="*"><i>I</i></button>
+            <button class="tool-btn" data-target="nc-content" data-insert="&#10;---&#10;">── HR</button>
+            <button class="tool-btn" data-target="nc-content" data-insert="&#10;> ">❝</button>
           </div>
-          <textarea class="content-editor" id="qp-content" style="min-height:300px"></textarea>
-          <div class="word-count" id="qpWordCount">0 ký tự</div>
+          <textarea class="content-editor" id="nc-content" placeholder="Dán nội dung chương vào đây (văn bản thuần)..."></textarea>
+          <div class="word-count" id="ncWordCount">0 ký tự</div>
         </div>
-        <button class="btn btn-sky" id="qpSaveBtn">🚀 Đăng chương & Deploy</button>
+        <button class="btn btn-sky" id="ncSaveBtn">🚀 Đăng chương & Deploy</button>
       </div>
 
-      <!-- BULK UPLOAD -->
-      <div class="section" id="sec-bulk-upload">
-        <div class="sec-title">📦 Upload hàng loạt</div>
-
-        <div class="tabs" id="bulkTabs">
-          <div class="tab active" data-bt="paste">📋 Dán nhiều chương</div>
-          <div class="tab" data-bt="word">📄 Từ file Word/TXT</div>
-        </div>
-
-        <div class="tab-panel active" id="bt-paste">
-          <p style="font-size:.82rem;color:var(--text-mid);margin-bottom:14px;line-height:1.7">
-            Dán nội dung nhiều chương vào đây. Mỗi chương bắt đầu bằng dòng tiêu đề như:<br/>
-            <code style="background:var(--sky-pale);padding:2px 6px;border-radius:4px;font-size:.78rem">### Chương 5 – Tên chương</code>
-            hoặc <code style="background:var(--sky-pale);padding:2px 6px;border-radius:4px;font-size:.78rem">Chương 5</code>
-          </p>
-          <div class="field"><label>Chọn truyện</label>
-            <select id="bu-story">
-              <option value="ca-duoi-nuoc/quan-he-ban-cung-phong|qhbcp">Quan hệ bạn cùng phòng</option>
-              <option value="ca-duoi-nuoc/ha-chay-dong-hoang|hcdh">Hạ cháy đồng hoang</option>
-              <option value="ca-tren-ban/neu-dem-nay-troi-khong-mua|ndntkm">Nếu đêm nay trời không mưa</option>
-              <option value="ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay|tnctsct">Tôi nghĩ chúng tôi sắp chia tay</option>
-              <option value="ca-tren-ban/vat-de-vo|vdv">Vật dễ vỡ</option>
-              <option value="ca-tren-ban/thieu-de-xuan-tam|tdxt">Thiếu đế xuân tâm</option>
-            </select>
-          </div>
-          <div class="meta-grid">
-            <div class="field"><label>Số chương bắt đầu</label><input type="number" id="bu-start" value="1" min="1" /></div>
-            <div class="field"><label>Tags chung</label><input type="text" id="bu-tags" placeholder="đam mỹ, hiện đại" /></div>
-          </div>
-          <div class="field">
-            <label>Dán toàn bộ nội dung (auto phân tách theo tiêu đề chương)</label>
-            <textarea id="bu-content" style="min-height:280px;font-size:.84rem" placeholder="### Chương 1 – Tên&#10;Nội dung chương 1...&#10;&#10;### Chương 2 – Tên&#10;Nội dung chương 2..."></textarea>
-          </div>
-          <div id="bu-preview" style="margin:10px 0;font-size:.78rem;color:var(--text-mid)"></div>
-          <div class="progress-wrap" id="bu-progress" style="display:none">
-            <div style="font-size:.78rem;color:var(--text-mid);margin-bottom:4px" id="bu-prog-label">Đang upload...</div>
-            <div class="progress-bar"><div class="progress-fill" id="bu-prog-fill" style="width:0%"></div></div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn btn-outline" id="bu-parseBtn">🔍 Phân tách & Xem trước</button>
-            <button class="btn btn-sky" id="bu-uploadBtn" disabled>🚀 Upload tất cả </button>
-          </div>
-        </div>
-
-        <div class="tab-panel" id="bt-word">
-          <p style="font-size:.82rem;color:var(--text-mid);margin-bottom:14px;line-height:1.7">
-            Chọn file <strong>.txt</strong> hoặc <strong>.doc/.docx</strong>. Hệ thống sẽ tự tách thành chương dựa trên tiêu đề <code>Chương N</code>.
-          </p>
-          <div class="field"><label>Chọn truyện</label>
-            <select id="fw-story">
-              <option value="ca-duoi-nuoc/quan-he-ban-cung-phong|qhbcp">Quan hệ bạn cùng phòng</option>
-              <option value="ca-duoi-nuoc/ha-chay-dong-hoang|hcdh">Hạ cháy đồng hoang</option>
-              <option value="ca-tren-ban/neu-dem-nay-troi-khong-mua|ndntkm">Nếu đêm nay trời không mưa</option>
-              <option value="ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay|tnctsct">Tôi nghĩ chúng tôi sắp chia tay</option>
-              <option value="ca-tren-ban/vat-de-vo|vdv">Vật dễ vỡ</option>
-              <option value="ca-tren-ban/thieu-de-xuan-tam|tdxt">Thiếu đế xuân tâm</option>
-            </select>
-          </div>
-          <div class="meta-grid">
-            <div class="field"><label>Số chương bắt đầu</label><input type="number" id="fw-start" value="1" min="1" /></div>
-            <div class="field"><label>Tags chung</label><input type="text" id="fw-tags" placeholder="đam mỹ, hiện đại" /></div>
-          </div>
-          <div class="upload-zone" id="fileDropZone" onclick="document.getElementById('fileInput').click()">
-            <div style="font-size:2rem;margin-bottom:8px">📄</div>
-            <p><strong>Kéo & thả file vào đây</strong></p>
-            <p>hoặc click để chọn file (.txt, .doc, .docx)</p>
-            <input type="file" id="fileInput" accept=".txt,.doc,.docx" style="display:none" />
-          </div>
-          <div class="upload-preview" id="filePreview"></div>
-          <div class="progress-wrap" id="fw-progress" style="display:none;margin-top:10px">
-            <div style="font-size:.78rem;color:var(--text-mid);margin-bottom:4px" id="fw-prog-label">Đang upload...</div>
-            <div class="progress-bar"><div class="progress-fill" id="fw-prog-fill" style="width:0%"></div></div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn btn-sky" id="fw-uploadBtn" disabled>🚀 Upload tất cả</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEW STORY -->
-      <div class="section" id="sec-new-story">
-        <div class="sec-title">📚 Thêm truyện mới</div>
-        <div class="field"><label>Tên truyện</label><input type="text" id="ns-title" /></div>
-        <div class="meta-grid">
-          <div class="field"><label>Slug (URL, tự động)</label><input type="text" id="ns-slug" /></div>
-          <div class="field"><label>Tác giả</label><input type="text" id="ns-author" /></div>
-        </div>
-        <div class="meta-grid">
-          <div class="field"><label>Phân loại</label>
-            <select id="ns-cat">
-              <option value="ca-duoi-nuoc">🌊 Cá dưới nước (Đang làm)</option>
-              <option value="ca-tren-ban">🍽️ Cá trên bàn (Hoàn thành)</option>
-            </select>
-          </div>
-          <div class="field"><label>Tags</label><input type="text" id="ns-tags" /></div>
-        </div>
-        <div class="field"><label>Mô tả ngắn (tagline)</label><textarea id="ns-desc" style="min-height:70px"></textarea></div>
-        <div class="field"><label>Nội dung giới thiệu (Markdown)</label><textarea id="ns-body" style="min-height:200px"></textarea></div>
-        <button class="btn btn-sky" id="nsCreateBtn">🚀 Tạo trang truyện</button>
-      </div>
-
-    </div>
-  </div>
-</div>
+    </div><!-- /main -->
+  </div><!-- /admin-layout -->
+</div><!-- /app -->
 
 <script is:inline>
-// ═══════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════
-const REPO   = 'dynamicduooq/dynamic-duo-web';
+// ═══════════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════════
+const REPO = 'dynamicduooq/dynamic-duo-web';
 const BRANCH = 'main';
+// Đặt mật khẩu admin tại đây (hoặc đọc từ biến môi trường)
 const ADMIN_PASSWORD = 'dynamicduo2026'; // ← Đổi mật khẩu tại đây
 
+// Story definitions
 const STORIES = [
-  { id:'qhbcp',   title:'Quan hệ bạn cùng phòng',          path:'src/pages/ca-duoi-nuoc/quan-he-ban-cung-phong', cat:'ongoing'   },
-  { id:'hcdh',    title:'Hạ cháy đồng hoang',               path:'src/pages/ca-duoi-nuoc/ha-chay-dong-hoang',    cat:'ongoing'   },
-  { id:'ndntkm',  title:'Nếu đêm nay trời không mưa',       path:'src/pages/ca-tren-ban/neu-dem-nay-troi-khong-mua', cat:'completed' },
-  { id:'tnctsct', title:'Tôi nghĩ chúng tôi sắp chia tay', path:'src/pages/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay', cat:'completed' },
-  { id:'vdv',     title:'Vật dễ vỡ',                        path:'src/pages/ca-tren-ban/vat-de-vo', cat:'upcoming' },
-  { id:'tdxt',    title:'Thiếu đế xuân tâm',                path:'src/pages/ca-tren-ban/thieu-de-xuan-tam', cat:'upcoming' },
+  { id: 'qhbcp', title: 'Quan hệ bạn cùng phòng', path: 'src/pages/ca-duoi-nuoc/quan-he-ban-cung-phong', cat: 'ongoing' },
+  { id: 'hcdh',  title: 'Hạ cháy đồng hoang',      path: 'src/pages/ca-duoi-nuoc/ha-chay-dong-hoang', cat: 'ongoing' },
+  { id: 'ndntkm', title: 'Nếu đêm nay trời không mưa', path: 'src/pages/ca-tren-ban/neu-dem-nay-troi-khong-mua', cat: 'completed' },
+  { id: 'tnctsct', title: 'Tôi nghĩ chúng tôi sắp chia tay', path: 'src/pages/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay', cat: 'completed' },
+  { id: 'vdv',     title: 'Vật dễ vỡ',                          path: 'src/pages/ca-tren-ban/vat-de-vo', cat: 'completed' },
+  { id: 'tdxt',    title: 'Thiếu đế xuân tâm',                   path: 'src/pages/ca-tren-ban/thieu-de-xuan-tam', cat: 'completed' },
 ];
 
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
-let TOKEN='', currentStory=null, currentFile=null, editorMode='new';
-let parsedChapters=[], fileChapters=[], confirmCb=null, fileCache={};
-let checkedChaps=new Set();
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let TOKEN = '';
+let currentStory = null; // { id, title, path, cat }
+let currentFile = null;  // { path, sha, content, ... }
+let editorMode = 'new';  // 'new' | 'edit'
+let confirmCallback = null;
+let fileCache = {};      // path → { sha, content }
 
-// ═══════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════
-const $=id=>document.getElementById(id);
-const $$=sel=>document.querySelectorAll(sel);
-
-function toast(msg,type='info',dur=3500){
-  const el=$('toast');el.textContent=msg;el.className=`toast ${type} show`;
-  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),dur);
+// ═══════════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════════
+function toast(msg, type = 'info', dur = 3500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), dur);
 }
 
-function showSection(id){
-  $$('.section').forEach(s=>s.classList.remove('active'));
-  $(`sec-${id}`)?.classList.add('active');
-  $$('.sb-link').forEach(l=>l.classList.toggle('active',l.dataset.s===id));
-}
-
-function confirmDlg(title,msg,onOk){
-  $('confirmTitle').textContent=title;
-  $('confirmMsg').textContent=msg;
-  $('confirmOverlay').classList.add('open');
-  confirmCb=onOk;
-}
-$('confirmOk').onclick=()=>{ $('confirmOverlay').classList.remove('open'); confirmCb?.(); };
-$('confirmCancel').onclick=()=>$('confirmOverlay').classList.remove('open');
-
-function b64enc(str){ return btoa(unescape(encodeURIComponent(str))); }
-function b64dec(str){ return decodeURIComponent(escape(atob(str))); }
-function today(){ return new Date().toISOString().slice(0,10); }
-function countWords(str){ return str.trim() ? str.trim().split(/\s+/).length : 0; }
-
-// ═══════════════════════════════════════
-// GITHUB API
-// ═══════════════════════════════════════
-async function ghFetch(ep,opts={}){
-  const r=await fetch(`https://api.github.com${ep}`,{
-    ...opts,
-    headers:{ Authorization:`token ${TOKEN}`, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json', ...(opts.headers||{}) }
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(`sec-${id}`)?.classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.section === id);
   });
-  if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error(e.message||`HTTP ${r.status}`); }
-  return r.json();
 }
 
-async function listDir(path){
+function confirm(title, msg, onOk) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmOverlay').classList.add('open');
+  confirmCallback = onOk;
+}
+
+document.getElementById('confirmOk').addEventListener('click', () => {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  confirmCallback?.();
+});
+document.getElementById('confirmCancel').addEventListener('click', () => {
+  document.getElementById('confirmOverlay').classList.remove('open');
+});
+
+function b64encode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64decode(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function wordCount(str) {
+  return str ? str.length : 0;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════════════════════
+async function ghFetch(endpoint, opts = {}) {
+  const res = await fetch(`https://api.github.com${endpoint}`, {
+    ...opts,
+    headers: {
+      Authorization: `token ${TOKEN}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/vnd.github.v3+json',
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function listDir(path) {
   return ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
 }
 
-async function getFile(path){
-  if(fileCache[path]) return fileCache[path];
-  const d=await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
-  const decoded=b64dec(d.content.replace(/\n/g,''));
-  const r={...d,decoded};
-  fileCache[path]=r; return r;
+async function getFile(path) {
+  if (fileCache[path]) return fileCache[path];
+  const data = await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  const content = b64decode(data.content.replace(/\n/g, ''));
+  const result = { ...data, decoded: content };
+  fileCache[path] = result;
+  return result;
 }
 
-async function putFile(path,content,msg,sha=null){
+async function putFile(path, content, message, sha = null) {
   delete fileCache[path];
-  const body={ message:msg, content:b64enc(content), branch:BRANCH };
-  if(sha) body.sha=sha;
-  return ghFetch(`/repos/${REPO}/contents/${path}`,{ method:'PUT', body:JSON.stringify(body) });
-}
-
-async function delFile(path,sha,msg){
-  delete fileCache[path];
-  return ghFetch(`/repos/${REPO}/contents/${path}`,{
-    method:'DELETE', body:JSON.stringify({ message:msg, sha, branch:BRANCH })
+  const body = {
+    message,
+    content: b64encode(content),
+    branch: BRANCH,
+  };
+  if (sha) body.sha = sha;
+  return ghFetch(`/repos/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
   });
 }
 
-// ═══════════════════════════════════════
-// DARK MODE
-// ═══════════════════════════════════════
-function applyTheme(dark){
-  document.documentElement.setAttribute('data-theme',dark?'dark':'');
-  $('themeBtn').textContent=dark?'☀️':'🌙';
-  localStorage.setItem('dd-theme',dark?'dark':'light');
+async function deleteFile(path, sha, message) {
+  delete fileCache[path];
+  return ghFetch(`/repos/${REPO}/contents/${path}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ message, sha, branch: BRANCH }),
+  });
 }
-$('themeBtn').onclick=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
-(()=>{ if(localStorage.getItem('dd-theme')==='dark') applyTheme(true); })();
 
-// ═══════════════════════════════════════
-// LOGIN
-// ═══════════════════════════════════════
-async function doLogin(){
-  const token=$('tokenInput').value.trim();
-  const pass=$('passInput').value;
-  const err=$('loginErr');
-  err.style.display='none';
-  if(pass!==ADMIN_PASSWORD){ err.textContent='Mật khẩu không đúng.'; err.style.display='block'; return; }
-  if(!token){ err.textContent='Vui lòng nhập GitHub Token.'; err.style.display='block'; return; }
-  const btn=$('loginBtn'); btn.innerHTML='<span class="spin"></span> Đang kiểm tra...'; btn.disabled=true;
-  try{
-    TOKEN=token;
-    const user=await ghFetch('/user');
-    $('topUser').textContent=`👤 ${user.login}`;
-    $('loginScreen').style.display='none';
-    $('app').style.display='block';
+// ═══════════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════════
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const token = document.getElementById('tokenInput').value.trim();
+  const pass = document.getElementById('passInput').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  if (pass !== ADMIN_PASSWORD) {
+    errEl.textContent = 'Mật khẩu không đúng.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!token) {
+    errEl.textContent = 'Vui lòng nhập GitHub Token.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  btn.innerHTML = '<span class="spinner"></span> Đang kiểm tra...';
+  btn.disabled = true;
+
+  try {
+    TOKEN = token;
+    const user = await ghFetch('/user');
+    document.getElementById('topbarUser').textContent = `👤 ${user.login}`;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
     loadDashboard();
-  }catch(e){
-    TOKEN=''; err.textContent='Token không hợp lệ.'; err.style.display='block';
-  }finally{ btn.innerHTML='Đăng nhập'; btn.disabled=false; }
-}
-$('loginBtn').onclick=doLogin;
-$('passInput').onkeydown=e=>{ if(e.key==='Enter') doLogin(); };
-$('logoutBtn').onclick=()=>{
-  TOKEN=''; fileCache={}; checkedChaps.clear();
-  $('app').style.display='none'; $('loginScreen').style.display='flex';
-  $('tokenInput').value=''; $('passInput').value='';
-};
-
-// ═══════════════════════════════════════
-// SIDEBAR NAV
-// ═══════════════════════════════════════
-$$('.sb-link').forEach(l=>l.onclick=()=>{
-  const s=l.dataset.s; showSection(s);
-  if(s==='dashboard') loadDashboard();
-  if(s==='ongoing'||s==='completed'||s==='upcoming') renderStorySection(s);
+  } catch (e) {
+    TOKEN = '';
+    errEl.textContent = 'Token không hợp lệ hoặc không có quyền repo.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.innerHTML = 'Đăng nhập';
+    btn.disabled = false;
+  }
 });
 
-// ═══════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════
-async function loadDashboard(){
-  const bycat=cat=>STORIES.filter(s=>s.cat===cat).length;
-  $('stOngoing').textContent=bycat('ongoing');
-  $('stDone').textContent=bycat('completed');
-  $('stUpcoming').textContent=bycat('upcoming');
-  let total=0;
-  let html='<div style="font-size:.76rem;color:var(--text-dim);margin-bottom:10px">Chương đã đăng theo truyện:</div>';
-  for(const s of STORIES){
-    try{
-      const files=await listDir(s.path);
-      const n=files.filter(f=>f.name!=='index.md'&&f.name.endsWith('.md')).length;
-      total+=n;
-      html+=`<div class="story-item">
-        <div class="story-item-info"><h3>${s.title}</h3><p>${n} chương · ${s.cat}</p></div>
-        <div class="story-item-btns">
-          <button class="btn btn-outline btn-sm" onclick="openChapList('${s.id}')">Quản lý chương</button>
-        </div>
-      </div>`;
-    }catch(e){}
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  TOKEN = ''; fileCache = {};
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('tokenInput').value = '';
+  document.getElementById('passInput').value = '';
+});
+
+// Enter key login
+document.getElementById('passInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+// ═══════════════════════════════════════════════════════════
+//  SIDEBAR NAV
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', () => {
+    const sec = link.dataset.section;
+    showSection(sec);
+    if (sec === 'dashboard') loadDashboard();
+    if (sec === 'ongoing') loadStoryList('ongoing');
+    if (sec === 'completed') loadStoryList('completed');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════════
+async function loadDashboard() {
+  const ongoing = STORIES.filter(s => s.cat === 'ongoing');
+  const completed = STORIES.filter(s => s.cat === 'completed');
+  document.getElementById('statOngoing').textContent = ongoing.length;
+  document.getElementById('statCompleted').textContent = completed.length;
+  document.getElementById('statUpcoming').textContent = '☁️';
+
+  let totalChaps = 0;
+  let recentHtml = '<div style="font-size:.8rem;color:var(--text-dim);margin-bottom:12px">Chương mới nhất:</div><div style="display:flex;flex-direction:column;gap:8px">';
+
+  for (const story of STORIES) {
+    try {
+      const files = await listDir(story.path);
+      const chaps = files.filter(f => f.name !== 'index.md' && f.name.endsWith('.md'));
+      totalChaps += chaps.length;
+      if (chaps.length > 0) {
+        const last = chaps[chaps.length - 1];
+        recentHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#fff;border:1px solid rgba(186,230,253,.5);border-radius:var(--r-md)">
+          <div>
+            <div style="font-size:.82rem;color:var(--text-main);font-weight:600">${story.title}</div>
+            <div style="font-size:.74rem;color:var(--text-dim)">${last.name}</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="openStoryChaps('${story.id}')">Xem chương</button>
+          </div>
+        </div>`;
+      }
+    } catch(e) {}
   }
-  $('stChaps').textContent=total;
-  $('dashRecent').innerHTML=html;
+  recentHtml += '</div>';
+  document.getElementById('statChaps').textContent = totalChaps;
+  document.getElementById('recentList').innerHTML = recentHtml;
 }
 
-// ═══════════════════════════════════════
-// STORY SECTIONS
-// ═══════════════════════════════════════
-function renderStorySection(cat){
-  const stories=STORIES.filter(s=>s.cat===cat);
-  const containerId=cat==='ongoing'?'ongoingList':cat==='completed'?'completedList':'upcomingList';
-  document.getElementById(containerId).innerHTML=stories.map(s=>`
-    <div class="story-item">
-      <div class="story-item-info">
-        <h3>${s.title}</h3>
-        <p style="font-family:monospace;font-size:.7rem">📁 ${s.path}</p>
+// ═══════════════════════════════════════════════════════════
+//  STORY LIST
+// ═══════════════════════════════════════════════════════════
+function loadStoryList(cat) {
+  const stories = STORIES.filter(s => s.cat === cat);
+  const containerId = cat === 'ongoing' ? 'ongoingStoryList' : 'completedStoryList';
+  const container = document.getElementById(containerId);
+  container.innerHTML = stories.map(s => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:#fff;border:1px solid rgba(186,230,253,.5);border-radius:var(--r-md);margin-bottom:12px">
+      <div>
+        <div style="font-family:'Literata',serif;font-size:1rem;color:var(--sky-dark);font-weight:600">${s.title}</div>
+        <div style="font-size:.74rem;color:var(--text-dim);margin-top:3px">📁 ${s.path}</div>
       </div>
-      <div class="story-item-btns">
-        <button class="btn btn-sky btn-sm" onclick="openChapList('${s.id}')">Danh sách chương</button>
-        <button class="btn btn-outline btn-sm" onclick="openStoryMeta('${s.id}')">✎ Thông tin truyện</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sky btn-sm" onclick="openStoryChaps('${s.id}')">Quản lý chương</button>
+        <button class="btn btn-outline btn-sm" onclick="editIndexPage('${s.id}')">Sửa trang truyện</button>
       </div>
     </div>
   `).join('');
 }
 
-// ═══════════════════════════════════════
-// CHAPTER LIST
-// ═══════════════════════════════════════
-window.openChapList=async function(storyId){
-  currentStory=STORIES.find(s=>s.id===storyId);
-  checkedChaps.clear();
-  updateBulkBar();
-  $('chapListTitle').textContent=currentStory.title;
-  $('chapListBack').onclick=()=>showSection(currentStory.cat==='ongoing'?'ongoing':currentStory.cat==='completed'?'completed':'upcoming');
-  $('addChapBtn').onclick=()=>openEditor('new');
-  $('chapSearch').value='';
-  showSection('chap-list');
+// ═══════════════════════════════════════════════════════════
+//  CHAPTER LIST
+// ═══════════════════════════════════════════════════════════
+window.openStoryChaps = async function(storyId) {
+  currentStory = STORIES.find(s => s.id === storyId);
+  document.getElementById('chapListTitle').textContent = `Chương — ${currentStory.title}`;
+  document.getElementById('chapListBack').onclick = () => {
+    showSection(currentStory.cat === 'ongoing' ? 'ongoing' : 'completed');
+  };
+  document.getElementById('addChapBtn').onclick = () => openEditor('new');
+  showSection('chapter-list');
   await renderChapTable();
 };
 
-async function renderChapTable(filter=''){
-  const wrap=$('chapTableWrap');
-  wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">Đang tải...</div>';
-  try{
-    const files=await listDir(currentStory.path);
-    let chaps=files.filter(f=>f.name!=='index.md'&&f.name.endsWith('.md')).sort((a,b)=>a.name.localeCompare(b.name,'vi',{numeric:true}));
-    if(filter) chaps=chaps.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase()));
-    if(!chaps.length){ wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim);font-style:italic">Chưa có chương nào.</div>'; return; }
+async function renderChapTable() {
+  const wrap = document.getElementById('chapTableWrap');
+  wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+  try {
+    const files = await listDir(currentStory.path);
+    const chaps = files
+      .filter(f => f.name !== 'index.md' && f.name.endsWith('.md'))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
-    let tbody='';
-    for(const f of chaps){
-      let chapTitle=f.name, chapDate='–';
-      try{
-        const fd=await getFile(`${currentStory.path}/${f.name}`);
-        const tm=fd.decoded.match(/^title:\s*"?([^"\n]+)"?/m);
-        const dm=fd.decoded.match(/^date:\s*"?([^"\n]+)"?/m);
-        if(tm) chapTitle=tm[1]; if(dm) chapDate=dm[1];
-      }catch(e){}
-      const m=f.name.match(/chuong-(\d+)/); const num=m?parseInt(m[1]):'?';
-      const checked=checkedChaps.has(f.name)?'checked':'';
-      tbody+=`<tr data-file="${f.name}" data-sha="${f.sha}">
-        <td><input type="checkbox" class="chap-check chap-cb" data-fn="${f.name}" ${checked}></td>
-        <td class="chap-num">${num}</td>
-        <td class="chap-title-cell" title="${chapTitle}">${chapTitle}</td>
-        <td class="chap-date">${chapDate}</td>
-        <td class="chap-actions">
-          <button class="btn btn-outline btn-sm" onclick="openEditor('edit','${f.name}')">✎ Sửa</button>
-          <button class="btn btn-red btn-sm" onclick="deleteOneChap('${f.name}','${f.sha}')">🗑</button>
-        </td>
-      </tr>`;
+    if (chaps.length === 0) {
+      wrap.innerHTML = '<div class="empty">Chưa có chương nào. Nhấn "+ Thêm chương" để bắt đầu.</div>';
+      return;
     }
-    wrap.innerHTML=`<table class="chap-table">
-      <thead><tr><th></th><th>#</th><th>Tiêu đề</th><th>Ngày</th><th>Thao tác</th></tr></thead>
-      <tbody>${tbody}</tbody>
+
+    wrap.innerHTML = `<table class="chap-table">
+      <thead><tr>
+        <th>#</th><th>Tên file</th><th>Tiêu đề</th><th>Ngày</th><th>Thao tác</th>
+      </tr></thead>
+      <tbody id="chapTbody"></tbody>
     </table>`;
 
-    // checkbox events
-    wrap.querySelectorAll('.chap-cb').forEach(cb=>{
-      cb.checked=checkedChaps.has(cb.dataset.fn);
-      cb.onchange=()=>{
-        if(cb.checked) checkedChaps.add(cb.dataset.fn); else checkedChaps.delete(cb.dataset.fn);
-        updateBulkBar();
-      };
-    });
-  }catch(e){ wrap.innerHTML=`<div style="color:var(--red);padding:16px">Lỗi: ${e.message}</div>`; }
-}
+    const tbody = document.getElementById('chapTbody');
+    for (let i = 0; i < chaps.length; i++) {
+      const f = chaps[i];
+      const m = f.name.match(/chuong-(\d+)/);
+      const num = m ? parseInt(m[1]) : i + 1;
 
-// Select all
-$('selectAllBtn').onclick=async()=>{
-  const cbs=document.querySelectorAll('.chap-cb');
-  const allChecked=[...cbs].every(c=>c.checked);
-  cbs.forEach(cb=>{ cb.checked=!allChecked; if(!allChecked) checkedChaps.add(cb.dataset.fn); else checkedChaps.delete(cb.dataset.fn); });
-  updateBulkBar();
-};
+      // Quick read frontmatter for title
+      let chapTitle = f.name;
+      try {
+        const fd = await getFile(`${currentStory.path}/${f.name}`);
+        const tm = fd.decoded.match(/^title:\s*"?([^"\n]+)"?/m);
+        if (tm) chapTitle = tm[1];
+      } catch(e) {}
 
-// Search filter
-$('chapSearch').oninput=e=>renderChapTable(e.target.value);
-
-function updateBulkBar(){
-  const n=checkedChaps.size;
-  $('bulkBar').classList.toggle('show',n>0);
-  $('bulkCount').textContent=`${n} đã chọn`;
-  $('bulkDeleteBtn').textContent=`🗑 Xoá ${n} chương`;
-}
-
-$('bulkUnselectBtn').onclick=()=>{
-  checkedChaps.clear(); updateBulkBar();
-  document.querySelectorAll('.chap-cb').forEach(cb=>cb.checked=false);
-};
-
-$('bulkDeleteBtn').onclick=()=>{
-  const n=checkedChaps.size;
-  confirmDlg('Xoá hàng loạt',`Xoá ${n} chương? Không thể hoàn tác!`,async()=>{
-    const btn=$('bulkDeleteBtn'); btn.innerHTML='<span class="spin"></span>';
-    let ok=0;
-    for(const fn of [...checkedChaps]){
-      try{
-        const fd=await getFile(`${currentStory.path}/${fn}`);
-        await delFile(`${currentStory.path}/${fn}`,fd.sha,`🗑 Xoá: ${fn}`);
-        ok++;
-      }catch(e){}
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="chap-num">${num}</td>
+        <td style="font-size:.75rem;color:var(--text-dim);font-family:monospace">${f.name}</td>
+        <td class="chap-title-cell">${chapTitle}</td>
+        <td class="chap-date">–</td>
+        <td class="chap-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEditor('edit','${f.name}')">✏️ Sửa</button>
+          <button class="btn btn-red btn-sm" onclick="deleteChap('${f.name}','${f.sha}')">🗑</button>
+        </td>`;
+      tbody.appendChild(tr);
     }
-    checkedChaps.clear(); updateBulkBar();
-    toast(`Đã xoá ${ok} chương.`,'success');
-    await renderChapTable();
-  });
+  } catch(e) {
+    wrap.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  EDITOR
+// ═══════════════════════════════════════════════════════════
+window.openEditor = async function(mode, filename = null) {
+  editorMode = mode;
+  showSection('editor');
+  document.getElementById('editorBack').onclick = () => {
+    showSection('chapter-list');
+    renderChapTable();
+  };
+
+  const today = todayISO();
+
+  if (mode === 'new') {
+    document.getElementById('editorTitle').textContent = `Chương mới — ${currentStory.title}`;
+    document.getElementById('ef-title').value = '';
+    document.getElementById('ef-chuong').value = '';
+    document.getElementById('ef-truyen-id').value = currentStory.id;
+    document.getElementById('ef-date').value = today;
+    document.getElementById('ef-tags').value = '';
+    document.getElementById('ef-content').value = '';
+    document.getElementById('editorStatus').textContent = '';
+    currentFile = { filename: null, sha: null };
+  } else {
+    document.getElementById('editorTitle').textContent = `Sửa: ${filename}`;
+    document.getElementById('editorStatus').textContent = '⏳ Đang tải...';
+    try {
+      const fd = await getFile(`${currentStory.path}/${filename}`);
+      currentFile = { filename, sha: fd.sha, path: `${currentStory.path}/${filename}` };
+      // Parse frontmatter
+      const fm = parseFrontmatter(fd.decoded);
+      document.getElementById('ef-title').value = fm.title || '';
+      document.getElementById('ef-chuong').value = fm.chuong || '';
+      document.getElementById('ef-truyen-id').value = fm.truyen_id || currentStory.id;
+      document.getElementById('ef-date').value = fm.date || today;
+      document.getElementById('ef-tags').value = Array.isArray(fm.tags) ? fm.tags.join(', ') : (fm.tags || '');
+      // Body = everything after second ---
+      const body = fd.decoded.replace(/^---[\s\S]*?---\s*/m, '').trim();
+      document.getElementById('ef-content').value = body;
+      document.getElementById('editorStatus').textContent = '✓ Đã tải';
+    } catch(e) {
+      document.getElementById('editorStatus').textContent = `Lỗi: ${e.message}`;
+    }
+  }
+
+  updateWordCount();
 };
 
-window.deleteOneChap=function(fn,sha){
-  confirmDlg('Xoá chương',`Xoá "${fn}"?`,async()=>{
-    try{ await delFile(`${currentStory.path}/${fn}`,sha,`🗑 Xoá: ${fn}`); toast('Đã xoá.','success'); renderChapTable(); }
-    catch(e){ toast(`Lỗi: ${e.message}`,'error'); }
-  });
+window.editIndexPage = async function(storyId) {
+  currentStory = STORIES.find(s => s.id === storyId);
+  editorMode = 'edit-index';
+  showSection('editor');
+  document.getElementById('editorTitle').textContent = `Sửa trang truyện — ${currentStory.title}`;
+  document.getElementById('editorBack').onclick = () => showSection(currentStory.cat === 'ongoing' ? 'ongoing' : 'completed');
+  document.getElementById('editorStatus').textContent = '⏳ Đang tải...';
+
+  try {
+    const fd = await getFile(`${currentStory.path}/index.md`);
+    currentFile = { filename: 'index.md', sha: fd.sha, path: `${currentStory.path}/index.md` };
+    const fm = parseFrontmatter(fd.decoded);
+    document.getElementById('ef-title').value = fm.title || '';
+    document.getElementById('ef-chuong').value = '';
+    document.getElementById('ef-truyen-id').value = fm.truyen_id || '';
+    document.getElementById('ef-date').value = fm.date || todayISO();
+    document.getElementById('ef-tags').value = Array.isArray(fm.tags) ? fm.tags.join(', ') : '';
+    const body = fd.decoded.replace(/^---[\s\S]*?---\s*/m, '').trim();
+    document.getElementById('ef-content').value = body;
+    document.getElementById('editorStatus').textContent = '✓ Đã tải';
+  } catch(e) {
+    document.getElementById('editorStatus').textContent = `Lỗi: ${e.message}`;
+  }
+  updateWordCount();
 };
 
-// ═══════════════════════════════════════
-// CHAPTER EDITOR
-// ═══════════════════════════════════════
-function parseFM(text){
-  const m=text.match(/^---\s*([\s\S]*?)---/); if(!m) return {};
-  const fm={};
-  let arr=null, arrKey=null;
-  for(const line of m[1].split('\n')){
-    const kv=line.match(/^(\w[\w_-]*):\s*(.*)/);
-    if(kv){ arr=null; const v=kv[2].trim().replace(/^"(.*)"$/,'$1'); fm[kv[1]]=v===''?(arr=[],arrKey=kv[1],arr):isNaN(v)?v:Number(v); }
-    else if(line.match(/^\s+-\s+"?(.+?)"?\s*$/)&&arr!==null) arr.push(line.match(/^\s+-\s+"?(.+?)"?\s*$/)[1]);
+function parseFrontmatter(text) {
+  const match = text.match(/^---\s*([\s\S]*?)---/);
+  if (!match) return {};
+  const fm = {};
+  const lines = match[1].split('\n');
+  let currentKey = null, currentArr = null;
+  for (const line of lines) {
+    const kvMatch = line.match(/^(\w[\w_-]*):\s*(.*)/);
+    if (kvMatch) {
+      currentArr = null;
+      const k = kvMatch[1], v = kvMatch[2].trim().replace(/^"(.*)"$/, '$1');
+      if (v === '') { fm[k] = []; currentKey = k; currentArr = fm[k]; }
+      else { fm[k] = isNaN(v) ? v : Number(v); currentKey = k; }
+    } else if (line.match(/^\s+-\s+"?(.+?)"?\s*$/) && currentArr !== null) {
+      currentArr.push(line.match(/^\s+-\s+"?(.+?)"?\s*$/)[1]);
+    }
   }
   return fm;
 }
 
-function buildMD(title,tid,chuong,date,tags,body){
-  const tl=tags.split(',').map(t=>t.trim()).filter(Boolean);
-  let fm='---\n';
-  fm+=`layout: ${tid?'../../../../':'../'}layouts/Layout.astro\n`;
-  fm+=`title: "${title.replace(/"/g,'\\"')}"\n`;
-  if(tid) fm+=`truyen_id: "${tid}"\n`;
-  if(chuong!==''&&chuong!==null) fm+=`chuong: ${chuong}\n`;
-  if(date) fm+=`date: "${date}"\n`;
-  if(tl.length) fm+=`tags:\n${tl.map(t=>`  - "${t.replace(/"/g,'\\"')}"`).join('\n')}\n`;
-  fm+='---\n\n';
-  return fm+body;
-}
-
-window.openEditor=async function(mode,filename=null){
-  editorMode=mode; currentFile={filename:null,sha:null,path:null};
-  $('editorTitle').textContent=mode==='new'?`Chương mới — ${currentStory?.title||''}`:filename;
-  $('editorBack').onclick=()=>{showSection('chap-list');renderChapTable();};
-  $('editorStatus').textContent='';
-  // reset tabs
-  $$('#editorTabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.tab==='write'));
-  $$('#tab-write, #tab-meta, #tab-preview').forEach(p=>p.classList.toggle('active',p.id==='tab-write'));
-
-  if(mode==='new'){
-    $('ef-title').value=''; $('ef-chuong').value=''; $('ef-tid').value=currentStory?.id||''; $('ef-date').value=today(); $('ef-tags').value=''; $('ef-content').value='';
-  } else {
-    $('editorStatus').textContent='⏳ Đang tải...';
-    try{
-      const p=`${currentStory.path}/${filename}`;
-      const fd=await getFile(p);
-      currentFile={filename,sha:fd.sha,path:p};
-      const fm=parseFM(fd.decoded);
-      $('ef-title').value=fm.title||'';
-      $('ef-chuong').value=fm.chuong??'';
-      $('ef-tid').value=fm.truyen_id||currentStory?.id||'';
-      $('ef-date').value=fm.date||today();
-      $('ef-tags').value=Array.isArray(fm.tags)?fm.tags.join(', '):(fm.tags||'');
-      const body=fd.decoded.replace(/^---[\s\S]*?---\s*/,'').trim();
-      $('ef-content').value=body;
-      $('editorStatus').textContent='✓ Đã tải';
-    }catch(e){ $('editorStatus').textContent=`Lỗi: ${e.message}`; }
+function buildMarkdown(title, truyen_id, chuong, date, tags, body) {
+  const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
+  let fm = '---\n';
+  fm += `title: "${title.replace(/"/g, '\\"')}"\n`;
+  if (truyen_id) fm += `truyen_id: "${truyen_id}"\n`;
+  if (chuong !== '' && chuong !== null) fm += `chuong: ${chuong}\n`;
+  if (date) fm += `date: "${date}"\n`;
+  if (tagList.length > 0) {
+    fm += `tags:\n${tagList.map(t => `  - "${t.replace(/"/g, '\\"')}"`).join('\n')}\n`;
   }
-  updateWC(); showSection('editor');
-};
-
-// Editor tabs
-$$('#editorTabs .tab').forEach(tab=>{
-  tab.onclick=()=>{
-    $$('#editorTabs .tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    $$('.tab-panel').forEach(p=>p.classList.remove('active'));
-    $(`tab-${tab.dataset.tab}`)?.classList.add('active');
-    if(tab.dataset.tab==='preview') updatePreview();
-  };
-});
-
-function updatePreview(){
-  let h=$('ef-content').value
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/^#### (.+)$/gm,'<h4>$1</h4>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
-    .replace(/^---$/gm,'<hr>')
-    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
-  $('previewPanel').innerHTML=`<p>${h}</p>`;
+  fm += '---\n\n';
+  return fm + body;
 }
-
-function updateWC(){
-  const v=$('ef-content').value;
-  $('wordCount').textContent=`${v.length} ký tự · ${countWords(v)} từ`;
-}
-$('ef-content').oninput=updateWC;
-
-// Toolbar
-$$('.tool-btn[data-wrap]').forEach(btn=>{
-  btn.onclick=()=>{
-    const ta=$('ef-content'); const s=ta.selectionStart,e=ta.selectionEnd;
-    const sel=ta.value.slice(s,e);
-    const b=btn.dataset.wrap, af=btn.dataset.end||b;
-    ta.value=ta.value.slice(0,s)+b+sel+af+ta.value.slice(e);
-    ta.selectionStart=s+b.length; ta.selectionEnd=e+b.length;
-    ta.focus(); updateWC();
-  };
-});
-$$('.tool-btn[data-ins]').forEach(btn=>{
-  btn.onclick=()=>{
-    const ta=$('ef-content'); const s=ta.selectionStart;
-    const ins=btn.dataset.ins;
-    ta.value=ta.value.slice(0,s)+ins+ta.value.slice(s);
-    ta.selectionStart=ta.selectionEnd=s+ins.length;
-    ta.focus(); updateWC();
-  };
-});
 
 // SAVE
-$('saveBtn').onclick=async()=>{
-  const title=$('ef-title').value.trim();
-  if(!title){ toast('Vui lòng nhập tiêu đề.','error'); return; }
-  const btn=$('saveBtn'); btn.innerHTML='<span class="spin"></span> Đang lưu...'; btn.disabled=true;
-  try{
-    const chuong=$('ef-chuong').value, tid=$('ef-tid').value, date=$('ef-date').value, tags=$('ef-tags').value, body=$('ef-content').value;
-    let path=currentFile.path, sha=currentFile.sha;
-    if(editorMode==='new'){
-      const n=parseInt(chuong)||1;
-      const fn=`chuong-${String(n).padStart(2,'0')}.md`;
-      path=`${currentStory.path}/${fn}`; sha=null;
-    }
-    const content=buildMD(title,tid,chuong,date,tags,body);
-    await putFile(path,content,editorMode==='new'?`✏️ Thêm: ${title}`:`📝 Cập nhật: ${title}`,sha);
-    toast('✅ Đã lưu & deploy!','success',4000);
-    $('editorStatus').textContent='✓ Đã lưu';
-    if(editorMode==='new') editorMode='edit';
-  }catch(e){ toast(`❌ Lỗi: ${e.message}`,'error',5000); }
-  finally{ btn.innerHTML='💾 Lưu & Deploy'; btn.disabled=false; }
-};
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  const title = document.getElementById('ef-title').value.trim();
+  const chuong = document.getElementById('ef-chuong').value;
+  const truyen_id = document.getElementById('ef-truyen-id').value.trim();
+  const date = document.getElementById('ef-date').value;
+  const tags = document.getElementById('ef-tags').value;
+  const body = document.getElementById('ef-content').value;
 
-// ═══════════════════════════════════════
-// STORY META EDITOR
-// ═══════════════════════════════════════
-window.openStoryMeta=async function(storyId){
-  currentStory=STORIES.find(s=>s.id===storyId);
-  showSection('story-meta'); $('metaTitle').textContent=currentStory.title;
-  $('metaBack').onclick=()=>showSection(currentStory.cat==='ongoing'?'ongoing':currentStory.cat==='completed'?'completed':'upcoming');
-  $('metaSaveBtn').textContent='💾 Lưu thông tin';
-  try{
-    const fd=await getFile(`${currentStory.path}/index.astro`).catch(()=>getFile(`${currentStory.path}/index.md`));
-    currentFile={sha:fd.sha,path:fd.path||`${currentStory.path}/index.astro`};
-    const fm=parseFM(fd.decoded);
-    $('sm-title').value=fm.title||currentStory.title;
-    $('sm-author').value=fm.author||'';
-    $('sm-total').value=fm.total||'';
-    $('sm-status').value=fm.status||currentStory.cat;
-    $('sm-cover').value=fm.cover||'';
-    $('sm-desc').value=fm.description||'';
-    $('sm-tags').value=Array.isArray(fm.tags)?fm.tags.join(', '):(fm.tags||'');
-    const body=fd.decoded.replace(/^---[\s\S]*?---\s*/,'').trim();
-    $('sm-body').value=body;
-  }catch(e){ toast('Không tải được thông tin truyện.','error'); }
-};
+  if (!title) { toast('Vui lòng nhập tiêu đề chương.', 'error'); return; }
 
-$('metaSaveBtn').onclick=async()=>{
-  const btn=$('metaSaveBtn'); btn.innerHTML='<span class="spin"></span>'; btn.disabled=true;
-  try{
-    // Rebuild frontmatter for index.md
-    const title=$('sm-title').value.trim();
-    const tags=$('sm-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-    let fm='---\n';
-    fm+=`layout: ../../../layouts/Layout.astro\n`;
-    fm+=`title: "${title.replace(/"/g,'\\"')}"\n`;
-    const author=$('sm-author').value.trim(); if(author) fm+=`author: "${author}"\n`;
-    const status=$('sm-status').value; fm+=`status: "${status}"\n`;
-    const cover=$('sm-cover').value.trim(); if(cover) fm+=`cover: "${cover}"\n`;
-    const desc=$('sm-desc').value.trim(); if(desc) fm+=`description: "${desc.replace(/"/g,'\\"')}"\n`;
-    const total=$('sm-total').value; if(total) fm+=`total_chaps: ${total}\n`;
-    if(tags.length) fm+=`tags:\n${tags.map(t=>`  - "${t}"`).join('\n')}\n`;
-    fm+='---\n\n';
-    const content=fm+$('sm-body').value;
-    // Save as index.md
-    const path=`${currentStory.path}/index.md`;
-    let sha=null;
-    try{ const fd=await getFile(path); sha=fd.sha; }catch(e){}
-    await putFile(path,content,`📝 Cập nhật thông tin: ${title}`,sha);
-    toast('✅ Đã lưu thông tin truyện!','success');
-  }catch(e){ toast(`❌ Lỗi: ${e.message}`,'error'); }
-  finally{ btn.innerHTML='💾 Lưu thông tin'; btn.disabled=false; }
-};
+  const btn = document.getElementById('saveBtn');
+  btn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+  btn.disabled = true;
 
-// ═══════════════════════════════════════
-// QUICK POST
-// ═══════════════════════════════════════
-// QP toolbar
-$$('.tool-btn[data-wrap2]').forEach(btn=>{
-  btn.onclick=()=>{
-    const ta=$('qp-content'); const s=ta.selectionStart,e=ta.selectionEnd, sel=ta.value.slice(s,e);
-    const b=btn.dataset.wrap2,af=btn.dataset.end2||b;
-    ta.value=ta.value.slice(0,s)+b+sel+af+ta.value.slice(e);
-    ta.selectionStart=s+b.length; ta.selectionEnd=e+b.length; ta.focus();
-  };
-});
-$$('.tool-btn[data-ins2]').forEach(btn=>{
-  btn.onclick=()=>{
-    const ta=$('qp-content'); const s=ta.selectionStart;
-    ta.value=ta.value.slice(0,s)+btn.dataset.ins2+ta.value.slice(s);
-    ta.selectionStart=ta.selectionEnd=s+btn.dataset.ins2.length; ta.focus();
-  };
-});
-$('qp-content').oninput=()=>{ const v=$('qp-content').value; $('qpWordCount').textContent=`${v.length} ký tự`; };
+  try {
+    let filePath, filename, sha;
 
-$('qpSaveBtn').onclick=async()=>{
-  const [sp,sid]=$('qp-story').value.split('|');
-  const title=$('qp-title').value.trim(), chuong=$('qp-chuong').value;
-  if(!title||!chuong){ toast('Vui lòng nhập tiêu đề và số chương.','error'); return; }
-  const btn=$('qpSaveBtn'); btn.innerHTML='<span class="spin"></span>'; btn.disabled=true;
-  try{
-    const n=parseInt(chuong), fn=`chuong-${String(n).padStart(2,'0')}.md`;
-    const path=`src/pages/${sp}/${fn}`;
-    const relLayout='../../../../layouts/Layout.astro';
-    const tags=$('qp-tags').value, body=$('qp-content').value;
-    const tl=tags.split(',').map(t=>t.trim()).filter(Boolean);
-    let fm=`---\nlayout: ${relLayout}\ntitle: "${title.replace(/"/g,'\\"')}"\ntruyen_id: "${sid}"\nchuong: ${n}\ndate: "${today()}"\n`;
-    if(tl.length) fm+=`tags:\n${tl.map(t=>`  - "${t}"`).join('\n')}\n`;
-    fm+='---\n\n';
-    await putFile(path,fm+body,`✏️ Đăng: ${title}`,null);
-    toast('✅ Đã đăng chương!','success',4000);
-    $('qp-title').value=''; $('qp-chuong').value=''; $('qp-content').value=''; $('qpWordCount').textContent='0 ký tự';
-  }catch(e){ toast(`❌ ${e.message}`,'error',5000); }
-  finally{ btn.innerHTML='🚀 Đăng chương & Deploy'; btn.disabled=false; }
-};
-
-// ═══════════════════════════════════════
-// BULK UPLOAD — PASTE MODE
-// ═══════════════════════════════════════
-function parseChapters(text,startNum){
-  // Split by heading patterns: ### Chương N, Chương N, === Chương N ===
-  const re=/(?:^|\n)(?:#{1,4}\s*|={3}\s*)?(?:chương|chapter|chuong)\s*(\d+)(?:\s*[-–—:]\s*([^\n]*))?/gi;
-  const parts=[]; let lastIdx=0, lastNum=startNum-1, lastTitle='';
-  let m;
-  while((m=re.exec(text))!==null){
-    if(m.index>lastIdx+5){
-      parts.push({ num:lastNum, title:lastTitle||`Chương ${lastNum}`, body:text.slice(lastIdx,m.index).trim() });
-    }
-    lastNum=parseInt(m[1]); lastTitle=(m[2]||'').trim()||`Chương ${lastNum}`; lastIdx=m.index+m[0].length;
-  }
-  if(lastIdx<text.length-5) parts.push({ num:lastNum, title:lastTitle||`Chương ${lastNum}`, body:text.slice(lastIdx).trim() });
-  return parts.filter(p=>p.body.length>10);
-}
-
-$('bu-parseBtn').onclick=()=>{
-  const text=$('bu-content').value;
-  const start=parseInt($('bu-start').value)||1;
-  parsedChapters=parseChapters(text,start);
-  if(!parsedChapters.length){ $('bu-preview').innerHTML='<span style="color:var(--red)">Không tìm thấy chương nào. Hãy dùng định dạng: "Chương N – Tên"</span>'; $('bu-uploadBtn').disabled=true; return; }
-  $('bu-preview').innerHTML=`<strong style="color:var(--sky)">Tìm thấy ${parsedChapters.length} chương:</strong><br/>`+
-    parsedChapters.map(c=>`<span style="display:inline-block;margin:2px 6px;padding:1px 8px;background:var(--sky-pale);border-radius:var(--r-pill);font-size:.72rem;color:var(--sky)">C${c.num}: ${c.title.slice(0,30)}</span>`).join('');
-  $('bu-uploadBtn').textContent=`🚀 Upload ${parsedChapters.length} chương`;
-  $('bu-uploadBtn').disabled=false;
-};
-
-$('bu-uploadBtn').onclick=async()=>{
-  if(!parsedChapters.length) return;
-  const [sp,sid]=$('bu-story').value.split('|');
-  const tags=$('bu-tags').value;
-  const tl=tags.split(',').map(t=>t.trim()).filter(Boolean);
-  const btn=$('bu-uploadBtn'); btn.disabled=true;
-  const prog=$('bu-progress'); prog.style.display='block';
-  let done=0;
-  for(const chap of parsedChapters){
-    $('bu-prog-label').textContent=`Upload ${done+1}/${parsedChapters.length}: ${chap.title}`;
-    try{
-      const fn=`chuong-${String(chap.num).padStart(2,'0')}.md`;
-      let fm=`---\nlayout: ../../../../layouts/Layout.astro\ntitle: "${chap.title.replace(/"/g,'\\"')}"\ntruyen_id: "${sid}"\nchuong: ${chap.num}\ndate: "${today()}"\n`;
-      if(tl.length) fm+=`tags:\n${tl.map(t=>`  - "${t}"`).join('\n')}\n`;
-      fm+='---\n\n';
-      await putFile(`src/pages/${sp}/${fn}`,fm+chap.body,`✏️ Bulk: ${chap.title}`,null);
-      done++;
-    }catch(e){ toast(`Lỗi C${chap.num}: ${e.message}`,'error'); }
-    $('bu-prog-fill').style.width=`${Math.round((done/parsedChapters.length)*100)}%`;
-    await new Promise(r=>setTimeout(r,600)); // rate limit
-  }
-  prog.style.display='none'; btn.disabled=false;
-  toast(`✅ Đã upload ${done}/${parsedChapters.length} chương!`,'success',5000);
-  parsedChapters=[]; $('bu-preview').innerHTML=''; $('bu-content').value='';
-  $('bu-uploadBtn').textContent='🚀 Upload tất cả';
-};
-
-// ═══════════════════════════════════════
-// BULK UPLOAD — FILE MODE
-// ═══════════════════════════════════════
-const dz=$('fileDropZone'), fi=$('fileInput');
-dz.ondragover=e=>{ e.preventDefault(); dz.classList.add('drag'); };
-dz.ondragleave=()=>dz.classList.remove('drag');
-dz.ondrop=e=>{ e.preventDefault(); dz.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); };
-fi.onchange=()=>handleFile(fi.files[0]);
-
-async function handleFile(file){
-  if(!file) return;
-  $('filePreview').textContent='Đang đọc file...';
-  try{
-    let text='';
-    if(file.name.endsWith('.txt')){
-      text=await file.text();
-    } else if(file.name.endsWith('.docx')){
-      // Parse docx: use mammoth if available, else fallback
-      try{
-        const mammoth=await import('https://cdn.jsdelivr.net/npm/mammoth@1/mammoth.browser.min.js').catch(()=>null);
-        if(mammoth){
-          const ab=await file.arrayBuffer();
-          const res=await mammoth.extractRawText({arrayBuffer:ab});
-          text=res.value;
-        } else throw new Error('Thư viện đọc docx chưa sẵn sàng. Hãy copy nội dung và dùng tab "Dán nhiều chương".');
-      }catch(e2){ throw e2; }
+    if (editorMode === 'edit' || editorMode === 'edit-index') {
+      filePath = currentFile.path;
+      filename = currentFile.filename;
+      sha = currentFile.sha;
     } else {
-      throw new Error('Chỉ hỗ trợ .txt và .docx');
+      // New chapter: auto filename
+      const chapNum = chuong ? parseInt(chuong) : 1;
+      filename = `chuong-${String(chapNum).padStart(2, '0')}.md`;
+      filePath = `${currentStory.path}/${filename}`;
+      sha = null;
     }
-    const start=parseInt($('fw-start').value)||1;
-    fileChapters=parseChapters(text,start);
-    if(!fileChapters.length){
-      $('filePreview').innerHTML='<span style="color:var(--red)">Không tìm thấy chương. File phải có dòng "Chương N" để phân tách.</span>';
-      $('fw-uploadBtn').disabled=true; return;
-    }
-    $('filePreview').innerHTML=`<strong style="color:var(--sky)">Đọc được ${fileChapters.length} chương từ "${file.name}"</strong><br/>`+
-      fileChapters.slice(0,5).map(c=>`<span style="font-size:.74rem;color:var(--sky)">C${c.num}: ${c.title.slice(0,40)}</span>`).join('<br/>');
-    $('fw-uploadBtn').textContent=`🚀 Upload ${fileChapters.length} chương`;
-    $('fw-uploadBtn').disabled=false;
-  }catch(e){ $('filePreview').innerHTML=`<span style="color:var(--red)">${e.message}</span>`; }
-}
 
-$('fw-uploadBtn').onclick=async()=>{
-  if(!fileChapters.length) return;
-  const [sp,sid]=$('fw-story').value.split('|');
-  const tags=$('fw-tags').value;
-  const tl=tags.split(',').map(t=>t.trim()).filter(Boolean);
-  const btn=$('fw-uploadBtn'); btn.disabled=true;
-  const prog=$('fw-progress'); prog.style.display='block';
-  let done=0;
-  for(const chap of fileChapters){
-    $('fw-prog-label').textContent=`Upload ${done+1}/${fileChapters.length}: ${chap.title}`;
-    try{
-      const fn=`chuong-${String(chap.num).padStart(2,'0')}.md`;
-      let fm=`---\nlayout: ../../../../layouts/Layout.astro\ntitle: "${chap.title.replace(/"/g,'\\"')}"\ntruyen_id: "${sid}"\nchuong: ${chap.num}\ndate: "${today()}"\n`;
-      if(tl.length) fm+=`tags:\n${tl.map(t=>`  - "${t}"`).join('\n')}\n`;
-      fm+='---\n\n';
-      await putFile(`src/pages/${sp}/${fn}`,fm+chap.body,`✏️ File upload: ${chap.title}`,null);
-      done++;
-    }catch(e){ toast(`Lỗi C${chap.num}: ${e.message}`,'error'); }
-    $('fw-prog-fill').style.width=`${Math.round((done/fileChapters.length)*100)}%`;
-    await new Promise(r=>setTimeout(r,600));
+    const content = buildMarkdown(title, truyen_id, chuong, date, tags, body);
+    const commitMsg = editorMode === 'new'
+      ? `✏️ Thêm chương: ${title}`
+      : `📝 Cập nhật: ${title}`;
+
+    await putFile(filePath, content, commitMsg, sha);
+    currentFile.sha = null; // invalidate
+    toast('✅ Đã lưu & deploy thành công!', 'success', 4000);
+    document.getElementById('editorStatus').textContent = '✓ Đã lưu';
+
+    // If new chapter, switch to edit mode with new sha
+    if (editorMode === 'new') {
+      currentFile = { filename, sha: null, path: filePath };
+      editorMode = 'edit';
+    }
+  } catch(e) {
+    toast(`❌ Lỗi: ${e.message}`, 'error', 5000);
+  } finally {
+    btn.innerHTML = '💾 Lưu & Deploy';
+    btn.disabled = false;
   }
-  prog.style.display='none'; btn.disabled=false;
-  toast(`✅ Đã upload ${done}/${fileChapters.length} chương!`,'success',5000);
-  fileChapters=[]; $('filePreview').innerHTML=''; fi.value='';
-  $('fw-uploadBtn').textContent='🚀 Upload tất cả'; $('fw-uploadBtn').disabled=true;
+});
+
+// DELETE
+window.deleteChap = function(filename, sha) {
+  confirm('Xoá chương', `Bạn chắc chắn muốn xoá "${filename}"? Hành động này không thể hoàn tác.`, async () => {
+    try {
+      await deleteFile(`${currentStory.path}/${filename}`, sha, `🗑 Xoá chương: ${filename}`);
+      toast('Đã xoá chương.', 'success');
+      await renderChapTable();
+    } catch(e) {
+      toast(`Lỗi: ${e.message}`, 'error');
+    }
+  });
 };
 
-// ═══════════════════════════════════════
-// NEW STORY
-// ═══════════════════════════════════════
-$('ns-title').oninput=e=>{
-  const slug=e.target.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .replace(/đ/g,'d').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  $('ns-slug').value=slug;
-};
+// ═══════════════════════════════════════════════════════════
+//  NEW STORY
+// ═══════════════════════════════════════════════════════════
+document.getElementById('createStoryBtn').addEventListener('click', async () => {
+  const title = document.getElementById('ns-title').value.trim();
+  const slug = document.getElementById('ns-slug').value.trim();
+  const author = document.getElementById('ns-author').value.trim();
+  const cat = document.getElementById('ns-cat').value;
+  const tags = document.getElementById('ns-tags').value;
+  const desc = document.getElementById('ns-desc').value.trim();
+  const body = document.getElementById('ns-body').value;
 
-$('nsCreateBtn').onclick=async()=>{
-  const title=$('ns-title').value.trim(), slug=$('ns-slug').value.trim();
-  if(!title||!slug){ toast('Vui lòng nhập tên và slug.','error'); return; }
-  const btn=$('nsCreateBtn'); btn.innerHTML='<span class="spin"></span>'; btn.disabled=true;
-  try{
-    const cat=$('ns-cat').value, author=$('ns-author').value.trim();
-    const tags=$('ns-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-    const desc=$('ns-desc').value.trim(), body=$('ns-body').value;
-    let fm=`---\nlayout: ../../../layouts/Layout.astro\ntitle: "${title.replace(/"/g,'\\"')}"\n`;
-    if(author) fm+=`author: "${author}"\n`;
-    fm+=`status: "${cat==='ca-duoi-nuoc'?'ongoing':'completed'}"\n`;
-    if(desc) fm+=`description: "${desc.replace(/"/g,'\\"')}"\n`;
-    if(tags.length) fm+=`tags:\n${tags.map(t=>`  - "${t}"`).join('\n')}\n`;
-    fm+='---\n\n';
-    await putFile(`src/pages/${cat}/${slug}/index.md`,fm+body,`📚 Thêm truyện: ${title}`,null);
-    toast('✅ Đã tạo trang truyện!','success');
-    ['ns-title','ns-slug','ns-author','ns-tags','ns-desc','ns-body'].forEach(id=>{$(id).value='';});
-  }catch(e){ toast(`❌ ${e.message}`,'error'); }
-  finally{ btn.innerHTML='🚀 Tạo trang truyện'; btn.disabled=false; }
-};
+  if (!title || !slug) { toast('Vui lòng nhập tên truyện và slug.', 'error'); return; }
 
-// ═══════════════════════════════════════
-// BULK TABS
-// ═══════════════════════════════════════
-$$('#bulkTabs .tab').forEach(tab=>{
-  tab.onclick=()=>{
-    $$('#bulkTabs .tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    $$('#bt-paste,#bt-word').forEach(p=>p.classList.remove('active'));
-    $(`bt-${tab.dataset.bt}`)?.classList.add('active');
-  };
+  const btn = document.getElementById('createStoryBtn');
+  btn.innerHTML = '<span class="spinner"></span> Đang tạo...';
+  btn.disabled = true;
+
+  try {
+    const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
+    const storyId = slug.replace(/-/g, '');
+    let fm = `---\ntitle: "${title}"\nstatus: "${cat === 'ca-duoi-nuoc' ? 'ongoing' : 'completed'}"\nauthor: "${author}"\ndescription: "${desc.replace(/"/g, '\\"')}"\n`;
+    if (tagList.length) fm += `tags:\n${tagList.map(t => `  - "${t}"`).join('\n')}\n`;
+    fm += `---\n\n${body}`;
+
+    const path = `src/pages/${cat}/${slug}/index.md`;
+    await putFile(path, fm, `📚 Thêm truyện: ${title}`, null);
+    toast('✅ Đã tạo trang truyện!', 'success', 4000);
+
+    // Clear form
+    ['ns-title','ns-slug','ns-author','ns-tags','ns-desc','ns-body'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  } catch(e) {
+    toast(`❌ Lỗi: ${e.message}`, 'error', 5000);
+  } finally {
+    btn.innerHTML = '🚀 Tạo trang truyện & Deploy';
+    btn.disabled = false;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  NEW CHAPTER SHORTCUT
+// ═══════════════════════════════════════════════════════════
+document.getElementById('ncSaveBtn').addEventListener('click', async () => {
+  const storyVal = document.getElementById('nc-story').value;
+  const [storyPath, storyId] = storyVal.split('|');
+  const title = document.getElementById('nc-title').value.trim();
+  const chuong = document.getElementById('nc-chuong').value;
+  const tags = document.getElementById('nc-tags').value;
+  const body = document.getElementById('nc-content').value;
+
+  if (!title || !chuong) { toast('Vui lòng nhập tiêu đề và số chương.', 'error'); return; }
+
+  const btn = document.getElementById('ncSaveBtn');
+  btn.innerHTML = '<span class="spinner"></span> Đang đăng...';
+  btn.disabled = true;
+
+  try {
+    const chapNum = parseInt(chuong);
+    const filename = `chuong-${String(chapNum).padStart(2, '0')}.md`;
+    const filePath = `src/pages/${storyPath}/${filename}`;
+    const content = buildMarkdown(title, storyId, chuong, todayISO(), tags, body);
+    await putFile(filePath, content, `✏️ Đăng chương: ${title}`, null);
+    toast('✅ Đăng chương thành công!', 'success', 4000);
+    document.getElementById('nc-title').value = '';
+    document.getElementById('nc-chuong').value = '';
+    document.getElementById('nc-content').value = '';
+    document.getElementById('ncWordCount').textContent = '0 ký tự';
+  } catch(e) {
+    toast(`❌ Lỗi: ${e.message}`, 'error', 5000);
+  } finally {
+    btn.innerHTML = '🚀 Đăng chương & Deploy';
+    btn.disabled = false;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  TOOLBAR
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.tool-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.dataset.target || 'ef-content';
+    const ta = document.getElementById(targetId);
+    if (!ta) return;
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    const selected = ta.value.slice(start, end);
+
+    if (btn.dataset.wrap) {
+      const before = btn.dataset.wrap, after = btn.dataset.wrapEnd || before;
+      ta.value = ta.value.slice(0, start) + before + selected + after + ta.value.slice(end);
+      ta.selectionStart = start + before.length;
+      ta.selectionEnd = end + before.length;
+    } else if (btn.dataset.insert) {
+      const ins = btn.dataset.insert;
+      ta.value = ta.value.slice(0, start) + ins + ta.value.slice(end);
+      ta.selectionStart = ta.selectionEnd = start + ins.length;
+    }
+    ta.focus();
+    updateWordCount();
+  });
+});
+
+// Preview toggle
+document.getElementById('previewToggleBtn')?.addEventListener('click', () => {
+  const panel = document.getElementById('previewPanel');
+  const ta = document.getElementById('ef-content');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    // Simple markdown → HTML preview
+    let html = ta.value
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+      .replace(/^---$/gm, '<hr>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    panel.innerHTML = `<p>${html}</p>`;
+    document.getElementById('previewToggleBtn').textContent = '✏️ Soạn';
+    ta.style.display = 'none';
+  } else {
+    panel.style.display = 'none';
+    ta.style.display = '';
+    document.getElementById('previewToggleBtn').textContent = '👁 Preview';
+  }
+});
+
+// Word count
+function updateWordCount() {
+  const ta = document.getElementById('ef-content');
+  if (ta) document.getElementById('wordCount').textContent = `${wordCount(ta.value)} ký tự`;
+}
+document.getElementById('ef-content')?.addEventListener('input', updateWordCount);
+document.getElementById('nc-content')?.addEventListener('input', () => {
+  const ta = document.getElementById('nc-content');
+  document.getElementById('ncWordCount').textContent = `${wordCount(ta.value)} ký tự`;
+});
+
+// Auto-slug from title for new story
+document.getElementById('ns-title')?.addEventListener('input', e => {
+  const slug = e.target.value
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  document.getElementById('ns-slug').value = slug;
 });
 </script>
 </body>

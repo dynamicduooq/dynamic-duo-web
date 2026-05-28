@@ -13,7 +13,7 @@ const qhbcpCount   = countChaps(qhbcpPosts);
 const hcdhCount    = countChaps(hcdhPosts);
 ---
 
-<Layout title="Trang chủ" fullWidth={true}>
+<Layout title="Trang chủ">
 <style>
 /* ─── TICKER ─── */
 .ticker-wrap {
@@ -160,8 +160,8 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* ─── SIDEBAR ─── */
 .sidebar-col { display:flex; flex-direction:column; gap:16px; }
-.sidebar-col > .widget { position:sticky; top:72px; }
-.sidebar-col > .widget + .widget { position:sticky; }
+.sidebar-col > .widget { position:static; top:72px; }
+.sidebar-col > .widget + .widget { position:static; }
 .widget { background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7); border-radius:18px; padding:16px 14px; }
 [data-theme="dark"] .widget { background:rgba(15,42,64,.8); border-color:rgba(30,74,110,.7); }
 .widget-title { font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px; }
@@ -613,7 +613,6 @@ const obs = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
 }), { threshold: .1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-</script>
 /* ─── DARK MODE BUTTON SYNC ─── */
 (function() {
   const btn = document.getElementById('darkBtnIdx');
@@ -634,4 +633,5 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     syncBtn();
   });
 })();
+</script>
 </Layout>

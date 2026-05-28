@@ -13,8 +13,34 @@ const qhbcpCount   = countChaps(qhbcpPosts);
 const hcdhCount    = countChaps(hcdhPosts);
 ---
 
-<Layout title="Trang chủ">
+<Layout title="Trang chủ" isHome={true}>
 <style>
+/* Override .home-shell để tận dụng full width */
+.home-shell {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 20px 40px 80px !important;
+  width: 100% !important;
+}
+ 
+/* Sidebar rộng hơn 1 chút để cân bằng */
+@media(min-width:1025px){
+  .home-shell {
+    grid-template-columns: 1fr 280px !important;
+  }
+}
+ 
+@media(min-width:1400px){
+  .home-shell {
+    grid-template-columns: 1fr 300px !important;
+  }
+}
+ 
+@media(max-width:768px){
+  .home-shell {
+    padding: 14px 16px 60px !important;
+  }
+}
 /* ─── TICKER ─── */
 .ticker-wrap {
   overflow:hidden; padding:7px 0;

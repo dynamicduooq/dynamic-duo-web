@@ -41,27 +41,21 @@ if (currentTruyenId && isNovelPage) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
 
-  <!-- Firebase SDK -->
-  <script type="module" is:inline>
+  <!-- Firebase SDK — type="module" để dùng ESM import -->
+  <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getDatabase, ref, push, onValue, remove, serverTimestamp }
       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    /* ── CẤU HÌNH FIREBASE ──
-       Tạo project tại https://console.firebase.google.com
-       → Realtime Database → Rules: cho phép read/write public (xem README)
-       Thay các giá trị dưới đây bằng config của project bạn:
-    */
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
-  authDomain: "dynamic-duo-comments.firebaseapp.com",
-  projectId: "dynamic-duo-comments",
-  storageBucket: "dynamic-duo-comments.firebasestorage.app",
-  messagingSenderId: "948025586876",
-  appId: "1:948025586876:web:848f38701acfdb9b844cb9",
-  measurementId: "G-9SJG2YV1LL"
-};    
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
+      authDomain: "dynamic-duo-comments.firebaseapp.com",
+      projectId: "dynamic-duo-comments",
+      storageBucket: "dynamic-duo-comments.firebasestorage.app",
+      messagingSenderId: "948025586876",
+      appId: "1:948025586876:web:848f38701acfdb9b844cb9",
+      databaseURL: "https://dynamic-duo-comments-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
 
     let db = null;
     try {
@@ -71,8 +65,8 @@ const firebaseConfig = {
       console.warn('[DD] Firebase init failed:', e.message);
     }
 
-    /* Expose to global for non-module scripts */
     window.__ddFirebase = { db, ref, push, onValue, remove, serverTimestamp };
+    window.dispatchEvent(new Event('dd-firebase-ready'));
   </script>
 
   <script is:inline>
@@ -80,7 +74,7 @@ const firebaseConfig = {
   </script>
 
   <style is:global>
-    /* ─── BIẾN MÀU ─── */
+    /* ─── CSS VARIABLES ─── */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -90,102 +84,145 @@ const firebaseConfig = {
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px; --t:all .2s ease;
     }
 
-    /* ─── DARK MODE — contrast cao hơn, dễ đọc ─── */
+    /* ─── DARK MODE — contrast tốt, đọc được ─── */
     [data-theme="dark"] {
-      --sky:#89d0f5;
-      --sky2:#60b8e8;
-      --sky-dark:#c8e8f8;        /* tiêu đề sáng */
-      --sky-light:#2a6a8a;       /* border */
-      --sky-pale:#102030;        /* nền nhạt */
-      --cream:#0a1929;
-      --bg2:#111f30;
-      --text-main:#d8eeff;       /* text chính — sáng hơn nhiều */
-      --text-mid:#9ac8df;        /* text phụ — đủ contrast */
-      --text-dim:#6a9ab5;        /* text mờ — vẫn đọc được */
+      --sky:#60b8e8;
+      --sky2:#89d0f5;
+      --sky-dark:#c8e8f8;
+      --sky-light:#1e5a7a;
+      --sky-pale:#0c1e30;
+      --cream:#091726;
+      --bg2:#0e2236;
+      --text-main:#daeeff;
+      --text-mid:#a0c8e0;
+      --text-dim:#6a9ab5;
     }
-    [data-theme="dark"] body { background:#0a1929; color:#d8eeff; }
+    [data-theme="dark"] body { background:#091726; color:#daeeff; }
 
     /* Navbar dark */
     [data-theme="dark"] nav {
-      background:rgba(10,25,41,.97);
-      border-color:rgba(96,184,232,.2);
+      background:rgba(9,23,38,.98);
+      border-color:rgba(96,184,232,.18);
     }
     [data-theme="dark"] .mobile-menu {
-      background:rgba(10,25,41,.99);
+      background:rgba(9,23,38,.99);
       border-color:rgba(96,184,232,.2);
     }
     [data-theme="dark"] .dropdown-content {
-      background:#111f30;
-      border-color:rgba(96,184,232,.25);
+      background:#0e2236;
+      border-color:rgba(96,184,232,.22);
     }
-    [data-theme="dark"] .dd-item { color:#9ac8df; }
-    [data-theme="dark"] .dd-item:hover { background:rgba(96,184,232,.12); color:#d8eeff; }
-    [data-theme="dark"] .nav-item > a { color:#9ac8df; }
+    [data-theme="dark"] .dd-item { color:#a0c8e0; }
+    [data-theme="dark"] .dd-item:hover { background:rgba(96,184,232,.1); color:#daeeff; }
+    [data-theme="dark"] .nav-item > a { color:#a0c8e0; }
     [data-theme="dark"] .nav-item > a:hover,
     [data-theme="dark"] .nav-btn:hover,
     [data-theme="dark"] .nav-item:hover > a,
-    [data-theme="dark"] .nav-item:hover > .nav-btn { color:#89d0f5; background:rgba(96,184,232,.1); }
+    [data-theme="dark"] .nav-item:hover > .nav-btn { color:#60b8e8; background:rgba(96,184,232,.1); }
     [data-theme="dark"] .nav-logo { color:#89d0f5; }
-    [data-theme="dark"] .nav-btn { color:#9ac8df; }
-    [data-theme="dark"] .dd-section-title { color:#5a8fa8; }
+    [data-theme="dark"] .nav-btn { color:#a0c8e0; }
+    [data-theme="dark"] .dd-section-title { color:#4a7a96; }
 
     /* Content areas dark */
     [data-theme="dark"] .novel-content,
     [data-theme="dark"] .page-content-wrap {
-      background:rgba(15,30,48,.98);
-      border-color:rgba(96,184,232,.18);
-      color:#d8eeff;
+      background:rgba(12,24,40,.99);
+      border-color:rgba(96,184,232,.16);
+      color:#daeeff;
     }
-    [data-theme="dark"] .novel-content p { color:#c8e0f4; }
+    [data-theme="dark"] .novel-content p { color:#cce4f8; }
     [data-theme="dark"] h1,[data-theme="dark"] h2,
     [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#89d0f5; }
 
     [data-theme="dark"] blockquote {
-      background:rgba(16,36,56,.9);
-      color:#9ac8df;
-      border-left-color:#2a6a8a;
+      background:rgba(14,36,58,.9);
+      color:#a0c8e0;
+      border-left-color:#1e5a7a;
     }
 
     /* Chapter nav dark */
-    [data-theme="dark"] .chap-pn { border-color:#2a6a8a; color:#9ac8df; }
-    [data-theme="dark"] .chap-pn:hover { background:rgba(96,184,232,.1); color:#d8eeff; border-color:#89d0f5; }
-    [data-theme="dark"] .chap-dd-btn { background:#102030; border-color:#2a6a8a; color:#9ac8df; }
-    [data-theme="dark"] .chap-dd-btn:hover { background:rgba(96,184,232,.12); color:#d8eeff; }
-    [data-theme="dark"] .chap-dd-list { background:#111f30; border-color:#2a6a8a; }
-    [data-theme="dark"] .chap-dd-list a { color:#9ac8df; border-color:rgba(96,184,232,.15); }
-    [data-theme="dark"] .chap-dd-list a:hover { background:rgba(96,184,232,.1); color:#d8eeff; }
+    [data-theme="dark"] .chap-pn { border-color:#1e5a7a; color:#a0c8e0; }
+    [data-theme="dark"] .chap-pn:hover { background:rgba(96,184,232,.1); color:#daeeff; border-color:#60b8e8; }
+    [data-theme="dark"] .chap-dd-btn { background:#0c1e30; border-color:#1e5a7a; color:#a0c8e0; }
+    [data-theme="dark"] .chap-dd-btn:hover { background:rgba(96,184,232,.12); color:#daeeff; }
+    [data-theme="dark"] .chap-dd-list { background:#0e2236; border-color:#1e5a7a; }
+    [data-theme="dark"] .chap-dd-list a { color:#a0c8e0; border-color:rgba(96,184,232,.12); }
+    [data-theme="dark"] .chap-dd-list a:hover { background:rgba(96,184,232,.1); color:#daeeff; }
     [data-theme="dark"] .chap-dd-list a.cur-chap { background:rgba(96,184,232,.15); color:#89d0f5; font-weight:700; }
 
-    /* Inline comment bubble dark */
+    /* ── INLINE COMMENT BUBBLE dark ── */
     [data-theme="dark"] .ic-bubble {
-      background:#111f30;
-      border-color:rgba(96,184,232,.3);
-      color:#d8eeff;
+      background:#0e2236;
+      border-color:rgba(96,184,232,.28);
+      color:#daeeff;
     }
     [data-theme="dark"] .ic-bubble-header { color:#6a9ab5; }
     [data-theme="dark"] .ic-bubble-header strong { color:#89d0f5; }
-    [data-theme="dark"] .ic-comment-item { background:rgba(96,184,232,.08); color:#c8e0f4; border:1px solid rgba(96,184,232,.12); }
+    [data-theme="dark"] .ic-comment-item {
+      background:rgba(96,184,232,.08);
+      color:#cce4f8;
+      border:1px solid rgba(96,184,232,.12);
+    }
     [data-theme="dark"] .ic-comment-name { color:#89d0f5; }
     [data-theme="dark"] .ic-comment-time { color:#6a9ab5; }
-    [data-theme="dark"] .ic-input { background:#102030; border-color:#2a6a8a; color:#d8eeff; }
-    [data-theme="dark"] .ic-input::placeholder { color:#5a8fa8; }
-    [data-theme="dark"] .ic-reply-btn { color:#89d0f5; }
-    [data-theme="dark"] .ic-delete-btn { color:#6a9ab5; }
+    [data-theme="dark"] .ic-input {
+      background:#091726;
+      border-color:#1e5a7a;
+      color:#daeeff;
+    }
+    [data-theme="dark"] .ic-input::placeholder { color:#4a7a96; }
     [data-theme="dark"] .ic-loading { color:#6a9ab5; }
+    [data-theme="dark"] .ic-delete-btn { color:#6a9ab5; }
+
+    /* ── CHAPTER COMMENT dark ── */
+    [data-theme="dark"] .comment-form {
+      background:rgba(12,24,40,.99);
+      border-color:rgba(96,184,232,.18);
+    }
+    [data-theme="dark"] .comment-inp {
+      background:#091726;
+      border-color:#1e5a7a;
+      color:#daeeff;
+    }
+    [data-theme="dark"] .comment-inp::placeholder { color:#4a7a96; }
+    [data-theme="dark"] .comment-textarea {
+      background:#091726;
+      border-color:#1e5a7a;
+      color:#daeeff;
+    }
+    [data-theme="dark"] .comment-textarea::placeholder { color:#4a7a96; }
+    [data-theme="dark"] .comment-card {
+      background:rgba(12,24,40,.99);
+      border-color:rgba(96,184,232,.16);
+    }
+    [data-theme="dark"] .comment-card-name { color:#89d0f5; }
+    [data-theme="dark"] .comment-card-time { color:#4a7a96; }
+    [data-theme="dark"] .comment-card-text { color:#cce4f8; }
+    [data-theme="dark"] .comment-card-del { color:#4a7a96; }
+    [data-theme="dark"] .comment-empty { color:#4a7a96; }
+    [data-theme="dark"] .comment-loading { color:#4a7a96; }
+    [data-theme="dark"] .chap-comment-title { color:#89d0f5; }
+    [data-theme="dark"] .chap-comment-title::after {
+      background:linear-gradient(to right, #1e5a7a, transparent);
+    }
 
     /* Footer dark */
-    [data-theme="dark"] footer { background:#111f30; border-color:rgba(96,184,232,.15); color:#9ac8df; }
+    [data-theme="dark"] footer { background:#0e2236; border-color:rgba(96,184,232,.12); color:#a0c8e0; }
     [data-theme="dark"] .ft-logo { color:#89d0f5; }
-    [data-theme="dark"] .ft-links a { color:#9ac8df; }
+    [data-theme="dark"] .ft-links a { color:#a0c8e0; }
     [data-theme="dark"] .ft-links a:hover { color:#89d0f5; }
-    [data-theme="dark"] .ft-bottom { color:#5a8fa8; }
+    [data-theme="dark"] .ft-bottom { color:#4a7a96; }
     [data-theme="dark"] .ft-brand p { color:#6a9ab5; }
-    [data-theme="dark"] .social-ic { background:rgba(16,36,56,.8); border-color:#2a6a8a; }
+    [data-theme="dark"] .social-ic { background:rgba(14,36,58,.8); border-color:#1e5a7a; }
 
-    [data-theme="dark"] .tag-badge { color:#89d0f5; border-color:#2a6a8a; }
+    [data-theme="dark"] .tag-badge { color:#89d0f5; border-color:#1e5a7a; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(96,184,232,.1); }
-    [data-theme="dark"] .scroll-btn { background:#1a5070; }
-    [data-theme="dark"] .scroll-btn:hover { background:#236090; }
+    [data-theme="dark"] .scroll-btn { background:#1a4f6e; }
+    [data-theme="dark"] .scroll-btn:hover { background:#215f84; }
+
+    /* Contact email in widget */
+    .contact-email { color:#475569; }
+    [data-theme="dark"] .contact-email { color:#a0c8e0; }
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -255,10 +292,10 @@ const firebaseConfig = {
     .mobile-menu.open { display:flex; }
     .mobile-menu a { padding:9px 12px; font-size:.88rem; color:var(--text-mid); border-radius:var(--r-sm); display:block; transition:var(--t); }
     .mobile-menu a:hover { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .mobile-menu a { color:#9ac8df; }
+    [data-theme="dark"] .mobile-menu a { color:#a0c8e0; }
     [data-theme="dark"] .mobile-menu a:hover { background:rgba(96,184,232,.1); color:#89d0f5; }
     .mobile-section-title { font-size:.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:10px 12px 3px; }
-    [data-theme="dark"] .mobile-section-title { color:#5a8fa8; }
+    [data-theme="dark"] .mobile-section-title { color:#4a7a96; }
     @media(max-width:700px) { .nav-links{display:none;} .nav-hamburger{display:flex;} }
 
     /* ─── LAYOUT ─── */
@@ -350,7 +387,7 @@ const firebaseConfig = {
     .chap-dd-list a.cur-chap { background:var(--sky-pale); color:var(--sky); font-weight:700; }
     .chap-dd-list.up { bottom:calc(100% + 6px); top:auto; }
 
-    /* ─── INLINE COMMENT ─── */
+    /* ─── INLINE COMMENT BUBBLE ─── */
     .novel-content p:hover .ic-trigger { opacity:1; }
     .ic-trigger {
       display:inline-flex; align-items:center; justify-content:center;
@@ -371,9 +408,8 @@ const firebaseConfig = {
       box-shadow:0 8px 28px rgba(2,132,199,.18); padding:14px 16px;
       z-index:1000; font-size:.8rem;
       display:none;
-      animation:bubblePop .18s ease;
     }
-    .ic-bubble.open { display:block; }
+    .ic-bubble.open { display:block; animation:bubblePop .18s ease; }
     @keyframes bubblePop { from{opacity:0;transform:scale(.9) translateY(4px)} to{opacity:1;transform:scale(1) translateY(0)} }
     .ic-bubble-header { font-size:.68rem; color:var(--text-dim); margin-bottom:8px; letter-spacing:.3px; display:flex; align-items:center; justify-content:space-between; }
     .ic-bubble-header strong { color:var(--sky); }
@@ -397,8 +433,6 @@ const firebaseConfig = {
     }
     .ic-comment-item:hover .ic-delete-btn { opacity:1; }
     .ic-delete-btn:hover { color:#ef4444; background:rgba(239,68,68,.08); }
-    .ic-reply-btn { font-size:.65rem; color:var(--sky); cursor:pointer; margin-top:3px; display:inline-block; }
-    .ic-reply-btn:hover { text-decoration:underline; }
     .ic-name-row { display:flex; gap:6px; margin-bottom:5px; }
     .ic-input {
       flex:1; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill);
@@ -417,7 +451,7 @@ const firebaseConfig = {
     .ic-loading { font-size:.72rem; color:var(--text-dim); text-align:center; padding:8px 0; }
     .ic-send-row { display:flex; gap:6px; }
 
-    /* ─── CUỐI CHƯƠNG COMMENT ─── */
+    /* ─── CHAPTER-END COMMENT ─── */
     .chap-comment-section {
       max-width:760px; margin:0 auto; padding:0 12px 60px;
     }
@@ -426,13 +460,11 @@ const firebaseConfig = {
       letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 14px;
       display:flex; align-items:center; gap:10px;
     }
-    [data-theme="dark"] .chap-comment-title { color:#89d0f5; }
     .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right, var(--sky-light), transparent); }
     .comment-form {
       background:#fff; border:1px solid rgba(186,230,253,.5);
       border-radius:14px; padding:16px; margin-bottom:20px;
     }
-    [data-theme="dark"] .comment-form { background:rgba(15,30,48,.98); border-color:rgba(96,184,232,.2); }
     .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
     .comment-inp {
       flex:1; padding:8px 14px; border:1.5px solid var(--sky-light);
@@ -440,8 +472,6 @@ const firebaseConfig = {
       font-family:'Newsreader',serif; color:var(--text-main);
       background:var(--cream); outline:none;
     }
-    [data-theme="dark"] .comment-inp { background:#102030; border-color:#2a6a8a; color:#d8eeff; }
-    [data-theme="dark"] .comment-inp::placeholder { color:#5a8fa8; }
     .comment-inp:focus { border-color:var(--sky); }
     .comment-textarea {
       width:100%; padding:10px 14px; border:1.5px solid var(--sky-light);
@@ -450,8 +480,6 @@ const firebaseConfig = {
       background:var(--cream); outline:none; resize:vertical; min-height:80px;
       box-sizing:border-box; margin-bottom:10px;
     }
-    [data-theme="dark"] .comment-textarea { background:#102030; border-color:#2a6a8a; color:#d8eeff; }
-    [data-theme="dark"] .comment-textarea::placeholder { color:#5a8fa8; }
     .comment-textarea:focus { border-color:var(--sky); }
     .comment-submit-btn {
       padding:7px 20px; background:var(--sky); color:#fff; border:none;
@@ -465,13 +493,9 @@ const firebaseConfig = {
       background:#fff; border:1px solid rgba(186,230,253,.45);
       border-radius:14px; padding:14px 16px; position:relative;
     }
-    [data-theme="dark"] .comment-card { background:rgba(15,30,48,.95); border-color:rgba(96,184,232,.18); }
     .comment-card-name { font-weight:700; color:var(--sky-dark); font-size:.8rem; }
-    [data-theme="dark"] .comment-card-name { color:#89d0f5; }
     .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:8px; }
-    [data-theme="dark"] .comment-card-time { color:#5a8fa8; }
     .comment-card-text { font-size:.84rem; color:var(--text-main); margin:6px 0 0; line-height:1.65; }
-    [data-theme="dark"] .comment-card-text { color:#c8e0f4; }
     .comment-card-del {
       position:absolute; top:10px; right:12px;
       background:none; border:none; cursor:pointer;
@@ -481,12 +505,7 @@ const firebaseConfig = {
     .comment-card:hover .comment-card-del { opacity:1; }
     .comment-card-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
     .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:20px; }
-    [data-theme="dark"] .comment-empty { color:#5a8fa8; }
     .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
-    [data-theme="dark"] .comment-loading { color:#5a8fa8; }
-
-    /* ─── GISCUS ─── */
-    .giscus-wrap { margin-top:28px; border-top:1px dashed var(--sky-light); padding-top:24px; }
 
     /* ─── FOOTER ─── */
     footer { background:#fff; border-top:1px solid rgba(186,230,253,.4); padding:44px 20px 26px; margin-top:auto; }
@@ -644,7 +663,6 @@ const firebaseConfig = {
     </div>
   )}
 
-  {/* ── COMMENT CUỐI CHƯƠNG (Firebase realtime) ── */}
   {isNovelPage && (
     <div class="chap-comment-section" id="chapCommentSection">
       <div class="chap-comment-title">💬 Bình luận chương</div>
@@ -660,8 +678,6 @@ const firebaseConfig = {
       </div>
     </div>
   )}
-
-  {/* Giscus fallback đã loại bỏ — dùng Firebase thay thế */}
 </div>
 
 <footer>
@@ -753,10 +769,9 @@ window.__ddToggleTheme = function() {
   applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
 };
 
-/* ─── FIREBASE COMMENT SYSTEM ─── */
+/* ─── FIREBASE COMMENTS ─── */
 (function initComments() {
 
-  /* ── Helper: time ── */
   function timeAgo(ts) {
     if (!ts) return '';
     const d = Date.now() - ts;
@@ -766,19 +781,32 @@ window.__ddToggleTheme = function() {
     return Math.floor(d / 86400000) + ' ngày trước';
   }
 
-  /* ── Escape HTML ── */
   function esc(s) {
     return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  /* ── pageKey: pathname → Firebase node key ── */
   function pageKey() {
     return location.pathname.replace(/[^a-zA-Z0-9]/g, '_').replace(/^_+|_+$/g,'').substring(0, 120);
   }
 
-  /* ═══════════════════════════════════════════
-     A CUỐI CHƯƠNG — bình luận chính
-  ═══════════════════════════════════════════ */
+  /* Chờ Firebase module load xong — dùng event + polling */
+  function waitFirebase(cb) {
+    if (window.__ddFirebase?.db) { cb(window.__ddFirebase); return; }
+    const handler = () => { if (window.__ddFirebase?.db) cb(window.__ddFirebase); };
+    window.addEventListener('dd-firebase-ready', handler, { once: true });
+    /* Fallback polling nếu event đã fired trước khi listener được gắn */
+    let attempts = 0;
+    const poll = setInterval(() => {
+      if (window.__ddFirebase?.db) { clearInterval(poll); cb(window.__ddFirebase); }
+      if (++attempts > 50) {
+        clearInterval(poll);
+        const el = document.getElementById('cmtList');
+        if (el) el.innerHTML = '<div class="comment-empty">⚠️ Không kết nối được Firebase. Kiểm tra cấu hình.</div>';
+      }
+    }, 200);
+  }
+
+  /* ══ A. BÌNH LUẬN CUỐI CHƯƠNG ══ */
   (function setupChapComments() {
     const section = document.getElementById('chapCommentSection');
     if (!section) return;
@@ -791,21 +819,9 @@ window.__ddToggleTheme = function() {
 
     const key = 'chap_' + pageKey();
 
-    /* Wait for Firebase to be ready (loaded via type="module") */
-    function waitFirebase(cb, attempt) {
-      attempt = attempt || 0;
-      if (window.__ddFirebase?.db) return cb(window.__ddFirebase);
-      if (attempt > 40) {
-        cmtList.innerHTML = '<div class="comment-empty">⚠️ Chưa kết nối Firebase. Xem hướng dẫn README.</div>';
-        return;
-      }
-      setTimeout(() => waitFirebase(cb, attempt + 1), 200);
-    }
-
-    waitFirebase(function({ db, ref, push, onValue, remove, serverTimestamp }) {
+    waitFirebase(function({ db, ref, push, onValue, remove }) {
       const cmtRef = ref(db, 'comments/' + key);
 
-      /* Listen realtime */
       onValue(cmtRef, (snap) => {
         const data = snap.val();
         if (!data) {
@@ -825,7 +841,6 @@ window.__ddToggleTheme = function() {
           </div>
         `).join('');
 
-        /* Delete buttons */
         cmtList.querySelectorAll('.comment-card-del').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (!confirm('Xóa bình luận này?')) return;
@@ -834,7 +849,6 @@ window.__ddToggleTheme = function() {
         });
       });
 
-      /* Submit */
       cmtSubmit.addEventListener('click', async () => {
         const text = (cmtText?.value || '').trim();
         if (!text) return;
@@ -852,16 +866,13 @@ window.__ddToggleTheme = function() {
         cmtSubmit.disabled = false;
       });
 
-      /* Ctrl+Enter submit */
       cmtText?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit.click();
       });
     });
   })();
 
-  /* ═══════════════════════════════════════════
-     B INLINE COMMENT — bình luận từng đoạn
-  ═══════════════════════════════════════════ */
+  /* ══ B. INLINE COMMENT ══ */
   (function setupInlineComments() {
     const content = document.querySelector('.novel-content');
     if (!content) return;
@@ -870,6 +881,7 @@ window.__ddToggleTheme = function() {
     bubble.className = 'ic-bubble';
     document.body.appendChild(bubble);
     let currentIdx = null;
+    let currentUnsub = null;
 
     function positionBubble(trigger) {
       const rect = trigger.getBoundingClientRect();
@@ -882,34 +894,29 @@ window.__ddToggleTheme = function() {
       let left = rect.right + margin;
       if (left + bw > window.innerWidth - margin) left = rect.left - bw - margin;
       if (left < margin) { left = Math.max(margin, (window.innerWidth - bw) / 2); top = rect.bottom + margin; }
-      bubble.style.cssText += `;width:${bw}px;left:${left}px;top:${top}px`;
+      bubble.style.cssText = `width:${bw}px;left:${left}px;top:${top}px;position:fixed;`;
     }
 
-    function waitFirebase(cb, attempt) {
-      attempt = attempt || 0;
-      if (window.__ddFirebase?.db) return cb(window.__ddFirebase);
-      if (attempt > 40) return;
-      setTimeout(() => waitFirebase(cb, attempt + 1), 200);
-    }
-
-    function renderBubble(idx, data) {
-      const { db, ref, push, onValue, remove } = window.__ddFirebase;
-      const items = data ? Object.entries(data).map(([id, v]) => ({ id, ...v })).sort((a,b)=>(a.ts||0)-(b.ts||0)) : [];
+    function renderBubble(idx, data, fbObj) {
+      const { db, ref, push, remove } = fbObj;
+      const items = data
+        ? Object.entries(data).map(([id, v]) => ({ id, ...v })).sort((a,b)=>(a.ts||0)-(b.ts||0))
+        : [];
       bubble.setAttribute('data-para', idx);
 
       const commentsHtml = items.length
         ? items.map(c => `
           <div class="ic-comment-item">
             <button class="ic-delete-btn" data-id="${esc(c.id)}" title="Xóa">✕</button>
-            <div class="ic-comment-name">${esc(c.name)||'Khách vô danh'}<span class="ic-comment-time">${timeAgo(c.ts)}</span></div>
+            <div class="ic-comment-name">${esc(c.name)||'Khách vô danh'}<span class="ic-comment-time"> · ${timeAgo(c.ts)}</span></div>
             <p class="ic-comment-text">${esc(c.text)}</p>
           </div>`).join('')
         : '<div style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:8px 0">Chưa có bình luận cho đoạn này 🌊</div>';
 
       bubble.innerHTML = `
         <div class="ic-bubble-header">
-          <span>💬 <strong>${items.length}</strong> · đoạn ${idx + 1}</span>
-          <button class="ic-bubble-close">✕</button>
+          <span>💬 <strong>${items.length}</strong> bình luận · đoạn ${idx + 1}</span>
+          <button class="ic-bubble-close" title="Đóng">✕</button>
         </div>
         <div class="ic-comments-list">${commentsHtml}</div>
         <div class="ic-name-row">
@@ -921,7 +928,8 @@ window.__ddToggleTheme = function() {
         </div>`;
 
       bubble.querySelector('.ic-bubble-close').addEventListener('click', (e) => {
-        e.stopPropagation(); bubble.classList.remove('open'); currentIdx = null;
+        e.stopPropagation();
+        closeBubble();
       });
 
       const icKey = 'inline_' + pageKey() + '_p' + idx;
@@ -947,6 +955,12 @@ window.__ddToggleTheme = function() {
         btn.disabled = false;
       });
 
+      bubble.querySelector('.ic-text-inp')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          bubble.querySelector('.ic-send-btn')?.click();
+        }
+      });
+
       bubble.querySelectorAll('.ic-delete-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -956,54 +970,66 @@ window.__ddToggleTheme = function() {
       });
     }
 
-    content.querySelectorAll('p').forEach((p, idx) => {
+    function closeBubble() {
+      bubble.classList.remove('open');
+      currentIdx = null;
+      if (currentUnsub) { try { currentUnsub(); } catch(e){} currentUnsub = null; }
+    }
+
+    /* Gắn trigger vào từng đoạn */
+    const paragraphs = content.querySelectorAll('p');
+    paragraphs.forEach((p, idx) => {
       const trigger = document.createElement('span');
       trigger.className = 'ic-trigger';
       trigger.title = 'Bình luận đoạn này';
       trigger.textContent = '💬';
       p.appendChild(trigger);
 
-      /* Check if paragraph has comments → show faint indicator */
+      /* Realtime counter per paragraph */
       waitFirebase(({ db, ref, onValue }) => {
         const icKey = 'inline_' + pageKey() + '_p' + idx;
         onValue(ref(db, 'comments/' + icKey), (snap) => {
           const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
           trigger.textContent = cnt > 0 ? `💬${cnt}` : '💬';
           trigger.classList.toggle('has-comments', cnt > 0);
-
-          /* If this para is currently open, refresh */
-          if (currentIdx === idx && bubble.classList.contains('open')) {
-            renderBubble(idx, snap.val());
-            const triggers = content.querySelectorAll('.ic-trigger');
-            positionBubble(triggers[idx]);
-          }
         });
       });
 
       trigger.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (currentIdx === idx && bubble.classList.contains('open')) {
-          bubble.classList.remove('open'); currentIdx = null; return;
-        }
-        currentIdx = idx;
 
-        waitFirebase(({ db, ref, onValue }) => {
+        /* Toggle đóng nếu click lại cùng đoạn */
+        if (currentIdx === idx && bubble.classList.contains('open')) {
+          closeBubble(); return;
+        }
+
+        /* Đóng bubble cũ */
+        if (currentUnsub) { try { currentUnsub(); } catch(e){} currentUnsub = null; }
+
+        currentIdx = idx;
+        bubble.innerHTML = '<div class="ic-loading">Đang tải...</div>';
+        bubble.classList.add('open');
+        positionBubble(trigger);
+
+        waitFirebase((fbObj) => {
+          const { db, ref, onValue } = fbObj;
           const icKey = 'inline_' + pageKey() + '_p' + idx;
-          /* One-time read for initial render, then realtime via the per-trigger listener above */
-          onValue(ref(db, 'comments/' + icKey), (snap) => {
+          /* Realtime listener cho bubble đang mở */
+          const unsub = onValue(ref(db, 'comments/' + icKey), (snap) => {
             if (currentIdx !== idx) return;
-            renderBubble(idx, snap.val());
+            renderBubble(idx, snap.val(), fbObj);
             bubble.classList.add('open');
             positionBubble(trigger);
-            setTimeout(() => bubble.querySelector('.ic-text-inp')?.focus(), 50);
-          }, { onlyOnce: true });
+          });
+          currentUnsub = unsub;
+          setTimeout(() => bubble.querySelector('.ic-text-inp')?.focus(), 60);
         });
       });
     });
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.ic-bubble') && !e.target.closest('.ic-trigger')) {
-        bubble.classList.remove('open'); currentIdx = null;
+        closeBubble();
       }
     });
 
@@ -1014,6 +1040,14 @@ window.__ddToggleTheme = function() {
         if (t) positionBubble(t);
       }
     }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      if (bubble.classList.contains('open') && currentIdx !== null) {
+        const triggers = content.querySelectorAll('.ic-trigger');
+        const t = triggers[currentIdx];
+        if (t) positionBubble(t);
+      }
+    });
   })();
 
 })();

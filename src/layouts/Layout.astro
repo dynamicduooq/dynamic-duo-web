@@ -452,9 +452,62 @@ if (currentTruyenId && isNovelPage) {
     .ic-send-row { display:flex; gap:6px; }
 
     /* ─── CHAPTER-END COMMENT ─── */
-    .chap-comment-section {
-      max-width:760px; margin:0 auto; padding:0 12px 60px;
-    }
+.chap-comment-section {
+  position: fixed;
+  right: 0;
+  top: 56px;
+  width: 320px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  background: #fff;
+  border-left: 1px solid rgba(186,230,253,.5);
+  padding: 20px 16px;
+  z-index: 300;
+  box-shadow: -4px 0 16px rgba(2,132,199,.08);
+  transform: translateX(100%);
+  transition: transform .3s ease;
+}
+.chap-comment-section.open {
+  transform: translateX(0);
+}
+[data-theme="dark"] .chap-comment-section {
+  background: #0e2236;
+  border-left-color: rgba(96,184,232,.2);
+}
+
+/* Nút mở sidebar comment */
+.comment-sidebar-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  z-index: 400;
+  background: var(--sky);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 8px 14px;
+  font-size: .78rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2,132,199,.35);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Newsreader', serif;
+}
+.comment-sidebar-toggle:hover { background: var(--sky2); }
+
+@media(max-width:640px) {
+  .chap-comment-section {
+    width: 100%;
+    height: 60vh;
+    top: auto;
+    bottom: 0;
+    border-left: none;
+    border-top: 1px solid rgba(186,230,253,.5);
+    transform: translateY(100%);
+  }
+  .chap-comment-section.open { transform: translateY(0); }
+}
     .chap-comment-title {
       font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark);
       letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 14px;
@@ -708,6 +761,21 @@ if (currentTruyenId && isNovelPage) {
   <button class="scroll-btn" id="scrollTop" title="Lên đầu" aria-label="Lên đầu trang">↑</button>
   <button class="scroll-btn" id="scrollBot" title="Xuống cuối" aria-label="Xuống cuối trang">↓</button>
 </div>
+{isNovelPage && (
+  <button class="comment-sidebar-toggle" id="cmtToggle">
+    💬 Bình luận
+  </button>
+)}
+
+<script is:inline>
+  const toggle = document.getElementById('cmtToggle');
+  const sidebar = document.getElementById('chapCommentSection');
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
+</script>
 
 <script is:inline>
 /* ─── SCROLL + PROGRESS ─── */
@@ -990,7 +1058,9 @@ window.__ddToggleTheme = function() {
         const icKey = 'inline_' + pageKey() + '_p' + idx;
         onValue(ref(db, 'comments/' + icKey), (snap) => {
           const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
-          trigger.textContent = cnt > 0 ? `💬${cnt}` : '💬';
+trigger.innerHTML = cnt > 0 
+  ? `<span style="font-size:.6rem">${cnt}</span>` 
+  : '💬';
           trigger.classList.toggle('has-comments', cnt > 0);
         });
       });

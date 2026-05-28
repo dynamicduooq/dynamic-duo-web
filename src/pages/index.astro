@@ -200,17 +200,24 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 @media(max-width:900px){ .sidebar-col{ position:static; max-height:none; } }
 
+/* ─── WIDGET BASE ─── */
 .widget {
   background:#fff; border:1px solid rgba(186,230,253,.65);
   border-radius:14px; padding:13px 12px; flex-shrink:0;
 }
-[data-theme="dark"] .widget { background:rgba(10,22,38,.98); border-color:rgba(96,184,232,.22); }
+/* Dark mode for ALL widgets */
+[data-theme="dark"] .widget {
+  background:rgba(10,22,38,.98);
+  border-color:rgba(96,184,232,.22);
+}
 .widget-title {
   font-family:'Merriweather',serif; font-size:.68rem;
   letter-spacing:2.5px; text-transform:uppercase; color:var(--sky);
   text-align:center; margin-bottom:10px;
 }
 [data-theme="dark"] .widget-title { color:#89d0f5; }
+
+/* Profile widget */
 .profile-avatar {
   width:66px; height:66px; border-radius:50%; overflow:hidden;
   margin:0 auto 8px; border:3px solid var(--sky-light);
@@ -248,37 +255,41 @@ const hcdhCount    = countChaps(hcdhPosts);
   font-style:italic; font-size:.75rem; color:#475569; line-height:1.75;
   border-left:3px solid var(--sky-light); padding-left:10px; margin:0;
 }
-[data-theme="dark"] .quote-widget-inner {
-  background:linear-gradient(135deg,rgba(183, 215, 255, 0.95),rgba(8,22,42,.98));
-  border:1px solid rgba(96,184,232,.2); border-radius:10px; padding:10px 12px; margin:-2px;
-}
 [data-theme="dark"] .quote-body { color:#d4eeff; border-left-color:#2a6a8a; }
+.quote-widget-inner {
+  border-radius:10px; padding:10px 12px; margin:-2px;
+}
+[data-theme="dark"] .quote-widget-inner {
+  background:linear-gradient(135deg,rgba(14,34,62,.95),rgba(8,22,42,.98));
+  border:1px solid rgba(96,184,232,.2);
+}
 .quote-src { font-size:.62rem; color:#94a3b8; margin-top:6px; text-align:right; }
 [data-theme="dark"] .quote-src { color:#6a9ab5; }
 
 /* ─── MESSAGE WIDGET ─── */
-/* Uniform font size: .68rem for ALL message text */
+/* Base font size for ALL message elements: .72rem */
 .msg-widget-tabs {
   display:flex; gap:0; margin-bottom:9px;
   border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); overflow:hidden;
 }
+[data-theme="dark"] .msg-widget-tabs { border-color:rgba(96,184,232,.25); }
 .msg-tab {
   flex:1; padding:4px 0; font-size:.62rem; letter-spacing:.5px; text-transform:uppercase;
   background:none; border:none; cursor:pointer; font-family:'Newsreader',serif;
   color:var(--text-mid); transition:var(--t);
 }
 .msg-tab.active { background:var(--sky); color:#fff; }
-[data-theme="dark"] .msg-tab { color:#9ac8df; }
+[data-theme="dark"] .msg-tab { color:#9ac8df; background:transparent; }
 [data-theme="dark"] .msg-tab.active { background:#1565a0; color:#e8f6ff; }
 .msg-panel { display:none; }
 .msg-panel.active { display:block; }
 
-/* Uniform inputs */
+/* Uniform inputs — .72rem */
 .msg-inp, .msg-textarea {
   width:100%; padding:5px 10px;
   border:1.5px solid var(--sky-light); font-family:'Newsreader',serif;
-  color:var(--text-main); background:var(--cream); outline:none;
-  box-sizing:border-box; font-size:.68rem; margin-bottom:5px;
+  color:var(--text-main); background:#fff; outline:none;
+  box-sizing:border-box; font-size:.72rem; margin-bottom:5px;
   border-radius:var(--r-pill);
 }
 .msg-textarea { border-radius:8px; resize:none; min-height:48px; }
@@ -287,9 +298,10 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:#091726; border-color:#1e5a7a; color:#daeeff;
 }
 [data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color:#4a7a96; }
+
 .msg-send-btn {
   width:100%; padding:5px; background:var(--sky); color:#fff;
-  border:none; border-radius:var(--r-pill); font-size:.68rem;
+  border:none; border-radius:var(--r-pill); font-size:.72rem;
   font-family:'Newsreader',serif; cursor:pointer; transition:var(--t);
 }
 .msg-send-btn:hover { background:var(--sky2); }
@@ -302,19 +314,24 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* Public feed */
 .msg-public-feed {
-  max-height:100px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;
+  max-height:120px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;
   margin-bottom:7px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
 }
 .msg-public-feed::-webkit-scrollbar { width:3px; }
 .msg-public-feed::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+
 .msg-pub-item {
   background:var(--sky-pale); border-radius:8px; padding:5px 8px;
   border:1px solid rgba(186,230,253,.35); font-size:.68rem;
 }
-[data-theme="dark"] .msg-pub-item { background:rgba(21,50,80,.35); border-color:rgba(96,184,232,.12); }
+[data-theme="dark"] .msg-pub-item {
+  background:rgba(21,50,80,.5);
+  border-color:rgba(96,184,232,.15);
+}
 .msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
 [data-theme="dark"] .msg-pub-name { color:#89d0f5; }
 .msg-pub-time { font-size:.6rem; color:var(--text-dim); margin-left:4px; }
+[data-theme="dark"] .msg-pub-time { color:#4a7a96; }
 .msg-pub-text { color:var(--text-main); margin:2px 0 0; line-height:1.4; word-break:break-word; font-size:.68rem; }
 [data-theme="dark"] .msg-pub-text { color:#cce4f8; }
 .msg-pub-del {
@@ -326,19 +343,23 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-public-empty { font-size:.68rem; color:var(--text-dim); font-style:italic; text-align:center; padding:8px 0; }
 [data-theme="dark"] .msg-public-empty { color:#4a7a96; }
 
-/* Admin private cards */
+/* Private admin cards */
 .msg-priv-card {
   border-radius:9px; padding:7px 9px;
   border:1px solid rgba(186,230,253,.4); font-size:.68rem;
   background:var(--sky-pale);
 }
-[data-theme="dark"] .msg-priv-card { background:rgba(21,50,80,.35); border-color:rgba(96,184,232,.12); }
+[data-theme="dark"] .msg-priv-card {
+  background:rgba(21,50,80,.4);
+  border-color:rgba(96,184,232,.15);
+}
 .msg-priv-card.unread  { border-left:3px solid var(--sky); }
 .msg-priv-card.replied { border-left:3px solid #34d399; opacity:.85; }
 .msg-priv-card-header  { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
 .msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
 [data-theme="dark"] .msg-priv-sender { color:#89d0f5; }
 .msg-priv-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
+[data-theme="dark"] .msg-priv-time { color:#4a7a96; }
 .msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.6rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
 .msg-priv-del:hover { color:#ef4444; }
 .msg-priv-text { color:var(--text-main); line-height:1.4; margin:2px 0 5px; word-break:break-word; font-size:.68rem; }
@@ -346,7 +367,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-priv-reply-inp {
   width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:7px;
   font-size:.68rem; font-family:'Newsreader',serif; resize:none;
-  background:var(--cream); color:var(--text-main); outline:none; margin-bottom:4px;
+  background:#fff; color:var(--text-main); outline:none; margin-bottom:4px;
 }
 .msg-priv-reply-inp:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-priv-reply-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
@@ -360,6 +381,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   margin-top:4px; padding:4px 8px; background:rgba(52,211,153,.08);
   border-radius:6px; border:1px solid rgba(52,211,153,.25);
 }
+[data-theme="dark"] .msg-priv-replied-wrap { background:rgba(52,211,153,.05); border-color:rgba(52,211,153,.2); }
 .msg-priv-replied-label { font-size:.6rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
 .msg-priv-replied-text  { font-size:.68rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-priv-replied-text { color:#cce4f8; }
@@ -371,20 +393,32 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-admin-reply-section { margin-top:7px; }
 .msg-admin-reply-title   { font-size:.64rem; color:#059669; font-weight:700; margin-bottom:4px; }
 .msg-admin-reply-card    { padding:6px 8px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:8px; margin-bottom:4px; }
+[data-theme="dark"] .msg-admin-reply-card { background:rgba(52,211,153,.05); }
 .msg-admin-reply-orig    { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
 .msg-admin-reply-body    { font-size:.68rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-admin-reply-body { color:#cce4f8; }
 .msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.56rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-right:3px; }
 .msg-admin-reply-time    { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
 .msg-pub-admin           { background:rgba(14,165,233,.06)!important; border-color:rgba(14,165,233,.25)!important; }
+[data-theme="dark"] .msg-pub-admin { background:rgba(21,101,160,.2)!important; border-color:rgba(96,184,232,.3)!important; }
 .msg-pub-admin-name      { color:var(--sky-dark)!important; }
+[data-theme="dark"] .msg-pub-admin-name { color:#89d0f5!important; }
 .msg-pub-owner-badge     { display:inline-block; font-size:.52rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
 
+/* Description text in private panel */
+.msg-panel p {
+  font-size:.68rem;
+  color:var(--text-dim);
+  margin:0 0 7px;
+  font-style:italic;
+  line-height:1.5;
+}
+[data-theme="dark"] .msg-panel p { color:#6a9ab5; }
+
 /* ─── FLOATING MAIL BUBBLE ─── */
-/* Đặt riêng, không nằm trong nhóm scroll buttons */
 .msg-bubble-btn {
   position:fixed;
-  bottom: 126px; /* trên scroll buttons (40px) + 8px gap + 28px */
+  bottom: 126px;
   right: 22px;
   z-index: 410;
   width: 40px; height: 40px; border-radius:50%;
@@ -399,7 +433,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   transform:scale(1.1) translateY(-2px);
   box-shadow:0 7px 20px rgba(2,132,199,.55);
 }
-/* Ripple luôn chạy — mời nhắn tin */
 .bubble-ripple {
   position:absolute; inset:-5px; border-radius:50%;
   border:2px solid var(--sky);
@@ -413,7 +446,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .msg-bubble-btn { background:linear-gradient(135deg,#1565a0,#0e3d6e); }
 @media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
 
-/* Popup từ bubble */
+/* Popup from bubble */
 .msg-popup {
   position:fixed; bottom:128px; right:16px; z-index:420;
   width:min(330px,calc(100vw - 28px));
@@ -423,7 +456,10 @@ const hcdhCount    = countChaps(hcdhPosts);
   opacity:0; pointer-events:none; transform:translateY(12px) scale(.97);
   transition:opacity .22s ease, transform .22s ease;
 }
-[data-theme="dark"] .msg-popup { background:rgba(10,22,38,.98); border-color:rgba(96,184,232,.22); }
+[data-theme="dark"] .msg-popup {
+  background:rgba(10,22,38,.98);
+  border-color:rgba(96,184,232,.22);
+}
 .msg-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
 .msg-popup-header {
   display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
@@ -440,18 +476,17 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 .msg-popup-close:hover { background:var(--sky-pale); color:var(--sky); }
 [data-theme="dark"] .msg-popup-close { border-color:rgba(96,184,232,.2); color:#6a9ab5; }
+[data-theme="dark"] .msg-popup-close:hover { background:rgba(96,184,232,.1); }
 
-/* ─── DARK MODE TOGGLE — góc phải nav thay vì sidebar ─── */
-/* (Đã xử lý qua JS thêm button vào navbar trong script) */
-.nav-theme-btn {
-  font-size:.72rem; padding:5px 10px; border-radius:var(--r-pill);
-  border:1px solid rgba(186,230,253,.6); background:none;
-  color:var(--text-mid); cursor:pointer; transition:var(--t);
-  font-family:'Newsreader',serif; display:flex; align-items:center; gap:4px;
+/* Popup also needs dark inputs */
+[data-theme="dark"] .msg-popup .msg-inp,
+[data-theme="dark"] .msg-popup .msg-textarea {
+  background:#091726; border-color:#1e5a7a; color:#daeeff;
 }
-.nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
-[data-theme="dark"] .nav-theme-btn { border-color:rgba(96,184,232,.3); color:#a0c8e0; }
-[data-theme="dark"] .nav-theme-btn:hover { background:rgba(96,184,232,.1); color:#60b8e8; }
+[data-theme="dark"] .msg-popup .msg-pub-item {
+  background:rgba(21,50,80,.5); border-color:rgba(96,184,232,.15);
+}
+[data-theme="dark"] .msg-popup p { color:#6a9ab5; }
 
 /* Misc */
 .no-results { display:none; text-align:center; padding:24px; color:var(--text-dim); font-style:italic; }
@@ -459,6 +494,8 @@ const hcdhCount    = countChaps(hcdhPosts);
 .hidden { display:none !important; }
 .reveal { opacity:0; transform:translateY(14px); transition:opacity .5s ease,transform .5s ease; }
 .reveal.visible { opacity:1; transform:translateY(0); }
+.contact-email { font-size:.72rem; margin-bottom:5px; }
+[data-theme="dark"] .contact-email { color:#a0c8e0; }
 
 @media(max-width:600px){
   .sc-cover-wrap { width:88px; }
@@ -674,7 +711,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
   </div><!-- /main-col -->
 
-  <!-- ── SIDEBAR (không còn Tags, không còn Dark Mode button) ── -->
+  <!-- ── SIDEBAR ── -->
   <aside class="sidebar-col">
 
     <div class="widget">
@@ -745,9 +782,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       <div class="msg-panel active" id="msgPanelPrivate">
         <!-- User view -->
         <div id="msgPrivateUserNote">
-          <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic;line-height:1.5">
-            Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.
-          </p>
+          <p>Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.</p>
           <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
           <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
           <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
@@ -775,20 +810,20 @@ const hcdhCount    = countChaps(hcdhPosts);
 
     <div class="widget" style="text-align:center">
       <div class="widget-title">✉ Liên hệ</div>
-      <p class="contact-email" style="font-size:.72rem;margin-bottom:5px">dynamicduoo.q@gmail.com</p>
+      <p class="contact-email">dynamicduoo.q@gmail.com</p>
       <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.68rem;color:var(--sky)">🌐 WordPress cũ</a>
     </div>
 
   </aside>
 </div><!-- /home-shell -->
 
-<!-- ── FLOATING MAIL BUBBLE (shortcut mở popup) ── -->
+<!-- ── FLOATING MAIL BUBBLE ── -->
 <button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
   <span>✉</span>
   <span class="bubble-ripple"></span>
 </button>
 
-<!-- Popup từ bubble -->
+<!-- Popup from bubble -->
 <div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
     <span class="msg-popup-title">✉ Lời nhắn</span>
@@ -818,25 +853,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 <script is:inline>
 /* ══════════════════════════════════════
-   DARK MODE TOGGLE — thêm vào navbar
-══════════════════════════════════════ */
-(function injectThemeBtn(){
-  const navLinks = document.querySelector('.nav-links');
-  if(!navLinks) return;
-  const btn = document.createElement('button');
-  btn.className = 'nav-theme-btn';
-  btn.id = 'navThemeBtn';
-  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
-  const sync = () => { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối'; };
-  sync();
-  btn.addEventListener('click', () => {
-    if(typeof window.__ddToggleTheme === 'function') window.__ddToggleTheme();
-    sync();
-  });
-  navLinks.appendChild(btn);
-})();
-
-/* ══════════════════════════════════════
    FILTER
 ══════════════════════════════════════ */
 const allCards  = document.querySelectorAll('.sc');
@@ -864,7 +880,7 @@ function applyFilter(){
 }
 chips.forEach(chip=>{
   chip.addEventListener('click',()=>{
-    if(chip.id==='chipClear'){ activeTags.clear(); activeCat=null; chips.forEach(c=>c.classList.remove('active')); document.querySelector('[data-tag="all"]')?.classList.add('active'); document.querySelectorAll('#tagCloud .tc-btn').forEach(b=>b.classList.remove('active')); applyFilter(); return; }
+    if(chip.id==='chipClear'){ activeTags.clear(); activeCat=null; chips.forEach(c=>c.classList.remove('active')); document.querySelector('[data-tag="all"]')?.classList.add('active'); applyFilter(); return; }
     if(chip.dataset.tag){
       const tag=chip.dataset.tag;
       if(tag==='all'){ activeTags.clear(); chips.forEach(c=>c.dataset.tag&&c.classList.remove('active')); chip.classList.add('active'); }
@@ -883,7 +899,7 @@ const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.ta
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
 /* ══════════════════════════════════════
-   MAIL BUBBLE — chỉ toggle popup, không đếm tin
+   MAIL BUBBLE
 ══════════════════════════════════════ */
 (function setupBubble(){
   const btn   = document.getElementById('msgBubbleBtn');
@@ -901,7 +917,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
       popup.classList.remove('open');
   });
 
-  /* Tab switcher cho popup */
+  /* Tab switcher for popup */
   popup.querySelectorAll('[data-popup-panel]').forEach(tab => {
     tab.addEventListener('click', () => {
       const panel = tab.dataset.popupPanel;
@@ -929,7 +945,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   function getMsgToken(){ let t=localStorage.getItem('dd_token'); if(!t){t=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('dd_token',t);} return t; }
   const myToken     = getMsgToken();
   const ADMIN_NAME  = 'dynamic duo 𓆝';
-  const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
   let isAdmin=false, lastPublicData=null, lastPrivateData=null, pubDebounce=null, privDebounce=null;
 
   window.addEventListener('dd-auth-change', e => {
@@ -948,7 +963,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
   }
 
-  /* Tab switcher cho sidebar widget */
+  /* Tab switcher for sidebar widget */
   document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
     tab.addEventListener('click', () => {
       const panel = tab.dataset.panel;
@@ -993,7 +1008,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
           }
         </div>`;
       }).join('');
-      /* Bind events */
       adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const mid=btn.dataset.mid, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
@@ -1025,7 +1039,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     }
   }
 
-  /* ── Gửi private (user) ── */
+  /* ── Send private (user) ── */
   function bindPrivateSend(nameId,textId,sendId,doneId){
     const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
     if(!sendEl) return;
@@ -1067,7 +1081,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     renderFeed(document.getElementById('msgPopupPublicFeed'));
   }
 
-  /* ── Gửi public ── */
+  /* ── Send public ── */
   function bindPublicSend(nameId,textId,sendId,doneId){
     const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
     if(!sendEl) return;

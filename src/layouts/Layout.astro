@@ -193,75 +193,475 @@ if (currentTruyenId && isNovelPage) {
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
     @media(max-width:640px){ .page-content-wrap{ padding:24px 18px; margin:16px 12px 40px; } }
 
-    /* ── NOVEL LAYOUT: content + inline sidebar ── */
-/* ── NOVEL LAYOUT: content không đổi, sidebar luôn fixed bên phải ── */
-.novel-layout-wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-/* Khi sidebar open: thu hẹp content để không bị che */
-.novel-layout-wrap.sidebar-open .novel-content {
-  margin-right: 328px;
-  transition: margin-right .3s ease;
-}
+    /* ── CHAP NAV ── */
+    .chap-nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .chap-pn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 16px; border-radius: var(--r-pill);
+      border: 1px solid var(--sky-light); font-size: .78rem;
+      color: var(--sky-dark); transition: var(--t); white-space: nowrap;
+      background: rgba(255,255,255,.9);
+    }
+    .chap-pn:hover { background: var(--sky-pale); border-color: var(--sky); }
+    .chap-pn.disabled { opacity: .4; pointer-events: none; }
+    [data-theme="dark"] .chap-pn { background: rgba(12,30,48,.9); }
 
-/* ── NOVEL CONTENT ── */
-.novel-content {
-  max-width: 760px;
-  margin: 32px auto 60px;
-  padding: 40px 50px;
-  background: rgba(255,255,255,.98);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-soft);
-  border: 1px solid rgba(186,230,253,.5);
-  transition: margin-right .3s ease;
-}
-@media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
-.novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
-blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
-hr { border:none; text-align:center; margin:40px 0; }
-hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
+    /* ── CHAPTER DROPDOWN ── */
+    .chap-dd-wrap { position: relative; }
+    .chap-dd-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: var(--r-pill);
+      border: 1px solid var(--sky-light); font-size: .76rem;
+      color: var(--sky-dark); cursor: pointer; font-family: 'Newsreader', serif;
+      background: rgba(255,255,255,.9); transition: var(--t); white-space: nowrap;
+    }
+    .chap-dd-btn:hover { background: var(--sky-pale); border-color: var(--sky); }
+    [data-theme="dark"] .chap-dd-btn { background: rgba(12,30,48,.9); }
 
-/* ── INLINE COMMENT SIDEBAR — luôn fixed bên phải, mọi màn hình ── */
-.ic-sidebar {
-  position: fixed;
-  top: 56px;
-  right: 0;
-  bottom: 0;
-  width: 300px;
-  max-height: none;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease, transform .25s ease;
-  transform: translateX(100%);
-  z-index: 450;
-  background: #fff;
-  border-left: 1px solid rgba(186,230,253,.5);
-  border-radius: var(--r-lg) 0 0 var(--r-lg);
-  box-shadow: -4px 0 24px rgba(2,132,199,.10);
-}
-[data-theme="dark"] .ic-sidebar {
-  background: rgba(12,24,40,.99);
-  border-color: rgba(96,184,232,.16);
-}
-.novel-layout-wrap.sidebar-open .ic-sidebar {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
-}
-    /* ── MOBILE: sidebar thành overlay ── */
-/* ── MOBILE: thu hẹp width sidebar ── */
-@media(max-width:600px){
-  .ic-sidebar { width: min(300px, 85vw); }
-  .novel-layout-wrap.sidebar-open .novel-content { margin-right: 0; }
-}
-@media(min-width:601px){
-  .ic-overlay { display: none !important; }
-}
+    /* ── FIX: Dropdown list overflow ── */
+    .chap-dd-list {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 700;
+      /* Fixed width, scroll inside */
+      width: 220px;
+      max-height: 280px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #fff;
+      border: 1px solid rgba(186,230,253,.7);
+      border-radius: var(--r-md);
+      box-shadow: 0 16px 48px rgba(2,132,199,.15);
+      padding: 4px;
+      display: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--sky-light) transparent;
+    }
+    .chap-dd-list::-webkit-scrollbar { width: 3px; }
+    .chap-dd-list::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
+    .chap-dd-list.open { display: block; }
+    /* Up variant (for bottom nav) */
+    .chap-dd-list.up {
+      top: auto;
+      bottom: calc(100% + 6px);
+    }
+    .chap-dd-list a {
+      display: block;
+      padding: 6px 12px;
+      font-size: .76rem;
+      color: var(--text-mid);
+      border-radius: var(--r-sm);
+      transition: var(--t);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-bottom: 1px solid rgba(186,230,253,.2);
+    }
+    .chap-dd-list a:last-child { border-bottom: none; }
+    .chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky); }
+    .chap-dd-list a.cur-chap {
+      background: rgba(14,165,233,.1);
+      color: var(--sky-dark);
+      font-weight: 700;
+    }
+    [data-theme="dark"] .chap-dd-list { background: #0e2236; border-color: #1e5a7a; }
+    [data-theme="dark"] .chap-dd-list a { color: #a0c8e0; border-color: rgba(96,184,232,.12); }
+    [data-theme="dark"] .chap-dd-list a:hover { background: rgba(96,184,232,.1); color: #daeeff; }
+    [data-theme="dark"] .chap-dd-list a.cur-chap { background: rgba(96,184,232,.15); color: #89d0f5; }
+
+    /* ── NOVEL LAYOUT ── */
+    .novel-layout-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 16px;
+      position: relative;
+    }
+
+    /* ── NOVEL CONTENT ── */
+    .novel-content {
+      max-width: 760px;
+      margin: 24px auto 60px;
+      padding: 40px 50px;
+      background: rgba(255,255,255,.98);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-soft);
+      border: 1px solid rgba(186,230,253,.5);
+      transition: margin-right .3s ease;
+      position: relative;
+    }
+    @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
+    .novel-content p {
+      text-align: justify;
+      text-justify: inter-word;
+      position: relative;
+      margin-bottom: 1.1em;
+      display: block;
+    }
+    blockquote {
+      font-style: italic; font-size: .9rem; color: var(--text-mid);
+      line-height: 1.75; border-left: 3px solid var(--sky-light);
+      padding: 15px 20px; margin: 20px 0;
+      background: var(--sky-pale); border-radius: 0 12px 12px 0;
+    }
+    hr { border: none; text-align: center; margin: 40px 0; }
+    hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
+
+    /* ── INLINE COMMENT SIDEBAR ── */
+    /* Sidebar fixed on right, slides in */
+    .ic-sidebar {
+      position: fixed;
+      top: 56px;
+      right: 0;
+      bottom: 0;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-left: 1px solid rgba(186,230,253,.5);
+      border-radius: var(--r-lg) 0 0 var(--r-lg);
+      box-shadow: -4px 0 24px rgba(2,132,199,.10);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(100%);
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 450;
+      overflow: hidden;
+    }
+    [data-theme="dark"] .ic-sidebar {
+      background: rgba(12,24,40,.99);
+      border-color: rgba(96,184,232,.16);
+    }
+    .novel-layout-wrap.sidebar-open .ic-sidebar {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+    /* Push content left when sidebar is open on wide screens */
+    @media(min-width:1100px){
+      .novel-layout-wrap.sidebar-open .novel-content { margin-right: 316px; }
+    }
+    @media(max-width:600px){
+      .ic-sidebar { width: min(300px, 88vw); }
+    }
+    @media(min-width:601px){
+      .ic-overlay { display: none !important; }
+    }
+
+    /* Sidebar inner structure */
+    .ic-sidebar-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+    .ic-sidebar-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid rgba(186,230,253,.4);
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .ic-sidebar-header { border-color: rgba(96,184,232,.15); }
+    .ic-para-preview {
+      flex: 1;
+      font-size: .68rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.5;
+      max-height: 3.5em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .ic-sidebar-close {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(186,230,253,.5);
+      background: none; cursor: pointer;
+      font-size: .62rem; color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--t);
+    }
+    .ic-sidebar-close:hover { background: var(--sky-pale); color: var(--sky); }
+    [data-theme="dark"] .ic-sidebar-close { border-color: rgba(96,184,232,.2); color: #6a9ab5; }
+
+    /* Sidebar form */
+    .ic-sidebar-form {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(186,230,253,.3);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    [data-theme="dark"] .ic-sidebar-form { border-color: rgba(96,184,232,.12); }
+    .ic-form-name {
+      width: 100%;
+      padding: 5px 10px;
+      border: 1.5px solid var(--sky-light);
+      border-radius: var(--r-pill);
+      font-size: .72rem;
+      font-family: 'Newsreader', serif;
+      color: var(--text-main);
+      background: var(--cream);
+      outline: none;
+    }
+    .ic-form-name:focus { border-color: var(--sky); }
+    [data-theme="dark"] .ic-form-name { background: #091726; border-color: #1e5a7a; color: #daeeff; }
+    [data-theme="dark"] .ic-form-name::placeholder { color: #4a7a96; }
+    .ic-form-body {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .ic-form-text {
+      flex: 1;
+      padding: 7px 10px;
+      border: 1.5px solid var(--sky-light);
+      border-radius: 10px;
+      font-size: .74rem;
+      font-family: 'Newsreader', serif;
+      color: var(--text-main);
+      background: var(--cream);
+      outline: none;
+      resize: none;
+      min-height: 48px;
+    }
+    .ic-form-text:focus { border-color: var(--sky); }
+    [data-theme="dark"] .ic-form-text { background: #091726; border-color: #1e5a7a; color: #daeeff; }
+    [data-theme="dark"] .ic-form-text::placeholder { color: #4a7a96; }
+    .ic-form-send {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--sky); color: #fff;
+      border: none; cursor: pointer;
+      font-size: .88rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: var(--t);
+    }
+    .ic-form-send:hover { background: var(--sky2); }
+    .ic-form-send:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* Quoting bar in sidebar form */
+    .ic-quoting-bar {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(14,165,233,.07);
+      border-radius: 6px;
+      border-left: 3px solid var(--sky-light);
+      font-size: .66rem;
+    }
+    .ic-quoting-bar.show { display: flex; }
+    [data-theme="dark"] .ic-quoting-bar { background: rgba(96,184,232,.1); border-left-color: #2a6a8a; }
+    .ic-quoting-label { flex: 1; color: var(--sky); font-style: italic; }
+    [data-theme="dark"] .ic-quoting-label { color: #89d0f5; }
+    .ic-quoting-cancel {
+      background: none; border: none; cursor: pointer;
+      font-size: .58rem; color: var(--text-dim); padding: 0 2px;
+      border-radius: 3px; transition: color .15s;
+    }
+    .ic-quoting-cancel:hover { color: #ef4444; }
+
+    /* Sidebar list */
+    .ic-sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--sky-light) transparent;
+    }
+    .ic-sidebar-list::-webkit-scrollbar { width: 3px; }
+    .ic-sidebar-list::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
+    .ic-empty {
+      font-size: .74rem;
+      color: var(--text-dim);
+      font-style: italic;
+      text-align: center;
+      padding: 20px 0;
+      line-height: 1.7;
+    }
+    [data-theme="dark"] .ic-empty { color: #4a7a96; }
+
+    /* Sidebar comment items */
+    .ic-item {
+      background: var(--sky-pale);
+      border: 1px solid rgba(186,230,253,.5);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: .74rem;
+    }
+    [data-theme="dark"] .ic-item { background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.15); }
+    .ic-item-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .ic-item-name { font-weight: 700; color: var(--sky-dark); font-size: .72rem; }
+    [data-theme="dark"] .ic-item-name { color: #89d0f5; }
+    .ic-item-time { font-size: .6rem; color: var(--text-dim); margin-left: auto; }
+    .ic-item-text { font-size: .74rem; color: var(--text-main); line-height: 1.5; margin-bottom: 6px; word-break: break-word; }
+    [data-theme="dark"] .ic-item-text { color: #cce4f8; }
+    .ic-item-actions { display: flex; align-items: center; gap: 6px; }
+    .ic-reply-toggle {
+      font-size: .64rem; color: var(--sky); background: none; border: none;
+      cursor: pointer; font-family: 'Newsreader', serif; padding: 0;
+      transition: color .15s;
+    }
+    .ic-reply-toggle:hover { color: var(--sky2); text-decoration: underline; }
+    [data-theme="dark"] .ic-reply-toggle { color: #89d0f5; }
+    .ic-del-btn {
+      margin-left: auto; font-size: .62rem; color: var(--text-dim);
+      background: none; border: none; cursor: pointer; padding: 2px 5px;
+      border-radius: 4px; display: none; transition: color .15s;
+    }
+    .ic-del-btn.show { display: inline-flex; align-items: center; gap: 2px; }
+    .ic-del-btn:hover { color: #ef4444; }
+
+    /* Replies inside sidebar */
+    .ic-replies {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px solid rgba(186,230,253,.3);
+    }
+    .ic-replies.open { display: flex; }
+    [data-theme="dark"] .ic-replies { border-color: rgba(96,184,232,.12); }
+    .ic-reply-item {
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+      background: rgba(255,255,255,.7);
+      border-radius: 7px;
+      padding: 6px 8px;
+      position: relative;
+    }
+    [data-theme="dark"] .ic-reply-item { background: rgba(21,50,80,.5); }
+    .ic-reply-avatar {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky-pale), var(--sky-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: .58rem; font-weight: 700;
+      color: var(--sky-dark); flex-shrink: 0;
+      border: 1px solid var(--sky-light);
+    }
+    [data-theme="dark"] .ic-reply-avatar { background: rgba(21,101,160,.4); color: #89d0f5; border-color: rgba(96,184,232,.3); }
+    .ic-reply-body { flex: 1; min-width: 0; }
+    .ic-reply-name { font-weight: 700; font-size: .66rem; color: var(--sky-dark); }
+    [data-theme="dark"] .ic-reply-name { color: #89d0f5; }
+    .ic-reply-at { color: var(--sky); font-weight: 700; font-size: .66rem; background: rgba(14,165,233,.08); border-radius: 3px; padding: 0 3px; margin-right: 2px; }
+    [data-theme="dark"] .ic-reply-at { color: #89d0f5; background: rgba(96,184,232,.12); }
+    .ic-reply-text { font-size: .7rem; color: var(--text-main); line-height: 1.45; margin-top: 2px; word-break: break-word; }
+    [data-theme="dark"] .ic-reply-text { color: #b8d8f0; }
+    .ic-rr-btn {
+      display: inline-block; margin-top: 3px;
+      background: none; border: none; cursor: pointer;
+      font-size: .6rem; color: var(--sky); padding: 0;
+      font-family: 'Newsreader', serif; transition: color .15s;
+    }
+    .ic-rr-btn:hover { color: var(--sky2); text-decoration: underline; }
+    [data-theme="dark"] .ic-rr-btn { color: #89d0f5; }
+    .ic-reply-del {
+      position: absolute; top: 5px; right: 6px;
+      background: none; border: none; cursor: pointer;
+      font-size: .56rem; color: var(--text-dim); opacity: 0;
+      transition: opacity .15s, color .15s; padding: 2px 3px;
+      border-radius: 3px; display: none;
+    }
+    .ic-reply-item:hover .ic-reply-del { opacity: 1; }
+    .ic-reply-del:hover { color: #ef4444; }
+    .ic-reply-del.show { display: block; }
+
+    /* Reply form inside sidebar */
+    .ic-reply-form {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .ic-reply-form.open { display: flex; }
+    .ic-reply-form input, .ic-reply-form textarea {
+      width: 100%; padding: 5px 9px;
+      border: 1.5px solid var(--sky-light);
+      font-family: 'Newsreader', serif;
+      color: var(--text-main); background: var(--cream);
+      outline: none; font-size: .7rem;
+    }
+    .ic-reply-form input { border-radius: var(--r-pill); }
+    .ic-reply-form textarea { border-radius: 8px; resize: none; min-height: 44px; }
+    .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color: var(--sky); }
+    [data-theme="dark"] .ic-reply-form input,
+    [data-theme="dark"] .ic-reply-form textarea { background: #091726; border-color: #1e5a7a; color: #daeeff; }
+    [data-theme="dark"] .ic-reply-form input::placeholder,
+    [data-theme="dark"] .ic-reply-form textarea::placeholder { color: #4a7a96; }
+    .ic-reply-form-row {
+      display: flex; gap: 5px; justify-content: flex-end;
+    }
+    .ic-rf-cancel {
+      padding: 3px 9px; background: none; border: 1px solid rgba(186,230,253,.6);
+      border-radius: var(--r-pill); font-size: .66rem; cursor: pointer;
+      color: var(--text-dim); transition: var(--t);
+    }
+    .ic-rf-cancel:hover { color: var(--sky); }
+    .ic-rf-send {
+      padding: 3px 10px; background: var(--sky); color: #fff;
+      border: none; border-radius: var(--r-pill);
+      font-size: .66rem; cursor: pointer; transition: var(--t);
+    }
+    .ic-rf-send:hover { background: var(--sky2); }
+    .ic-rf-send:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* Trigger button on paragraphs */
+    .ic-trigger {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 6px;
+      padding: 0 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .75rem;
+      opacity: 0;
+      transition: opacity .15s;
+      vertical-align: middle;
+      border-radius: 4px;
+      color: var(--sky);
+      line-height: 1;
+    }
+    .novel-content p:hover .ic-trigger { opacity: .65; }
+    .ic-trigger:hover { opacity: 1 !important; }
+    .ic-trigger.has-comments { opacity: .8; }
+    .novel-content p.ic-active .ic-trigger { opacity: 1; }
+
+    /* Overlay for mobile */
+    .ic-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 440;
+    }
+    .ic-overlay.show { display: block; }
+
     /* ══════════════════════════════════
        CHAPTER-END COMMENT
     ══════════════════════════════════ */
@@ -353,67 +753,18 @@ hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-siz
     .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
-/* ── @mention tag ── */
-.reply-at {
-  display: inline-block;
-  color: var(--sky);
-  font-weight: 700;
-  font-size: .75em;
-  background: rgba(14,165,233,.08);
-  border-radius: 4px;
-  padding: 0 4px;
-  margin-right: 2px;
-}
-[data-theme="dark"] .reply-at {
-  color: #89d0f5;
-  background: rgba(96,184,232,.12);
-}
- 
-/* ── Inline "đang reply cho..." banner ── */
-.reply-quoting {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  background: rgba(14,165,233,.07);
-  border-radius: 6px;
-  margin-bottom: 6px;
-  border-left: 3px solid var(--sky-light);
-}
-[data-theme="dark"] .reply-quoting {
-  background: rgba(96,184,232,.1);
-  border-left-color: #2a6a8a;
-}
-.reply-quoting-label {
-  flex: 1;
-  font-size: .68rem;
-  color: var(--sky);
-  font-style: italic;
-}
-[data-theme="dark"] .reply-quoting-label { color: #89d0f5; }
-.reply-quoting-cancel {
-  background: none; border: none; cursor: pointer;
-  font-size: .62rem; color: var(--text-dim); padding: 0 2px;
-  border-radius: 3px; transition: color .15s;
-}
-.reply-quoting-cancel:hover { color: #ef4444; }
- 
-/* ── "↩ Reply" button trong mỗi reply item ── */
-.reply-quote-btn {
-  display: inline-block;
-  margin-top: 4px;
-  background: none; border: none; cursor: pointer;
-  font-size: .62rem; color: var(--sky); padding: 0;
-  font-family: 'Newsreader', serif; transition: color .15s;
-}
-.reply-quote-btn:hover { color: var(--sky2); text-decoration: underline; }
-[data-theme="dark"] .reply-quote-btn { color: #89d0f5; }
- 
-/* ── Wrap chứa list reply items (dùng để scroll) ── */
-.reply-items-wrap {
-  display: flex; flex-direction: column; gap: 7px;
-  margin-bottom: 6px;
-}
+    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
+    [data-theme="dark"] .reply-at { color:#89d0f5; background:rgba(96,184,232,.12); }
+    .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
+    [data-theme="dark"] .reply-quoting { background:rgba(96,184,232,.1); border-left-color:#2a6a8a; }
+    .reply-quoting-label { flex:1; font-size:.68rem; color:var(--sky); font-style:italic; }
+    [data-theme="dark"] .reply-quoting-label { color:#89d0f5; }
+    .reply-quoting-cancel { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 2px; border-radius:3px; transition:color .15s; }
+    .reply-quoting-cancel:hover { color:#ef4444; }
+    .reply-quote-btn { display:inline-block; margin-top:4px; background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--sky); padding:0; font-family:'Newsreader',serif; transition:color .15s; }
+    .reply-quote-btn:hover { color:var(--sky2); text-decoration:underline; }
+    [data-theme="dark"] .reply-quote-btn { color:#89d0f5; }
+    .reply-items-wrap { display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
     .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
     .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
     [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#4a7a96; }
@@ -434,16 +785,18 @@ hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-siz
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
     /* ── SCROLL BUTTONS ── */
-    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
-    body.novel-sidebar-open .scroll-btns { right: 336px; }
-    @media(max-width:900px){
-      body.novel-sidebar-open .scroll-btns { right: 22px; }
-    }
-    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease,right .3s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
+    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; transition: right .3s ease; }
+    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
     [data-theme="dark"] .scroll-btn   { background:#1a4f6e; }
     [data-theme="dark"] .scroll-btn:hover { background:#215f84; }
+
+    /* Tags */
+    .tag-badge { display:inline-block; margin:2px 3px; padding:3px 10px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.72rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); }
+    .tag-badge:hover { background:var(--sky-light); }
+    [data-theme="dark"] .tag-badge { color:#89d0f5; border-color:#1e5a7a; background:rgba(21,101,160,.2); }
+    [data-theme="dark"] .tag-badge:hover { background:rgba(96,184,232,.1); }
   </style>
 </head>
 <body>
@@ -549,6 +902,10 @@ hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-siz
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
           </div>
           <div class="ic-sidebar-form">
+            <div class="ic-quoting-bar" id="icQuotingBar">
+              <span class="ic-quoting-label" id="icQuotingLabel"></span>
+              <button class="ic-quoting-cancel" id="icQuotingCancel">✕</button>
+            </div>
             <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
             <div class="ic-form-body">
               <textarea class="ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="2"></textarea>
@@ -635,7 +992,7 @@ hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-siz
   <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
 </footer>
 
-<div class="scroll-btns">
+<div class="scroll-btns" id="scrollBtns">
   <button class="scroll-btn" id="scrollTop" title="Lên đầu">↑</button>
   <button class="scroll-btn" id="scrollBot" title="Xuống cuối">↓</button>
 </div>
@@ -655,7 +1012,6 @@ function pageKey(){
   return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120);
 }
 function avatarLetter(name){ return (name||'K').trim().charAt(0).toUpperCase(); }
-
 function getMyToken(){
   let t = localStorage.getItem('dd_token');
   if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); }
@@ -663,7 +1019,6 @@ function getMyToken(){
 }
 function getLiked(id){ try{ return JSON.parse(localStorage.getItem('dd_liked')||'{}')[id]||false; }catch(e){ return false; } }
 function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked')||'{}'); o[id]=v; localStorage.setItem('dd_liked',JSON.stringify(o)); }catch(e){} }
-
 function waitFirebase(cb){
   if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
   window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
@@ -698,7 +1053,11 @@ function setupDD(btnId,listId){
     e.stopPropagation();
     const was=list.classList.contains('open');
     document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
-    if(!was){ list.classList.add('open'); const cur=list.querySelector('.cur-chap'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'center'}),30); }
+    if(!was){
+      list.classList.add('open');
+      const cur=list.querySelector('.cur-chap');
+      if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}),30);
+    }
   });
 }
 setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
@@ -708,8 +1067,22 @@ document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.o
 function applyTheme(dark){ document.documentElement.setAttribute('data-theme',dark?'dark':''); localStorage.setItem('dd-theme',dark?'dark':'light'); }
 window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
 
+/* ══ INJECT THEME BUTTON INTO NAV ══ */
+(function injectThemeBtn(){
+  const navLinks = document.querySelector('.nav-links');
+  if(!navLinks) return;
+  const btn = document.createElement('button');
+  btn.style.cssText = 'font-size:.72rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(186,230,253,.6);background:none;color:var(--text-mid);cursor:pointer;transition:all .2s ease;font-family:Newsreader,serif;display:inline-flex;align-items:center;gap:4px;';
+  btn.id = 'navThemeBtn';
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const sync = () => { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối'; };
+  sync();
+  btn.addEventListener('click', () => { window.__ddToggleTheme(); sync(); });
+  navLinks.appendChild(btn);
+})();
+
 /* ══════════════════════════════════════════
-   A. INLINE COMMENT SIDEBAR (Wattpad style)
+   A. INLINE COMMENT SIDEBAR
 ══════════════════════════════════════════ */
 (function setupInlineSidebar(){
   const novelWrap  = document.getElementById('novelLayoutWrap');
@@ -721,72 +1094,53 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   const formText   = document.getElementById('icFormText');
   const formSend   = document.getElementById('icFormSend');
   const overlay    = document.getElementById('icOverlay');
+  const quotingBar = document.getElementById('icQuotingBar');
+  const quotingLabel = document.getElementById('icQuotingLabel');
   if(!content || !sidebar || !novelWrap) return;
- 
+
   let currentIdx   = null;
   let currentUnsub = null;
   let isAdmin      = !!window.__ddIsAdmin;
   const myToken    = getMyToken();
- 
-  /* ── Quoting state cho reply-of-reply ── */
   let quotingReplyId   = null;
   let quotingReplyName = null;
- 
-  /* Thêm quoting bar vào form nếu chưa có */
-  const formArea = document.getElementById('icFormText')?.closest('.ic-sidebar-form');
-  let quotingBar = null;
-  if(formArea){
-    quotingBar = document.createElement('div');
-    quotingBar.className = 'ic-quoting-bar';
-    quotingBar.id = 'icQuotingBar';
-    quotingBar.innerHTML = '<span class="ic-quoting-label" id="icQuotingLabel"></span>'
-      + '<button class="ic-quoting-cancel" id="icQuotingCancel">✕</button>';
-    formArea.insertBefore(quotingBar, formArea.firstChild);
-    document.getElementById('icQuotingCancel')?.addEventListener('click', clearQuoting);
-  }
- 
+
+  document.getElementById('icQuotingCancel')?.addEventListener('click', clearQuoting);
+
   function setQuoting(rid, rname){
     quotingReplyId   = rid;
     quotingReplyName = rname;
-    const bar   = document.getElementById('icQuotingBar');
-    const label = document.getElementById('icQuotingLabel');
-    if(bar)   bar.classList.add('show');
-    if(label) label.textContent = '↩ Reply cho ' + (rname || 'Khách vô danh');
+    if(quotingBar)   quotingBar.classList.add('show');
+    if(quotingLabel) quotingLabel.textContent = '↩ Reply cho ' + (rname || 'Khách vô danh');
     formText?.focus();
   }
   function clearQuoting(){
     quotingReplyId   = null;
     quotingReplyName = null;
-    const bar = document.getElementById('icQuotingBar');
-    if(bar) bar.classList.remove('show');
+    if(quotingBar) quotingBar.classList.remove('show');
   }
- 
+
   window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; });
- 
-  /* ── Mở sidebar ── */
+
   function openSidebar(idx){
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
     currentIdx = idx;
     clearQuoting();
- 
     const paras   = content.querySelectorAll('p');
     const preview = document.getElementById('icParaPreview');
     if(preview){
       const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
-      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b => b.remove()); preview.textContent = clone.textContent.trim(); }
+      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b => b.remove()); preview.textContent = clone.textContent.trim().substring(0,120)+(clone.textContent.trim().length>120?'…':''); }
     }
     if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
     if(paras[idx]) paras[idx].classList.add('ic-active');
- 
     novelWrap.classList.add('sidebar-open');
     document.body.classList.add('novel-sidebar-open');
     if(overlay) overlay.classList.add('show');
- 
     loadInlineComments(idx);
     setTimeout(() => formText?.focus(), 200);
   }
- 
-  /* ── Đóng sidebar ── */
+
   function closeSidebar(){
     novelWrap.classList.remove('sidebar-open');
     document.body.classList.remove('novel-sidebar-open');
@@ -796,11 +1150,10 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     currentIdx = null;
     clearQuoting();
   }
- 
+
   closeBtn?.addEventListener('click', closeSidebar);
   overlay?.addEventListener('click', closeSidebar);
- 
-  /* ── Load comments realtime ── */
+
   function loadInlineComments(idx){
     if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
     waitFirebase(({db, ref, onValue}) => {
@@ -811,8 +1164,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       });
     });
   }
- 
-  /* ── Render comments + threaded replies ── */
+
   function renderInlineComments(data, key, idx){
     if(!sideList) return;
     if(!data){
@@ -822,35 +1174,29 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     const items = Object.entries(data)
       .map(([id,v]) => ({id,...v}))
       .sort((a,b) => (a.ts||0) - (b.ts||0));
- 
+
     sideList.innerHTML = items.map(c => {
       const isMine = c.token === myToken;
       const canDel = isAdmin || isMine;
       const replies = c.replies
         ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
         : [];
- 
+
       const repliesHtml = replies.map(r => {
         const rMine  = r.token === myToken;
         const rCanDel= isAdmin || rMine;
-        const atTag  = r.replyTo
-          ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>`
-          : '';
+        const atTag  = r.replyTo ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>` : '';
         return `<div class="ic-reply-item" id="icri-${esc(r.id)}">
           <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="ic-reply-body">
             <span class="ic-reply-name">${esc(r.name)||'Khách vô danh'}</span>
             <div class="ic-reply-text">${atTag}${esc(r.text)}</div>
-            <button class="ic-rr-btn"
-              data-action="rr-reply"
-              data-cid="${esc(c.id)}"
-              data-rid="${esc(r.id)}"
-              data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
+            <button class="ic-rr-btn" data-action="rr-reply" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
           </div>
           ${rCanDel ? `<button class="ic-reply-del show" data-action="del-reply" data-key="${esc(key)}" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}">✕</button>` : ''}
         </div>`;
       }).join('');
- 
+
       return `<div class="ic-item" id="icitem-${esc(c.id)}">
         <div class="ic-item-header">
           <span class="ic-item-name">${esc(c.name)||'Khách vô danh'}</span>
@@ -876,16 +1222,15 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         </div>
       </div>`;
     }).join('');
- 
+
     sideList.scrollTop = sideList.scrollHeight;
   }
- 
-  /* ── Event delegation trên sideList ── */
+
   sideList?.addEventListener('click', async e => {
     const btn = e.target.closest('[data-action]');
     if(!btn) return;
     const action = btn.dataset.action;
- 
+
     if(action === 'del-comment'){
       if(!confirm('Xóa bình luận này?')) return;
       waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id)));
@@ -908,7 +1253,6 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       clearQuoting();
       return;
     }
-    /* Reply-of-reply: click ↩ Reply trên một reply item */
     if(action === 'rr-reply'){
       const cid   = btn.dataset.cid;
       const rid   = btn.dataset.rid;
@@ -918,7 +1262,6 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       if(replies) replies.classList.add('open');
       if(form){ form.classList.add('open'); form.querySelector('[data-role="rtext"]')?.focus(); }
       setQuoting(rid, rname);
-      /* Scroll sidebar xuống để thấy form */
       setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
       return;
     }
@@ -933,13 +1276,8 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       if(!text) return;
       btn.disabled = true;
       const name = (form?.querySelector('[data-role="rname"]')?.value || '').trim() || 'Khách vô danh';
- 
       const payload = { name, text, ts: Date.now(), token: myToken };
-      /* Gắn replyTo nếu đang quote một reply */
-      if(quotingReplyId){
-        payload.replyTo = { id: quotingReplyId, name: quotingReplyName || '' };
-      }
- 
+      if(quotingReplyId){ payload.replyTo = { id: quotingReplyId, name: quotingReplyName || '' }; }
       waitFirebase(async ({db, ref, push}) => {
         try{
           await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), payload);
@@ -952,8 +1290,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       return;
     }
   });
- 
-  /* ── Gửi comment mới vào đoạn ── */
+
   formSend?.addEventListener('click', async () => {
     const text = (formText?.value || '').trim();
     if(!text || currentIdx === null) return;
@@ -973,8 +1310,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   formText?.addEventListener('keydown', e => {
     if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
   });
- 
-  /* ── Gắn trigger vào từng đoạn ── */
+
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
@@ -983,7 +1319,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
     btn.innerHTML = '💬';
     p.appendChild(btn);
- 
+
     waitFirebase(({db, ref, onValue}) => {
       const key = 'inline_' + pageKey() + '_p' + idx;
       onValue(ref(db, 'comments/' + key), snap => {
@@ -994,7 +1330,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         btn.classList.toggle('has-comments', cnt > 0);
       });
     });
- 
+
     btn.addEventListener('click', e => {
       e.stopPropagation();
       if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){
@@ -1012,7 +1348,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
 (function setupChapComments(){
   const section       = document.getElementById('chapCommentSection');
   if(!section) return;
- 
+
   const cmtList       = document.getElementById('cmtList');
   const cmtName       = document.getElementById('cmtName');
   const cmtText       = document.getElementById('cmtText');
@@ -1020,23 +1356,21 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   const adminStatus   = document.getElementById('adminStatus');
   const adminLoginBtn = document.getElementById('adminLoginBtn');
   if(!cmtList) return;
- 
+
   const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
   const myToken     = getMyToken();
   const key         = 'chap_' + pageKey();
   let isAdmin       = false;
   let lastData      = null;
   let listenerBound = false;
- 
-  /* Debounce: tránh Firebase local-echo + server-confirm fire liên tiếp */
-  let rebuildTimer = null;
+  let rebuildTimer  = null;
+
   function scheduleRebuild(data){
     lastData = data;
     clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(() => rebuildComments(lastData), 60);
   }
- 
-  /* ── Auth ── */
+
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
     if(adminStatus)   adminStatus.textContent   = isAdmin ? '✅ Admin: '+ADMIN_EMAIL : '🔒 Quản trị: chưa đăng nhập';
@@ -1044,27 +1378,23 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
                        adminLoginBtn.className   = isAdmin ? 'admin-logout-btn' : 'admin-login-btn'; }
     if(lastData !== null) rebuildComments(lastData);
   });
- 
+
   adminLoginBtn?.addEventListener('click', () => {
     const fb = window.__ddFirebase; if(!fb) return;
     if(isAdmin){ fb.signOut(fb.auth); }
     else { const p = new fb.GoogleAuthProvider(); fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message)); }
   });
- 
-  /* ══════════════════════════════════════
-     RENDER
-  ══════════════════════════════════════ */
+
   function rebuildComments(data){
     if(!cmtList) return;
     if(!data){
       cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>';
       return;
     }
- 
     const items = Object.entries(data)
       .map(([id,v]) => ({id,...v}))
       .sort((a,b) => (a.ts||0) - (b.ts||0));
- 
+
     cmtList.innerHTML = items.map(c => {
       const isMine    = c.token === myToken;
       const canDel    = isAdmin || isMine;
@@ -1073,30 +1403,23 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       const replies   = c.replies
         ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
         : [];
- 
-      /* Render thread replies — hỗ trợ reply-of-reply (hiện @tên) */
+
       const repliesHtml = replies.map(r => {
         const rMine  = r.token === myToken;
         const rCanDel= isAdmin || rMine;
-        const atTag  = r.replyTo
-          ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> `
-          : '';
+        const atTag  = r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
         return `<div class="reply-item" id="ri-${esc(r.id)}">
           <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="reply-body">
             <span class="reply-name">${esc(r.name)||'Khách vô danh'}</span>
             <span class="reply-time">${timeAgo(r.ts)}</span>
             <div class="reply-text">${atTag}${esc(r.text)}</div>
-            <button class="reply-quote-btn"
-              data-cid="${esc(c.id)}"
-              data-rid="${esc(r.id)}"
-              data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
+            <button class="reply-quote-btn" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
           </div>
-          <button class="reply-del ${rCanDel?'show':''}"
-            data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
+          <button class="reply-del ${rCanDel?'show':''}" data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
         </div>`;
       }).join('');
- 
+
       return `<div class="comment-card" id="cmt-${esc(c.id)}">
         <div class="comment-card-header">
           <div class="comment-card-avatar">${esc(avatarLetter(c.name))}</div>
@@ -1113,15 +1436,9 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
           </button>
           <button class="cmt-del-btn ${canDel?'show':''}" data-id="${esc(c.id)}">🗑 Xóa</button>
         </div>
- 
         <div class="reply-thread ${replies.length > 0 ? 'open' : ''}" id="thread-${esc(c.id)}">
-          <div class="reply-items-wrap" id="riwrap-${esc(c.id)}">
-            ${repliesHtml}
-          </div>
- 
-          <!-- Reply form — dùng chung cho reply mới & reply-of-reply -->
+          <div class="reply-items-wrap" id="riwrap-${esc(c.id)}">${repliesHtml}</div>
           <div class="reply-form" id="rf-${esc(c.id)}">
-            <!-- Hiển thị khi đang reply một reply cụ thể -->
             <div class="reply-quoting" id="rq-${esc(c.id)}" style="display:none">
               <span class="reply-quoting-label"></span>
               <button class="reply-quoting-cancel" data-cid="${esc(c.id)}">✕</button>
@@ -1136,17 +1453,12 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         </div>
       </div>`;
     }).join('');
- 
+
     bindEvents();
   }
- 
-  /* ══════════════════════════════════════
-     BIND EVENTS (sau mỗi render)
-  ══════════════════════════════════════ */
+
   function bindEvents(){
     const fb = window.__ddFirebase; if(!fb) return;
- 
-    /* Like */
     cmtList.querySelectorAll('.cmt-like-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
@@ -1155,36 +1467,21 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         try { await fb.push(fb.ref(fb.db, `comments/${key}/${id}/likes`), {ts:Date.now()}); } catch(e){}
       });
     });
- 
-    /* Mở reply form (reply bình luận gốc) */
     cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cid = btn.dataset.id;
-        openReplyForm(cid, null, null);
-      });
+      btn.addEventListener('click', () => openReplyForm(btn.dataset.id, null, null));
     });
- 
-    /* Reply-of-reply: click ↩ Reply trên một reply */
     cmtList.querySelectorAll('.reply-quote-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname);
-      });
+      btn.addEventListener('click', () => openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname));
     });
- 
-    /* Hủy quoting */
     cmtList.querySelectorAll('.reply-quoting-cancel').forEach(btn => {
       btn.addEventListener('click', () => clearQuoting(btn.dataset.cid));
     });
- 
-    /* Hủy reply form */
     cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open');
         clearQuoting(btn.dataset.cid);
       });
     });
- 
-    /* Gửi reply */
     cmtList.querySelectorAll('.reply-send-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const cid  = btn.dataset.cid;
@@ -1192,40 +1489,27 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
         if(!text) return;
         btn.disabled = true;
- 
         const name    = (form?.querySelector('[data-role="rname"]')?.value||'').trim() || 'Khách vô danh';
         const quotBox = document.getElementById('rq-'+cid);
-        const replyTo = quotBox?.dataset.replyToId
-          ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' }
-          : null;
- 
+        const replyTo = quotBox?.dataset.replyToId ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' } : null;
         const payload = { name, text, ts: Date.now(), token: myToken };
         if(replyTo) payload.replyTo = replyTo;
- 
         try {
           await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/replies`), payload);
           form.querySelector('[data-role="rtext"]').value = '';
           form.classList.remove('open');
           clearQuoting(cid);
-          /* Scroll đến reply vừa gửi sau khi Firebase cập nhật */
-          setTimeout(() => {
-            const wrap = document.getElementById('riwrap-'+cid);
-            if(wrap) wrap.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'});
-          }, 300);
+          setTimeout(() => { const wrap = document.getElementById('riwrap-'+cid); if(wrap) wrap.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 300);
         } catch(e){ alert('Lỗi: '+e.message); }
         btn.disabled = false;
       });
     });
- 
-    /* Xóa comment */
     cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn => {
       btn.addEventListener('click', async () => {
         if(!confirm('Xóa bình luận này?')) return;
         await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`));
       });
     });
- 
-    /* Xóa reply */
     cmtList.querySelectorAll('.reply-del.show').forEach(btn => {
       btn.addEventListener('click', async () => {
         if(!confirm('Xóa reply này?')) return;
@@ -1233,8 +1517,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       });
     });
   }
- 
-  /* ── Helpers quoting ── */
+
   function openReplyForm(cid, rid, rname){
     const thread = document.getElementById('thread-'+cid);
     const form   = document.getElementById('rf-'+cid);
@@ -1246,7 +1529,6 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       form.querySelector('[data-role="rtext"]')?.focus();
     }
   }
- 
   function setQuoting(cid, rid, rname){
     const box = document.getElementById('rq-'+cid);
     if(!box) return;
@@ -1256,7 +1538,6 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     const label = box.querySelector('.reply-quoting-label');
     if(label) label.textContent = '↩ Reply cho ' + (rname||'Khách vô danh');
   }
- 
   function clearQuoting(cid){
     const box = document.getElementById('rq-'+cid);
     if(!box) return;
@@ -1264,16 +1545,11 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     box.dataset.replyToId   = '';
     box.dataset.replyToName = '';
   }
- 
-  /* ══════════════════════════════════════
-     FIREBASE SUBSCRIBE + SUBMIT (1 LẦN)
-  ══════════════════════════════════════ */
+
   waitFirebase(({db, ref, push, onValue}) => {
     onValue(ref(db, 'comments/'+key), snap => scheduleRebuild(snap.val()));
- 
     if(listenerBound) return;
     listenerBound = true;
- 
     cmtSubmit?.addEventListener('click', async () => {
       const text = (cmtText?.value||'').trim();
       if(!text) return;
@@ -1281,15 +1557,12 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       try {
         await push(ref(db, 'comments/'+key), {
           name  : (cmtName?.value||'').trim() || 'Khách vô danh',
-          text,
-          ts    : Date.now(),
-          token : myToken
+          text, ts : Date.now(), token : myToken
         });
         if(cmtText) cmtText.value = '';
       } catch(e){ alert('Lỗi: '+e.message); }
       cmtSubmit.disabled = false;
     });
- 
     cmtText?.addEventListener('keydown', e => {
       if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click();
     });

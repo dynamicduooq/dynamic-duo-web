@@ -442,7 +442,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <div class="widget" style="padding:12px">
-      <button class="dark-btn" onclick="window.__ddToggleTheme()" id="darkBtnIdx">🌙 Chế độ tối</button>
+    <button class="dark-btn" id="darkBtnIdx">🌙 Chế độ tối</button>
     </div>
 
     <div class="widget">
@@ -608,19 +608,30 @@ document.querySelectorAll('#tagCloud .tc-btn').forEach(btn => {
   });
 });
 
-/* ─── DARK MODE ─── */
-const darkBtnIdx = document.getElementById('darkBtnIdx');
-function syncDarkBtn() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  if (darkBtnIdx) darkBtnIdx.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
-}
-syncDarkBtn();
-darkBtnIdx?.addEventListener('click', () => { window.__ddToggleTheme?.(); syncDarkBtn(); });
-
 /* ─── REVEAL ─── */
 const obs = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
 }), { threshold: .1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
+/* ─── DARK MODE BUTTON SYNC ─── */
+(function() {
+  const btn = document.getElementById('darkBtnIdx');
+  if (!btn) return;
+
+  function syncBtn() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
+  }
+
+  syncBtn(); // sync text khi load
+
+  btn.addEventListener('click', () => {
+    // Gọi hàm toggle từ Layout (đã được định nghĩa trước đó)
+    if (typeof window.__ddToggleTheme === 'function') {
+      window.__ddToggleTheme();
+    }
+    syncBtn();
+  });
+})();
 </Layout>

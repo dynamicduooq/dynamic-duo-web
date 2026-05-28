@@ -15,529 +15,465 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 <Layout title="Trang chủ" isHome={true}>
 <style>
-/* Override .home-shell để tận dụng full width */
+/* ─── HOME SHELL ─── */
 .home-shell {
-  max-width: 1400px !important;
-  margin: 0 auto !important;
-  padding: 20px 40px 80px !important;
-  width: 100% !important;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 28px 80px;
+  align-items: start;
+  box-sizing: border-box;
+  width: 100%;
 }
- 
-@media(min-width:1025px){
-  .home-shell {
-    grid-template-columns: 1fr 280px !important;
-  }
-}
- 
-@media(min-width:1400px){
-  .home-shell {
-    grid-template-columns: 1fr 300px !important;
-  }
-}
- 
-@media(max-width:768px){
-  .home-shell {
-    padding: 14px 16px 60px !important;
-  }
-}
+@media(max-width:1100px){ .home-shell{ grid-template-columns:1fr 200px; padding:18px 20px 80px; gap:16px; } }
+@media(max-width:900px){  .home-shell{ grid-template-columns:1fr; padding:14px 14px 80px; } }
+
 /* ─── TICKER ─── */
 .ticker-wrap {
-  overflow:hidden; padding:7px 0;
-  background:linear-gradient(90deg,rgba(224,242,254,.5),rgba(240,249,255,.7),rgba(224,242,254,.5));
-  border-top:1px solid var(--sky-light); border-bottom:1px solid var(--sky-light);
+  overflow: hidden; padding: 6px 0;
+  background: linear-gradient(90deg,rgba(224,242,254,.5),rgba(240,249,255,.7),rgba(224,242,254,.5));
+  border-top: 1px solid var(--sky-light); border-bottom: 1px solid var(--sky-light);
 }
 [data-theme="dark"] .ticker-wrap {
-  background:linear-gradient(90deg,rgba(13,27,42,.8),rgba(17,31,48,.9),rgba(13,27,42,.8));
-  border-color:rgba(96,184,232,.2);
+  background: linear-gradient(90deg,rgba(13,27,42,.8),rgba(17,31,48,.9),rgba(13,27,42,.8));
+  border-color: rgba(96,184,232,.2);
 }
 .ticker-track { display:flex; white-space:nowrap; animation:ticker 40s linear infinite; }
 .ticker-track:hover { animation-play-state:paused; }
 .ticker-item {
   display:inline-flex; align-items:center; padding:0 20px;
-  font-size:.74rem; color:var(--sky2); letter-spacing:1.5px;
+  font-size:.7rem; color:var(--sky2); letter-spacing:1.5px;
 }
 [data-theme="dark"] .ticker-item { color:#c8e8f8; }
 .ticker-item::after { content:'𓆝'; color:var(--sky-light); margin-left:20px; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-/* ─── PAGE SHELL ─── */
-.home-shell {
-  display:grid;
-  grid-template-columns:1fr 268px;
-  gap:24px;
-  padding:20px 20px 20px;
-  max-width:100%;
-  margin:0 auto;
-  align-items:start;
-  box-sizing:border-box;
-  width:100%;
-}
-@media(max-width:1400px){.home-shell{grid-template-columns:1fr 220px;padding:24px 32px 80px;gap:18px;}}
-@media(max-width:1024px){.home-shell{grid-template-columns:1fr;padding:18px 20px 60px;}.sidebar-col{display:none;}}
-
 /* ─── HERO ─── */
-.hero{text-align:center;padding:20px 0 16px;}
-.hero-banner-wrap{
-  position:relative;border-radius:14px;overflow:hidden;
-  max-height:200px;margin:0 auto;
-  display:flex;align-items:center;justify-content:center;
+.hero { text-align:center; padding:18px 0 14px; }
+.hero-banner-wrap {
+  position:relative; border-radius:14px; overflow:hidden;
+  max-height:190px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center;
 }
-.hero-banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
-.hero-banner-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(2,70,130,.35) 0%,rgba(0, 71, 147, 0.6) 80%);
-  z-index:1;pointer-events:none;
+.hero-banner-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.hero-banner-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(2,70,130,.35) 0%,rgba(2,50,100,.6) 100%);
+  z-index:1; pointer-events:none;
 }
-.hero-name-img{
-  position:relative;z-index:2;max-width:380px;width:85%;
-  display:block;margin:0 auto;padding:24px 0;
+.hero-name-img {
+  position:relative; z-index:2; max-width:360px; width:82%;
+  display:block; margin:0 auto; padding:22px 0;
   filter:drop-shadow(0 2px 12px rgba(0,0,0,.35));
 }
-.hero-tagline{font-size:.82rem;color:var(--text-dim);font-style:italic;margin:10px 0 0;}
-[data-theme="dark"] .hero-tagline{color:#9ac8df;}
+.hero-tagline { font-size:.78rem; color:var(--text-dim); font-style:italic; margin:9px 0 0; }
+[data-theme="dark"] .hero-tagline { color:#9ac8df; }
 
 /* ─── SECTION HEADER ─── */
-.sec-hd{display:flex;align-items:center;gap:10px;margin:24px 0 12px;}
-.sec-hd h2{
-  font-family:'Merriweather',serif;font-size:.78rem;color:var(--sky-dark);
-  letter-spacing:2px;text-transform:uppercase;margin:0;text-align:left;white-space:nowrap;
+.sec-hd { display:flex; align-items:center; gap:10px; margin:22px 0 11px; }
+.sec-hd h2 {
+  font-family:'Merriweather',serif; font-size:.76rem; color:var(--sky-dark);
+  letter-spacing:2px; text-transform:uppercase; margin:0; text-align:left; white-space:nowrap;
 }
-[data-theme="dark"] .sec-hd h2{color:#89d0f5;}
-.sec-line{flex:1;height:1px;background:linear-gradient(to right,var(--sky-light),transparent);}
-[data-theme="dark"] .sec-line{background:linear-gradient(to right,rgba(96,184,232,.35),transparent);}
+[data-theme="dark"] .sec-hd h2 { color:#89d0f5; }
+.sec-line { flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
+[data-theme="dark"] .sec-line { background:linear-gradient(to right,rgba(96,184,232,.35),transparent); }
 
 /* ─── FILTER BAR ─── */
-.filter-bar{
-  background:#fff;border:1px solid rgba(186,230,253,.5);
-  border-radius:12px;padding:10px 12px;
-  display:flex;flex-wrap:wrap;gap:6px;align-items:center;
-  margin-bottom:14px;
+.filter-bar {
+  background:#fff; border:1px solid rgba(186,230,253,.5);
+  border-radius:12px; padding:9px 12px;
+  display:flex; flex-wrap:wrap; gap:5px; align-items:center;
+  margin-bottom:12px;
 }
-[data-theme="dark"] .filter-bar{background:rgba(12,26,42,.98);border-color:rgba(96,184,232,.25);}
-.fl-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);flex-shrink:0;}
-[data-theme="dark"] .fl-label{color:#9ac8df;}
-.fl-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;}
-.chip{
-  display:inline-flex;align-items:center;gap:3px;padding:3px 11px;
-  border-radius:var(--r-pill);font-size:.7rem;cursor:pointer;
-  transition:var(--t);border:1.5px solid rgba(186,230,253,.6);
-  background:var(--sky-pale);color:var(--sky-dark);user-select:none;
-  font-family:'Newsreader',serif;white-space:nowrap;
+[data-theme="dark"] .filter-bar { background:rgba(12,26,42,.98); border-color:rgba(96,184,232,.25); }
+.fl-label { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); flex-shrink:0; }
+[data-theme="dark"] .fl-label { color:#9ac8df; }
+.fl-chips { display:flex; flex-wrap:wrap; gap:4px; flex:1; }
+.chip {
+  display:inline-flex; align-items:center; gap:3px; padding:3px 10px;
+  border-radius:var(--r-pill); font-size:.67rem; cursor:pointer;
+  transition:var(--t); border:1.5px solid rgba(186,230,253,.6);
+  background:var(--sky-pale); color:var(--sky-dark); user-select:none;
+  font-family:'Newsreader',serif; white-space:nowrap;
 }
-[data-theme="dark"] .chip{
-  color:#c8e8f8;
-  border-color:rgba(96,184,232,.3);
-  background:rgba(14,32,52,.9);
+[data-theme="dark"] .chip { color:#c8e8f8; border-color:rgba(96,184,232,.3); background:rgba(14,32,52,.9); }
+.chip:hover { background:var(--sky-light); color:var(--sky-dark); }
+[data-theme="dark"] .chip:hover { background:rgba(96,184,232,.18); color:#e8f6ff; }
+.chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
+[data-theme="dark"] .chip.active { background:#1565a0; border-color:#89d0f5; color:#e8f6ff; }
+.chip-clear { background:none; border-color:rgba(186,230,253,.4); color:var(--text-dim); }
+.chip-clear:hover { background:rgba(239,68,68,.08); color:#ef4444; border-color:#fca5a5; }
+.fl-count {
+  font-size:.64rem; background:var(--sky-pale); color:var(--sky-dark);
+  padding:2px 8px; border-radius:var(--r-pill); border:1px solid var(--sky-light);
+  white-space:nowrap; margin-left:auto;
 }
-.chip:hover{background:var(--sky-light);color:var(--sky-dark);}
-[data-theme="dark"] .chip:hover{background:rgba(96,184,232,.18);color:#e8f6ff;}
-.chip.active{background:var(--sky);color:#fff;border-color:var(--sky);}
-[data-theme="dark"] .chip.active{background:#1565a0;border-color:#89d0f5;color:#e8f6ff;}
-.chip-clear{background:none;border-color:rgba(186,230,253,.4);color:var(--text-dim);}
-[data-theme="dark"] .chip-clear{color:#9ac8df;}
-.chip-clear:hover{background:rgba(239,68,68,.08);color:#ef4444;border-color:#fca5a5;}
-.fl-count{
-  font-size:.67rem;background:var(--sky-pale);color:var(--sky-dark);
-  padding:2px 9px;border-radius:var(--r-pill);border:1px solid var(--sky-light);
-  white-space:nowrap;margin-left:auto;
-}
-[data-theme="dark"] .fl-count{
-  background:rgba(21,101,160,.25);border-color:rgba(96,184,232,.3);color:#c8e8f8;
-}
+[data-theme="dark"] .fl-count { background:rgba(21,101,160,.25); border-color:rgba(96,184,232,.3); color:#c8e8f8; }
 
 /* ─── STORY GRID ─── */
-.stories-grid{display:flex;flex-direction:column;gap:10px;}
-.sc{
-  display:flex;gap:0;
-  background:#fff;border:1px solid rgba(186,230,253,.5);
-  border-radius:12px;overflow:hidden;
-  transition:var(--t);box-shadow:0 2px 8px rgba(2,132,199,.05);
+.stories-grid { display:flex; flex-direction:column; gap:9px; }
+.sc {
+  display:flex;
+  background:#fff; border:1px solid rgba(186,230,253,.5);
+  border-radius:12px; overflow:hidden;
+  transition:var(--t); box-shadow:0 2px 8px rgba(2,132,199,.05);
 }
-[data-theme="dark"] .sc{background:rgba(12,26,42,.98);border-color:rgba(96,184,232,.22);}
-.sc:hover{box-shadow:0 6px 22px rgba(2,132,199,.12);transform:translateY(-2px);}
-[data-theme="dark"] .sc:hover{box-shadow:0 6px 22px rgba(0,0,0,.45);}
-
-/* ── Ảnh bìa: rộng hơn, không crop, hiển thị đủ ── */
-.sc-cover-wrap{
-  position:relative;flex-shrink:0;
-  width:110px;          /* tăng từ 78px lên 110px */
-  min-height:140px;
-  overflow:hidden;
+[data-theme="dark"] .sc { background:rgba(12,26,42,.98); border-color:rgba(96,184,232,.22); }
+.sc:hover { box-shadow:0 6px 22px rgba(2,132,199,.12); transform:translateY(-2px); }
+[data-theme="dark"] .sc:hover { box-shadow:0 6px 22px rgba(0,0,0,.45); }
+.sc-cover-wrap {
+  position:relative; flex-shrink:0; width:105px; min-height:135px; overflow:hidden;
   background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
-  display:flex;align-items:center;justify-content:center;
+  display:flex; align-items:center; justify-content:center;
 }
-.sc-cover-wrap img{
-  width:110px;
-  height:auto;          /* bỏ height:100% để không bị crop */
-  max-height:none;
-  object-fit:contain;   /* contain thay vì cover — không crop */
-  display:block;
-  padding:4px;          /* nhỏ padding để không sát viền */
+.sc-cover-wrap img { width:105px; height:auto; max-height:none; object-fit:contain; display:block; padding:4px; }
+.sc-status {
+  position:absolute; top:6px; left:0;
+  font-size:.5rem; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 6px; border-radius:0 4px 4px 0; font-weight:700;
 }
-.sc-status{
-  position:absolute;top:6px;left:0;
-  font-size:.52rem;letter-spacing:1px;text-transform:uppercase;
-  padding:2px 6px;border-radius:0 4px 4px 0;font-weight:700;
+.status-ongoing  { background:rgba(2,132,199,.9);  color:#fff; }
+.status-complete { background:rgba(5,150,105,.9);  color:#fff; }
+.status-upcoming { background:rgba(100,116,139,.8); color:#fff; }
+.sc-body { padding:10px 12px; flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
+.sc-shelf { font-size:.6rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
+[data-theme="dark"] .sc-shelf { color:#89d0f5; }
+.sc-title {
+  font-family:'Merriweather',serif; font-size:.84rem; color:#0c4a6e;
+  margin:0; line-height:1.35; text-align:left;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
-.status-ongoing{background:rgba(2,132,199,.9);color:#fff;}
-.status-complete{background:rgba(5,150,105,.9);color:#fff;}
-.status-upcoming{background:rgba(100,116,139,.8);color:#fff;}
-.sc-body{padding:11px 13px;flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
-.sc-shelf{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);}
-[data-theme="dark"] .sc-shelf{color:#89d0f5;}
-
-/* Tiêu đề truyện — căn TRÁI */
-.sc-title{
-  font-family:'Merriweather',serif;font-size:.86rem;
-  color:#0c4a6e;
-  margin:0;line-height:1.35;
-  text-align:left;        /* căn trái */
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+[data-theme="dark"] .sc-title { color:#e0f4ff; }
+.sc-meta { font-size:.65rem; color:#475569; font-style:italic; }
+[data-theme="dark"] .sc-meta { color:#9ac8df; }
+.sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
+.sc-tag {
+  font-size:.58rem; padding:1px 7px;
+  border:1px solid var(--sky-light); border-radius:var(--r-pill);
+  color:#0369a1; background:#e0f2fe;
 }
-[data-theme="dark"] .sc-title{color:#e0f4ff;}
-
-.sc-meta{font-size:.67rem;color:#475569;font-style:italic;}
-[data-theme="dark"] .sc-meta{color:#9ac8df;}
-.sc-tags{display:flex;flex-wrap:wrap;gap:3px;}
-.sc-tag{
-  font-size:.6rem;padding:1px 7px;
-  border:1px solid var(--sky-light);border-radius:var(--r-pill);
-  color:#0369a1;background:#e0f2fe;
-}
-[data-theme="dark"] .sc-tag{
-  border-color:rgba(96,184,232,.35);
-  background:rgba(21,101,160,.3);
-  color:#c8e8f8;
-}
-.sc-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:4px;}
-.sc-chapters{font-size:.67rem;color:#475569;}
-[data-theme="dark"] .sc-chapters{color:#9ac8df;}
-.sc-link{
-  font-size:.71rem;padding:4px 12px;background:var(--sky);color:#fff;
-  border-radius:var(--r-pill);transition:var(--t);flex-shrink:0;
-}
-.sc-link:hover{background:var(--sky2);}
-.sc-link.secondary{background:#e0f2fe;color:#0369a1;}
-[data-theme="dark"] .sc-link.secondary{
-  color:#c8e8f8;background:rgba(21,101,160,.35);
-  border:1px solid rgba(96,184,232,.3);
-}
-.sc-link.secondary:hover{background:#bae6fd;}
-[data-theme="dark"] .sc-link.secondary:hover{background:rgba(96,184,232,.22);}
+[data-theme="dark"] .sc-tag { border-color:rgba(96,184,232,.35); background:rgba(21,101,160,.3); color:#c8e8f8; }
+.sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
+.sc-chapters { font-size:.65rem; color:#475569; }
+[data-theme="dark"] .sc-chapters { color:#9ac8df; }
+.sc-link { font-size:.68rem; padding:3px 11px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; }
+.sc-link:hover { background:var(--sky2); }
+.sc-link.secondary { background:#e0f2fe; color:#0369a1; }
+[data-theme="dark"] .sc-link.secondary { color:#c8e8f8; background:rgba(21,101,160,.35); border:1px solid rgba(96,184,232,.3); }
+.sc-link.secondary:hover { background:#bae6fd; }
+[data-theme="dark"] .sc-link.secondary:hover { background:rgba(96,184,232,.22); }
 
 /* ─── NOTICE ─── */
-.notice-section{margin-top:24px;}
-.notice-img{width:100%;display:block;border-radius:10px;}
+.notice-section { margin-top:22px; }
+.notice-img { width:100%; display:block; border-radius:10px; }
 
 /* ─── RECENT ─── */
-.recent-list{display:flex;flex-direction:column;gap:6px;}
-.recent-item{
-  display:flex;align-items:center;gap:10px;padding:10px 13px;
-  background:#fff;border:1px solid rgba(186,230,253,.4);border-radius:10px;
-  transition:var(--t);color:var(--text-main);
+.recent-list { display:flex; flex-direction:column; gap:6px; }
+.recent-item {
+  display:flex; align-items:center; gap:10px; padding:9px 12px;
+  background:#fff; border:1px solid rgba(186,230,253,.4); border-radius:10px;
+  transition:var(--t); color:var(--text-main);
 }
-[data-theme="dark"] .recent-item{
-  background:rgba(12,26,42,.98);border-color:rgba(96,184,232,.2);color:#c8e8f8;
-}
-.recent-item:hover{background:var(--sky-pale);border-color:var(--sky-light);transform:translateX(3px);}
-[data-theme="dark"] .recent-item:hover{background:rgba(96,184,232,.1);}
-.recent-icon{font-size:1rem;flex-shrink:0;}
-.ri-body{flex:1;min-width:0;}
-.ri-story{font-size:.67rem;color:#64748b;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
-[data-theme="dark"] .ri-story{color:#9ac8df;}
-.ri-title{font-size:.83rem;color:#0c4a6e;font-weight:600;}
-[data-theme="dark"] .ri-title{color:#e0f4ff;}
-.recent-arrow{color:var(--sky);font-size:.9rem;}
-[data-theme="dark"] .recent-arrow{color:#89d0f5;}
+[data-theme="dark"] .recent-item { background:rgba(12,26,42,.98); border-color:rgba(96,184,232,.2); color:#c8e8f8; }
+.recent-item:hover { background:var(--sky-pale); border-color:var(--sky-light); transform:translateX(3px); }
+[data-theme="dark"] .recent-item:hover { background:rgba(96,184,232,.1); }
+.recent-icon { font-size:.95rem; flex-shrink:0; }
+.ri-body { flex:1; min-width:0; }
+.ri-story { font-size:.64rem; color:#64748b; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+[data-theme="dark"] .ri-story { color:#9ac8df; }
+.ri-title { font-size:.8rem; color:#0c4a6e; font-weight:600; }
+[data-theme="dark"] .ri-title { color:#e0f4ff; }
+.recent-arrow { color:var(--sky); font-size:.88rem; }
 
 /* ─── SIDEBAR ─── */
-.sidebar-col{
-  display:flex;flex-direction:column;gap:14px;
-  position:sticky;top:68px;
-  max-height:calc(100vh - 84px);overflow-y:auto;overflow-x:hidden;
-  scrollbar-width:thin;scrollbar-color:var(--sky-light) transparent;
+.sidebar-col {
+  display:flex; flex-direction:column; gap:12px;
+  position:sticky; top:68px;
+  max-height:calc(100vh - 84px); overflow-y:auto; overflow-x:hidden;
+  scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
   padding-bottom:8px;
 }
-.sidebar-col::-webkit-scrollbar{width:3px;}
-.sidebar-col::-webkit-scrollbar-thumb{background:var(--sky-light);border-radius:3px;}
+.sidebar-col::-webkit-scrollbar { width:3px; }
+.sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+@media(max-width:900px){ .sidebar-col{ position:static; max-height:none; } }
 
-.widget{
-  background:#fff;
-  border:1px solid rgba(186,230,253,.65);
-  border-radius:16px;padding:14px 13px;flex-shrink:0;
+.widget {
+  background:#fff; border:1px solid rgba(186,230,253,.65);
+  border-radius:14px; padding:13px 12px; flex-shrink:0;
 }
-[data-theme="dark"] .widget{
-  background:rgba(10,22,38,.98);
-  border-color:rgba(96,184,232,.22);
+[data-theme="dark"] .widget { background:rgba(10,22,38,.98); border-color:rgba(96,184,232,.22); }
+.widget-title {
+  font-family:'Merriweather',serif; font-size:.68rem;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--sky);
+  text-align:center; margin-bottom:10px;
 }
-.widget-title{
-  font-family:'Merriweather',serif;font-size:.7rem;
-  letter-spacing:2.5px;text-transform:uppercase;color:var(--sky);
-  text-align:center;margin-bottom:11px;
+[data-theme="dark"] .widget-title { color:#89d0f5; }
+.profile-avatar {
+  width:66px; height:66px; border-radius:50%; overflow:hidden;
+  margin:0 auto 8px; border:3px solid var(--sky-light);
+  background:var(--sky-pale); display:flex; align-items:center; justify-content:center; font-size:2rem;
 }
-[data-theme="dark"] .widget-title{color:#89d0f5;}
-.profile-avatar{
-  width:72px;height:72px;border-radius:50%;overflow:hidden;
-  margin:0 auto 9px;border:3px solid var(--sky-light);
-  background:var(--sky-pale);display:flex;align-items:center;justify-content:center;font-size:2rem;
-}
-.profile-name{font-family:'Merriweather',serif;color:#0c4a6e;font-size:.9rem;text-align:center;margin-bottom:3px;}
-[data-theme="dark"] .profile-name{color:#e0f4ff;}
-.profile-tagline{font-size:.76rem;color:#64748b;font-style:italic;text-align:center;line-height:1.5;margin-bottom:6px;}
-[data-theme="dark"] .profile-tagline{color:#9ac8df;}
-.profile-deco{text-align:center;font-size:.92rem;letter-spacing:3px;color:var(--sky-light);}
-[data-theme="dark"] .profile-deco{color:#2a6a8a;}
-
-/* Tag cloud */
-.tag-cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;}
-.tc-btn{
-  display:inline-block;padding:3px 9px;background:#fff;color:#0369a1;
-  border-radius:var(--r-pill);font-size:.7rem;border:1px dashed var(--sky-light);
-  transition:var(--t);cursor:pointer;
-}
-[data-theme="dark"] .tc-btn{
-  background:rgba(14,30,50,.9);color:#c8e8f8;border-color:rgba(96,184,232,.3);
-}
-.tc-btn:hover,.tc-btn.active{background:var(--sky-pale);border-style:solid;}
-[data-theme="dark"] .tc-btn:hover,[data-theme="dark"] .tc-btn.active{
-  background:rgba(96,184,232,.18);color:#e8f6ff;
-}
+.profile-name { font-family:'Merriweather',serif; color:#0c4a6e; font-size:.86rem; text-align:center; margin-bottom:2px; }
+[data-theme="dark"] .profile-name { color:#e0f4ff; }
+.profile-tagline { font-size:.72rem; color:#64748b; font-style:italic; text-align:center; line-height:1.5; margin-bottom:5px; }
+[data-theme="dark"] .profile-tagline { color:#9ac8df; }
+.profile-deco { text-align:center; font-size:.88rem; letter-spacing:3px; color:var(--sky-light); }
 
 /* Category tree */
-.cat-tree{font-size:.76rem;color:#64748b;}
-[data-theme="dark"] .cat-tree{color:#9ac8df;}
-.cat-tree ul{list-style:none;padding-left:12px;margin:3px 0;}
-.cat-tree > ul{padding-left:0;}
-.cat-tree a{color:#64748b;transition:color .2s;display:block;padding:2px 0;}
-[data-theme="dark"] .cat-tree a{color:#9ac8df;}
-.cat-tree a:hover{color:var(--sky);}
-[data-theme="dark"] .cat-tree a:hover{color:#e0f4ff;}
-.cat-tree summary{
-  cursor:pointer;font-size:.78rem;color:#0c4a6e;font-weight:600;
-  padding:3px 0;list-style:none;display:flex;align-items:center;gap:5px;
+.cat-tree { font-size:.74rem; color:#64748b; }
+[data-theme="dark"] .cat-tree { color:#9ac8df; }
+.cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
+.cat-tree > ul { padding-left:0; }
+.cat-tree a { color:#64748b; transition:color .2s; display:block; padding:2px 0; }
+[data-theme="dark"] .cat-tree a { color:#9ac8df; }
+.cat-tree a:hover { color:var(--sky); }
+[data-theme="dark"] .cat-tree a:hover { color:#e0f4ff; }
+.cat-tree summary {
+  cursor:pointer; font-size:.76rem; color:#0c4a6e; font-weight:600;
+  padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px;
 }
-[data-theme="dark"] .cat-tree summary{color:#c8e8f8;}
-.cat-tree summary::-webkit-details-marker{display:none;}
-.cat-tree summary::before{content:'▸';font-size:.6rem;transition:transform .2s;color:var(--sky);}
-[data-theme="dark"] .cat-tree summary::before{color:#89d0f5;}
-.cat-tree details[open]>summary::before{transform:rotate(90deg);}
-.cat-count{font-size:.64rem;color:#94a3b8;margin-left:4px;}
-[data-theme="dark"] .cat-count{color:#5a8fa8;}
+[data-theme="dark"] .cat-tree summary { color:#c8e8f8; }
+.cat-tree summary::-webkit-details-marker { display:none; }
+.cat-tree summary::before { content:'▸'; font-size:.58rem; transition:transform .2s; color:var(--sky); }
+[data-theme="dark"] .cat-tree summary::before { color:#89d0f5; }
+.cat-tree details[open]>summary::before { transform:rotate(90deg); }
+.cat-count { font-size:.62rem; color:#94a3b8; margin-left:4px; }
+[data-theme="dark"] .cat-count { color:#5a8fa8; }
 
-/* Dark toggle */
-.dark-btn{
-  width:100%;padding:7px;background:none;border:1.5px solid var(--sky-light);
-  border-radius:var(--r-pill);color:#0369a1;font-size:.74rem;cursor:pointer;
-  transition:var(--t);font-family:'Newsreader',serif;
-  display:flex;align-items:center;justify-content:center;gap:6px;
+/* Quote widget */
+.quote-body {
+  font-style:italic; font-size:.75rem; color:#475569; line-height:1.75;
+  border-left:3px solid var(--sky-light); padding-left:10px; margin:0;
 }
-[data-theme="dark"] .dark-btn{border-color:rgba(96,184,232,.35);color:#c8e8f8;}
-.dark-btn:hover{background:var(--sky-pale);}
-[data-theme="dark"] .dark-btn:hover{background:rgba(96,184,232,.12);}
-
-/* ── Quote widget ── */
-.quote-body{
-  font-style:italic;font-size:.78rem;color:#475569;line-height:1.75;
-  border-left:3px solid var(--sky-light);padding-left:10px;margin:0;
-}
-/* Dark mode: nền xanh đậm ấm hơn, chữ sáng rõ */
 [data-theme="dark"] .quote-widget-inner {
-  background: linear-gradient(135deg, rgba(10,30,55,.95), rgba(8,22,42,.98));
-  border: 1px solid rgba(96,184,232,.2);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin: -2px;
+  background:linear-gradient(135deg,rgba(10,30,55,.95),rgba(8,22,42,.98));
+  border:1px solid rgba(96,184,232,.2); border-radius:10px; padding:10px 12px; margin:-2px;
 }
-[data-theme="dark"] .quote-body{
-  color:#d4eeff;
-  border-left-color:#2a6a8a;
-}
-.quote-src{font-size:.65rem;color:#94a3b8;margin-top:7px;text-align:right;}
-[data-theme="dark"] .quote-src{color:#6a9ab5;}
+[data-theme="dark"] .quote-body { color:#d4eeff; border-left-color:#2a6a8a; }
+.quote-src { font-size:.62rem; color:#94a3b8; margin-top:6px; text-align:right; }
+[data-theme="dark"] .quote-src { color:#6a9ab5; }
 
-/* Misc */
-.no-results{display:none;text-align:center;padding:28px;color:var(--text-dim);font-style:italic;}
-.no-results.show{display:block;}
-.hidden{display:none !important;}
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
 /* ─── MESSAGE WIDGET ─── */
+/* Uniform font size: .68rem for ALL message text */
 .msg-widget-tabs {
-  display: flex; gap: 0; margin-bottom: 10px;
-  border: 1px solid rgba(186,230,253,.6); border-radius: var(--r-pill); overflow: hidden;
+  display:flex; gap:0; margin-bottom:9px;
+  border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); overflow:hidden;
 }
-.msg-tab { flex: 1; padding: 4px 0; font-size: .62rem; letter-spacing: .5px; text-transform: uppercase; background: none; border: none; cursor: pointer; font-family: 'Newsreader', serif; color: var(--text-mid); transition: var(--t); }
-.msg-tab.active { background: var(--sky); color: #fff; }
-[data-theme="dark"] .msg-tab { color: #9ac8df; }
-[data-theme="dark"] .msg-tab.active { background: #1565a0; color: #e8f6ff; }
- 
-.msg-panel { display: none; }
-.msg-panel.active { display: block; }
- 
-.msg-inp, .msg-textarea { width: 100%; padding: 5px 10px; border: 1.5px solid var(--sky-light); font-family: 'Newsreader', serif; color: var(--text-main); background: var(--cream); outline: none; box-sizing: border-box; border-radius: var(--r-pill); font-size: .72rem; margin-bottom: 5px; }
-.msg-textarea { border-radius: 10px; resize: none; min-height: 52px; }
-.msg-inp:focus, .msg-textarea:focus { border-color: var(--sky); }
+.msg-tab {
+  flex:1; padding:4px 0; font-size:.62rem; letter-spacing:.5px; text-transform:uppercase;
+  background:none; border:none; cursor:pointer; font-family:'Newsreader',serif;
+  color:var(--text-mid); transition:var(--t);
+}
+.msg-tab.active { background:var(--sky); color:#fff; }
+[data-theme="dark"] .msg-tab { color:#9ac8df; }
+[data-theme="dark"] .msg-tab.active { background:#1565a0; color:#e8f6ff; }
+.msg-panel { display:none; }
+.msg-panel.active { display:block; }
+
+/* Uniform inputs */
+.msg-inp, .msg-textarea {
+  width:100%; padding:5px 10px;
+  border:1.5px solid var(--sky-light); font-family:'Newsreader',serif;
+  color:var(--text-main); background:var(--cream); outline:none;
+  box-sizing:border-box; font-size:.68rem; margin-bottom:5px;
+  border-radius:var(--r-pill);
+}
+.msg-textarea { border-radius:8px; resize:none; min-height:48px; }
+.msg-inp:focus, .msg-textarea:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea {
-  background: #091726; border-color: #1e5a7a; color: #daeeff;
+  background:#091726; border-color:#1e5a7a; color:#daeeff;
 }
-[data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color: #4a7a96; }
- 
+[data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color:#4a7a96; }
 .msg-send-btn {
-  width: 100%; padding: 5px; background: var(--sky); color: #fff;
-  border: none; border-radius: var(--r-pill); font-size: .68rem; font-family: 'Newsreader', serif;
-  cursor: pointer; transition: var(--t);
+  width:100%; padding:5px; background:var(--sky); color:#fff;
+  border:none; border-radius:var(--r-pill); font-size:.68rem;
+  font-family:'Newsreader',serif; cursor:pointer; transition:var(--t);
 }
-.msg-send-btn:hover { background: var(--sky2); }
-.msg-send-btn:disabled { opacity: .5; cursor: not-allowed; }
- 
+.msg-send-btn:hover { background:var(--sky2); }
+.msg-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 .msg-sent-notice {
-  text-align: center; font-size: .74rem; color: #059669; padding: 6px 0;
-  display: none; font-style: italic;
+  text-align:center; font-size:.68rem; color:#059669; padding:5px 0;
+  display:none; font-style:italic;
 }
-[data-theme="dark"] .msg-sent-notice { color: #34d399; }
- 
+[data-theme="dark"] .msg-sent-notice { color:#34d399; }
+
 /* Public feed */
 .msg-public-feed {
-  max-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
-  margin-bottom: 8px;
-  scrollbar-width: thin; scrollbar-color: var(--sky-light) transparent;
+  max-height:100px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;
+  margin-bottom:7px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
 }
-.msg-public-feed::-webkit-scrollbar { width: 3px; }
-.msg-public-feed::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
- 
+.msg-public-feed::-webkit-scrollbar { width:3px; }
+.msg-public-feed::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 .msg-pub-item {
-  background: var(--sky-pale); border-radius: 10px; padding: 6px 9px;
-  border: 1px solid rgba(186,230,253,.35); font-size: .7rem;
+  background:var(--sky-pale); border-radius:8px; padding:5px 8px;
+  border:1px solid rgba(186,230,253,.35); font-size:.68rem;
 }
-[data-theme="dark"] .msg-pub-item {
-  background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.12);
-}
-.msg-pub-name { font-weight: 700; color: var(--sky-dark); font-size: .62rem; }
-[data-theme="dark"] .msg-pub-name { color: #89d0f5; }
-.msg-pub-time { font-size: .6rem; color: var(--text-dim); margin-left: 5px; }
-.msg-pub-text { color: var(--text-main); margin: 2px 0 0; line-height: 1.4; word-break: break-word; font-size: .68rem; }
-[data-theme="dark"] .msg-pub-text { color: #cce4f8; }
+[data-theme="dark"] .msg-pub-item { background:rgba(21,50,80,.35); border-color:rgba(96,184,232,.12); }
+.msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
+[data-theme="dark"] .msg-pub-name { color:#89d0f5; }
+.msg-pub-time { font-size:.6rem; color:var(--text-dim); margin-left:4px; }
+.msg-pub-text { color:var(--text-main); margin:2px 0 0; line-height:1.4; word-break:break-word; font-size:.68rem; }
+[data-theme="dark"] .msg-pub-text { color:#cce4f8; }
 .msg-pub-del {
-  float: right; background: none; border: none; font-size: .58rem; color: var(--text-dim);
-  cursor: pointer; padding: 0 2px; transition: color .15s; display: none;
+  float:right; background:none; border:none; font-size:.58rem; color:var(--text-dim);
+  cursor:pointer; padding:0 2px; transition:color .15s; display:none;
 }
-.msg-pub-del.show { display: inline; }
-.msg-pub-del:hover { color: #ef4444; }
- 
-.msg-public-empty { font-size: .72rem; color: var(--text-dim); font-style: italic; text-align: center; padding: 10px 0; }
-[data-theme="dark"] .msg-public-empty { color: #4a7a96; }
- 
-/* ─── FLOATING BUBBLE ─── */
-.msg-bubble-btn {
-  position: fixed; bottom: 88px; right: 22px; z-index: 410;
-  width: 46px; height: 46px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--sky), var(--sky2));
-  border: none; cursor: pointer; color: #fff; font-size: 1.1rem;
-  box-shadow: 0 4px 18px rgba(2,132,199,.45);
-  display: flex; align-items: center; justify-content: center;
-  transition: transform .2s, box-shadow .2s;
-  overflow: visible;
-}
-.msg-bubble-btn:hover { transform: scale(1.12) translateY(-2px); box-shadow: 0 8px 28px rgba(2,132,199,.6); }
-.msg-bubble-btn .msg-bubble-badge {
-  position: absolute; top: -2px; right: -2px;
-  background: #f43f5e; color: #fff; font-size: .55rem; font-weight: 700;
-  min-width: 16px; height: 16px; border-radius: 8px; padding: 0 3px;
-  display: none; align-items: center; justify-content: center;
-  border: 2px solid #fff;
-}
-.msg-bubble-badge.show { display: flex; }
- 
-/* Popup khi click bubble */
-.msg-popup {
-  position: fixed; bottom: 148px; right: 16px; z-index: 420;
-  width: min(340px, calc(100vw - 32px));
-  background: #fff; border: 1px solid rgba(186,230,253,.6);
-  border-radius: 18px; box-shadow: 0 16px 48px rgba(2,132,199,.18);
-  padding: 16px 15px 14px;
-  opacity: 0; pointer-events: none; transform: translateY(12px) scale(.97);
-  transition: opacity .22s ease, transform .22s ease;
-}
-[data-theme="dark"] .msg-popup {
-  background: rgba(10,22,38,.98); border-color: rgba(96,184,232,.22);
-}
-.msg-popup.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
- 
-.msg-popup-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px;
-}
-.msg-popup-title {
-  font-family: 'Merriweather', serif; font-size: .78rem; color: var(--sky-dark);
-  letter-spacing: 1.5px; text-transform: uppercase;
-}
-[data-theme="dark"] .msg-popup-title { color: #89d0f5; }
-.msg-popup-close {
-  width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(186,230,253,.5);
-  background: none; cursor: pointer; font-size: .68rem; color: var(--text-dim);
-  display: flex; align-items: center; justify-content: center; transition: var(--t);
-}
-.msg-popup-close:hover { background: var(--sky-pale); color: var(--sky); }
-[data-theme="dark"] .msg-popup-close { border-color: rgba(96,184,232,.2); color: #6a9ab5; }
- 
-/* Trên mobile: ẩn bubble nếu sidebar đang open */
-@media(max-width:900px){
-  body.novel-sidebar-open .msg-bubble-btn { display: none; }
-}
-@media(max-width:768px){
-  .home-shell{ grid-template-columns:1fr; padding:14px 12px 60px; }
-  .sidebar-col{ display:flex !important; flex-direction:column; align-items:center; }
-  .widget{ width:100%; max-width:480px; }
-  .filter-bar{ justify-content:center; }
-  .fl-chips{ justify-content:center; }
-  .hero-name-img{ max-width:260px; }
-  .sc-cover-wrap{ width:90px; }
-  .sc-cover-wrap img{ width:90px; }
-}
-/* ── Admin private message cards ── */
+.msg-pub-del.show { display:inline; }
+.msg-pub-del:hover { color:#ef4444; }
+.msg-public-empty { font-size:.68rem; color:var(--text-dim); font-style:italic; text-align:center; padding:8px 0; }
+[data-theme="dark"] .msg-public-empty { color:#4a7a96; }
+
+/* Admin private cards */
 .msg-priv-card {
-  border-radius: 10px; padding: 8px 10px;
-  border: 1px solid rgba(186,230,253,.4); font-size: .7rem;
-  background: var(--sky-pale);
+  border-radius:9px; padding:7px 9px;
+  border:1px solid rgba(186,230,253,.4); font-size:.68rem;
+  background:var(--sky-pale);
 }
-[data-theme="dark"] .msg-priv-card { background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.12); }
-.msg-priv-card.unread { border-left: 3px solid var(--sky); }
-.msg-priv-card.replied { border-left: 3px solid #34d399; opacity: .85; }
-.msg-priv-card-header { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
-.msg-priv-sender { font-weight:700; color:var(--sky-dark); }
+[data-theme="dark"] .msg-priv-card { background:rgba(21,50,80,.35); border-color:rgba(96,184,232,.12); }
+.msg-priv-card.unread  { border-left:3px solid var(--sky); }
+.msg-priv-card.replied { border-left:3px solid #34d399; opacity:.85; }
+.msg-priv-card-header  { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
+.msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
 [data-theme="dark"] .msg-priv-sender { color:#89d0f5; }
 .msg-priv-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
-.msg-priv-del { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
+.msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.6rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
 .msg-priv-del:hover { color:#ef4444; }
-.msg-priv-text { color:var(--text-main); line-height:1.45; margin:3px 0 6px; word-break:break-word; }
+.msg-priv-text { color:var(--text-main); line-height:1.4; margin:2px 0 5px; word-break:break-word; font-size:.68rem; }
 [data-theme="dark"] .msg-priv-text { color:#cce4f8; }
-.msg-priv-reply-inp { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:8px; font-size:.7rem; font-family:'Newsreader',serif; resize:none; background:var(--cream); color:var(--text-main); outline:none; margin-bottom:4px; }
+.msg-priv-reply-inp {
+  width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:7px;
+  font-size:.68rem; font-family:'Newsreader',serif; resize:none;
+  background:var(--cream); color:var(--text-main); outline:none; margin-bottom:4px;
+}
 .msg-priv-reply-inp:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-priv-reply-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
-.msg-priv-send-btn { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
+.msg-priv-send-btn {
+  padding:3px 10px; background:var(--sky); color:#fff; border:none;
+  border-radius:var(--r-pill); font-size:.64rem; cursor:pointer; transition:var(--t);
+}
 .msg-priv-send-btn:hover { background:var(--sky2); }
 .msg-priv-send-btn:disabled { opacity:.5; }
-.msg-priv-replied-wrap { margin-top:5px; padding:5px 8px; background:rgba(52,211,153,.08); border-radius:7px; border:1px solid rgba(52,211,153,.25); }
+.msg-priv-replied-wrap {
+  margin-top:4px; padding:4px 8px; background:rgba(52,211,153,.08);
+  border-radius:6px; border:1px solid rgba(52,211,153,.25);
+}
 .msg-priv-replied-label { font-size:.6rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
-.msg-priv-replied-text { font-size:.7rem; color:var(--text-main); line-height:1.4; }
+.msg-priv-replied-text  { font-size:.68rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-priv-replied-text { color:#cce4f8; }
-.msg-priv-del-reply { background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); padding:2px 4px; margin-top:3px; border-radius:3px; transition:color .15s; }
+.msg-priv-del-reply {
+  background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim);
+  padding:2px 4px; margin-top:2px; border-radius:3px; transition:color .15s;
+}
 .msg-priv-del-reply:hover { color:#ef4444; }
-.msg-admin-reply-section { margin-top:8px; }
-.msg-admin-reply-title { font-size:.66rem; color:#059669; font-weight:700; margin-bottom:5px; }
-.msg-admin-reply-card { padding:7px 9px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:9px; margin-bottom:5px; }
-.msg-admin-reply-orig { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
-.msg-admin-reply-body { font-size:.72rem; color:var(--text-main); line-height:1.4; }
+.msg-admin-reply-section { margin-top:7px; }
+.msg-admin-reply-title   { font-size:.64rem; color:#059669; font-weight:700; margin-bottom:4px; }
+.msg-admin-reply-card    { padding:6px 8px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:8px; margin-bottom:4px; }
+.msg-admin-reply-orig    { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
+.msg-admin-reply-body    { font-size:.68rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-admin-reply-body { color:#cce4f8; }
-.msg-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.58rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-right:4px; }
-.msg-admin-reply-time { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
-.msg-pub-admin { background:rgba(14,165,233,.06) !important; border-color:rgba(14,165,233,.25) !important; }
-.msg-pub-admin-name { color:var(--sky-dark) !important; }
-.msg-pub-owner-badge { display:inline-block; font-size:.54rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:4px; vertical-align:middle; }
+.msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.56rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-right:3px; }
+.msg-admin-reply-time    { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
+.msg-pub-admin           { background:rgba(14,165,233,.06)!important; border-color:rgba(14,165,233,.25)!important; }
+.msg-pub-admin-name      { color:var(--sky-dark)!important; }
+.msg-pub-owner-badge     { display:inline-block; font-size:.52rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
+
+/* ─── FLOATING MAIL BUBBLE ─── */
+/* Đặt riêng, không nằm trong nhóm scroll buttons */
+.msg-bubble-btn {
+  position:fixed;
+  bottom: 76px; /* trên scroll buttons (40px) + 8px gap + 28px */
+  right: 22px;
+  z-index: 410;
+  width: 40px; height: 40px; border-radius:50%;
+  background:linear-gradient(135deg,var(--sky),var(--sky2));
+  border:none; cursor:pointer; color:#fff; font-size:1rem;
+  box-shadow:0 4px 14px rgba(2,132,199,.4);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .2s, box-shadow .2s;
+  overflow:visible;
+}
+.msg-bubble-btn:hover {
+  transform:scale(1.1) translateY(-2px);
+  box-shadow:0 7px 20px rgba(2,132,199,.55);
+}
+/* Ripple luôn chạy — mời nhắn tin */
+.bubble-ripple {
+  position:absolute; inset:-5px; border-radius:50%;
+  border:2px solid var(--sky);
+  opacity:0; animation:bubbleRipple 2.8s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes bubbleRipple {
+  0%   { transform:scale(1);   opacity:.55; }
+  100% { transform:scale(1.75); opacity:0; }
+}
+[data-theme="dark"] .msg-bubble-btn { background:linear-gradient(135deg,#1565a0,#0e3d6e); }
+@media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
+
+/* Popup từ bubble */
+.msg-popup {
+  position:fixed; bottom:128px; right:16px; z-index:420;
+  width:min(330px,calc(100vw - 28px));
+  background:#fff; border:1px solid rgba(186,230,253,.6);
+  border-radius:16px; box-shadow:0 14px 44px rgba(2,132,199,.18);
+  padding:15px 14px 13px;
+  opacity:0; pointer-events:none; transform:translateY(12px) scale(.97);
+  transition:opacity .22s ease, transform .22s ease;
+}
+[data-theme="dark"] .msg-popup { background:rgba(10,22,38,.98); border-color:rgba(96,184,232,.22); }
+.msg-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+.msg-popup-header {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+}
+.msg-popup-title {
+  font-family:'Merriweather',serif; font-size:.74rem; color:var(--sky-dark);
+  letter-spacing:1.5px; text-transform:uppercase;
+}
+[data-theme="dark"] .msg-popup-title { color:#89d0f5; }
+.msg-popup-close {
+  width:24px; height:24px; border-radius:50%; border:1px solid rgba(186,230,253,.5);
+  background:none; cursor:pointer; font-size:.66rem; color:var(--text-dim);
+  display:flex; align-items:center; justify-content:center; transition:var(--t);
+}
+.msg-popup-close:hover { background:var(--sky-pale); color:var(--sky); }
+[data-theme="dark"] .msg-popup-close { border-color:rgba(96,184,232,.2); color:#6a9ab5; }
+
+/* ─── DARK MODE TOGGLE — góc phải nav thay vì sidebar ─── */
+/* (Đã xử lý qua JS thêm button vào navbar trong script) */
+.nav-theme-btn {
+  font-size:.72rem; padding:5px 10px; border-radius:var(--r-pill);
+  border:1px solid rgba(186,230,253,.6); background:none;
+  color:var(--text-mid); cursor:pointer; transition:var(--t);
+  font-family:'Newsreader',serif; display:flex; align-items:center; gap:4px;
+}
+.nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
+[data-theme="dark"] .nav-theme-btn { border-color:rgba(96,184,232,.3); color:#a0c8e0; }
+[data-theme="dark"] .nav-theme-btn:hover { background:rgba(96,184,232,.1); color:#60b8e8; }
+
+/* Misc */
+.no-results { display:none; text-align:center; padding:24px; color:var(--text-dim); font-style:italic; }
+.no-results.show { display:block; }
+.hidden { display:none !important; }
+.reveal { opacity:0; transform:translateY(14px); transition:opacity .5s ease,transform .5s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+@media(max-width:600px){
+  .sc-cover-wrap { width:88px; }
+  .sc-cover-wrap img { width:88px; }
+  .hero-name-img { max-width:240px; }
+}
 </style>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
+    <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
+    <!-- duplicate for seamless loop -->
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
     <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
     <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
@@ -592,6 +528,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <div class="stories-grid" id="storiesGrid">
+
       <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
@@ -681,7 +618,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
 
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:110px">☁️</div>
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--sky-light);width:105px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Vật dễ vỡ</h3>
@@ -695,7 +632,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
 
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:110px">☁️</div>
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--sky-light);width:105px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Thiếu đế xuân tâm</h3>
@@ -712,7 +649,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <!-- MỚI CẬP NHẬT -->
-    <div class="sec-hd reveal" style="margin-top:28px">
+    <div class="sec-hd reveal" style="margin-top:26px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
@@ -737,8 +674,9 @@ const hcdhCount    = countChaps(hcdhPosts);
 
   </div><!-- /main-col -->
 
-  <!-- ── SIDEBAR ── -->
+  <!-- ── SIDEBAR (không còn Tags, không còn Dark Mode button) ── -->
   <aside class="sidebar-col">
+
     <div class="widget">
       <div class="widget-title">✦ Về nhà cá</div>
       <div class="profile-avatar">
@@ -748,29 +686,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       <p class="profile-tagline">paired dreams,<br/>boundless gleam ⋆.˚</p>
       <div class="profile-deco">𓆝.°•</div>
       <div style="margin-top:10px;text-align:center">
-        <a href="/dynamic-duo-web/about/" style="font-size:.71rem;color:var(--sky);border:1px solid var(--sky-light);padding:3px 12px;border-radius:var(--r-pill);transition:var(--t)" onmouseover="this.style.background='var(--sky-pale)'" onmouseout="this.style.background=''">About us →</a>
-      </div>
-    </div>
-
-    <div class="widget" style="padding:11px">
-      <button class="dark-btn" id="darkBtnIdx">🌙 Chế độ tối</button>
-    </div>
-
-    <div class="widget">
-      <div class="widget-title">🏷️ Tags</div>
-      <div class="tag-cloud" id="tagCloud">
-        <button class="tc-btn" data-tag="đam mỹ"># đam mỹ</button>
-        <button class="tc-btn" data-tag="hiện đại"># hiện đại</button>
-        <button class="tc-btn" data-tag="cổ đại"># cổ đại</button>
-        <button class="tc-btn" data-tag="HE"># HE</button>
-        <button class="tc-btn" data-tag="chua xót"># chua xót</button>
-        <button class="tc-btn" data-tag="niên hạ"># niên hạ</button>
-        <button class="tc-btn" data-tag="mất trí nhớ"># mất trí nhớ</button>
-        <button class="tc-btn" data-tag="gương vỡ lại lành"># gương vỡ lại lành</button>
-        <button class="tc-btn" data-tag="drama motip cũ"># drama motip cũ</button>
-        <button class="tc-btn" data-tag="trai thẳng"># trai thẳng</button>
-        <button class="tc-btn" data-tag="đồng quê"># đồng quê</button>
-        <button class="tc-btn" data-tag="1v1"># 1v1</button>
+        <a href="/dynamic-duo-web/about/" style="font-size:.68rem;color:var(--sky);border:1px solid var(--sky-light);padding:3px 11px;border-radius:var(--r-pill);transition:var(--t)" onmouseover="this.style.background='var(--sky-pale)'" onmouseout="this.style.background=''">About us →</a>
       </div>
     </div>
 
@@ -808,7 +724,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
     </div>
 
-    <!-- ── QUOTE OF THE DAY (đã cập nhật) ── -->
+    <!-- Quote of the day -->
     <div class="widget">
       <div class="widget-title">✨ Quote of the day</div>
       <div class="quote-widget-inner">
@@ -816,61 +732,113 @@ const hcdhCount    = countChaps(hcdhPosts);
         <div class="quote-src">— 1 John 4:18</div>
       </div>
     </div>
-<div class="widget" id="msgSidebarWidget">
-  <div class="widget-title">✉ Lời nhắn</div>
- 
-  <!-- Tabs -->
-  <div class="msg-widget-tabs">
-    <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư</button>
-    <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Nhắn chung</button>
-  </div>
- 
-  <!-- Panel: Riêng tư -->
- <div class="msg-panel active" id="msgPanelPrivate">
-  <!-- View user thường: form gửi + xem reply của admin -->
-  <div id="msgPrivateUserNote">
-    <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5">
-      Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.
-    </p>
-    <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
-    <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
-    <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
-    <!-- Hiện khi admin đã reply cho user này -->
-    <div id="msgPrivateUserReply" style="margin-top:8px"></div>
-  </div>
 
-  <!-- View admin: danh sách tin + form reply — ẩn với user thường -->
-  <div id="msgPrivateAdminPanel" style="display:none">
-    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 8px;font-style:italic">
-      📬 Tin nhắn riêng nhận được:
-    </p>
-    <div id="msgPrivateAdminList" style="max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin"></div>
-  </div>
-</div>
+    <!-- Lời nhắn widget -->
+    <div class="widget" id="msgSidebarWidget">
+      <div class="widget-title">✉ Lời nhắn</div>
+      <div class="msg-widget-tabs">
+        <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư</button>
+        <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Nhắn chung</button>
+      </div>
 
-  <!-- Panel: Public -->
-  <div class="msg-panel" id="msgPanelPublic">
-    <div class="msg-public-feed" id="msgPublicFeed">
-      <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
+      <!-- Panel: Riêng tư -->
+      <div class="msg-panel active" id="msgPanelPrivate">
+        <!-- User view -->
+        <div id="msgPrivateUserNote">
+          <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic;line-height:1.5">
+            Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.
+          </p>
+          <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+          <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
+          <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
+          <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
+          <div id="msgPrivateUserReply" style="margin-top:7px"></div>
+        </div>
+        <!-- Admin view -->
+        <div id="msgPrivateAdminPanel" style="display:none">
+          <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic">📬 Tin nhắn riêng nhận được:</p>
+          <div id="msgPrivateAdminList" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin"></div>
+        </div>
+      </div>
+
+      <!-- Panel: Public -->
+      <div class="msg-panel" id="msgPanelPublic">
+        <div class="msg-public-feed" id="msgPublicFeed">
+          <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
+        </div>
+        <input  class="msg-inp"      id="msgPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+        <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn cho mọi người..." rows="2"></textarea>
+        <button class="msg-send-btn" id="msgPublicSend">Gửi 🌊</button>
+        <div class="msg-sent-notice" id="msgPublicDone">✓ Đã gửi! 🌊</div>
+      </div>
     </div>
-    <input  class="msg-inp"      id="msgPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn cho mọi người..." rows="2"></textarea>
-    <button class="msg-send-btn" id="msgPublicSend">Gửi 🌊</button>
-    <div class="msg-sent-notice" id="msgPublicDone">✓ Đã gửi! 🌊</div>
-  </div>
-</div>
+
     <div class="widget" style="text-align:center">
       <div class="widget-title">✉ Liên hệ</div>
-      <p class="contact-email" style="font-size:.74rem;margin-bottom:6px">dynamicduoo.q@gmail.com</p>
-      <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.71rem;color:var(--sky)">🌐 WordPress cũ</a>
+      <p class="contact-email" style="font-size:.72rem;margin-bottom:5px">dynamicduoo.q@gmail.com</p>
+      <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.68rem;color:var(--sky)">🌐 WordPress cũ</a>
     </div>
-  </aside>
 
+  </aside>
 </div><!-- /home-shell -->
 
+<!-- ── FLOATING MAIL BUBBLE (shortcut mở popup) ── -->
+<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
+  <span>✉</span>
+  <span class="bubble-ripple"></span>
+</button>
+
+<!-- Popup từ bubble -->
+<div class="msg-popup" id="msgPopup">
+  <div class="msg-popup-header">
+    <span class="msg-popup-title">✉ Lời nhắn</span>
+    <button class="msg-popup-close" id="msgPopupClose">✕</button>
+  </div>
+  <div class="msg-widget-tabs" style="margin-bottom:9px">
+    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư</button>
+    <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
+  </div>
+  <div class="msg-panel active" id="msgPopupPanelPrivate">
+    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 6px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
+    <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn..." rows="3"></textarea>
+    <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
+    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi! 🌊</div>
+  </div>
+  <div class="msg-panel" id="msgPopupPanelPublic">
+    <div class="msg-public-feed" id="msgPopupPublicFeed">
+      <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
+    </div>
+    <input  class="msg-inp"      id="msgPopupPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Nhắn gì đó..." rows="2"></textarea>
+    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi 🌊</button>
+    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi! 🌊</div>
+  </div>
+</div>
+
 <script is:inline>
-/* ─── FILTER ─── */
+/* ══════════════════════════════════════
+   DARK MODE TOGGLE — thêm vào navbar
+══════════════════════════════════════ */
+(function injectThemeBtn(){
+  const navLinks = document.querySelector('.nav-links');
+  if(!navLinks) return;
+  const btn = document.createElement('button');
+  btn.className = 'nav-theme-btn';
+  btn.id = 'navThemeBtn';
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const sync = () => { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối'; };
+  sync();
+  btn.addEventListener('click', () => {
+    if(typeof window.__ddToggleTheme === 'function') window.__ddToggleTheme();
+    sync();
+  });
+  navLinks.appendChild(btn);
+})();
+
+/* ══════════════════════════════════════
+   FILTER
+══════════════════════════════════════ */
 const allCards  = document.querySelectorAll('.sc');
 const chips     = document.querySelectorAll('#filterChips .chip');
 const flCount   = document.getElementById('flCount');
@@ -878,177 +846,132 @@ const chipClear = document.getElementById('chipClear');
 let activeTags = new Set();
 let activeCat  = null;
 
-function updateClearBtn() {
-  if (chipClear) chipClear.style.display = (activeTags.size > 0 || activeCat !== null) ? 'inline-flex' : 'none';
-}
-function applyFilter() {
-  let vis = 0;
-  allCards.forEach(card => {
-    const cCat  = card.dataset.cat || '';
-    const cTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
-    const catOk = activeCat === null || cCat === activeCat;
-    const tagOk = activeTags.size === 0 || [...activeTags].every(t => cTags.includes(t.toLowerCase()));
-    const show = catOk && tagOk;
-    card.classList.toggle('hidden', !show);
-    if (show) vis++;
+function updateClearBtn(){ if(chipClear) chipClear.style.display=(activeTags.size>0||activeCat!==null)?'inline-flex':'none'; }
+function applyFilter(){
+  let vis=0;
+  allCards.forEach(card=>{
+    const cCat  = card.dataset.cat||'';
+    const cTags = (card.dataset.tags||'').split(',').map(t=>t.trim().toLowerCase());
+    const catOk = activeCat===null||cCat===activeCat;
+    const tagOk = activeTags.size===0||[...activeTags].every(t=>cTags.includes(t.toLowerCase()));
+    const show  = catOk&&tagOk;
+    card.classList.toggle('hidden',!show);
+    if(show) vis++;
   });
-  flCount.textContent = vis + ' truyện';
-  document.getElementById('noRes')?.classList.toggle('show', vis === 0);
+  if(flCount) flCount.textContent=vis+' truyện';
+  document.getElementById('noRes')?.classList.toggle('show',vis===0);
   updateClearBtn();
 }
-chips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    if (chip.id === 'chipClear') {
-      activeTags.clear(); activeCat = null;
-      chips.forEach(c => c.classList.remove('active'));
-      document.querySelector('[data-tag="all"]')?.classList.add('active');
-      document.querySelectorAll('#tagCloud .tc-btn').forEach(b => b.classList.remove('active'));
-      applyFilter(); return;
-    }
-    if (chip.dataset.tag) {
-      const tag = chip.dataset.tag;
-      if (tag === 'all') {
-        activeTags.clear(); chips.forEach(c => c.dataset.tag && c.classList.remove('active')); chip.classList.add('active');
-      } else {
-        document.querySelector('[data-tag="all"]')?.classList.remove('active');
-        if (activeTags.has(tag)) { activeTags.delete(tag); chip.classList.remove('active'); }
-        else { activeTags.add(tag); chip.classList.add('active'); }
-        if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
-      }
-    } else if (chip.dataset.cat) {
-      const cat = chip.dataset.cat;
-      chips.forEach(c => c.dataset.cat && c.classList.remove('active'));
-      activeCat = (activeCat === cat) ? null : cat;
-      if (activeCat) chip.classList.add('active');
+chips.forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    if(chip.id==='chipClear'){ activeTags.clear(); activeCat=null; chips.forEach(c=>c.classList.remove('active')); document.querySelector('[data-tag="all"]')?.classList.add('active'); document.querySelectorAll('#tagCloud .tc-btn').forEach(b=>b.classList.remove('active')); applyFilter(); return; }
+    if(chip.dataset.tag){
+      const tag=chip.dataset.tag;
+      if(tag==='all'){ activeTags.clear(); chips.forEach(c=>c.dataset.tag&&c.classList.remove('active')); chip.classList.add('active'); }
+      else{ document.querySelector('[data-tag="all"]')?.classList.remove('active'); if(activeTags.has(tag)){activeTags.delete(tag);chip.classList.remove('active');}else{activeTags.add(tag);chip.classList.add('active');} if(activeTags.size===0) document.querySelector('[data-tag="all"]')?.classList.add('active'); }
+    } else if(chip.dataset.cat){
+      const cat=chip.dataset.cat; chips.forEach(c=>c.dataset.cat&&c.classList.remove('active')); activeCat=(activeCat===cat)?null:cat; if(activeCat) chip.classList.add('active');
     }
     applyFilter();
   });
 });
-document.querySelectorAll('#tagCloud .tc-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tag = btn.dataset.tag;
-    if (activeTags.has(tag)) { activeTags.delete(tag); btn.classList.remove('active'); }
-    else { activeTags.add(tag); btn.classList.add('active'); }
-    chips.forEach(c => {
-      if (c.dataset.tag === tag)   c.classList.toggle('active', activeTags.has(tag));
-      if (c.dataset.tag === 'all') c.classList.toggle('active', activeTags.size === 0);
+
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
+const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ══════════════════════════════════════
+   MAIL BUBBLE — chỉ toggle popup, không đếm tin
+══════════════════════════════════════ */
+(function setupBubble(){
+  const btn   = document.getElementById('msgBubbleBtn');
+  const popup = document.getElementById('msgPopup');
+  const close = document.getElementById('msgPopupClose');
+  if(!btn||!popup) return;
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    popup.classList.toggle('open');
+  });
+  close?.addEventListener('click', () => popup.classList.remove('open'));
+  document.addEventListener('click', e => {
+    if(popup.classList.contains('open') && !popup.contains(e.target) && !btn.contains(e.target))
+      popup.classList.remove('open');
+  });
+
+  /* Tab switcher cho popup */
+  popup.querySelectorAll('[data-popup-panel]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panel = tab.dataset.popupPanel;
+      popup.querySelectorAll('[data-popup-panel]').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      popup.querySelectorAll('.msg-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('msgPopupPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
     });
-    if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
-    applyFilter();
-    document.getElementById('storiesGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
-
-/* ─── REVEAL ─── */
-const obs = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-}), { threshold: .1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-/* ─── DARK MODE BUTTON ─── */
-(function() {
-  const btn = document.getElementById('darkBtnIdx');
-  if (!btn) return;
-  function syncBtn() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    btn.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
-  }
-  syncBtn();
-  btn.addEventListener('click', () => {
-    if (typeof window.__ddToggleTheme === 'function') window.__ddToggleTheme();
-    syncBtn();
   });
 })();
+
+/* ══════════════════════════════════════
+   MESSAGE WIDGET
+══════════════════════════════════════ */
 (function setupMessageWidget(){
- 
-  /* ── Helpers ── */
   function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function msgTime(ts){
     if(!ts) return '';
-    const d = Date.now() - ts;
-    if(d < 60000)    return 'vừa xong';
-    if(d < 3600000)  return Math.floor(d/60000) + ' phút trước';
-    if(d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
-    return Math.floor(d/86400000) + ' ngày trước';
+    const d=Date.now()-ts;
+    if(d<60000)    return 'vừa xong';
+    if(d<3600000)  return Math.floor(d/60000)+' phút trước';
+    if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
+    return Math.floor(d/86400000)+' ngày trước';
   }
-  function getMsgToken(){
-    let t = localStorage.getItem('dd_token');
-    if(!t){ t = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('dd_token', t); }
-    return t;
-  }
+  function getMsgToken(){ let t=localStorage.getItem('dd_token'); if(!t){t=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('dd_token',t);} return t; }
   const myToken     = getMsgToken();
   const ADMIN_NAME  = 'dynamic duo 𓆝';
   const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
-  let isAdmin       = false;
-  let lastPublicData   = null;
-  let lastPrivateData  = null;
-  let pubDebounce      = null;
-  let privDebounce     = null;
- 
-  /* ── Auth state ── */
+  let isAdmin=false, lastPublicData=null, lastPrivateData=null, pubDebounce=null, privDebounce=null;
+
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
     updateAdminUI();
     renderPublicMessages(lastPublicData);
     renderPrivateMessages(lastPrivateData);
   });
- 
+
   function updateAdminUI(){
-    /* Ẩn/hiện input tên khi gửi public tùy theo admin */
-    const nameEl = document.getElementById('msgPublicName');
-    if(nameEl){
-      nameEl.style.display    = isAdmin ? 'none' : '';
-      nameEl.placeholder      = isAdmin ? ADMIN_NAME : 'Tên (tùy chọn)';
-    }
-    /* Hiện/ẩn panel private admin */
+    const nameEl     = document.getElementById('msgPublicName');
     const adminPanel = document.getElementById('msgPrivateAdminPanel');
-    if(adminPanel) adminPanel.style.display = isAdmin ? 'block' : 'none';
-    /* Đổi label panel private cho user thường */
-    const privUserNote = document.getElementById('msgPrivateUserNote');
-    if(privUserNote) privUserNote.style.display = isAdmin ? 'none' : 'block';
-    /* Hiện reply của admin cho người gửi (dựa vào token) */
-    renderPrivateMessages(lastPrivateData);
+    const userNote   = document.getElementById('msgPrivateUserNote');
+    if(nameEl)     { nameEl.style.display = isAdmin ? 'none' : ''; }
+    if(adminPanel) { adminPanel.style.display = isAdmin ? 'block' : 'none'; }
+    if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
   }
- 
-  /* ══════════════════════════════════════
-     TAB SWITCHER
-  ══════════════════════════════════════ */
-  function setupTabs(tabSelector, panelPrefix){
-    document.querySelectorAll(tabSelector).forEach(tab => {
-      tab.addEventListener('click', () => {
-        const panel = tab.dataset.panel || tab.dataset.popupPanel;
-        document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const container = tab.closest('.msg-popup, .widget');
-        container?.querySelectorAll('.msg-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById(panelPrefix + (panel.charAt(0).toUpperCase() + panel.slice(1)))?.classList.add('active');
-      });
+
+  /* Tab switcher cho sidebar widget */
+  document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panel = tab.dataset.panel;
+      document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('#msgSidebarWidget .msg-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('msgPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
     });
-  }
-  setupTabs('[data-panel]', 'msgPanel');
- 
-  /* ══════════════════════════════════════
-     PRIVATE MESSAGES
-  ══════════════════════════════════════ */
+  });
+
+  /* ── Render private messages ── */
   function renderPrivateMessages(data){
     lastPrivateData = data;
     const adminList = document.getElementById('msgPrivateAdminList');
     const userView  = document.getElementById('msgPrivateUserReply');
- 
-    /* ── View cho ADMIN: danh sách tất cả tin nhắn ── */
+
     if(adminList){
-      if(!isAdmin){ adminList.innerHTML = ''; return; }
-      if(!data){
-        adminList.innerHTML = '<div class="msg-admin-empty">Chưa có tin nhắn riêng tư nào 🌊</div>';
-        return;
-      }
-      const items = Object.entries(data)
-        .map(([id,v]) => ({id,...v}))
-        .sort((a,b) => (b.ts||0) - (a.ts||0)); /* mới nhất lên đầu */
- 
+      if(!isAdmin){ adminList.innerHTML=''; return; }
+      if(!data){ adminList.innerHTML='<div class="msg-public-empty">Chưa có tin nhắn riêng tư nào 🌊</div>'; return; }
+      const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(b.ts||0)-(a.ts||0));
       adminList.innerHTML = items.map(m => {
         const replied = m.adminReply;
-        return `<div class="msg-priv-card ${replied ? 'replied' : 'unread'}" id="mpc-${msgEsc(m.id)}">
+        return `<div class="msg-priv-card ${replied?'replied':'unread'}" id="mpc-${msgEsc(m.id)}">
           <div class="msg-priv-card-header">
             <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
             <span class="msg-priv-time">${msgTime(m.ts)}</span>
@@ -1061,228 +984,114 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
                 <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
                 <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}">✕ Xóa reply</button>
                </div>`
-            : `<div class="msg-priv-reply-form" id="mprf-${msgEsc(m.id)}">
+            : `<div>
                 <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
-                <div style="display:flex;gap:5px;justify-content:flex-end;margin-top:4px">
+                <div style="display:flex;justify-content:flex-end;margin-top:3px">
                   <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}">Gửi reply ↩</button>
                 </div>
                </div>`
           }
         </div>`;
       }).join('');
- 
       /* Bind events */
       adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const mid  = btn.dataset.mid;
-          const ta   = document.getElementById('mprft-' + mid);
-          const text = (ta?.value||'').trim();
-          if(!text) return;
-          btn.disabled = true;
-          if(window.__ddFirebase){
-            const {db, ref, update} = window.__ddFirebase;
-            try {
-              await update(ref(db, 'private_messages/' + mid + '/adminReply'), {
-                text, ts: Date.now()
-              });
-              if(ta) ta.value = '';
-            } catch(e){ alert('Lỗi: ' + e.message); }
-          }
-          btn.disabled = false;
+          const mid=btn.dataset.mid, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
+          if(!text) return; btn.disabled=true;
+          if(window.__ddFirebase){ const {db,ref,update}=window.__ddFirebase; try{ await update(ref(db,'private_messages/'+mid+'/adminReply'),{text,ts:Date.now()}); if(ta) ta.value=''; }catch(e){alert('Lỗi: '+e.message);} }
+          btn.disabled=false;
         });
       });
       adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if(!confirm('Xóa tin nhắn này?')) return;
-          if(window.__ddFirebase){
-            const {db, ref, remove} = window.__ddFirebase;
-            await remove(ref(db, 'private_messages/' + btn.dataset.mid));
-          }
-        });
+        btn.addEventListener('click', async () => { if(!confirm('Xóa tin nhắn này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'private_messages/'+btn.dataset.mid));} });
       });
       adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if(!confirm('Xóa reply này?')) return;
-          if(window.__ddFirebase){
-            const {db, ref, remove} = window.__ddFirebase;
-            await remove(ref(db, 'private_messages/' + btn.dataset.mid + '/adminReply'));
-          }
-        });
+        btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'private_messages/'+btn.dataset.mid+'/adminReply'));} });
       });
     }
- 
-    /* ── View cho USER: chỉ hiện reply của admin cho tin nhắn của chính mình ── */
+
     if(userView && !isAdmin){
-      if(!data){ userView.innerHTML = ''; return; }
-      const myMessages = Object.entries(data)
-        .map(([id,v]) => ({id,...v}))
-        .filter(m => m.token === myToken && m.adminReply)
-        .sort((a,b) => (b.ts||0) - (a.ts||0));
- 
-      if(myMessages.length === 0){
-        userView.innerHTML = '';
-        return;
-      }
+      if(!data){ userView.innerHTML=''; return; }
+      const myMsgs = Object.entries(data).map(([id,v])=>({id,...v})).filter(m=>m.token===myToken&&m.adminReply).sort((a,b)=>(b.ts||0)-(a.ts||0));
+      if(myMsgs.length===0){ userView.innerHTML=''; return; }
       userView.innerHTML = `<div class="msg-admin-reply-section">
         <div class="msg-admin-reply-title">💬 Chủ nhà đã trả lời bạn:</div>
-        ${myMessages.map(m => `
-          <div class="msg-admin-reply-card">
-            <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
-            <div class="msg-admin-reply-body">
-              <span class="msg-admin-badge">dynamic duo 𓆝</span>
-              ${msgEsc(m.adminReply.text)}
-            </div>
-            <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
-          </div>
-        `).join('')}
+        ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
+          <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
+          <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
+          <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
+        </div>`).join('')}
       </div>`;
     }
   }
- 
-  /* ── Gửi private message (user) ── */
-  function bindPrivateSend(nameId, textId, sendId, doneId){
-    const nameEl = document.getElementById(nameId);
-    const textEl = document.getElementById(textId);
-    const sendEl = document.getElementById(sendId);
-    const doneEl = document.getElementById(doneId);
+
+  /* ── Gửi private (user) ── */
+  function bindPrivateSend(nameId,textId,sendId,doneId){
+    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
     if(!sendEl) return;
     function doSend(){
-      const text = (textEl?.value||'').trim();
-      if(!text) return;
-      sendEl.disabled = true;
-      function wfl(cb){ if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; } const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200); }
-      wfl(async ({db, ref, push}) => {
-        try {
-          await push(ref(db, 'private_messages'), {
-            name: (nameEl?.value||'').trim() || 'Ẩn danh',
-            text, ts: Date.now(), token: myToken, read: false
-          });
-          if(textEl) textEl.value = '';
-          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; },3500); }
-        } catch(e){ alert('Lỗi: '+e.message); }
-        sendEl.disabled = false;
-      });
+      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
+      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
+      wfl(async({db,ref,push})=>{ try{ await push(ref(db,'private_messages'),{name:(nameEl?.value||'').trim()||'Ẩn danh',text,ts:Date.now(),token:myToken,read:false}); if(textEl)textEl.value=''; if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3500);} }catch(e){alert('Lỗi: '+e.message);} sendEl.disabled=false; });
     }
-    sendEl.addEventListener('click', doSend);
-    textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
+    sendEl.addEventListener('click',doSend);
+    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
   }
-  bindPrivateSend('msgPrivateName', 'msgPrivateText', 'msgPrivateSend', 'msgPrivateDone');
- 
-  /* ══════════════════════════════════════
-     PUBLIC MESSAGES
-  ══════════════════════════════════════ */
+  bindPrivateSend('msgPrivateName','msgPrivateText','msgPrivateSend','msgPrivateDone');
+  bindPrivateSend('msgPopupPrivateName','msgPopupPrivateText','msgPopupPrivateSend','msgPopupPrivateDone');
+
+  /* ── Render public messages ── */
   function renderPublicMessages(data){
     lastPublicData = data;
-    const feed = document.getElementById('msgPublicFeed');
-    if(!feed) return;
-    const empty = '<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
-    if(!data){ feed.innerHTML = empty; return; }
- 
-    const items = Object.entries(data)
-      .map(([id,v]) => ({id,...v}))
-      .sort((a,b) => (a.ts||0) - (b.ts||0));
- 
-    feed.innerHTML = items.map(m => {
-      const isMine  = m.token === myToken;
-      const canDel  = isAdmin || isMine;
-      const isOwner = m.isAdmin === true;
-      return `<div class="msg-pub-item ${isOwner ? 'msg-pub-admin' : ''}">
-        <button class="msg-pub-del ${canDel?'show':''}" data-mid="${msgEsc(m.id)}">✕</button>
-        <span class="msg-pub-name ${isOwner ? 'msg-pub-admin-name' : ''}">${isOwner ? '🐋 '+msgEsc(m.name) : msgEsc(m.name)||'Khách vô danh'}</span>
-        ${isOwner ? '<span class="msg-pub-owner-badge">chủ nhà</span>' : ''}
-        <span class="msg-pub-time">${msgTime(m.ts)}</span>
-        <div class="msg-pub-text">${msgEsc(m.text)}</div>
-      </div>`;
-    }).join('');
- 
-    feed.scrollTop = feed.scrollHeight;
-    feed.querySelectorAll('.msg-pub-del.show').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if(!confirm('Xóa lời nhắn này?')) return;
-        if(window.__ddFirebase){
-          const {db, ref, remove} = window.__ddFirebase;
-          await remove(ref(db, 'public_messages/' + btn.dataset.mid));
-        }
-      });
-    });
-  }
- 
-  /* ── Gửi public message ── */
-  (function bindPublicSend(){
-    const nameEl = document.getElementById('msgPublicName');
-    const textEl = document.getElementById('msgPublicText');
-    const sendEl = document.getElementById('msgPublicSend');
-    const doneEl = document.getElementById('msgPublicDone');
-    if(!sendEl) return;
-    function doSend(){
-      const text = (textEl?.value||'').trim();
-      if(!text) return;
-      sendEl.disabled = true;
-      function wfl(cb){ if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; } const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200); }
-      wfl(async ({db, ref, push}) => {
-        try {
-          const name = isAdmin ? ADMIN_NAME : (nameEl?.value||'').trim() || 'Khách vô danh';
-          await push(ref(db, 'public_messages'), {
-            name, text, ts: Date.now(), token: myToken,
-            isAdmin: isAdmin ? true : false   /* đánh dấu tin của chủ nhà */
-          });
-          if(textEl) textEl.value = '';
-          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; },3000); }
-        } catch(e){ alert('Lỗi: '+e.message); }
-        sendEl.disabled = false;
+    function renderFeed(feedEl){
+      if(!feedEl) return;
+      const empty='<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
+      if(!data){ feedEl.innerHTML=empty; return; }
+      const items=Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+      feedEl.innerHTML=items.map(m=>{
+        const isMine=m.token===myToken, canDel=isAdmin||isMine, isOwner=m.isAdmin===true;
+        return `<div class="msg-pub-item ${isOwner?'msg-pub-admin':''}">
+          <button class="msg-pub-del ${canDel?'show':''}" data-mid="${msgEsc(m.id)}">✕</button>
+          <span class="msg-pub-name ${isOwner?'msg-pub-admin-name':''}">${isOwner?'🐋 '+msgEsc(m.name):msgEsc(m.name)||'Khách vô danh'}</span>
+          ${isOwner?'<span class="msg-pub-owner-badge">chủ nhà</span>':''}
+          <span class="msg-pub-time">${msgTime(m.ts)}</span>
+          <div class="msg-pub-text">${msgEsc(m.text)}</div>
+        </div>`;
+      }).join('');
+      feedEl.scrollTop=feedEl.scrollHeight;
+      feedEl.querySelectorAll('.msg-pub-del.show').forEach(btn=>{
+        btn.addEventListener('click',async()=>{ if(!confirm('Xóa lời nhắn này?'))return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'public_messages/'+btn.dataset.mid));} });
       });
     }
-    sendEl.addEventListener('click', doSend);
-    textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
-  })();
- 
-  /* ── Subscribe Firebase realtime ── */
-  function wfl(cb){
-    if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-    window.addEventListener('dd-firebase-ready', ()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
-    let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60)clearInterval(t); },200);
+    renderFeed(document.getElementById('msgPublicFeed'));
+    renderFeed(document.getElementById('msgPopupPublicFeed'));
   }
-  wfl(({db, ref, onValue}) => {
-    onValue(ref(db, 'public_messages'),  snap => { clearTimeout(pubDebounce);  pubDebounce  = setTimeout(()=>renderPublicMessages(snap.val()),  60); });
-    onValue(ref(db, 'private_messages'), snap => { clearTimeout(privDebounce); privDebounce = setTimeout(()=>renderPrivateMessages(snap.val()), 60); });
+
+  /* ── Gửi public ── */
+  function bindPublicSend(nameId,textId,sendId,doneId){
+    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
+    if(!sendEl) return;
+    function doSend(){
+      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
+      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
+      wfl(async({db,ref,push})=>{ try{ const name=isAdmin?ADMIN_NAME:(nameEl?.value||'').trim()||'Khách vô danh'; await push(ref(db,'public_messages'),{name,text,ts:Date.now(),token:myToken,isAdmin:isAdmin?true:false}); if(textEl)textEl.value=''; if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3000);} }catch(e){alert('Lỗi: '+e.message);} sendEl.disabled=false; });
+    }
+    sendEl.addEventListener('click',doSend);
+    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
+  }
+  bindPublicSend('msgPublicName','msgPublicText','msgPublicSend','msgPublicDone');
+  bindPublicSend('msgPopupPublicName','msgPopupPublicText','msgPopupPublicSend','msgPopupPublicDone');
+
+  /* ── Firebase subscribe ── */
+  function wfl(cb){
+    if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}
+    window.addEventListener('dd-firebase-ready',()=>{if(window.__ddFirebase?.db)cb(window.__ddFirebase);},{once:true});
+    let n=0; const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}if(++n>60)clearInterval(t);},200);
+  }
+  wfl(({db,ref,onValue})=>{
+    onValue(ref(db,'public_messages'),  snap=>{clearTimeout(pubDebounce);  pubDebounce =setTimeout(()=>renderPublicMessages(snap.val()),60);});
+    onValue(ref(db,'private_messages'), snap=>{clearTimeout(privDebounce); privDebounce=setTimeout(()=>renderPrivateMessages(snap.val()),60);});
   });
- 
 })();
 </script>
-<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
-  <span class="bubble-icon">✉</span>
-  <span class="bubble-ripple"></span>
-  <span class="msg-bubble-badge" id="msgBubbleBadge"></span>
-</button>
-
-<!-- Popup từ bubble -->
-<div class="msg-popup" id="msgPopup">
-  <div class="msg-popup-header">
-    <span class="msg-popup-title">✉ Lời nhắn</span>
-    <button class="msg-popup-close" id="msgPopupClose">✕</button>
-  </div>
- 
-  <div class="msg-widget-tabs" style="margin-bottom:10px">
-    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư</button>
-    <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
-  </div>
- 
-  <div class="msg-panel active" id="msgPopupPanelPrivate">
-    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
-    <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn..." rows="3"></textarea>
-    <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
-    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi! 🌊</div>
-  </div>
- 
-  <div class="msg-panel" id="msgPopupPanelPublic">
-    <div class="msg-public-feed" id="msgPopupPublicFeed">
-      <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
-    </div>
-    <input  class="msg-inp"      id="msgPopupPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Nhắn gì đó..." rows="2"></textarea>
-    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi 🌊</button>
-    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi! 🌊</div>
-  </div>
-</div>
 </Layout>

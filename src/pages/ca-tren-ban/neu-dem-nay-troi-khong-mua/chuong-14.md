@@ -1,5 +1,4 @@
 ---
-layout: ../../../layouts/Layout.astro
 title: "Chương 14"
 truyen_id: "ndntkm"
 chuong: 14
@@ -11,7 +10,7 @@ tags:
   - "HE"
 ---
 
-**Chương 14**
+## **Chương 14**
 
 Một chậu nước lẫn với lá rau vụn bắn tung tóe bên chân Lâm Hướng Bắc. Cậu nhanh mắt nhanh chân lùi lại, mới may mắn tránh được cảnh sáng sớm mùa thu bị tạt ướt sũng trên đường đến trường.
 

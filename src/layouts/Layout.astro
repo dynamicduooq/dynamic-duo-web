@@ -1011,7 +1011,9 @@ if (currentTruyenId && isNovelPage) {
       </div>
     </div>
   </div>
-  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
+  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026
+  {isNovelPage && <span id="footerAdminHint" style="opacity:.3;font-size:.6rem;margin-left:8px;cursor:pointer" onclick="document.getElementById('adminFloatingBtn')?.click()">·</span>}
+</div>
 </footer>
 
 <div class="scroll-btns" id="scrollBtns">
@@ -1115,7 +1117,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   let isAdmin = !!window.__ddIsAdmin;
 
   function syncBtn(){
-    btn.classList.toggle('visible', true); // luôn hiện ở trang novel
+    btn.classList.toggle('visible', isAdmin); // chỉ hiện khi đăng nhập
     btn.textContent = isAdmin ? '🔓' : '🔑';
     btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
   }

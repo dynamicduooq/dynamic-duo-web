@@ -54,7 +54,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 .hero-banner-bg {
   position:absolute; inset:0;
   width:100%; height:100%; object-fit:cover;
-  filter:brightness(.55) blur(1px);
   z-index:0;
 }
 .hero-banner-overlay {
@@ -162,7 +161,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 /* ─── SIDEBAR ─── */
 .sidebar-col { display:flex; flex-direction:column; gap:16px; }
 .sidebar-col > .widget { position:sticky; top:72px; }
-.sidebar-col > .widget + .widget { position:static; }
+.sidebar-col > .widget + .widget { position:sticky; }
 .widget { background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7); border-radius:18px; padding:16px 14px; }
 [data-theme="dark"] .widget { background:rgba(15,42,64,.8); border-color:rgba(30,74,110,.7); }
 .widget-title { font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px; }

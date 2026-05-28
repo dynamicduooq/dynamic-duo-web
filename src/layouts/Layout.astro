@@ -103,11 +103,16 @@ if (currentTruyenId && isNovelPage) {
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
       --t:all .2s ease;
     }
+    /* ── FIX 3: Dark theme - tất cả bg block dùng màu tối thực sự ── */
     [data-theme="dark"] {
       --sky:#60b8e8; --sky2:#89d0f5; --sky-dark:#c8e8f8;
       --sky-light:#1e5a7a; --sky-pale:#0c1e30;
       --cream:#091726;
       --text-main:#daeeff; --text-mid:#a0c8e0; --text-dim:#6a9ab5;
+      /* Override white backgrounds globally */
+      --bg-card:#0e2236;
+      --bg-card2:#0c1e30;
+      --border-card:rgba(96,184,232,.18);
     }
     [data-theme="dark"] body          { background:#091726; color:#daeeff; }
     [data-theme="dark"] nav           { background:rgba(9,23,38,.98); border-color:rgba(96,184,232,.18); }
@@ -123,13 +128,19 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .nav-logo     { color:#89d0f5; }
     [data-theme="dark"] .nav-btn      { color:#a0c8e0; }
     [data-theme="dark"] .dd-section-title { color:#4a7a96; }
+
+    /* Novel content & page wrappers */
     [data-theme="dark"] .novel-content,
-    [data-theme="dark"] .page-content-wrap { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.16); color:#daeeff; }
+    [data-theme="dark"] .page-content-wrap {
+      background:#0e2236 !important;
+      border-color:rgba(96,184,232,.16);
+      color:#daeeff;
+    }
     [data-theme="dark"] .novel-content p { color:#cce4f8; }
     [data-theme="dark"] h1,[data-theme="dark"] h2,
     [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#89d0f5; }
     [data-theme="dark"] blockquote    { background:rgba(14,36,58,.9); color:#a0c8e0; border-left-color:#1e5a7a; }
-    [data-theme="dark"] .chap-pn      { border-color:#1e5a7a; color:#a0c8e0; }
+    [data-theme="dark"] .chap-pn      { border-color:#1e5a7a; color:#a0c8e0; background:#0c1e30; }
     [data-theme="dark"] .chap-pn:hover { background:rgba(96,184,232,.1); color:#daeeff; border-color:#60b8e8; }
     [data-theme="dark"] .chap-dd-btn  { background:#0c1e30; border-color:#1e5a7a; color:#a0c8e0; }
     [data-theme="dark"] .chap-dd-list { background:#0e2236; border-color:#1e5a7a; }
@@ -149,6 +160,15 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .scroll-btn:hover { background:#215f84; }
     .contact-email { color:#475569; }
     [data-theme="dark"] .contact-email { color:#a0c8e0; }
+
+    /* ── FIX 3: Comment section dark backgrounds ── */
+    [data-theme="dark"] .comment-form { background:#0e2236 !important; border-color:rgba(96,184,232,.18) !important; }
+    [data-theme="dark"] .comment-card { background:#0e2236 !important; border-color:rgba(96,184,232,.16) !important; }
+    [data-theme="dark"] .reply-item   { background:rgba(21,50,80,.6) !important; }
+    [data-theme="dark"] .admin-bar    { background:rgba(21,101,160,.12); border-color:rgba(96,184,232,.2); color:#6a9ab5; }
+    [data-theme="dark"] .ic-sidebar   { background:#0e2236 !important; border-color:rgba(96,184,232,.16); }
+    [data-theme="dark"] .ic-item      { background:rgba(21,50,80,.5) !important; border-color:rgba(96,184,232,.15); }
+    [data-theme="dark"] .ic-reply-item { background:rgba(21,50,80,.6) !important; }
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
@@ -213,7 +233,6 @@ if (currentTruyenId && isNovelPage) {
     }
     .chap-pn:hover { background: var(--sky-pale); border-color: var(--sky); }
     .chap-pn.disabled { opacity: .4; pointer-events: none; }
-    [data-theme="dark"] .chap-pn { background: rgba(12,30,48,.9); }
 
     /* ── CHAPTER DROPDOWN ── */
     .chap-dd-wrap { position: relative; }
@@ -225,16 +244,13 @@ if (currentTruyenId && isNovelPage) {
       background: rgba(255,255,255,.9); transition: var(--t); white-space: nowrap;
     }
     .chap-dd-btn:hover { background: var(--sky-pale); border-color: var(--sky); }
-    [data-theme="dark"] .chap-dd-btn { background: rgba(12,30,48,.9); }
 
-    /* ── FIX: Dropdown list overflow ── */
     .chap-dd-list {
       position: absolute;
       top: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
       z-index: 700;
-      /* Fixed width, scroll inside */
       width: 220px;
       max-height: 280px;
       overflow-y: auto;
@@ -251,7 +267,6 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list::-webkit-scrollbar { width: 3px; }
     .chap-dd-list::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
     .chap-dd-list.open { display: block; }
-    /* Up variant (for bottom nav) */
     .chap-dd-list.up {
       top: auto;
       bottom: calc(100% + 6px);
@@ -297,8 +312,8 @@ if (currentTruyenId && isNovelPage) {
       border-radius: var(--r-lg);
       box-shadow: var(--sh-soft);
       border: 1px solid rgba(186,230,253,.5);
-      transition: margin-right .3s ease;
       position: relative;
+      /* FIX 1: Không push content, sidebar sẽ overlay */
     }
     @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
     .novel-content p {
@@ -317,8 +332,7 @@ if (currentTruyenId && isNovelPage) {
     hr { border: none; text-align: center; margin: 40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* ── INLINE COMMENT SIDEBAR ── */
-    /* Sidebar fixed on right, slides in */
+    /* ── FIX 1: INLINE COMMENT SIDEBAR — full overlay, không push content ── */
     .ic-sidebar {
       position: fixed;
       top: 56px;
@@ -330,32 +344,37 @@ if (currentTruyenId && isNovelPage) {
       background: #fff;
       border-left: 1px solid rgba(186,230,253,.5);
       border-radius: var(--r-lg) 0 0 var(--r-lg);
-      box-shadow: -4px 0 24px rgba(2,132,199,.10);
+      box-shadow: -8px 0 40px rgba(2,132,199,.18);
       opacity: 0;
       pointer-events: none;
       transform: translateX(100%);
       transition: opacity .25s ease, transform .25s ease;
-      z-index: 450;
+      z-index: 460; /* trên overlay, dưới nav */
       overflow: hidden;
     }
     [data-theme="dark"] .ic-sidebar {
-      background: rgba(12,24,40,.99);
+      background: #0e2236;
       border-color: rgba(96,184,232,.16);
     }
+    /* FIX 1: Chỉ toggle open/close, KHÔNG push content */
     .novel-layout-wrap.sidebar-open .ic-sidebar {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(0);
     }
-    /* Push content left when sidebar is open on wide screens */
-    @media(min-width:1100px){
-      .novel-layout-wrap.sidebar-open .novel-content { margin-right: 316px; }
+    /* FIX 1: Overlay backdrop che toàn bộ trang khi sidebar mở */
+    .ic-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 450;
+      backdrop-filter: blur(1px);
     }
+    .ic-overlay.show { display: block; }
+
     @media(max-width:600px){
       .ic-sidebar { width: min(300px, 88vw); }
-    }
-    @media(min-width:601px){
-      .ic-overlay { display: none !important; }
     }
 
     /* Sidebar inner structure */
@@ -511,7 +530,6 @@ if (currentTruyenId && isNovelPage) {
       padding: 9px 10px;
       font-size: .74rem;
     }
-    [data-theme="dark"] .ic-item { background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.15); }
     .ic-item-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
     .ic-item-name { font-weight: 700; color: var(--sky-dark); font-size: .72rem; }
     [data-theme="dark"] .ic-item-name { color: #89d0f5; }
@@ -652,16 +670,6 @@ if (currentTruyenId && isNovelPage) {
     .ic-trigger.has-comments { opacity: .8; }
     .novel-content p.ic-active .ic-trigger { opacity: 1; }
 
-    /* Overlay for mobile */
-    .ic-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.35);
-      z-index: 440;
-    }
-    .ic-overlay.show { display: block; }
-
     /* ══════════════════════════════════
        CHAPTER-END COMMENT
     ══════════════════════════════════ */
@@ -671,15 +679,10 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .chap-comment-title { color:#89d0f5; }
     [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e5a7a,transparent); }
 
-    .admin-bar { display:flex; align-items:center; justify-content:space-between; background:rgba(14,165,233,.05); border:1px solid rgba(186,230,253,.5); border-radius:10px; padding:7px 14px; margin-bottom:14px; font-size:.72rem; color:var(--text-dim); gap:10px; }
-    [data-theme="dark"] .admin-bar { background:rgba(21,101,160,.12); border-color:rgba(96,184,232,.2); color:#6a9ab5; }
-    .admin-login-btn { padding:4px 12px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); flex-shrink:0; }
-    .admin-login-btn:hover { background:var(--sky2); }
-    .admin-logout-btn { padding:3px 10px; background:none; color:var(--text-dim); border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.68rem; cursor:pointer; transition:var(--t); flex-shrink:0; }
-    .admin-logout-btn:hover { border-color:#ef4444; color:#ef4444; }
+    /* FIX 6: Admin bar moved — ẩn admin-bar cũ ở comment section */
+    .admin-bar { display:none; }
 
     .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:18px; margin-bottom:20px; }
-    [data-theme="dark"] .comment-form { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.18); }
     .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
     .comment-inp { flex:1; padding:8px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.82rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
     .comment-inp:focus { border-color:var(--sky); }
@@ -696,7 +699,6 @@ if (currentTruyenId && isNovelPage) {
     .comment-list { display:flex; flex-direction:column; gap:12px; }
     .comment-card { background:#fff; border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
     .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
-    [data-theme="dark"] .comment-card { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.16); }
     .comment-card-header { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
     .comment-card-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--sky-pale),var(--sky-light)); display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--sky-dark); flex-shrink:0; border:1.5px solid var(--sky-light); }
     [data-theme="dark"] .comment-card-avatar { background:rgba(21,101,160,.3); border-color:rgba(96,184,232,.3); color:#89d0f5; }
@@ -725,7 +727,6 @@ if (currentTruyenId && isNovelPage) {
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-top-color:rgba(96,184,232,.15); }
     .reply-item { display:flex; gap:8px; align-items:flex-start; background:var(--sky-pale); border-radius:10px; padding:9px 11px; position:relative; }
-    [data-theme="dark"] .reply-item { background:rgba(21,50,80,.4); }
     .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
     [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#89d0f5; border-color:rgba(96,184,232,.3); }
     .reply-body { flex:1; min-width:0; }
@@ -785,7 +786,7 @@ if (currentTruyenId && isNovelPage) {
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
     /* ── SCROLL BUTTONS ── */
-    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; transition: right .3s ease; }
+    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
     .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
@@ -797,6 +798,25 @@ if (currentTruyenId && isNovelPage) {
     .tag-badge:hover { background:var(--sky-light); }
     [data-theme="dark"] .tag-badge { color:#89d0f5; border-color:#1e5a7a; background:rgba(21,101,160,.2); }
     [data-theme="dark"] .tag-badge:hover { background:rgba(96,184,232,.1); }
+
+    /* FIX 6: Admin floating button */
+    #adminFloatingBtn {
+      position: fixed;
+      bottom: 172px;
+      right: 22px;
+      z-index: 410;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1565a0, #0e3d6e);
+      border: none; cursor: pointer; color: #fff; font-size: .88rem;
+      box-shadow: 0 4px 14px rgba(2,132,199,.4);
+      display: none;
+      align-items: center; justify-content: center;
+      transition: transform .2s, box-shadow .2s;
+      title: 'Admin';
+    }
+    #adminFloatingBtn:hover { transform: scale(1.1); box-shadow: 0 7px 20px rgba(2,132,199,.55); }
+    #adminFloatingBtn.visible { display: flex; }
   </style>
 </head>
 <body>
@@ -833,6 +853,7 @@ if (currentTruyenId && isNovelPage) {
     </div>
     <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
+    <!-- FIX 5: Chỉ 1 button theme duy nhất ở đây -->
   </div>
   <button class="nav-hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -950,8 +971,9 @@ if (currentTruyenId && isNovelPage) {
   {isNovelPage && (
     <div class="chap-comment-section" id="chapCommentSection">
       <div class="chap-comment-title">💬 Bình luận chương</div>
-      <div class="admin-bar" id="adminBar">
-        <span id="adminStatus">🔒 Quản trị: chưa đăng nhập</span>
+      <!-- FIX 6: Admin bar đã ẩn, login/logout qua floating button -->
+      <div class="admin-bar" id="adminBar" style="display:none">
+        <span id="adminStatus"></span>
         <button class="admin-login-btn" id="adminLoginBtn">Đăng nhập Google</button>
       </div>
       <div class="comment-form">
@@ -996,6 +1018,11 @@ if (currentTruyenId && isNovelPage) {
   <button class="scroll-btn" id="scrollTop" title="Lên đầu">↑</button>
   <button class="scroll-btn" id="scrollBot" title="Xuống cuối">↓</button>
 </div>
+
+<!-- FIX 6: Admin floating button (chỉ hiện khi là trang novel) -->
+{isNovelPage && (
+  <button id="adminFloatingBtn" title="Quản trị viên" aria-label="Admin login">🔑</button>
+)}
 
 <script is:inline>
 /* ══ HELPERS ══ */
@@ -1063,22 +1090,51 @@ function setupDD(btnId,listId){
 setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
 document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
 
-/* ══ DARK MODE ══ */
+/* ══ FIX 5: DARK MODE — chỉ 1 button theme duy nhất ══ */
 function applyTheme(dark){ document.documentElement.setAttribute('data-theme',dark?'dark':''); localStorage.setItem('dd-theme',dark?'dark':'light'); }
 window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
 
-/* ══ INJECT THEME BUTTON INTO NAV ══ */
 (function injectThemeBtn(){
   const navLinks = document.querySelector('.nav-links');
   if(!navLinks) return;
   const btn = document.createElement('button');
-  btn.style.cssText = 'font-size:.72rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(186,230,253,.6);background:none;color:var(--text-mid);cursor:pointer;transition:all .2s ease;font-family:Newsreader,serif;display:inline-flex;align-items:center;gap:4px;';
+  btn.style.cssText = 'font-size:.8rem;width:32px;height:32px;border-radius:50%;border:1px solid rgba(186,230,253,.6);background:none;color:var(--text-mid);cursor:pointer;transition:all .2s ease;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;';
   btn.id = 'navThemeBtn';
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
   const sync = () => { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối'; };
   sync();
   btn.addEventListener('click', () => { window.__ddToggleTheme(); sync(); });
   navLinks.appendChild(btn);
+})();
+
+/* ══ FIX 6: ADMIN FLOATING BUTTON ══ */
+(function setupAdminBtn(){
+  const btn = document.getElementById('adminFloatingBtn');
+  if(!btn) return;
+
+  let isAdmin = !!window.__ddIsAdmin;
+
+  function syncBtn(){
+    btn.classList.toggle('visible', true); // luôn hiện ở trang novel
+    btn.textContent = isAdmin ? '🔓' : '🔑';
+    btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
+  }
+  syncBtn();
+
+  window.addEventListener('dd-auth-change', e => {
+    isAdmin = e.detail.isAdmin;
+    syncBtn();
+  });
+
+  btn.addEventListener('click', () => {
+    const fb = window.__ddFirebase; if(!fb) return;
+    if(isAdmin){
+      if(confirm('Đăng xuất tài khoản admin?')) fb.signOut(fb.auth);
+    } else {
+      const p = new fb.GoogleAuthProvider();
+      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message));
+    }
+  });
 })();
 
 /* ══════════════════════════════════════════
@@ -1135,7 +1191,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
     if(paras[idx]) paras[idx].classList.add('ic-active');
     novelWrap.classList.add('sidebar-open');
-    document.body.classList.add('novel-sidebar-open');
+    /* FIX 1: Overlay hiện, không push content */
     if(overlay) overlay.classList.add('show');
     loadInlineComments(idx);
     setTimeout(() => formText?.focus(), 200);
@@ -1143,7 +1199,6 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
 
   function closeSidebar(){
     novelWrap.classList.remove('sidebar-open');
-    document.body.classList.remove('novel-sidebar-open');
     if(overlay) overlay.classList.remove('show');
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
     if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
@@ -1353,11 +1408,9 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   const cmtName       = document.getElementById('cmtName');
   const cmtText       = document.getElementById('cmtText');
   const cmtSubmit     = document.getElementById('cmtSubmit');
-  const adminStatus   = document.getElementById('adminStatus');
-  const adminLoginBtn = document.getElementById('adminLoginBtn');
+
   if(!cmtList) return;
 
-  const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
   const myToken     = getMyToken();
   const key         = 'chap_' + pageKey();
   let isAdmin       = false;
@@ -1373,16 +1426,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
 
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
-    if(adminStatus)   adminStatus.textContent   = isAdmin ? '✅ Admin: '+ADMIN_EMAIL : '🔒 Quản trị: chưa đăng nhập';
-    if(adminLoginBtn){ adminLoginBtn.textContent = isAdmin ? 'Đăng xuất' : 'Đăng nhập Google';
-                       adminLoginBtn.className   = isAdmin ? 'admin-logout-btn' : 'admin-login-btn'; }
     if(lastData !== null) rebuildComments(lastData);
-  });
-
-  adminLoginBtn?.addEventListener('click', () => {
-    const fb = window.__ddFirebase; if(!fb) return;
-    if(isAdmin){ fb.signOut(fb.auth); }
-    else { const p = new fb.GoogleAuthProvider(); fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message)); }
   });
 
   function rebuildComments(data){

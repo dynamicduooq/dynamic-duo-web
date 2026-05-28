@@ -493,7 +493,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 @media(max-width:900px){
   body.novel-sidebar-open .msg-bubble-btn { display: none; }
 }
-</style>
 @media(max-width:768px){
   .home-shell{ grid-template-columns:1fr; padding:14px 12px 60px; }
   .sidebar-col{ display:flex !important; flex-direction:column; align-items:center; }
@@ -917,7 +916,6 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     syncBtn();
   });
 })();
-<script is:inline>
 (function setupMessageWidget(){
   /* ── Helpers ── */
   function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1131,7 +1129,6 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   });
  
 })();
-</script>
 </script>
 <button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà">
   ✉

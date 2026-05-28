@@ -46,7 +46,6 @@ if (currentTruyenId && isNovelPage) {
   </script>
 
   <style is:global>
-    /* ─── BIẾN MÀU ─── */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -56,57 +55,26 @@ if (currentTruyenId && isNovelPage) {
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px; --t:all .2s ease;
     }
 
-    /* ─── DARK MODE: cân bằng, dễ đọc, không chói ─── */
     [data-theme="dark"] {
-      --sky:#60b8e8;
-      --sky2:#89d0f5;
-      --sky-dark:#c8e8f8;
-      --sky-light:#1d4a68;
-      --sky-pale:#0f2438;
-      --cream:#0d1b2a;
-      --bg2:#111f30;
-      --text-main:#d8edf8;
-      --text-mid:#8fb3cc;
-      --text-dim:#4e7a96;
+      --sky:#60b8e8; --sky2:#89d0f5; --sky-dark:#c8e8f8;
+      --sky-light:#1d4a68; --sky-pale:#0f2438;
+      --cream:#0d1b2a; --bg2:#111f30;
+      --text-main:#d8edf8; --text-mid:#8fb3cc; --text-dim:#4e7a96;
     }
     [data-theme="dark"] body { background:#0d1b2a; color:#d8edf8; }
-    [data-theme="dark"] nav {
-      background:rgba(13,27,42,.97);
-      border-color:rgba(29,74,104,.7);
-    }
-    [data-theme="dark"] .mobile-menu {
-      background:rgba(13,27,42,.99);
-      border-color:rgba(29,74,104,.6);
-    }
-    [data-theme="dark"] .dropdown-content {
-      background:#111f30;
-      border-color:rgba(29,74,104,.8);
-    }
+    [data-theme="dark"] nav { background:rgba(13,27,42,.97); border-color:rgba(29,74,104,.7); }
+    [data-theme="dark"] .mobile-menu { background:rgba(13,27,42,.99); border-color:rgba(29,74,104,.6); }
+    [data-theme="dark"] .dropdown-content { background:#111f30; border-color:rgba(29,74,104,.8); }
     [data-theme="dark"] .dd-item { color:#8fb3cc; }
     [data-theme="dark"] .dd-item:hover { background:rgba(29,74,104,.45); color:#c8e8f8; }
-    [data-theme="dark"] .nav-item > a { color:#8fb3cc; }
-    [data-theme="dark"] .nav-item > a:hover,
-    [data-theme="dark"] .nav-btn:hover,
-    [data-theme="dark"] .nav-item:hover > a,
-    [data-theme="dark"] .nav-item:hover > .nav-btn { color:#60b8e8; background:rgba(29,74,104,.35); }
+    [data-theme="dark"] .nav-item > a,[data-theme="dark"] .nav-btn { color:#8fb3cc; }
+    [data-theme="dark"] .nav-item > a:hover,[data-theme="dark"] .nav-btn:hover,
+    [data-theme="dark"] .nav-item:hover > a,[data-theme="dark"] .nav-item:hover > .nav-btn { color:#60b8e8; background:rgba(29,74,104,.35); }
     [data-theme="dark"] .nav-logo { color:#60b8e8; }
-    [data-theme="dark"] .nav-btn { color:#8fb3cc; }
-
-    [data-theme="dark"] .novel-content,
-    [data-theme="dark"] .page-content-wrap {
-      background:rgba(17,31,48,.98);
-      border-color:rgba(29,74,104,.5);
-      color:#d8edf8;
-    }
+    [data-theme="dark"] .novel-content,[data-theme="dark"] .page-content-wrap { background:rgba(17,31,48,.98); border-color:rgba(29,74,104,.5); color:#d8edf8; }
     [data-theme="dark"] .novel-content p { color:#cce3f4; }
-    [data-theme="dark"] h1,[data-theme="dark"] h2,
-    [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#60b8e8; }
-
-    [data-theme="dark"] blockquote {
-      background:rgba(15,36,56,.9);
-      color:#8fb3cc;
-      border-left-color:#1d4a68;
-    }
+    [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4 { color:#60b8e8; }
+    [data-theme="dark"] blockquote { background:rgba(15,36,56,.9); color:#8fb3cc; border-left-color:#1d4a68; }
     [data-theme="dark"] .chap-pn { border-color:#1d4a68; color:#8fb3cc; }
     [data-theme="dark"] .chap-pn:hover { background:rgba(29,74,104,.4); color:#c8e8f8; border-color:#60b8e8; }
     [data-theme="dark"] .chap-dd-btn { background:#0f2438; border-color:#1d4a68; color:#8fb3cc; }
@@ -115,18 +83,12 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .chap-dd-list a { color:#8fb3cc; border-color:rgba(29,74,104,.3); }
     [data-theme="dark"] .chap-dd-list a:hover { background:rgba(29,74,104,.45); color:#c8e8f8; }
     [data-theme="dark"] .chap-dd-list a.cur-chap { background:rgba(29,74,104,.4); color:#60b8e8; }
-
-    [data-theme="dark"] .ic-bubble {
-      background:#111f30;
-      border-color:rgba(29,74,104,.9);
-      color:#d8edf8;
-    }
+    [data-theme="dark"] .ic-bubble { background:#111f30; border-color:rgba(29,74,104,.9); color:#d8edf8; }
     [data-theme="dark"] .ic-bubble-header { color:#4e7a96; }
     [data-theme="dark"] .ic-bubble-header strong { color:#60b8e8; }
     [data-theme="dark"] .ic-comment-item { background:rgba(29,74,104,.3); color:#cce3f4; }
     [data-theme="dark"] .ic-comment-name { color:#60b8e8; }
     [data-theme="dark"] .ic-input { background:#0f2438; border-color:#1d4a68; color:#d8edf8; }
-
     [data-theme="dark"] footer { background:#111f30; border-color:rgba(29,74,104,.4); color:#8fb3cc; }
     [data-theme="dark"] .ft-logo { color:#60b8e8; }
     [data-theme="dark"] .ft-links a { color:#8fb3cc; }
@@ -134,60 +96,27 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .ft-bottom { color:#4e7a96; }
     [data-theme="dark"] .tag-badge { color:#60b8e8; border-color:#1d4a68; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(29,74,104,.35); }
-
     [data-theme="dark"] .scroll-btn { background:#1a4d6e; }
     [data-theme="dark"] .scroll-btn:hover { background:#245f87; }
 
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      background:var(--cream); color:var(--text-main);
-      font-family:'Newsreader',serif; font-size:18px; line-height:1.9;
-      margin:0; padding:0; overflow-x:hidden;
-    }
+    *, *::before, *::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--cream); color:var(--text-main); font-family:'Newsreader',serif; font-size:18px; line-height:1.9; margin:0; padding:0; overflow-x:hidden; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     a { color:inherit; text-decoration:none; }
     ::-webkit-scrollbar { width:5px; }
     ::-webkit-scrollbar-track { background:var(--sky-pale); }
     ::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 
-    /* ─── PROGRESS BAR ─── */
-    #read-progress {
-      position:fixed; top:0; left:0; height:3px; z-index:9999;
-      background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2));
-      width:0%; transition:width .1s linear; pointer-events:none;
-    }
+    #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    /* ─── NAVBAR ─── */
-    nav {
-      position:fixed; top:0; left:0; right:0; z-index:500;
-      display:flex; align-items:center; justify-content:space-between;
-      height:56px; padding:0 28px;
-      background:rgba(255,255,255,.97); backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(186,230,253,.5);
-      box-shadow:0 2px 12px rgba(2,132,199,.08);
-    }
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
     .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; }
     .nav-links { display:flex; align-items:center; gap:2px; }
     .nav-item { position:relative; }
-    .nav-item > a, .nav-btn {
-      font-family:'Newsreader',serif; font-size:.76rem; font-weight:400;
-      color:var(--text-mid); letter-spacing:1px; text-transform:uppercase;
-      padding:6px 12px; border-radius:var(--r-pill);
-      display:inline-flex; align-items:center; gap:5px;
-      transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap;
-    }
-    .nav-item > a:hover, .nav-btn:hover,
-    .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
-    .dropdown-content {
-      position:absolute; top:calc(100% + 8px); left:50%;
-      transform:translateX(-50%) translateY(8px);
-      min-width:240px; background:#fff;
-      border:1px solid rgba(186,230,253,.7); border-radius:var(--r-md);
-      box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px;
-      opacity:0; visibility:hidden; pointer-events:none;
-      transition:opacity .22s ease, transform .22s ease; z-index:600;
-    }
+    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; font-weight:400; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
+    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
+    .dropdown-content { position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:#fff; border:1px solid rgba(186,230,253,.7); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .22s ease, transform .22s ease; z-index:600; }
     .nav-item:hover .dropdown-content { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
     .dd-section-title { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:6px 12px 3px; }
     .dd-item { display:flex; align-items:center; gap:7px; padding:7px 12px; font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); }
@@ -195,177 +124,96 @@ if (currentTruyenId && isNovelPage) {
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
     .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
     .nav-hamburger span { display:block; width:22px; height:2px; background:var(--sky-dark); border-radius:2px; transition:var(--t); }
-    .mobile-menu {
-      display:none; position:fixed; top:56px; left:0; right:0;
-      background:rgba(255,255,255,.99); backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(186,230,253,.5);
-      padding:10px 16px 18px; z-index:490;
-      flex-direction:column; gap:2px; max-height:calc(100vh - 56px); overflow-y:auto;
-    }
+    .mobile-menu { display:none; position:fixed; top:56px; left:0; right:0; background:rgba(255,255,255,.99); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); padding:10px 16px 18px; z-index:490; flex-direction:column; gap:2px; max-height:calc(100vh - 56px); overflow-y:auto; }
     .mobile-menu.open { display:flex; }
     .mobile-menu a { padding:9px 12px; font-size:.88rem; color:var(--text-mid); border-radius:var(--r-sm); display:block; transition:var(--t); }
     .mobile-menu a:hover { background:var(--sky-pale); color:var(--sky); }
     .mobile-section-title { font-size:.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:10px 12px 3px; }
     @media(max-width:700px) { .nav-links{display:none;} .nav-hamburger{display:flex;} }
 
-    /* ─── LAYOUT ─── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
 
-    .page-content-wrap {
-      max-width:820px;
-      margin:32px auto 60px;
-      padding:40px 50px;
-      background:rgba(255,255,255,.98);
-      border-radius:var(--r-lg);
-      box-shadow:var(--sh-soft);
-      border:1px solid rgba(186,230,253,.5);
-    }
+    .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
     @media(max-width:640px) { .page-content-wrap { padding:24px 18px; margin:16px 12px 40px; } }
 
-    /* ─── NOVEL CONTENT ─── */
-    .novel-content {
-      max-width:760px;
-      margin:32px auto 60px;
-      padding:40px 50px;
-      background:rgba(255,255,255,.98);
-      border-radius:var(--r-lg);
-      box-shadow:var(--sh-soft);
-      border:1px solid rgba(186,230,253,.5);
-    }
+    .novel-content { max-width:760px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
     @media(max-width:640px) { .novel-content { padding:24px 18px; margin:16px 12px 40px; } }
-    .novel-content p {
-      text-align:justify; text-justify:inter-word;
-      position:relative; margin-bottom:1.1em;
-    }
-    blockquote {
-      font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75;
-      border-left:3px solid var(--sky-light); padding:15px 20px;
-      margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0;
-    }
+    .novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; }
+    blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* ─── TAGS ─── */
-    .tag-badge {
-      display:inline-block; padding:4px 12px;
-      border:1.5px solid var(--sky); border-radius:var(--r-pill);
-      font-size:.8rem; margin:3px; color:var(--sky); transition:var(--t);
-    }
+    .tag-badge { display:inline-block; padding:4px 12px; border:1.5px solid var(--sky); border-radius:var(--r-pill); font-size:.8rem; margin:3px; color:var(--sky); transition:var(--t); }
     .tag-badge:hover { background:var(--sky-pale); }
 
-    /* ─── CHAPTER NAV ─── */
-    .chap-nav-row {
-      display:flex; align-items:center; justify-content:center;
-      gap:10px; margin:22px 0; flex-wrap:wrap;
-      max-width:820px; margin-left:auto; margin-right:auto;
-      padding:0 12px;
-    }
-    .chap-pn {
-      display:inline-flex; align-items:center; gap:6px;
-      padding:8px 18px; border:1.5px solid var(--sky-light);
-      border-radius:var(--r-pill); color:var(--sky-dark);
-      font-size:.82rem; font-family:'Newsreader',serif;
-      transition:var(--t); white-space:nowrap; flex-shrink:0;
-    }
+    .chap-nav-row { display:flex; align-items:center; justify-content:center; gap:10px; margin:22px 0; flex-wrap:wrap; max-width:820px; margin-left:auto; margin-right:auto; padding:0 12px; }
+    .chap-pn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky-dark); font-size:.82rem; font-family:'Newsreader',serif; transition:var(--t); white-space:nowrap; flex-shrink:0; }
     .chap-pn:hover { background:var(--sky-pale); color:var(--sky); border-color:var(--sky); }
     .chap-pn.disabled { opacity:.35; pointer-events:none; }
     .chap-dd-wrap { position:relative; }
-    .chap-dd-btn {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 20px;
-      background:var(--sky-pale); border:1.5px solid var(--sky-light);
-      border-radius:var(--r-pill); color:var(--sky-dark);
-      font-size:.83rem; font-family:'Newsreader',serif; font-weight:600;
-      cursor:pointer; transition:var(--t); white-space:nowrap; user-select:none;
-    }
+    .chap-dd-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 20px; background:var(--sky-pale); border:1.5px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky-dark); font-size:.83rem; font-family:'Newsreader',serif; font-weight:600; cursor:pointer; transition:var(--t); white-space:nowrap; user-select:none; }
     .chap-dd-btn:hover { background:var(--sky-light); }
-    .chap-dd-list {
-      position:absolute; top:calc(100% + 6px); left:50%;
-      transform:translateX(-50%);
-      width:290px; max-height:260px; overflow-y:auto;
-      background:#fff; border:1px solid var(--sky-light);
-      border-radius:var(--r-md); z-index:200;
-      box-shadow:var(--sh-card); display:none; flex-direction:column;
-    }
+    .chap-dd-list { position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%); width:290px; max-height:260px; overflow-y:auto; background:#fff; border:1px solid var(--sky-light); border-radius:var(--r-md); z-index:200; box-shadow:var(--sh-card); display:none; flex-direction:column; }
     .chap-dd-list.open { display:flex; }
-    .chap-dd-list a {
-      padding:9px 16px; border-bottom:1px solid rgba(186,230,253,.25);
-      color:var(--text-mid); font-size:.82rem; transition:var(--t);
-    }
+    .chap-dd-list a { padding:9px 16px; border-bottom:1px solid rgba(186,230,253,.25); color:var(--text-mid); font-size:.82rem; transition:var(--t); }
     .chap-dd-list a:last-child { border-bottom:none; }
     .chap-dd-list a:hover { background:var(--sky-pale); color:var(--sky); }
     .chap-dd-list a.cur-chap { background:var(--sky-pale); color:var(--sky); font-weight:700; }
     .chap-dd-list.up { bottom:calc(100% + 6px); top:auto; }
 
-    /* ─── INLINE COMMENT ─── */
+    /* ── INLINE COMMENT ── */
     .novel-content p:hover .ic-trigger { opacity:1; }
-    .ic-trigger {
-      display:inline-flex; align-items:center; justify-content:center;
-      width:20px; height:20px; border-radius:50%;
-      background:var(--sky-pale); border:1px solid var(--sky-light);
-      color:var(--sky); font-size:.65rem; cursor:pointer;
-      opacity:0; transition:opacity .18s ease;
-      vertical-align:middle; margin-left:6px; flex-shrink:0;
-      position:relative; z-index:10;
-    }
+    .ic-trigger { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--sky-pale); border:1px solid var(--sky-light); color:var(--sky); font-size:.65rem; cursor:pointer; opacity:0; transition:opacity .18s ease; vertical-align:middle; margin-left:6px; flex-shrink:0; position:relative; z-index:10; }
     .ic-trigger:hover { background:var(--sky); color:#fff; opacity:1 !important; }
-    .ic-bubble {
-      display:none;
-      position:fixed;
-      width:min(290px, calc(100vw - 32px));
-      background:#fff;
-      border:1px solid rgba(186,230,253,.8); border-radius:14px;
-      box-shadow:0 8px 28px rgba(2,132,199,.18); padding:14px 16px;
-      z-index:1000; font-size:.8rem;
-      animation:bubblePop .18s ease;
-    }
+
+    .ic-bubble { display:none; position:fixed; width:min(300px, calc(100vw - 32px)); background:#fff; border:1px solid rgba(186,230,253,.8); border-radius:14px; box-shadow:0 8px 28px rgba(2,132,199,.18); padding:14px 16px; z-index:1000; font-size:.8rem; animation:bubblePop .18s ease; }
     .ic-bubble.open { display:block; }
     @keyframes bubblePop { from{opacity:0;transform:scale(.9) translateY(4px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .ic-bubble-header { font-size:.68rem; color:var(--text-dim); margin-bottom:8px; letter-spacing:.3px; display:flex; align-items:center; justify-content:space-between; }
-    .ic-bubble-header strong { color:var(--sky); }
-    .ic-bubble-close { background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:.75rem; padding:0 2px; transition:color .15s; }
-    .ic-bubble-close:hover { color:var(--sky); }
-    .ic-comments-list { max-height:150px; overflow-y:auto; margin-bottom:8px; }
-    .ic-comment-item {
-      background:var(--sky-pale); border-radius:10px; padding:7px 10px;
-      margin-bottom:6px; font-size:.76rem; color:var(--text-main); line-height:1.5;
-      position:relative;
-    }
-    .ic-comment-item:last-child { margin-bottom:0; }
-    .ic-comment-name { font-weight:700; color:var(--sky-dark); font-size:.7rem; margin-bottom:2px; }
-    .ic-comment-time { font-size:.62rem; color:var(--text-dim); float:right; }
-    .ic-comment-text { margin:0; }
-    .ic-delete-btn {
-      position:absolute; top:6px; right:6px;
-      background:none; border:none; cursor:pointer;
-      font-size:.65rem; color:var(--text-dim); opacity:0; transition:opacity .15s, color .15s;
-      padding:2px 5px; border-radius:4px;
-    }
-    .ic-comment-item:hover .ic-delete-btn { opacity:1; }
-    .ic-delete-btn:hover { color:#ef4444; background:rgba(239,68,68,.08); }
-    .ic-reply-btn { font-size:.65rem; color:var(--sky); cursor:pointer; margin-top:3px; display:inline-block; }
-    .ic-reply-btn:hover { text-decoration:underline; }
-    .ic-reply-row { display:flex; gap:6px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(186,230,253,.4); }
-    .ic-input {
-      flex:1; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill);
-      font-size:.75rem; font-family:'Newsreader',serif; color:var(--text-main);
-      background:var(--cream); outline:none; min-width:0;
-    }
-    .ic-input:focus { border-color:var(--sky); }
-    .ic-send-btn {
-      padding:5px 11px; background:var(--sky); color:#fff; border:none;
-      border-radius:var(--r-pill); font-size:.72rem; cursor:pointer; transition:var(--t);
-      flex-shrink:0;
-    }
-    .ic-send-btn:hover { background:var(--sky2); }
-    .ic-name-row { display:flex; gap:6px; margin-bottom:5px; flex-wrap:wrap; }
-    .ic-name-inp { width:90px !important; flex-shrink:0 !important; }
-    .ic-loading { font-size:.72rem; color:var(--text-dim); text-align:center; padding:6px 0; }
 
-    /* ─── GISCUS ─── */
+    .ic-bubble-header { font-size:.68rem; color:var(--text-dim); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+    .ic-bubble-header strong { color:var(--sky); }
+    .ic-bubble-close { background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:.75rem; padding:0 2px; transition:color .15s; line-height:1; }
+    .ic-bubble-close:hover { color:var(--sky); }
+
+    .ic-comments-list { max-height:160px; overflow-y:auto; margin-bottom:10px; }
+    .ic-empty { color:var(--text-dim); font-size:.72rem; text-align:center; padding:10px 0; }
+
+    .ic-comment-item { background:var(--sky-pale); border-radius:10px; padding:8px 10px; margin-bottom:6px; font-size:.76rem; color:var(--text-main); line-height:1.5; position:relative; }
+    .ic-comment-item:last-child { margin-bottom:0; }
+    .ic-comment-meta { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:3px; gap:6px; }
+    .ic-comment-name { font-weight:700; color:var(--sky-dark); font-size:.7rem; }
+    .ic-comment-time { font-size:.62rem; color:var(--text-dim); white-space:nowrap; }
+    .ic-comment-text { margin:0 0 3px; word-break:break-word; }
+
+    .ic-comment-actions { display:flex; gap:8px; align-items:center; }
+    .ic-reply-btn { font-size:.64rem; color:var(--sky); cursor:pointer; background:none; border:none; padding:0; font-family:inherit; }
+    .ic-reply-btn:hover { text-decoration:underline; }
+    .ic-delete-btn { font-size:.64rem; color:var(--text-dim); cursor:pointer; background:none; border:none; padding:0; font-family:inherit; transition:color .15s; }
+    .ic-delete-btn:hover { color:#ef4444; }
+
+    /* Reply indent */
+    .ic-reply-item { margin:6px 0 0 12px; padding:6px 8px; background:rgba(186,230,253,.15); border-radius:8px; border-left:2px solid var(--sky-light); font-size:.74rem; position:relative; }
+
+    /* Form */
+    .ic-form { border-top:1px solid rgba(186,230,253,.35); padding-top:8px; }
+    .ic-form-reply-label { font-size:.66rem; color:var(--sky); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between; }
+    .ic-cancel-reply { font-size:.64rem; color:var(--text-dim); cursor:pointer; background:none; border:none; font-family:inherit; }
+    .ic-cancel-reply:hover { color:#ef4444; }
+    .ic-inputs { display:flex; gap:5px; margin-bottom:5px; }
+    .ic-input { flex:1; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; min-width:0; }
+    .ic-input:focus { border-color:var(--sky); }
+    .ic-name-inp { width:80px; flex:0 0 80px; }
+    .ic-send-row { display:flex; justify-content:flex-end; }
+    .ic-send-btn { padding:5px 14px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.73rem; cursor:pointer; transition:var(--t); font-family:inherit; }
+    .ic-send-btn:hover { background:var(--sky2); }
+    .ic-send-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* Loading / error */
+    .ic-status { font-size:.7rem; text-align:center; padding:6px 0; color:var(--text-dim); }
+    .ic-status.err { color:#ef4444; }
+
     .giscus-wrap { margin-top:56px; border-top:1px dashed var(--sky-light); padding-top:28px; }
 
-    /* ─── FOOTER ─── */
     footer { background:#fff; border-top:1px solid rgba(186,230,253,.4); padding:44px 20px 26px; margin-top:auto; }
     .footer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; gap:28px; align-items:start; }
     @media(max-width:600px) { .footer-inner{grid-template-columns:1fr; text-align:center;} .ft-social{align-items:center!important;} }
@@ -380,21 +228,8 @@ if (currentTruyenId && isNovelPage) {
     .social-ic:hover { background:var(--sky-light); transform:translateY(-2px); }
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
-    /* ─── SCROLL BUTTONS ─── */
-    .scroll-btns {
-      position:fixed; bottom:24px; right:22px; z-index:400;
-      display:flex; flex-direction:column; gap:8px;
-      pointer-events:none;
-    }
-    .scroll-btn {
-      width:40px; height:40px; border-radius:50%;
-      background:var(--sky); color:#fff;
-      border:none; cursor:pointer; font-size:1.1rem;
-      box-shadow:0 4px 14px rgba(2,132,199,.35);
-      transition:opacity .25s ease, transform .25s ease, background .2s ease;
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; pointer-events:none; line-height:1;
-    }
+    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease, transform .25s ease, background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
   </style>
@@ -467,9 +302,7 @@ if (currentTruyenId && isNovelPage) {
 
   {isNovelPage && (
     <div class="chap-nav-row">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
+      {prevChap ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a> : <span class="chap-pn disabled">← Chương trước</span>}
       {chapters.length > 1 && (
         <div class="chap-dd-wrap" id="ddTop">
           <button class="chap-dd-btn" id="ddBtnTop">⚓ Chọn chương ▾</button>
@@ -482,14 +315,12 @@ if (currentTruyenId && isNovelPage) {
           </div>
         </div>
       )}
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
+      {nextChap ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a> : <span class="chap-pn disabled">Chương sau →</span>}
     </div>
   )}
 
   {isNovelPage ? (
-    <div class="novel-content">
+    <div class="novel-content" id="novelContent">
       <slot />
     </div>
   ) : (
@@ -500,9 +331,7 @@ if (currentTruyenId && isNovelPage) {
 
   {isNovelPage && (
     <div class="chap-nav-row" style="margin-top:36px;">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
+      {prevChap ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a> : <span class="chap-pn disabled">← Chương trước</span>}
       {chapters.length > 1 && (
         <div class="chap-dd-wrap" id="ddBot">
           <button class="chap-dd-btn" id="ddBtnBot">⚓ Chọn chương ▾</button>
@@ -515,9 +344,7 @@ if (currentTruyenId && isNovelPage) {
           </div>
         </div>
       )}
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
+      {nextChap ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a> : <span class="chap-pn disabled">Chương sau →</span>}
     </div>
   )}
 
@@ -572,250 +399,328 @@ if (currentTruyenId && isNovelPage) {
 </div>
 
 <script is:inline>
-/* ─── SCROLL + PROGRESS ─── */
-const _st = document.getElementById('scrollTop');
-const _sb = document.getElementById('scrollBot');
-const _rp = document.getElementById('read-progress');
-if (_st) _st.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-if (_sb) _sb.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+/* ══════════════════════════════════════════
+   SUPABASE CONFIG
+   Thay 2 giá trị này sau khi tạo project
+   ══════════════════════════════════════════ */
+var SUPA_URL = 'https://XXXXXXXXXX.supabase.co';   // ← thay
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';  // ← thay (anon key)
+
+var SUPA_HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SUPA_KEY,
+  'Authorization': 'Bearer ' + SUPA_KEY,
+  'Prefer': 'return=representation',
+};
+
+/* ── Lấy comment của trang hiện tại ── */
+async function supaGetComments(pageKey) {
+  var url = SUPA_URL + '/rest/v1/comments?page_key=eq.' + encodeURIComponent(pageKey) + '&order=created_at.asc';
+  var res = await fetch(url, { headers: SUPA_HEADERS });
+  if (!res.ok) throw new Error('Lỗi tải bình luận');
+  return res.json();
+}
+
+/* ── Thêm comment ── */
+async function supaAddComment(pageKey, paraIdx, parentId, author, body) {
+  var res = await fetch(SUPA_URL + '/rest/v1/comments', {
+    method: 'POST',
+    headers: SUPA_HEADERS,
+    body: JSON.stringify({
+      page_key: pageKey,
+      para_idx: paraIdx,
+      parent_id: parentId || null,
+      author: author || 'Khách vô danh',
+      body: body,
+    }),
+  });
+  if (!res.ok) throw new Error('Gửi thất bại');
+  var rows = await res.json();
+  return rows[0];
+}
+
+/* ── Xóa comment ── */
+async function supaDeleteComment(id) {
+  var res = await fetch(SUPA_URL + '/rest/v1/comments?id=eq.' + id, {
+    method: 'DELETE',
+    headers: SUPA_HEADERS,
+  });
+  if (!res.ok) throw new Error('Xóa thất bại');
+}
+
+/* ══ SCROLL + PROGRESS ══ */
+var _st = document.getElementById('scrollTop');
+var _sb = document.getElementById('scrollBot');
+var _rp = document.getElementById('read-progress');
+if (_st) _st.addEventListener('click', function(){ window.scrollTo({ top:0, behavior:'smooth' }); });
+if (_sb) _sb.addEventListener('click', function(){ window.scrollTo({ top:document.body.scrollHeight, behavior:'smooth' }); });
 function _updScroll() {
-  const y = window.scrollY;
-  const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
-  const pct = y / max;
+  var y = window.scrollY;
+  var max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+  var pct = y / max;
   if (_st) _st.classList.toggle('show', y > 300);
   if (_sb) _sb.classList.toggle('show', pct < 0.97 && max > 100);
   if (_rp) _rp.style.width = (pct * 100) + '%';
 }
-window.addEventListener('scroll', _updScroll, { passive: true });
-requestAnimationFrame(() => setTimeout(_updScroll, 200));
+window.addEventListener('scroll', _updScroll, { passive:true });
+requestAnimationFrame(function(){ setTimeout(_updScroll, 200); });
 
-/* ─── HAMBURGER ─── */
-document.getElementById('hamburger')?.addEventListener('click', () => {
+/* ══ HAMBURGER ══ */
+document.getElementById('hamburger')?.addEventListener('click', function(){
   document.getElementById('mobileMenu')?.classList.toggle('open');
 });
-document.addEventListener('click', (e) => {
-  const mm = document.getElementById('mobileMenu');
-  const hb = document.getElementById('hamburger');
+document.addEventListener('click', function(e){
+  var mm = document.getElementById('mobileMenu');
+  var hb = document.getElementById('hamburger');
   if (mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target))
     mm.classList.remove('open');
 });
 
-/* ─── CHAPTER DROPDOWNS ─── */
+/* ══ CHAPTER DROPDOWNS ══ */
 function setupDD(btnId, listId) {
-  const btn = document.getElementById(btnId);
-  const list = document.getElementById(listId);
+  var btn = document.getElementById(btnId);
+  var list = document.getElementById(listId);
   if (!btn || !list) return;
-  btn.addEventListener('click', (e) => {
+  btn.addEventListener('click', function(e){
     e.stopPropagation();
-    const wasOpen = list.classList.contains('open');
-    document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
+    var wasOpen = list.classList.contains('open');
+    document.querySelectorAll('.chap-dd-list.open').forEach(function(el){ el.classList.remove('open'); });
     if (!wasOpen) {
       list.classList.add('open');
-      const cur = list.querySelector('.cur-chap');
-      if (cur) setTimeout(() => cur.scrollIntoView({ block: 'center' }), 30);
+      var cur = list.querySelector('.cur-chap');
+      if (cur) setTimeout(function(){ cur.scrollIntoView({ block:'center' }); }, 30);
     }
   });
 }
-setupDD('ddBtnTop', 'ddListTop');
-setupDD('ddBtnBot', 'ddListBot');
-document.addEventListener('click', () => {
-  document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
+setupDD('ddBtnTop','ddListTop');
+setupDD('ddBtnBot','ddListBot');
+document.addEventListener('click', function(){
+  document.querySelectorAll('.chap-dd-list.open').forEach(function(el){ el.classList.remove('open'); });
 });
 
-/* ─── INLINE COMMENT — public storage via Artifacts API ─── */
-(function setupInlineComments() {
-  const content = document.querySelector('.novel-content');
+/* ══ INLINE COMMENT với Supabase ══ */
+(function setupInlineComments(){
+  var content = document.getElementById('novelContent');
   if (!content) return;
 
-  /* Storage key = pathname để phân biệt từng chương */
-  const pageKey = 'dd_ic_' + location.pathname.replace(/[^a-zA-Z0-9_-]/g, '_');
+  /* page_key = pathname chuẩn hoá */
+  var PAGE_KEY = location.pathname.replace(/\/$/, '');
 
-  /* ── Helpers ── */
   function timeAgo(ts) {
-    const d = Date.now() - ts;
+    var d = Date.now() - new Date(ts).getTime();
     if (d < 60000) return 'vừa xong';
     if (d < 3600000) return Math.floor(d/60000) + ' phút trước';
     if (d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
     return Math.floor(d/86400000) + ' ngày trước';
   }
 
-  /* ── Load từ storage (shared = public) ── */
-  async function loadStore() {
+  function esc(s){ return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* Bubble fixed, gắn vào body */
+  var bubble = document.createElement('div');
+  bubble.className = 'ic-bubble';
+  document.body.appendChild(bubble);
+  var currentIdx = null;
+
+  function positionBubble(trigger) {
+    var rect = trigger.getBoundingClientRect();
+    var bw = Math.min(300, window.innerWidth - 32);
+    var margin = 8;
+    var top = rect.top - 4;
+    var maxTop = window.innerHeight - 460 - margin;
+    if (top > maxTop) top = maxTop;
+    if (top < 70) top = 70;
+    var left = rect.right + margin;
+    if (left + bw > window.innerWidth - margin) left = rect.left - bw - margin;
+    if (left < margin) { left = Math.max(margin, (window.innerWidth - bw) / 2); top = rect.bottom + margin; }
+    bubble.style.width = bw + 'px';
+    bubble.style.left = left + 'px';
+    bubble.style.top = top + 'px';
+  }
+
+  /* State reply */
+  var replyTo = null; /* { id, author } */
+
+  function renderBubble(allRows, paraIdx) {
+    /* Tách top-level và reply */
+    var tops = allRows.filter(function(r){ return r.para_idx === paraIdx && !r.parent_id; });
+    var repliesMap = {};
+    allRows.filter(function(r){ return r.para_idx === paraIdx && r.parent_id; }).forEach(function(r){
+      if (!repliesMap[r.parent_id]) repliesMap[r.parent_id] = [];
+      repliesMap[r.parent_id].push(r);
+    });
+
+    var listHtml = '';
+    if (!tops.length) {
+      listHtml = '<div class="ic-empty">Chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
+    } else {
+      tops.forEach(function(c){
+        listHtml += '<div class="ic-comment-item" data-id="' + c.id + '">';
+        listHtml += '<div class="ic-comment-meta">';
+        listHtml += '<span class="ic-comment-name">' + esc(c.author) + '</span>';
+        listHtml += '<span class="ic-comment-time">' + timeAgo(c.created_at) + '</span>';
+        listHtml += '</div>';
+        listHtml += '<p class="ic-comment-text">' + esc(c.body) + '</p>';
+        listHtml += '<div class="ic-comment-actions">';
+        listHtml += '<button class="ic-reply-btn" data-id="' + c.id + '" data-author="' + esc(c.author) + '">↩ Trả lời</button>';
+        listHtml += '<button class="ic-delete-btn" data-id="' + c.id + '">✕ Xóa</button>';
+        listHtml += '</div>';
+        /* replies */
+        if (repliesMap[c.id]) {
+          repliesMap[c.id].forEach(function(r){
+            listHtml += '<div class="ic-reply-item" data-id="' + r.id + '">';
+            listHtml += '<div class="ic-comment-meta">';
+            listHtml += '<span class="ic-comment-name" style="font-size:.65rem">' + esc(r.author) + '</span>';
+            listHtml += '<span class="ic-comment-time">' + timeAgo(r.created_at) + '</span>';
+            listHtml += '</div>';
+            listHtml += '<p class="ic-comment-text">' + esc(r.body) + '</p>';
+            listHtml += '<div class="ic-comment-actions">';
+            listHtml += '<button class="ic-delete-btn" data-id="' + r.id + '">✕ Xóa</button>';
+            listHtml += '</div>';
+            listHtml += '</div>';
+          });
+        }
+        listHtml += '</div>';
+      });
+    }
+
+    var replyLabel = replyTo
+      ? '<div class="ic-form-reply-label">↩ Trả lời <strong>' + esc(replyTo.author) + '</strong><button class="ic-cancel-reply">✕ Hủy</button></div>'
+      : '';
+
+    bubble.innerHTML =
+      '<div class="ic-bubble-header">' +
+        '<span>💬 <strong>' + tops.length + '</strong> bình luận · đoạn ' + (paraIdx+1) + '</span>' +
+        '<button class="ic-bubble-close">✕</button>' +
+      '</div>' +
+      '<div class="ic-comments-list" id="icList">' + listHtml + '</div>' +
+      '<div class="ic-form">' +
+        replyLabel +
+        '<div class="ic-inputs">' +
+          '<input class="ic-input ic-name-inp" placeholder="Tên (tùy chọn)" />' +
+          '<input class="ic-input ic-text-inp" placeholder="Viết bình luận..." />' +
+        '</div>' +
+        '<div class="ic-send-row"><button class="ic-send-btn">Gửi ✦</button></div>' +
+      '</div>' +
+      '<div class="ic-status" id="icStatus"></div>';
+
+    /* Đóng */
+    bubble.querySelector('.ic-bubble-close').addEventListener('click', function(e){
+      e.stopPropagation();
+      bubble.classList.remove('open'); currentIdx = null;
+    });
+
+    /* Cancel reply */
+    bubble.querySelector('.ic-cancel-reply')?.addEventListener('click', function(){
+      replyTo = null;
+      refreshBubble(paraIdx);
+    });
+
+    /* Reply btn */
+    bubble.querySelectorAll('.ic-reply-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        replyTo = { id: btn.dataset.id, author: btn.dataset.author };
+        refreshBubble(paraIdx);
+        setTimeout(function(){ bubble.querySelector('.ic-text-inp')?.focus(); }, 30);
+      });
+    });
+
+    /* Delete btn */
+    bubble.querySelectorAll('.ic-delete-btn').forEach(function(btn){
+      btn.addEventListener('click', async function(){
+        if (!confirm('Xóa bình luận này?')) return;
+        var id = btn.dataset.id;
+        var statusEl = document.getElementById('icStatus');
+        try {
+          await supaDeleteComment(id);
+          replyTo = null;
+          await refreshBubble(paraIdx);
+        } catch(e) {
+          if (statusEl) { statusEl.textContent = e.message; statusEl.className = 'ic-status err'; }
+        }
+      });
+    });
+
+    /* Gửi */
+    bubble.querySelector('.ic-send-btn').addEventListener('click', async function(){
+      var nameEl = bubble.querySelector('.ic-name-inp');
+      var textEl = bubble.querySelector('.ic-text-inp');
+      var statusEl = document.getElementById('icStatus');
+      var text = textEl.value.trim();
+      if (!text) { textEl.focus(); return; }
+      var sendBtn = bubble.querySelector('.ic-send-btn');
+      sendBtn.disabled = true;
+      sendBtn.textContent = '…';
+      if (statusEl) { statusEl.textContent = ''; statusEl.className = 'ic-status'; }
+      try {
+        await supaAddComment(PAGE_KEY, paraIdx, replyTo?.id || null, nameEl.value.trim(), text);
+        replyTo = null;
+        await refreshBubble(paraIdx);
+      } catch(e) {
+        if (statusEl) { statusEl.textContent = e.message; statusEl.className = 'ic-status err'; }
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Gửi ✦';
+      }
+    });
+  }
+
+  async function refreshBubble(paraIdx) {
+    var statusEl = document.getElementById('icStatus');
     try {
-      const res = await window.storage?.get(pageKey, true);
-      return res ? JSON.parse(res.value) : {};
+      var rows = await supaGetComments(PAGE_KEY);
+      renderBubble(rows, paraIdx);
     } catch(e) {
-      /* Fallback: localStorage nếu storage API chưa có */
-      try { return JSON.parse(localStorage.getItem(pageKey) || '{}'); } catch(e2) { return {}; }
+      bubble.innerHTML = '<div class="ic-status err" style="padding:16px">⚠️ ' + e.message + '</div>';
     }
   }
 
-  /* ── Lưu vào storage (shared = public) ── */
-  async function saveStore(store) {
-    try {
-      await window.storage?.set(pageKey, JSON.stringify(store), true);
-    } catch(e) {}
-    /* Backup localStorage */
-    try { localStorage.setItem(pageKey, JSON.stringify(store)); } catch(e) {}
-  }
-
-  /* ── Global store (sẽ load async) ── */
-  let store = {};
-  loadStore().then(s => { store = s; });
-
-  /* ── Bubble (fixed, gắn vào body) ── */
-  const bubble = document.createElement('div');
-  bubble.className = 'ic-bubble';
-  document.body.appendChild(bubble);
-  let currentIdx = null;
-
-  function positionBubble(trigger) {
-    const rect = trigger.getBoundingClientRect();
-    const bw = Math.min(290, window.innerWidth - 32);
-    const margin = 8;
-    let top = rect.top - 4;
-    const maxTop = window.innerHeight - 420 - margin;
-    if (top > maxTop) top = maxTop;
-    if (top < 70) top = 70;
-    let left = rect.right + margin;
-    if (left + bw > window.innerWidth - margin) left = rect.left - bw - margin;
-    if (left < margin) { left = Math.max(margin, (window.innerWidth - bw) / 2); top = rect.bottom + margin; }
-    bubble.style.cssText += `;width:${bw}px;left:${left}px;top:${top}px`;
-  }
-
-  function renderComments(list, idx) {
-    if (!list || !list.length)
-      return '<div style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:8px 0">Chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
-    return list.map((c, ci) => `
-      <div class="ic-comment-item">
-        <button class="ic-delete-btn" data-para="${idx}" data-ci="${ci}" title="Xóa">✕</button>
-        <div class="ic-comment-name">${c.name || 'Khách vô danh'}<span class="ic-comment-time">${timeAgo(c.ts)}</span></div>
-        <p class="ic-comment-text">${c.text.replace(/</g,'&lt;')}</p>
-        ${(c.replies||[]).map((r,ri) => `
-          <div style="margin:5px 0 0 12px;padding:5px 8px;background:rgba(186,230,253,.15);border-radius:8px;border-left:2px solid var(--sky-light);position:relative">
-            <button class="ic-delete-btn" data-para="${idx}" data-ci="${ci}" data-ri="${ri}" style="opacity:0" title="Xóa reply">✕</button>
-            <div class="ic-comment-name" style="font-size:.65rem">${r.name||'Khách vô danh'}<span class="ic-comment-time">${timeAgo(r.ts)}</span></div>
-            <p class="ic-comment-text">${r.text.replace(/</g,'&lt;')}</p>
-          </div>`).join('')}
-        <span class="ic-reply-btn" data-para="${idx}" data-ci="${ci}">↩ Trả lời</span>
-      </div>`).join('');
-  }
-
-  async function refreshBubble(idx) {
-    /* Reload từ storage để lấy comment mới nhất từ mọi người */
-    store = await loadStore();
-    const comments = store[idx] || [];
-    bubble.setAttribute('data-para', idx);
-    bubble.innerHTML = `
-      <div class="ic-bubble-header">
-        <span>💬 <strong>${comments.length}</strong> bình luận · đoạn ${idx + 1}</span>
-        <button class="ic-bubble-close" id="icBubbleClose">✕ đóng</button>
-      </div>
-      <div class="ic-comments-list" id="icList${idx}">${renderComments(comments, idx)}</div>
-      <div class="ic-name-row">
-        <input class="ic-input ic-name-inp" placeholder="Tên (tùy chọn)" style="width:80px;flex:0 0 80px" />
-        <input class="ic-input ic-text-inp" placeholder="Viết bình luận..." />
-      </div>
-      <div class="ic-reply-row">
-        <button class="ic-send-btn">Gửi ✦</button>
-      </div>`;
-
-    /* Đóng bubble */
-    bubble.querySelector('#icBubbleClose')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      bubble.classList.remove('open');
-      currentIdx = null;
-    });
-
-    /* Gửi comment */
-    bubble.querySelector('.ic-send-btn').addEventListener('click', async () => {
-      const name = bubble.querySelector('.ic-name-inp').value.trim();
-      const text = bubble.querySelector('.ic-text-inp').value.trim();
-      if (!text) return;
-      if (!store[idx]) store[idx] = [];
-      store[idx].push({ name, text, ts: Date.now(), replies: [] });
-      await saveStore(store);
-      await refreshBubble(idx);
-    });
-
-    /* Reply */
-    bubble.querySelectorAll('.ic-reply-btn').forEach(rb => {
-      rb.addEventListener('click', async () => {
-        const ci = parseInt(rb.dataset.ci);
-        const rName = prompt('Tên của bạn (tùy chọn):') || '';
-        const rText = prompt('Trả lời:') || '';
-        if (!rText.trim()) return;
-        if (!store[idx][ci].replies) store[idx][ci].replies = [];
-        store[idx][ci].replies.push({ name: rName, text: rText, ts: Date.now() });
-        await saveStore(store);
-        await refreshBubble(idx);
-      });
-    });
-
-    /* Xóa comment / reply */
-    bubble.querySelectorAll('.ic-delete-btn').forEach(db => {
-      db.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        if (!confirm('Xóa bình luận này?')) return;
-        const ci = parseInt(db.dataset.ci);
-        const ri = db.dataset.ri !== undefined ? parseInt(db.dataset.ri) : null;
-        if (ri !== null) {
-          store[idx][ci].replies.splice(ri, 1);
-        } else {
-          store[idx].splice(ci, 1);
-          if (store[idx].length === 0) delete store[idx];
-        }
-        await saveStore(store);
-        await refreshBubble(idx);
-      });
-    });
-  }
-
-  content.querySelectorAll('p').forEach((p, idx) => {
-    const trigger = document.createElement('span');
+  /* Gắn trigger vào từng đoạn */
+  content.querySelectorAll('p').forEach(function(p, idx){
+    var trigger = document.createElement('span');
     trigger.className = 'ic-trigger';
     trigger.title = 'Bình luận đoạn này';
     trigger.textContent = '💬';
     p.appendChild(trigger);
 
-    trigger.addEventListener('click', async (e) => {
+    trigger.addEventListener('click', async function(e){
       e.stopPropagation();
       if (currentIdx === idx && bubble.classList.contains('open')) {
         bubble.classList.remove('open'); currentIdx = null; return;
       }
       currentIdx = idx;
-      bubble.innerHTML = '<div class="ic-loading">Đang tải bình luận...</div>';
+      replyTo = null;
+      bubble.innerHTML = '<div class="ic-status">Đang tải...</div>';
       bubble.classList.add('open');
       positionBubble(trigger);
       await refreshBubble(idx);
       positionBubble(trigger);
-      setTimeout(() => bubble.querySelector('.ic-text-inp')?.focus(), 50);
+      setTimeout(function(){ bubble.querySelector('.ic-text-inp')?.focus(); }, 50);
     });
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e){
     if (!e.target.closest('.ic-bubble') && !e.target.closest('.ic-trigger')) {
       bubble.classList.remove('open'); currentIdx = null;
     }
   });
 
-  window.addEventListener('scroll', () => {
+  window.addEventListener('scroll', function(){
     if (bubble.classList.contains('open') && currentIdx !== null) {
-      const triggers = content.querySelectorAll('.ic-trigger');
-      const t = triggers[currentIdx];
+      var triggers = content.querySelectorAll('.ic-trigger');
+      var t = triggers[currentIdx];
       if (t) positionBubble(t);
     }
-  }, { passive: true });
+  }, { passive:true });
 })();
 
-/* ─── DARK MODE ─── */
+/* ══ DARK MODE ══ */
 function applyTheme(dark) {
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
   localStorage.setItem('dd-theme', dark ? 'dark' : 'light');
-  const giscus = document.querySelector('iframe.giscus-frame');
-  if (giscus) giscus.contentWindow.postMessage({ giscus: { setConfig: { theme: dark ? 'dark' : 'light' }}}, 'https://giscus.app');
+  var giscus = document.querySelector('iframe.giscus-frame');
+  if (giscus) giscus.contentWindow.postMessage({ giscus:{ setConfig:{ theme: dark?'dark':'light' }}}, 'https://giscus.app');
 }
-window.__ddToggleTheme = function() {
+window.__ddToggleTheme = function(){
   applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
 };
 </script>

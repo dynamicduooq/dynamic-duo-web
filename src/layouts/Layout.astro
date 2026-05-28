@@ -300,11 +300,7 @@ if (currentTruyenId && isNovelPage) {
       transform: translateX(0);
     }
 
-    .ic-sidebar-inner {
-      background: #fff;
-      border: 1px solid rgba(186,230,253,.7);
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(2,132,199,.1);
+.ic-sidebar-inner {
       display: flex;
       flex-direction: column;
       max-height: calc(100vh - 88px);
@@ -312,30 +308,22 @@ if (currentTruyenId && isNovelPage) {
       animation: icSideIn .22s cubic-bezier(.34,1.3,.64,1);
     }
     @keyframes icSideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    [data-theme="dark"] .ic-sidebar-inner {
-      background: #0e2236;
-      border-color: rgba(96,184,232,.25);
-      box-shadow: 0 4px 24px rgba(0,0,0,.4);
-    }
-
-    .ic-sidebar-header {
-      display: flex; align-items: center; justify-content: space-between;
+.ic-sidebar-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px;
       padding: 12px 14px 10px;
       border-bottom: 1px solid rgba(186,230,253,.4);
       flex-shrink: 0;
     }
     [data-theme="dark"] .ic-sidebar-header { border-bottom-color: rgba(96,184,232,.15); }
-    .ic-sidebar-title {
-      font-family: 'Merriweather', serif; font-size: .72rem;
-      color: var(--sky-dark); letter-spacing: .5px;
+    .ic-para-preview {
+      flex: 1;
+      font-size: .8rem; font-style: italic;
+      color: var(--text-mid); line-height: 1.65;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-    [data-theme="dark"] .ic-sidebar-title { color: #89d0f5; }
-    .ic-sidebar-close {
-      background: none; border: none; cursor: pointer;
-      color: var(--text-dim); font-size: .85rem; padding: 2px 6px;
-      border-radius: 6px; transition: var(--t); line-height: 1;
-    }
-    .ic-sidebar-close:hover { background: var(--sky-pale); color: var(--sky); }
+    [data-theme="dark"] .ic-para-preview { color: #a0c8e0; }    .ic-sidebar-close:hover { background: var(--sky-pale); color: var(--sky); }
     [data-theme="dark"] .ic-sidebar-close:hover { background: rgba(96,184,232,.12); color: #89d0f5; }
 
     /* Danh sách comment trong sidebar */
@@ -427,8 +415,22 @@ if (currentTruyenId && isNovelPage) {
     .ic-rf-send:disabled { opacity: .5; cursor: not-allowed; }
 
     /* Form gửi comment mới trong sidebar */
-    .ic-sidebar-form { padding: 10px 12px; border-top: 1px solid rgba(186,230,253,.35); flex-shrink: 0; }
-    [data-theme="dark"] .ic-sidebar-form { border-top-color: rgba(96,184,232,.15); }
+.ic-sidebar-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(186,230,253,.4);
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .ic-sidebar-header { border-bottom-color: rgba(96,184,232,.15); }
+    .ic-para-preview {
+      flex: 1;
+      font-size: .8rem; font-style: italic;
+      color: var(--text-mid); line-height: 1.65;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    [data-theme="dark"] .ic-para-preview { color: #a0c8e0; }    [data-theme="dark"] .ic-sidebar-form { border-top-color: rgba(96,184,232,.15); }
     .ic-form-name {
       width: 100%; padding: 6px 11px; border: 1.5px solid var(--sky-light);
       border-radius: var(--r-pill); font-size: .73rem; font-family: 'Newsreader', serif;
@@ -710,24 +712,23 @@ if (currentTruyenId && isNovelPage) {
     <div class="novel-layout-wrap" id="novelLayoutWrap">
       <div class="novel-content" id="novelContent"><slot /></div>
       <!-- INLINE COMMENT SIDEBAR -->
-      <aside class="ic-sidebar" id="icSidebar" aria-label="Bình luận đoạn văn">
-        <div class="ic-sidebar-inner">
+<div class="ic-sidebar-inner">
           <div class="ic-sidebar-header">
-            <div class="ic-sidebar-title" id="icSidebarTitle">💬 Bình luận đoạn</div>
+            <div class="ic-para-preview" id="icParaPreview"></div>
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
-          </div>
-          <div class="ic-sidebar-list" id="icSidebarList">
-            <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
           </div>
           <div class="ic-sidebar-form">
             <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
             <div class="ic-form-body">
-              <textarea class="ic-form-text" id="icFormText" placeholder="Bình luận đoạn này... 🌊" rows="2"></textarea>
+              <textarea class="ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="2"></textarea>
               <button class="ic-form-send" id="icFormSend">↑</button>
             </div>
           </div>
+          <div class="ic-sidebar-list" id="icSidebarList">
+            <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
+          </div>
         </div>
-      </aside>
+              </aside>
     </div>
   ) : isHome ? (
     <!-- Trang chủ: không bọc wrapper, render trực tiếp -->
@@ -910,12 +911,16 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     // Bỏ active cũ
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
 
-    currentIdx = idx;
-    if(sideTitle) sideTitle.textContent = `💬 Bình luận · đoạn ${idx + 1}`;
-    if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
+currentIdx = idx;
+    const paras = content.querySelectorAll('p');
+    const preview = document.getElementById('icParaPreview');
+    if(preview){
+      const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
+      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b=>b.remove()); preview.textContent = clone.textContent.trim(); }
+    }
+        if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
 
     // Active paragraph
-    const paras = content.querySelectorAll('p');
     if(paras[idx]) paras[idx].classList.add('ic-active');
 
     // Mở layout

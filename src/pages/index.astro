@@ -23,7 +23,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   width: 100% !important;
 }
  
-/* Sidebar rộng hơn 1 chút để cân bằng */
 @media(min-width:1025px){
   .home-shell {
     grid-template-columns: 1fr 280px !important;
@@ -157,11 +156,24 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .sc{background:rgba(12,26,42,.98);border-color:rgba(96,184,232,.22);}
 .sc:hover{box-shadow:0 6px 22px rgba(2,132,199,.12);transform:translateY(-2px);}
 [data-theme="dark"] .sc:hover{box-shadow:0 6px 22px rgba(0,0,0,.45);}
+
+/* ── Ảnh bìa: rộng hơn, không crop, hiển thị đủ ── */
 .sc-cover-wrap{
-  position:relative;flex-shrink:0;width:78px;overflow:hidden;
+  position:relative;flex-shrink:0;
+  width:110px;          /* tăng từ 78px lên 110px */
+  min-height:140px;
+  overflow:hidden;
   background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
+  display:flex;align-items:center;justify-content:center;
 }
-.sc-cover-wrap img{width:78px;height:100%;object-fit:cover;display:block;min-height:100px;}
+.sc-cover-wrap img{
+  width:110px;
+  height:auto;          /* bỏ height:100% để không bị crop */
+  max-height:none;
+  object-fit:contain;   /* contain thay vì cover — không crop */
+  display:block;
+  padding:4px;          /* nhỏ padding để không sát viền */
+}
 .sc-status{
   position:absolute;top:6px;left:0;
   font-size:.52rem;letter-spacing:1px;text-transform:uppercase;
@@ -173,14 +185,17 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sc-body{padding:11px 13px;flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .sc-shelf{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);}
 [data-theme="dark"] .sc-shelf{color:#89d0f5;}
-/* Tiêu đề truyện — đảm bảo đọc được cả sáng lẫn tối */
+
+/* Tiêu đề truyện — căn TRÁI */
 .sc-title{
   font-family:'Merriweather',serif;font-size:.86rem;
-  color:#0c4a6e; /* sky-900 light */
-  margin:0;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:#0c4a6e;
+  margin:0;line-height:1.35;
+  text-align:left;        /* căn trái */
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 [data-theme="dark"] .sc-title{color:#e0f4ff;}
-/* Meta author */
+
 .sc-meta{font-size:.67rem;color:#475569;font-style:italic;}
 [data-theme="dark"] .sc-meta{color:#9ac8df;}
 .sc-tags{display:flex;flex-wrap:wrap;gap:3px;}
@@ -246,7 +261,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sidebar-col::-webkit-scrollbar{width:3px;}
 .sidebar-col::-webkit-scrollbar-thumb{background:var(--sky-light);border-radius:3px;}
 
-/* Widget — nền rõ ràng cả hai chế độ */
 .widget{
   background:#fff;
   border:1px solid rgba(186,230,253,.65);
@@ -321,12 +335,23 @@ const hcdhCount    = countChaps(hcdhPosts);
 .dark-btn:hover{background:var(--sky-pale);}
 [data-theme="dark"] .dark-btn:hover{background:rgba(96,184,232,.12);}
 
-/* Quote widget */
+/* ── Quote widget ── */
 .quote-body{
   font-style:italic;font-size:.78rem;color:#475569;line-height:1.75;
   border-left:3px solid var(--sky-light);padding-left:10px;margin:0;
 }
-[data-theme="dark"] .quote-body{color:#c8e8f8;border-left-color:#2a6a8a;}
+/* Dark mode: nền xanh đậm ấm hơn, chữ sáng rõ */
+[data-theme="dark"] .quote-widget-inner {
+  background: linear-gradient(135deg, rgba(10,30,55,.95), rgba(8,22,42,.98));
+  border: 1px solid rgba(96,184,232,.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: -2px;
+}
+[data-theme="dark"] .quote-body{
+  color:#d4eeff;
+  border-left-color:#2a6a8a;
+}
 .quote-src{font-size:.65rem;color:#94a3b8;margin-top:7px;text-align:right;}
 [data-theme="dark"] .quote-src{color:#6a9ab5;}
 
@@ -343,6 +368,8 @@ const hcdhCount    = countChaps(hcdhPosts);
   .filter-bar{ justify-content:center; }
   .fl-chips{ justify-content:center; }
   .hero-name-img{ max-width:260px; }
+  .sc-cover-wrap{ width:90px; }
+  .sc-cover-wrap img{ width:90px; }
 }
 </style>
 
@@ -492,7 +519,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
 
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:78px">☁️</div>
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:110px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Vật dễ vỡ</h3>
@@ -506,7 +533,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
 
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:78px">☁️</div>
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:110px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Thiếu đế xuân tâm</h3>
@@ -619,10 +646,13 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
     </div>
 
+    <!-- ── QUOTE OF THE DAY (đã cập nhật) ── -->
     <div class="widget">
-      <div class="widget-title">✨ Góc nhỏ</div>
-      <blockquote class="quote-body">"Cảm ơn các bạn đã ghé thăm. Chúng mình không dám hứa hẹn nhiều, chỉ cố gắng edit thật kỹ từng chương."</blockquote>
-      <div class="quote-src">— Xê &amp; Gờ, 2026</div>
+      <div class="widget-title">✨ Quote of the day</div>
+      <div class="quote-widget-inner">
+        <blockquote class="quote-body">"There is no fear in love. But perfect love drives out fear, because fear has to do with punishment. The one who fears is not made perfect in love."</blockquote>
+        <div class="quote-src">— 1 John 4:18</div>
+      </div>
     </div>
 
     <div class="widget" style="text-align:center">

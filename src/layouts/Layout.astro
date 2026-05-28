@@ -194,19 +194,15 @@ if (currentTruyenId && isNovelPage) {
     @media(max-width:640px){ .page-content-wrap{ padding:24px 18px; margin:16px 12px 40px; } }
 
     /* ── NOVEL LAYOUT: content + inline sidebar ── */
-    /*
-      Khi isNovelPage: bọc trong .novel-layout-wrap (grid 2 cột)
-      Cột trái: .novel-content (bài đọc)
-      Cột phải: .ic-sidebar (inline comment sidebar, ẩn mặc định, hiện khi có paragraph được chọn)
-    */
     .novel-layout-wrap {
       display: grid;
-      grid-template-columns: 1fr 0px;   /* sidebar ẩn mặc định (width 0) */
+      grid-template-columns: 1fr 0px;
       gap: 0;
       max-width: 1200px;
       margin: 0 auto;
       transition: grid-template-columns .3s ease;
       align-items: start;
+      padding: 0 16px;
     }
     .novel-layout-wrap.sidebar-open {
       grid-template-columns: 1fr 320px;
@@ -252,7 +248,7 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .chap-dd-list a.cur-chap { background:rgba(96,184,232,.15); color:#89d0f5; font-weight:700; }
 
     /* ══════════════════════════════════
-       INLINE COMMENT TRIGGER (dot bên phải đoạn văn)
+       INLINE COMMENT TRIGGER
     ══════════════════════════════════ */
     .ic-trigger {
       display: inline-flex; align-items: center; justify-content: center;
@@ -269,15 +265,13 @@ if (currentTruyenId && isNovelPage) {
     .novel-content p:focus-within .ic-trigger { opacity: 1; transform: scale(1.05); }
     .ic-trigger:hover { background: var(--sky); color: #fff; opacity: 1 !important; }
     .ic-trigger.has-comments { opacity: .85; background: rgba(14,165,233,.08); border-color: var(--sky); }
-    /* Paragraph được active (đang xem comment) */
     .novel-content p.ic-active .ic-trigger { opacity: 1; background: var(--sky); color: #fff; }
     [data-theme="dark"] .ic-trigger { background:#0e2236; border-color:rgba(96,184,232,.4); color:#89d0f5; }
     [data-theme="dark"] .ic-trigger:hover { background:#1565a0; color:#e8f6ff; }
     [data-theme="dark"] .ic-trigger.has-comments { background:rgba(21,101,160,.25); border-color:rgba(96,184,232,.6); }
 
     /* ══════════════════════════════════
-       INLINE COMMENT SIDEBAR (WordPress/Wattpad style)
-       Fixed bên phải, sticky theo scroll
+       INLINE COMMENT SIDEBAR
     ══════════════════════════════════ */
     .ic-sidebar {
       position: sticky;
@@ -293,6 +287,14 @@ if (currentTruyenId && isNovelPage) {
       transform: translateX(16px);
       margin-top: 32px;
       flex-shrink: 0;
+      background: #fff;
+      border: 1px solid rgba(186,230,253,.5);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-soft);
+    }
+    [data-theme="dark"] .ic-sidebar {
+      background: rgba(12,24,40,.99);
+      border-color: rgba(96,184,232,.16);
     }
     .novel-layout-wrap.sidebar-open .ic-sidebar {
       opacity: 1;
@@ -300,15 +302,13 @@ if (currentTruyenId && isNovelPage) {
       transform: translateX(0);
     }
 
-.ic-sidebar-inner {
+    .ic-sidebar-inner {
       display: flex;
       flex-direction: column;
       max-height: calc(100vh - 88px);
       overflow: hidden;
-      animation: icSideIn .22s cubic-bezier(.34,1.3,.64,1);
     }
-    @keyframes icSideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.ic-sidebar-header {
+    .ic-sidebar-header {
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 8px;
       padding: 12px 14px 10px;
@@ -323,8 +323,50 @@ if (currentTruyenId && isNovelPage) {
       display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    [data-theme="dark"] .ic-para-preview { color: #a0c8e0; }    .ic-sidebar-close:hover { background: var(--sky-pale); color: var(--sky); }
+    [data-theme="dark"] .ic-para-preview { color: #a0c8e0; }
+    .ic-sidebar-close {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid rgba(186,230,253,.5); background: none;
+      cursor: pointer; font-size: .7rem; color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: var(--t);
+    }
+    .ic-sidebar-close:hover { background: var(--sky-pale); color: var(--sky); }
+    [data-theme="dark"] .ic-sidebar-close { border-color: rgba(96,184,232,.2); color: #6a9ab5; }
     [data-theme="dark"] .ic-sidebar-close:hover { background: rgba(96,184,232,.12); color: #89d0f5; }
+
+    /* Form gửi comment trong sidebar */
+    .ic-sidebar-form {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(186,230,253,.4);
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .ic-sidebar-form { border-bottom-color: rgba(96,184,232,.15); }
+    .ic-form-name {
+      width: 100%; padding: 6px 11px; border: 1.5px solid var(--sky-light);
+      border-radius: var(--r-pill); font-size: .73rem; font-family: 'Newsreader', serif;
+      color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 6px;
+    }
+    .ic-form-name:focus { border-color: var(--sky); }
+    [data-theme="dark"] .ic-form-name { background: #091726; border-color: #1e5a7a; color: #daeeff; }
+    [data-theme="dark"] .ic-form-name::placeholder { color: #4a7a96; }
+    .ic-form-body { display: flex; gap: 6px; }
+    .ic-form-text {
+      flex: 1; padding: 6px 11px; border: 1.5px solid var(--sky-light);
+      border-radius: 10px; font-size: .75rem; font-family: 'Newsreader', serif;
+      color: var(--text-main); background: var(--cream); outline: none;
+      resize: none; min-height: 54px;
+    }
+    .ic-form-text:focus { border-color: var(--sky); }
+    [data-theme="dark"] .ic-form-text { background: #091726; border-color: #1e5a7a; color: #daeeff; }
+    [data-theme="dark"] .ic-form-text::placeholder { color: #4a7a96; }
+    .ic-form-send {
+      align-self: flex-end; padding: 7px 13px; background: var(--sky); color: #fff;
+      border: none; border-radius: var(--r-pill); font-size: .72rem;
+      cursor: pointer; transition: var(--t); flex-shrink: 0;
+    }
+    .ic-form-send:hover { background: var(--sky2); }
+    .ic-form-send:disabled { opacity: .5; cursor: not-allowed; }
 
     /* Danh sách comment trong sidebar */
     .ic-sidebar-list {
@@ -414,48 +456,6 @@ if (currentTruyenId && isNovelPage) {
     .ic-rf-send:hover { background: var(--sky2); }
     .ic-rf-send:disabled { opacity: .5; cursor: not-allowed; }
 
-    /* Form gửi comment mới trong sidebar */
-.ic-sidebar-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 8px;
-      padding: 12px 14px 10px;
-      border-bottom: 1px solid rgba(186,230,253,.4);
-      flex-shrink: 0;
-    }
-    [data-theme="dark"] .ic-sidebar-header { border-bottom-color: rgba(96,184,232,.15); }
-    .ic-para-preview {
-      flex: 1;
-      font-size: .8rem; font-style: italic;
-      color: var(--text-mid); line-height: 1.65;
-      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    [data-theme="dark"] .ic-para-preview { color: #a0c8e0; }    [data-theme="dark"] .ic-sidebar-form { border-top-color: rgba(96,184,232,.15); }
-    .ic-form-name {
-      width: 100%; padding: 6px 11px; border: 1.5px solid var(--sky-light);
-      border-radius: var(--r-pill); font-size: .73rem; font-family: 'Newsreader', serif;
-      color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 6px;
-    }
-    .ic-form-name:focus { border-color: var(--sky); }
-    [data-theme="dark"] .ic-form-name { background: #091726; border-color: #1e5a7a; color: #daeeff; }
-    [data-theme="dark"] .ic-form-name::placeholder { color: #4a7a96; }
-    .ic-form-body { display: flex; gap: 6px; }
-    .ic-form-text {
-      flex: 1; padding: 6px 11px; border: 1.5px solid var(--sky-light);
-      border-radius: 10px; font-size: .75rem; font-family: 'Newsreader', serif;
-      color: var(--text-main); background: var(--cream); outline: none;
-      resize: none; min-height: 54px;
-    }
-    .ic-form-text:focus { border-color: var(--sky); }
-    [data-theme="dark"] .ic-form-text { background: #091726; border-color: #1e5a7a; color: #daeeff; }
-    [data-theme="dark"] .ic-form-text::placeholder { color: #4a7a96; }
-    .ic-form-send {
-      align-self: flex-end; padding: 7px 13px; background: var(--sky); color: #fff;
-      border: none; border-radius: var(--r-pill); font-size: .72rem;
-      cursor: pointer; transition: var(--t); flex-shrink: 0;
-    }
-    .ic-form-send:hover { background: var(--sky2); }
-    .ic-form-send:disabled { opacity: .5; cursor: not-allowed; }
     .ic-empty { font-size: .74rem; color: var(--text-dim); font-style: italic; text-align: center; padding: 16px 0; }
     [data-theme="dark"] .ic-empty { color: #4a7a96; }
 
@@ -471,11 +471,11 @@ if (currentTruyenId && isNovelPage) {
         opacity: 0; pointer-events: none;
         transform: translateX(100%);
         z-index: 450;
+        border-radius: var(--r-lg) 0 0 var(--r-lg);
       }
       .novel-layout-wrap.sidebar-open .ic-sidebar {
         opacity: 1; pointer-events: auto; transform: translateX(0);
       }
-      /* Overlay tối phía sau sidebar trên mobile */
       .ic-overlay {
         display: none;
         position: fixed; inset: 0;
@@ -489,7 +489,7 @@ if (currentTruyenId && isNovelPage) {
     }
 
     /* ══════════════════════════════════
-       CHAPTER-END COMMENT (giữ nguyên)
+       CHAPTER-END COMMENT
     ══════════════════════════════════ */
     .chap-comment-section { max-width:760px; margin:0 auto; padding:0 12px 60px; }
     .chap-comment-title { font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
@@ -601,11 +601,8 @@ if (currentTruyenId && isNovelPage) {
 
     /* ── SCROLL BUTTONS ── */
     .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
-    /* Trên novel page, khi sidebar open thì dịch scroll btns sang trái để tránh che */
-    .novel-layout-wrap.sidebar-open ~ .scroll-btns,
     body.novel-sidebar-open .scroll-btns { right: 336px; }
     @media(max-width:900px){
-      .novel-layout-wrap.sidebar-open ~ .scroll-btns,
       body.novel-sidebar-open .scroll-btns { right: 22px; }
     }
     .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease,right .3s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
@@ -672,7 +669,6 @@ if (currentTruyenId && isNovelPage) {
   <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
-<!-- Mobile overlay cho inline comment sidebar -->
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
 <div class="page-wrapper">
@@ -708,11 +704,12 @@ if (currentTruyenId && isNovelPage) {
   )}
 
   {isNovelPage ? (
-    <!-- ── NOVEL: grid 2 cột (content + inline comment sidebar) ── -->
     <div class="novel-layout-wrap" id="novelLayoutWrap">
       <div class="novel-content" id="novelContent"><slot /></div>
-      <!-- INLINE COMMENT SIDEBAR -->
-<div class="ic-sidebar-inner">
+
+      <!-- ══ INLINE COMMENT SIDEBAR ══ -->
+      <aside class="ic-sidebar" id="icSidebar">
+        <div class="ic-sidebar-inner">
           <div class="ic-sidebar-header">
             <div class="ic-para-preview" id="icParaPreview"></div>
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
@@ -728,12 +725,9 @@ if (currentTruyenId && isNovelPage) {
             <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
           </div>
         </div>
-              </aside>
+      </aside>
     </div>
   ) : isHome ? (
-    <!-- Trang chủ: không bọc wrapper, render trực tiếp -->
-    <slot />
-    ) : isHome ? (
     <slot />
   ) : (
     <div class="page-content-wrap"><slot /></div>
@@ -762,7 +756,6 @@ if (currentTruyenId && isNovelPage) {
     </div>
   )}
 
-  <!-- CHAPTER-END COMMENT (giữ nguyên) -->
   {isNovelPage && (
     <div class="chap-comment-section" id="chapCommentSection">
       <div class="chap-comment-title">💬 Bình luận chương</div>
@@ -882,16 +875,13 @@ function applyTheme(dark){ document.documentElement.setAttribute('data-theme',da
 window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
 
 /* ══════════════════════════════════════════
-   A. INLINE COMMENT SIDEBAR (WordPress/Wattpad style)
-   - Sidebar cố định bên phải, xuất hiện khi click trigger
-   - Fix reply: dùng event delegation thay vì bind sau render
+   A. INLINE COMMENT SIDEBAR (Wattpad style)
 ══════════════════════════════════════════ */
 (function setupInlineSidebar(){
   const novelWrap  = document.getElementById('novelLayoutWrap');
   const content    = document.getElementById('novelContent');
   const sidebar    = document.getElementById('icSidebar');
   const sideList   = document.getElementById('icSidebarList');
-  const sideTitle  = document.getElementById('icSidebarTitle');
   const closeBtn   = document.getElementById('icSidebarClose');
   const formName   = document.getElementById('icFormName');
   const formText   = document.getElementById('icFormText');
@@ -907,24 +897,22 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; });
 
   /* ── Mở sidebar ── */
-  function openSidebar(idx, triggerEl){
-    // Bỏ active cũ
+  function openSidebar(idx){
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
+    currentIdx = idx;
 
-currentIdx = idx;
     const paras = content.querySelectorAll('p');
     const preview = document.getElementById('icParaPreview');
     if(preview){
       const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
       if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b=>b.remove()); preview.textContent = clone.textContent.trim(); }
     }
-        if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
+    if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
 
-    // Active paragraph
     if(paras[idx]) paras[idx].classList.add('ic-active');
 
-    // Mở layout
     novelWrap.classList.add('sidebar-open');
+    document.body.classList.add('novel-sidebar-open');
     if(overlay) overlay.classList.add('show');
 
     loadInlineComments(idx);
@@ -934,6 +922,7 @@ currentIdx = idx;
   /* ── Đóng sidebar ── */
   function closeSidebar(){
     novelWrap.classList.remove('sidebar-open');
+    document.body.classList.remove('novel-sidebar-open');
     if(overlay) overlay.classList.remove('show');
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
     if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
@@ -993,7 +982,7 @@ currentIdx = idx;
         </div>
         <div class="ic-item-text">${esc(c.text)}</div>
         <div class="ic-item-actions">
-          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">↩ Reply ${replies.length > 0 ? '(' + replies.length + ')' : ''}</button>
+          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">↩ Reply ${replies.length > 0 ? '('+replies.length+')' : ''}</button>
           ${canDel ? `<button class="ic-del-btn show" data-action="del-comment" data-key="${esc(key)}" data-id="${esc(c.id)}">✕ Xóa</button>` : ''}
         </div>
         <div class="ic-replies ${replies.length > 0 ? 'open' : ''}" id="icreplies-${esc(c.id)}">
@@ -1013,30 +1002,22 @@ currentIdx = idx;
     sideList.scrollTop = sideList.scrollHeight;
   }
 
-  /*
-    FIX REPLY: dùng event delegation trên sideList thay vì bind từng element.
-    Mỗi khi re-render, không cần rebind — delegation tự hoạt động.
-  */
+  /* Event delegation trên sideList */
   sideList?.addEventListener('click', async e => {
-    const action = e.target.closest('[data-action]')?.dataset?.action;
-    if(!action) return;
     const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    const action = btn.dataset.action;
 
-    /* Xóa comment */
     if(action === 'del-comment'){
       if(!confirm('Xóa bình luận này?')) return;
       waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id)));
       return;
     }
-
-    /* Xóa reply */
     if(action === 'del-reply'){
       if(!confirm('Xóa reply này?')) return;
       waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies/' + btn.dataset.rid)));
       return;
     }
-
-    /* Toggle reply form */
     if(action === 'toggle-reply'){
       const cid = btn.dataset.cid;
       const replies = document.getElementById('icreplies-' + cid);
@@ -1048,14 +1029,10 @@ currentIdx = idx;
       }
       return;
     }
-
-    /* Hủy reply */
     if(action === 'cancel-reply'){
       document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open');
       return;
     }
-
-    /* Gửi reply */
     if(action === 'send-reply'){
       const form = document.getElementById('icrf-' + btn.dataset.cid);
       const text = (form?.querySelector('[data-role="rtext"]')?.value || '').trim();
@@ -1076,7 +1053,7 @@ currentIdx = idx;
     }
   });
 
-  /* ── Gửi comment mới ── */
+  /* Gửi comment mới */
   formSend?.addEventListener('click', async () => {
     const text = (formText?.value || '').trim();
     if(!text || currentIdx === null) return;
@@ -1097,7 +1074,7 @@ currentIdx = idx;
     if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
   });
 
-  /* ── Gắn trigger vào từng đoạn ── */
+  /* Gắn trigger vào từng đoạn */
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
@@ -1124,14 +1101,14 @@ currentIdx = idx;
       if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){
         closeSidebar();
       } else {
-        openSidebar(idx, btn);
+        openSidebar(idx);
       }
     });
   });
 })();
 
 /* ══════════════════════════════════════════
-   B. CHAPTER-END COMMENT (giữ nguyên hoàn toàn)
+   B. CHAPTER-END COMMENT
 ══════════════════════════════════════════ */
 (function setupChapComments(){
   const section     = document.getElementById('chapCommentSection');

@@ -18,16 +18,16 @@ const hcdhCount    = countChaps(hcdhPosts);
 /* ─── HOME SHELL ─── */
 .home-shell {
   display: grid;
-  grid-template-columns: 1fr 240px;
-  gap: 22px;
-  max-width: 1200px;
+  grid-template-columns: 1fr 300px; /* Đã mở rộng widget sidebar lên 300px cho thoáng */
+  gap: 28px; /* Tăng khoảng cách giữa 2 cột */
+  max-width: 1260px; /* Tăng max-width để form rộng rãi hơn */
   margin: 0 auto;
   padding: 20px 28px 80px;
   align-items: start;
   box-sizing: border-box;
   width: 100%;
 }
-@media(max-width:1100px){ .home-shell{ grid-template-columns:1fr 200px; padding:18px 20px 80px; gap:16px; } }
+@media(max-width:1100px){ .home-shell{ grid-template-columns:1fr 260px; padding:18px 20px 80px; gap:20px; } }
 @media(max-width:900px){  .home-shell{ grid-template-columns:1fr; padding:14px 14px 80px; } }
 
 /* ─── TICKER ─── */
@@ -100,8 +100,8 @@ const hcdhCount    = countChaps(hcdhPosts);
   font-family:'Newsreader',serif; white-space:nowrap;
 }
 [data-theme="dark"] .chip { color:#d8eeff; border-color:rgba(126,200,227,.25); background:rgba(15,35,54,.8); }
-.chip:hover { background:var(--sky-light); color:var(--sky-dark); }
-[data-theme="dark"] .chip:hover { background:rgba(126,200,227,.15); color:#F3F9FF; }
+.chip:hover { background:var(--sky-light); color:var(--sky-dark); transform: translateY(-1px); box-shadow: 0 2px 5px rgba(2,132,199,.1); }
+[data-theme="dark"] .chip:hover { background:rgba(126,200,227,.15); color:#F3F9FF; box-shadow: 0 2px 5px rgba(0,0,0,.3); }
 .chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
 [data-theme="dark"] .chip.active { background:#1e4a6a; border-color:#7ec8e3; color:#F3F9FF; }
 .chip-clear { background:none; border-color:rgba(186,230,253,.4); color:var(--text-dim); }
@@ -113,247 +113,283 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 [data-theme="dark"] .fl-count { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.2); color:#a8daf0; }
 
-/* ─── STORY GRID ─── */
-.stories-grid { display:flex; flex-direction:column; gap:9px; }
+/* ─── STORY GRID (Added Staggered Animation & Hover 3D) ─── */
+@keyframes fadeUpAnim {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stories-grid { display:flex; flex-direction:column; gap:10px; }
 .sc {
   display:flex;
   background: var(--bg-card);
   border:1px solid rgba(186,230,253,.5);
   border-radius:12px; overflow:hidden;
-  transition:var(--t); box-shadow:0 2px 8px rgba(2,132,199,.05);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  box-shadow:0 2px 8px rgba(2,132,199,.05);
+  animation: fadeUpAnim 0.5s ease backwards;
 }
+/* Staggering the animation for items */
+.sc:nth-child(1) { animation-delay: 0.05s; }
+.sc:nth-child(2) { animation-delay: 0.1s; }
+.sc:nth-child(3) { animation-delay: 0.15s; }
+.sc:nth-child(4) { animation-delay: 0.2s; }
+.sc:nth-child(5) { animation-delay: 0.25s; }
+.sc:nth-child(6) { animation-delay: 0.3s; }
+
 [data-theme="dark"] .sc { border-color:rgba(80,150,210,.25); }
-.sc:hover { box-shadow:0 6px 22px rgba(2,132,199,.12); transform:translateY(-2px); }
-[data-theme="dark"] .sc:hover { box-shadow:0 6px 22px rgba(0,0,0,.5); }
+.sc:hover { box-shadow:0 12px 30px rgba(2,132,199,.12); transform:translateY(-4px) scale(1.01); z-index: 10; }
+[data-theme="dark"] .sc:hover { box-shadow:0 12px 30px rgba(0,0,0,.6); }
 .sc-cover-wrap {
-  position:relative; flex-shrink:0; width:105px; min-height:135px; overflow:hidden;
-  background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
+  position:relative; flex-shrink:0; width:110px; min-height:140px; overflow:hidden;
+  background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.4));
   display:flex; align-items:center; justify-content:center;
 }
-.sc-cover-wrap img { width:105px; height:auto; max-height:none; object-fit:contain; display:block; padding:4px; }
+.sc-cover-wrap img { width:100px; height:auto; max-height:none; object-fit:contain; display:block; padding:4px; transition: transform 0.4s ease; }
+.sc:hover .sc-cover-wrap img { transform: scale(1.05); } /* Ảnh zoom nhẹ khi hover */
 .sc-status {
   position:absolute; top:6px; left:0;
   font-size:.5rem; letter-spacing:1px; text-transform:uppercase;
   padding:2px 6px; border-radius:0 4px 4px 0; font-weight:700;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
 }
 .status-ongoing  { background:rgba(2,132,199,.9);  color:#fff; }
 .status-complete { background:rgba(5,150,105,.9);  color:#fff; }
 .status-upcoming { background:rgba(100,116,139,.8); color:#fff; }
-.sc-body { padding:10px 12px; flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
+.sc-body { padding:12px 14px; flex:1; display:flex; flex-direction:column; gap:4px; min-width:0; }
 .sc-shelf { font-size:.6rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
 [data-theme="dark"] .sc-shelf { color:#7ec8e3; }
 .sc-title {
-  font-family:'Merriweather',serif; font-size:.84rem; color:#0c4a6e;
+  font-family:'Merriweather',serif; font-size:.88rem; color:#0c4a6e;
   margin:0; line-height:1.35; text-align:left;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 [data-theme="dark"] .sc-title { color:#e8f4ff; }
 .sc-meta { font-size:.65rem; color:#475569; font-style:italic; }
 [data-theme="dark"] .sc-meta { color:#9bbcdb; }
-.sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
+.sc-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:2px;}
 .sc-tag {
   font-size:.58rem; padding:1px 7px;
   border:1px solid var(--sky-light); border-radius:var(--r-pill);
   color:#0369a1; background:#e0f2fe;
 }
 [data-theme="dark"] .sc-tag { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
-.sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
+.sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:6px; }
 .sc-chapters { font-size:.65rem; color:#475569; }
 [data-theme="dark"] .sc-chapters { color:#9bbcdb; }
-.sc-link { font-size:.68rem; padding:3px 11px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; }
-.sc-link:hover { background:var(--sky2); }
+.sc-link { font-size:.68rem; padding:4px 12px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; font-family:'Newsreader', serif;}
+.sc-link:hover { background:var(--sky2); transform: translateX(2px); }
 .sc-link.secondary { background:#e0f2fe; color:#0369a1; }
 [data-theme="dark"] .sc-link.secondary { color:#a8d4f0; background:rgba(20,55,90,.7); border:1px solid rgba(80,150,210,.35); }
-.sc-link.secondary:hover { background:#bae6fd; }
+.sc-link.secondary:hover { background:#bae6fd; transform: translateY(-1px); }
 [data-theme="dark"] .sc-link.secondary:hover { background:rgba(80,150,210,.25); }
 
 /* ─── NOTICE ─── */
 .notice-section { margin-top:22px; }
-.notice-img { width:100%; display:block; border-radius:10px; }
+.notice-img { width:100%; display:block; border-radius:10px; transition: transform 0.3s; }
+.notice-img:hover { transform: scale(1.01); box-shadow: 0 4px 15px rgba(2,132,199,.1); }
 
 /* ─── RECENT ─── */
-.recent-list { display:flex; flex-direction:column; gap:6px; }
+.recent-list { display:flex; flex-direction:column; gap:8px; }
 .recent-item {
-  display:flex; align-items:center; gap:10px; padding:9px 12px;
+  display:flex; align-items:center; gap:12px; padding:10px 14px;
   background:var(--bg-card); border:1px solid rgba(186,230,253,.4); border-radius:10px;
-  transition:var(--t); color:var(--text-main);
+  transition:var(--t); color:var(--text-main); box-shadow:0 2px 6px rgba(0,0,0,.02);
 }
 [data-theme="dark"] .recent-item { border-color:rgba(80,150,210,.25); }
-.recent-item:hover { background:var(--sky-pale); border-color:var(--sky-light); transform:translateX(3px); }
-[data-theme="dark"] .recent-item:hover { background:rgba(80,150,210,.12); }
+.recent-item:hover { background:var(--sky-pale); border-color:var(--sky-light); transform:translateX(5px); box-shadow:0 4px 12px rgba(2,132,199,.08); }
+[data-theme="dark"] .recent-item:hover { background:rgba(80,150,210,.12); box-shadow:0 4px 12px rgba(0,0,0,.4); }
 .recent-icon { font-size:.95rem; flex-shrink:0; }
 .ri-body { flex:1; min-width:0; }
-.ri-story { font-size:.64rem; color:#64748b; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.ri-story { font-size:.64rem; color:#64748b; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; margin-bottom: 2px;}
 [data-theme="dark"] .ri-story { color:#9bbcdb; }
 .ri-title { font-size:.8rem; color:#0c4a6e; font-weight:600; }
 [data-theme="dark"] .ri-title { color:#e8f4ff; }
-.recent-arrow { color:var(--sky); font-size:.88rem; }
+.recent-arrow { color:var(--sky); font-size:.88rem; transition: transform 0.2s; }
+.recent-item:hover .recent-arrow { transform: translateX(3px); }
 
 /* ─── SIDEBAR ─── */
 .sidebar-col {
-  display:flex; flex-direction:column; gap:12px;
+  display:flex; flex-direction:column; gap:16px; /* Tăng gap cho thoáng */
   position:sticky; top:68px;
   max-height:calc(100vh - 84px); overflow-y:auto; overflow-x:hidden;
   scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
   padding-bottom:8px;
 }
-.sidebar-col::-webkit-scrollbar { width:3px; }
-.sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+.sidebar-col::-webkit-scrollbar { width:4px; }
+.sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:4px; }
 @media(max-width:900px){ .sidebar-col{ position:static; max-height:none; } }
 
 /* ─── WIDGET BASE ─── */
 .widget {
   background:var(--bg-card); border:1px solid rgba(186,230,253,.65);
-  border-radius:14px; padding:13px 12px; flex-shrink:0;
+  border-radius:16px; padding:16px 14px; flex-shrink:0;
+  box-shadow: 0 4px 12px rgba(2,132,199,.04);
 }
-[data-theme="dark"] .widget { border-color:rgba(80,150,210,.28); }
+[data-theme="dark"] .widget { border-color:rgba(80,150,210,.28); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
 .widget-title {
-  font-family:'Merriweather',serif; font-size:.68rem;
+  font-family:'Merriweather',serif; font-size:.7rem;
   letter-spacing:2.5px; text-transform:uppercase; color:var(--sky);
-  text-align:center; margin-bottom:10px;
+  text-align:center; margin-bottom:12px;
 }
 [data-theme="dark"] .widget-title { color:#7ec8e3; }
 
 /* Profile widget */
 .profile-avatar {
-  width:66px; height:66px; border-radius:50%; overflow:hidden;
-  margin:0 auto 8px; border:3px solid var(--sky-light);
+  width:72px; height:72px; border-radius:50%; overflow:hidden;
+  margin:0 auto 10px; border:3px solid var(--sky-light);
   background:var(--sky-pale); display:flex; align-items:center; justify-content:center; font-size:2rem;
+  transition: transform 0.3s;
 }
-.profile-name { font-family:'Merriweather',serif; color:#0c4a6e; font-size:.86rem; text-align:center; margin-bottom:2px; }
+.profile-avatar:hover { transform: rotate(5deg) scale(1.05); border-color: var(--sky); }
+.profile-name { font-family:'Merriweather',serif; color:#0c4a6e; font-size:.9rem; text-align:center; margin-bottom:2px; }
 [data-theme="dark"] .profile-name { color:#e8f4ff; }
-.profile-tagline { font-size:.72rem; color:#64748b; font-style:italic; text-align:center; line-height:1.5; margin-bottom:5px; }
+.profile-tagline { font-size:.74rem; color:#64748b; font-style:italic; text-align:center; line-height:1.5; margin-bottom:8px; }
 [data-theme="dark"] .profile-tagline { color:#9bbcdb; }
 .profile-deco { text-align:center; font-size:.88rem; letter-spacing:3px; color:var(--sky-light); }
 
 /* Category tree */
-.cat-tree { font-size:.74rem; color:#64748b; }
+.cat-tree { font-size:.76rem; color:#64748b; }
 [data-theme="dark"] .cat-tree { color:#9bbcdb; }
-.cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
+.cat-tree ul { list-style:none; padding-left:14px; margin:4px 0; }
 .cat-tree > ul { padding-left:0; }
-.cat-tree a { color:#64748b; transition:color .2s; display:block; padding:2px 0; }
+.cat-tree a { color:#64748b; transition:color .2s, transform .2s; display:inline-block; padding:3px 0; }
 [data-theme="dark"] .cat-tree a { color:#9bbcdb; }
-.cat-tree a:hover { color:var(--sky); }
+.cat-tree a:hover { color:var(--sky); transform: translateX(3px); }
 [data-theme="dark"] .cat-tree a:hover { color:#e8f4ff; }
 .cat-tree summary {
-  cursor:pointer; font-size:.76rem; color:#0c4a6e; font-weight:600;
-  padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px;
+  cursor:pointer; font-size:.8rem; color:#0c4a6e; font-weight:600;
+  padding:4px 0; list-style:none; display:flex; align-items:center; gap:6px;
+  transition: color 0.2s;
 }
+.cat-tree summary:hover { color: var(--sky); }
 [data-theme="dark"] .cat-tree summary { color:#d0e6f5; }
+[data-theme="dark"] .cat-tree summary:hover { color:#e8f4ff; }
 .cat-tree summary::-webkit-details-marker { display:none; }
-.cat-tree summary::before { content:'▸'; font-size:.58rem; transition:transform .2s; color:var(--sky); }
+.cat-tree summary::before { content:'▸'; font-size:.6rem; transition:transform .2s; color:var(--sky); }
 [data-theme="dark"] .cat-tree summary::before { color:#7ec8e3; }
 .cat-tree details[open]>summary::before { transform:rotate(90deg); }
-.cat-count { font-size:.62rem; color:#94a3b8; margin-left:4px; }
-[data-theme="dark"] .cat-count { color:#6a8ea8; }
+.cat-count { font-size:.62rem; color:#94a3b8; margin-left:auto; background: var(--sky-pale); padding: 1px 6px; border-radius: var(--r-pill); border: 1px solid rgba(186,230,253,.4);}
+[data-theme="dark"] .cat-count { color:#6a8ea8; background: rgba(15,35,60,.5); border-color: rgba(80,150,210,.2); }
 
 /* Quote widget */
 .quote-body {
-  font-style:italic; font-size:.75rem; color:#475569; line-height:1.75;
-  border-left:3px solid var(--sky-light); padding-left:10px; margin:0;
+  font-style:italic; font-size:.78rem; color:#475569; line-height:1.75;
+  border-left:3px solid var(--sky-light); padding-left:12px; margin:0;
 }
 [data-theme="dark"] .quote-body { color:#e8f4ff; border-left-color:rgba(126,200,227,.4); }
 .quote-widget-inner {
-  border-radius:10px; padding:10px 12px; margin:-2px;
+  border-radius:10px; padding:12px 14px; margin:-2px;
+  background: rgba(240,249,255, 0.4);
 }
 [data-theme="dark"] .quote-widget-inner {
   background:rgba(15, 35, 60, 0.4);
   border:1px solid rgba(126,200,227,.15);
 }
-.quote-src { font-size:.62rem; color:#94a3b8; margin-top:6px; text-align:right; }
+.quote-src { font-size:.64rem; color:#94a3b8; margin-top:8px; text-align:right; font-weight: 600; }
 [data-theme="dark"] .quote-src { color:#a3cbeb; }
 
 /* ─── MESSAGE WIDGET ─── */
-/* Msg widget: rộng hơn, font đồng đều, X nhỏ */
 .msg-widget-tabs {
-  display:flex; gap:0; margin-bottom:9px;
+  display:flex; gap:0; margin-bottom:12px;
   border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); overflow:hidden;
+  background: var(--bg-card);
 }
 [data-theme="dark"] .msg-widget-tabs { border-color:rgba(80,150,210,.3); }
 .msg-tab {
-  flex:1; padding:5px 0; font-size:.68rem; letter-spacing:.5px; text-transform:uppercase;
+  flex:1; padding:7px 0; font-size:.7rem; letter-spacing:.5px; text-transform:uppercase;
   background:none; border:none; cursor:pointer; font-family:'Newsreader',serif;
-  color:var(--text-mid); transition:var(--t);
+  color:var(--text-mid); transition:all .3s ease; position: relative;
 }
-.msg-tab.active { background:var(--sky); color:#fff; }
+.msg-tab.active { background:var(--sky); color:#fff; font-weight: 600; }
 [data-theme="dark"] .msg-tab { color:#8ab8d8; background:transparent; }
 [data-theme="dark"] .msg-tab.active { background:#1a5a90; color:#e8f6ff; }
-.msg-panel { display:none; }
+
+/* Online Pulse Indicator cho Tab Riêng tư */
+.online-pulse {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; margin-left: 4px; vertical-align: middle;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.msg-panel { display:none; animation: fadeUpAnim 0.3s ease; }
 .msg-panel.active { display:block; }
 
 .msg-inp, .msg-textarea {
-  width:100%; padding:6px 11px;
+  width:100%; padding:8px 12px;
   border:1.5px solid var(--sky-light); font-family:'Newsreader',serif;
   color:var(--text-main); background:#fff; outline:none;
-  box-sizing:border-box; font-size:.72rem; margin-bottom:5px;
-  border-radius:var(--r-pill);
+  box-sizing:border-box; font-size:.75rem; margin-bottom:8px;
+  border-radius:var(--r-pill); transition: border-color 0.2s, box-shadow 0.2s;
 }
-.msg-textarea { border-radius:8px; resize:none; min-height:48px; }
-.msg-inp:focus, .msg-textarea:focus { border-color:var(--sky); }
+.msg-textarea { border-radius:12px; resize:none; min-height:56px; }
+.msg-inp:focus, .msg-textarea:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
 [data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea {
   background:rgba(10,25,45,.9); border-color:rgba(80,150,210,.4); color:#d8eeff;
 }
+[data-theme="dark"] .msg-inp:focus, [data-theme="dark"] .msg-textarea:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
 [data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color:#4a7a9a; }
 
 .msg-send-btn {
-  width:100%; padding:6px; background:var(--sky); color:#fff;
-  border:none; border-radius:var(--r-pill); font-size:.72rem;
+  width:100%; padding:8px; background:var(--sky); color:#fff;
+  border:none; border-radius:var(--r-pill); font-size:.76rem;
   font-family:'Newsreader',serif; cursor:pointer; transition:var(--t);
+  font-weight: 600;
 }
-.msg-send-btn:hover { background:var(--sky2); }
-.msg-send-btn:disabled { opacity:.5; cursor:not-allowed; }
+.msg-send-btn:hover { background:var(--sky2); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(2,132,199,.2); }
+.msg-send-btn:disabled { opacity:.5; cursor:not-allowed; transform: none; box-shadow: none;}
 .msg-sent-notice {
-  text-align:center; font-size:.68rem; color:#059669; padding:5px 0;
-  display:none; font-style:italic;
+  text-align:center; font-size:.7rem; color:#059669; padding:8px 0;
+  display:none; font-style:italic; font-weight: 600;
 }
 [data-theme="dark"] .msg-sent-notice { color:#34d399; }
 
 /* Public feed */
 .msg-public-feed {
-  max-height:140px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;
-  margin-bottom:8px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
+  max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;
+  margin-bottom:10px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
+  padding-right: 4px;
 }
-.msg-public-feed::-webkit-scrollbar { width:3px; }
-.msg-public-feed::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+.msg-public-feed::-webkit-scrollbar { width:4px; }
+.msg-public-feed::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:4px; }
 
 .msg-pub-item {
-  background:var(--sky-pale); border-radius:8px; padding:6px 9px;
-  border:1px solid rgba(186,230,253,.35); font-size:.68rem;
+  background:var(--sky-pale); border-radius:10px; padding:8px 10px;
+  border:1px solid rgba(186,230,253,.35); font-size:.7rem;
   line-height:1.5;
 }
 [data-theme="dark"] .msg-pub-item {
   background:rgba(15,35,60,.7);
   border-color:rgba(80,150,210,.2);
 }
-/* FIX 3: X nhỏ, float right, tất cả text trong feed cùng cỡ */
-.msg-pub-item-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 2px;
-}
+.msg-pub-item-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
 .msg-pub-del {
   margin-left: auto;
   background:none; border:1px solid rgba(186,230,253,.5); font-size:.56rem; color:var(--text-dim);
-  cursor:pointer; padding:1px 5px; border-radius:3px; transition:color .15s, border-color .15s;
+  cursor:pointer; padding:1px 5px; border-radius:4px; transition:color .15s, border-color .15s;
   display:none; line-height:1.4; flex-shrink:0;
 }
 .msg-pub-del.show { display:inline-flex; align-items:center; }
-.msg-pub-del:hover { color:#ef4444; border-color:#fca5a5; }
+.msg-pub-del:hover { color:#ef4444; border-color:#fca5a5; background: rgba(239,68,68,0.05); }
 [data-theme="dark"] .msg-pub-del { border-color:rgba(80,150,210,.3); color:#5a7a9a; }
-.msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
+.msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.7rem; }
 [data-theme="dark"] .msg-pub-name { color:#5aacdf; }
 .msg-pub-time { font-size:.62rem; color:var(--text-dim); }
 [data-theme="dark"] .msg-pub-time { color:#4a6a8a; }
-.msg-pub-text { color:var(--text-main); margin:0; line-height:1.45; word-break:break-word; font-size:.68rem; }
+.msg-pub-text { color:var(--text-main); margin:0; line-height:1.45; word-break:break-word; font-size:.7rem; }
 [data-theme="dark"] .msg-pub-text { color:#c0dff5; }
-.msg-public-empty { font-size:.68rem; color:var(--text-dim); font-style:italic; text-align:center; padding:10px 0; }
+.msg-public-empty { font-size:.7rem; color:var(--text-dim); font-style:italic; text-align:center; padding:12px 0; }
 [data-theme="dark"] .msg-public-empty { color:#4a6a8a; }
 
 /* Private admin cards */
 .msg-priv-card {
-  border-radius:9px; padding:8px 10px;
-  border:1px solid rgba(186,230,253,.4); font-size:.68rem;
+  border-radius:10px; padding:10px 12px;
+  border:1px solid rgba(186,230,253,.4); font-size:.7rem;
   background:var(--sky-pale);
 }
 [data-theme="dark"] .msg-priv-card {
@@ -362,127 +398,182 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 .msg-priv-card.unread  { border-left:3px solid var(--sky); }
 .msg-priv-card.replied { border-left:3px solid #34d399; opacity:.85; }
-.msg-priv-card-header  { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
-.msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
+.msg-priv-card-header  { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+.msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.7rem; }
 [data-theme="dark"] .msg-priv-sender { color:#5aacdf; }
 .msg-priv-time { font-size:.62rem; color:var(--text-dim); margin-left:auto; }
 [data-theme="dark"] .msg-priv-time { color:#4a6a8a; }
-.msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
+.msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.6rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
 .msg-priv-del:hover { color:#ef4444; }
-.msg-priv-text { color:var(--text-main); line-height:1.45; margin:2px 0 5px; word-break:break-word; font-size:.68rem; }
+.msg-priv-text { color:var(--text-main); line-height:1.45; margin:3px 0 6px; word-break:break-word; font-size:.7rem; }
 [data-theme="dark"] .msg-priv-text { color:#c0dff5; }
 .msg-priv-reply-inp {
-  width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:7px;
-  font-size:.68rem; font-family:'Newsreader',serif; resize:none;
+  width:100%; padding:6px 10px; border:1.5px solid var(--sky-light); border-radius:8px;
+  font-size:.7rem; font-family:'Newsreader',serif; resize:none;
   background:#fff; color:var(--text-main); outline:none; margin-bottom:4px;
 }
 .msg-priv-reply-inp:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-priv-reply-inp { background:rgba(10,25,45,.9); border-color:rgba(80,150,210,.4); color:#d8eeff; }
 .msg-priv-send-btn {
-  padding:3px 10px; background:var(--sky); color:#fff; border:none;
-  border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t);
+  padding:4px 12px; background:var(--sky); color:#fff; border:none;
+  border-radius:var(--r-pill); font-size:.68rem; cursor:pointer; transition:var(--t);
 }
 .msg-priv-send-btn:hover { background:var(--sky2); }
 .msg-priv-send-btn:disabled { opacity:.5; }
 .msg-priv-replied-wrap {
-  margin-top:4px; padding:4px 8px; background:rgba(52,211,153,.08);
-  border-radius:6px; border:1px solid rgba(52,211,153,.25);
+  margin-top:6px; padding:6px 10px; background:rgba(52,211,153,.08);
+  border-radius:8px; border:1px solid rgba(52,211,153,.25);
 }
 [data-theme="dark"] .msg-priv-replied-wrap { background:rgba(52,211,153,.05); border-color:rgba(52,211,153,.2); }
-.msg-priv-replied-label { font-size:.62rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
-.msg-priv-replied-text  { font-size:.68rem; color:var(--text-main); line-height:1.4; }
+.msg-priv-replied-label { font-size:.64rem; color:#059669; font-weight:700; display:block; margin-bottom:3px; }
+.msg-priv-replied-text  { font-size:.7rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-priv-replied-text { color:#c0dff5; }
 .msg-priv-del-reply {
-  background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim);
-  padding:2px 4px; margin-top:2px; border-radius:3px; transition:color .15s;
+  background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim);
+  padding:2px 4px; margin-top:3px; border-radius:4px; transition:color .15s;
 }
-.msg-priv-del-reply:hover { color:#ef4444; }
-.msg-admin-reply-section { margin-top:7px; }
-.msg-admin-reply-title   { font-size:.66rem; color:#059669; font-weight:700; margin-bottom:4px; }
-.msg-admin-reply-card    { padding:6px 8px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:8px; margin-bottom:4px; }
+.msg-priv-del-reply:hover { color:#ef4444; background: rgba(239,68,68,0.05);}
+.msg-admin-reply-section { margin-top:8px; }
+.msg-admin-reply-title   { font-size:.68rem; color:#059669; font-weight:700; margin-bottom:6px; }
+.msg-admin-reply-card    { padding:8px 10px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:10px; margin-bottom:6px; }
 [data-theme="dark"] .msg-admin-reply-card { background:rgba(52,211,153,.05); }
-.msg-admin-reply-orig    { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
-.msg-admin-reply-body    { font-size:.68rem; color:var(--text-main); line-height:1.4; }
+.msg-admin-reply-orig    { font-size:.64rem; color:var(--text-dim); font-style:italic; margin-bottom:4px; border-left: 2px solid #34d399; padding-left: 6px;}
+.msg-admin-reply-body    { font-size:.7rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-admin-reply-body { color:#c0dff5; }
-.msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.56rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-right:3px; }
-.msg-admin-reply-time    { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
+.msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.58rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-right:4px; }
+.msg-admin-reply-time    { font-size:.6rem; color:var(--text-dim); text-align:right; margin-top:3px; }
 .msg-pub-admin           { background:rgba(14,165,233,.06)!important; border-color:rgba(14,165,233,.25)!important; }
 [data-theme="dark"] .msg-pub-admin { background:rgba(20,60,100,.5)!important; border-color:rgba(80,150,210,.35)!important; }
 .msg-pub-admin-name      { color:var(--sky-dark)!important; }
 [data-theme="dark"] .msg-pub-admin-name { color:#5aacdf!important; }
-.msg-pub-owner-badge     { display:inline-block; font-size:.52rem; background:var(--sky); color:#fff; padding:1px 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
+.msg-pub-owner-badge     { display:inline-block; font-size:.54rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:4px; vertical-align:middle; }
 
 .msg-panel p {
-  font-size:.68rem;
+  font-size:.7rem;
   color:var(--text-dim);
-  margin:0 0 7px;
+  margin:0 0 8px;
   font-style:italic;
   line-height:1.5;
 }
 [data-theme="dark"] .msg-panel p { color:#5a7a9a; }
 
-/* FLOATING MAIL BUBBLE */
+/* FLOATING MAIL BUBBLE - Added Glassmorphism */
 .msg-bubble-btn {
   position:fixed;
   bottom: 126px;
   right: 22px;
   z-index: 410;
-  width: 40px; height: 40px; border-radius:50%;
-  background:linear-gradient(135deg,var(--sky),var(--sky2));
-  border:none; cursor:pointer; color:#fff; font-size:1rem;
-  box-shadow:0 4px 14px rgba(2,132,199,.4);
+  width: 44px; height: 44px; border-radius:50%; /* Tăng size nút bong bóng 1 chút */
+  background:linear-gradient(135deg, rgba(14,165,233,0.9), rgba(2,132,199,0.9));
+  backdrop-filter: blur(8px);
+  border:1px solid rgba(255,255,255,0.2);
+  cursor:pointer; color:#fff; font-size:1.1rem;
+  box-shadow:0 6px 16px rgba(2,132,199,.4);
   display:flex; align-items:center; justify-content:center;
-  transition:transform .2s, box-shadow .2s;
+  transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s ease;
 }
 .msg-bubble-btn:hover {
-  transform:scale(1.1) translateY(-2px);
-  box-shadow:0 7px 20px rgba(2,132,199,.55);
+  transform:scale(1.15) translateY(-3px);
+  box-shadow:0 10px 25px rgba(2,132,199,.55);
 }
-[data-theme="dark"] .msg-bubble-btn { background:linear-gradient(135deg,#1a5a90,#0e3d6e); }
+[data-theme="dark"] .msg-bubble-btn { 
+  background:linear-gradient(135deg,rgba(26,90,144,0.9),rgba(14,61,110,0.9)); 
+  border-color:rgba(126,200,227,0.2);
+}
 @media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
 
 /* Popup from bubble */
 .msg-popup {
-  position:fixed; bottom:128px; right:16px; z-index:420;
-  width:min(340px,calc(100vw - 28px));
-  background:var(--bg-card); border:1px solid rgba(186,230,253,.6);
-  border-radius:16px; box-shadow:0 14px 44px rgba(2,132,199,.18);
-  padding:15px 14px 13px;
-  opacity:0; pointer-events:none; transform:translateY(12px) scale(.97);
-  transition:opacity .22s ease, transform .22s ease;
+  position:fixed; bottom:132px; right:20px; z-index:420;
+  width:min(360px,calc(100vw - 32px)); /* Mở rộng popup */
+  background:rgba(255,255,255,0.98); 
+  backdrop-filter: blur(16px);
+  border:1px solid rgba(186,230,253,.6);
+  border-radius:18px; box-shadow:0 16px 50px rgba(2,132,199,.2);
+  padding:18px 16px 16px;
+  opacity:0; pointer-events:none; transform:translateY(15px) scale(.95);
+  transition:opacity .25s cubic-bezier(0.34, 1.56, 0.64, 1), transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-[data-theme="dark"] .msg-popup { border-color:rgba(80,150,210,.3); }
+[data-theme="dark"] .msg-popup { 
+  background:rgba(15,35,54,0.98);
+  border-color:rgba(80,150,210,.3); 
+  box-shadow:0 16px 50px rgba(0,0,0,.5);
+}
 .msg-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
 .msg-popup-header {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
 }
 .msg-popup-title {
-  font-family:'Merriweather',serif; font-size:.74rem; color:var(--sky-dark);
-  letter-spacing:1.5px; text-transform:uppercase;
+  font-family:'Merriweather',serif; font-size:.8rem; color:var(--sky-dark);
+  letter-spacing:1.5px; text-transform:uppercase; font-weight: bold;
 }
 [data-theme="dark"] .msg-popup-title { color:#5aacdf; }
 .msg-popup-close {
-  width:20px; height:20px; border-radius:10%; border:1px solid rgba(186,230,253,.5);
-  background:none; cursor:pointer; font-size:.66rem; color:var(--text-dim);
+  width:24px; height:24px; border-radius:12%; border:1px solid rgba(186,230,253,.6);
+  background:var(--bg-card); cursor:pointer; font-size:.7rem; color:var(--text-dim);
   display:flex; align-items:center; justify-content:center; transition:var(--t);
 }
-.msg-popup-close:hover { background:var(--sky-pale); color:var(--sky); }
+.msg-popup-close:hover { background:rgba(239,68,68,0.1); color:#ef4444; border-color:#fca5a5; transform: rotate(90deg); }
 [data-theme="dark"] .msg-popup-close { border-color:rgba(80,150,210,.3); color:#5a7a9a; }
-[data-theme="dark"] .msg-popup-close:hover { background:rgba(80,150,210,.12); }
+[data-theme="dark"] .msg-popup-close:hover { background:rgba(239,68,68,0.15); border-color:#ef4444;}
 
 /* Misc */
-.no-results { display:none; text-align:center; padding:24px; color:var(--text-dim); font-style:italic; }
-.no-results.show { display:block; }
+.no-results { display:none; text-align:center; padding:30px; color:var(--text-dim); font-style:italic; font-size: 0.9rem;}
+.no-results.show { display:block; animation: fadeUpAnim 0.3s ease; }
+.no-results .fish-icon { display: block; font-size: 2rem; margin-bottom: 10px; animation: swim 3s infinite ease-in-out alternate; }
+@keyframes swim {
+  0% { transform: translateX(-10px) rotate(-5deg); }
+  100% { transform: translateX(10px) rotate(5deg); }
+}
+
 .hidden { display:none !important; }
-.reveal { opacity:0; transform:translateY(14px); transition:opacity .5s ease,transform .5s ease; }
+.reveal { opacity:0; transform:translateY(15px); transition:opacity .6s cubic-bezier(0.34, 1.56, 0.64, 1),transform .6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .reveal.visible { opacity:1; transform:translateY(0); }
-.contact-email { font-size:.72rem; margin-bottom:5px; }
+.contact-email { font-size:.75rem; margin-bottom:6px; padding: 4px 8px; border-radius: 6px; display: inline-block; transition: background 0.2s;}
+.contact-email:hover { background: var(--sky-pale); color: var(--sky-dark); }
 [data-theme="dark"] .contact-email { color:#8ab8d8; }
+[data-theme="dark"] .contact-email:hover { background: rgba(126,200,227,0.1); color: #e8f4ff; }
+
+/* Custom Tooltip Copy Text */
+.copy-tooltip {
+  position: absolute; background: #333; color: #fff; font-size: 0.65rem; padding: 4px 8px;
+  border-radius: 4px; pointer-events: none; opacity: 0; transform: translateY(-5px);
+  transition: all 0.2s; white-space: nowrap; z-index: 1000;
+}
+.copy-tooltip.show { opacity: 1; transform: translateY(-30px); }
 
 @media(max-width:600px){
-  .sc-cover-wrap { width:88px; }
+  .sc-cover-wrap { width:95px; }
   .sc-cover-wrap img { width:88px; }
   .hero-name-img { max-width:240px; }
+}
+
+/* ─── THEME TOGGLE BUTTON ─── */
+#themeToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(186,230,253,.7);
+  background: none;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: var(--t);
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+#themeToggleBtn:hover {
+  background: var(--sky-pale);
+  border-color: var(--sky-light);
+  transform: rotate(30deg);
+}
+[data-theme="dark"] #themeToggleBtn {
+  border-color: rgba(80,150,210,.4);
+  color: #8ab8d8;
+}
+[data-theme="dark"] #themeToggleBtn:hover {
+  background: rgba(80,150,210,.15);
 }
 </style>
 
@@ -504,12 +595,12 @@ const hcdhCount    = countChaps(hcdhPosts);
 
     <!-- HERO -->
     <div class="hero">
-      <div class="hero-banner-wrap">
+      <div class="hero-banner-wrap reveal">
         <img class="hero-banner-bg" src="/dynamic-duo-web/images/banner.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
         <div class="hero-banner-overlay"></div>
         <img class="hero-name-img" src="/dynamic-duo-web/images/namexoanen.png" alt="dynamic duo" onerror="this.style.display='none'" />
       </div>
-      <p class="hero-tagline">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
+      <p class="hero-tagline reveal">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
     <!-- LƯU Ý -->
@@ -522,12 +613,12 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <!-- FILTER + STORIES -->
-    <div class="sec-hd">
+    <div class="sec-hd reveal">
       <h2>📚 Tủ truyện</h2>
       <div class="sec-line"></div>
     </div>
 
-    <div class="filter-bar">
+    <div class="filter-bar reveal">
       <span class="fl-label">Lọc</span>
       <div class="fl-chips" id="filterChips">
         <button class="chip active" data-tag="all">Tất cả</button>
@@ -547,7 +638,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
     <div class="stories-grid" id="storiesGrid">
 
-      <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
+      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
           <span class="sc-status status-ongoing">Đang đăng</span>
@@ -569,7 +660,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
+      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biahcdh.png" alt="Hạ cháy đồng hoang" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
           <span class="sc-status status-ongoing">Đang đăng</span>
@@ -591,7 +682,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
+      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
           <span class="sc-status status-complete">Hoàn thành</span>
@@ -613,7 +704,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
+      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biatnctsct.png" alt="Tôi nghĩ chúng tôi sắp chia tay" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
           <span class="sc-status status-complete">Hoàn thành</span>
@@ -635,8 +726,8 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="sc" data-cat="upcoming" data-tags="đam mỹ">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--sky-light);width:105px">☁️</div>
+      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Vật dễ vỡ</h3>
@@ -649,8 +740,8 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="sc" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--sky-light);width:105px">☁️</div>
+      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
         <div class="sc-body">
           <div class="sc-shelf">🌤️ Sắp đào</div>
           <h3 class="sc-title">Thiếu đế xuân tâm</h3>
@@ -663,11 +754,15 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <div class="no-results" id="noRes">𓆝 Không tìm thấy truyện phù hợp.</div>
+      <!-- Cute Empty State -->
+      <div class="no-results" id="noRes">
+        <span class="fish-icon">𓆝</span>
+        Cá bơi đi mất rồi. Không tìm thấy truyện phù hợp!
+      </div>
     </div>
 
     <!-- MỚI CẬP NHẬT -->
-    <div class="sec-hd reveal" style="margin-top:26px">
+    <div class="sec-hd reveal" style="margin-top:32px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
@@ -695,7 +790,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar-col">
 
-    <div class="widget">
+    <div class="widget reveal">
       <div class="widget-title">✦ Về nhà cá</div>
       <div class="profile-avatar">
         <img src="/dynamic-duo-web/images/logo1.png" alt="logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentElement.textContent='🐋'" />
@@ -703,12 +798,12 @@ const hcdhCount    = countChaps(hcdhPosts);
       <div class="profile-name">dynamic duo</div>
       <p class="profile-tagline">paired dreams,<br/>boundless gleam ⋆.˚</p>
       <div class="profile-deco">𓆝.°•</div>
-      <div style="margin-top:10px;text-align:center">
-        <a href="/dynamic-duo-web/about/" style="font-size:.68rem;color:var(--sky);border:1px solid var(--sky-light);padding:3px 11px;border-radius:var(--r-pill);transition:var(--t)" onmouseover="this.style.background='var(--sky-pale)'" onmouseout="this.style.background=''">About us →</a>
+      <div style="margin-top:14px;text-align:center">
+        <a href="/dynamic-duo-web/about/" style="font-size:.7rem;color:var(--sky);border:1px solid var(--sky-light);padding:5px 14px;border-radius:var(--r-pill);transition:var(--t); font-weight: 600;" onmouseover="this.style.background='var(--sky-pale)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background=''; this.style.transform='translateY(0)';">About us →</a>
       </div>
     </div>
 
-    <div class="widget">
+    <div class="widget reveal">
       <div class="widget-title">📂 Danh mục</div>
       <div class="cat-tree">
         <ul>
@@ -716,8 +811,8 @@ const hcdhCount    = countChaps(hcdhPosts);
             <details open>
               <summary>🐠 Cá dưới nước</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng<span class="cat-count">{qhbcpCount}c</span></a></li>
-                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang<span class="cat-count">{hcdhCount}c</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng</a><span class="cat-count">{qhbcpCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang</a><span class="cat-count">{hcdhCount}c</span></li>
               </ul>
             </details>
           </li>
@@ -725,10 +820,10 @@ const hcdhCount    = countChaps(hcdhPosts);
             <details>
               <summary>🍽️ Cá trên bàn</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa<span class="cat-count">{ndntkmCount}c</span></a></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay<span class="cat-count">{tnctcstCount}c</span></a></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ<span class="cat-count">sắp</span></a></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm<span class="cat-count">sắp</span></a></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa</a><span class="cat-count">{ndntkmCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay</a><span class="cat-count">{tnctcstCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ</a><span class="cat-count">sắp</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm</a><span class="cat-count">sắp</span></li>
               </ul>
             </details>
           </li>
@@ -743,7 +838,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <!-- Quote of the day -->
-    <div class="widget">
+    <div class="widget reveal">
       <div class="widget-title">✨ Quote of the day</div>
       <div class="quote-widget-inner">
         <blockquote class="quote-body">"There is no fear in love. But perfect love drives out fear, because fear has to do with punishment. The one who fears is not made perfect in love."</blockquote>
@@ -752,10 +847,10 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <!-- Lời nhắn widget -->
-    <div class="widget" id="msgSidebarWidget">
+    <div class="widget reveal" id="msgSidebarWidget">
       <div class="widget-title">✉ Lời nhắn</div>
       <div class="msg-widget-tabs">
-        <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư</button>
+        <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư <span class="online-pulse"></span></button>
         <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Nhắn chung</button>
       </div>
 
@@ -767,11 +862,11 @@ const hcdhCount    = countChaps(hcdhPosts);
           <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
           <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
           <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
-          <div id="msgPrivateUserReply" style="margin-top:7px"></div>
+          <div id="msgPrivateUserReply" style="margin-top:10px"></div>
         </div>
         <div id="msgPrivateAdminPanel" style="display:none">
-          <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic">📬 Tin nhắn riêng nhận được:</p>
-          <div id="msgPrivateAdminList" style="max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin"></div>
+          <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic; border-bottom: 1px solid rgba(186,230,253,.4); padding-bottom: 5px;">📬 Hộp thư Admin:</p>
+          <div id="msgPrivateAdminList" style="max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin"></div>
         </div>
       </div>
 
@@ -782,15 +877,19 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
         <input  class="msg-inp"      id="msgPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
         <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn cho mọi người..." rows="2"></textarea>
-        <button class="msg-send-btn" id="msgPublicSend">Gửi 🌊</button>
+        <button class="msg-send-btn" id="msgPublicSend">Gửi lên tường 🌊</button>
         <div class="msg-sent-notice" id="msgPublicDone">✓ Đã gửi! 🌊</div>
       </div>
     </div>
 
-    <div class="widget" style="text-align:center">
+    <!-- Contact widget with Copy Feature -->
+    <div class="widget reveal" style="text-align:center; position: relative;">
       <div class="widget-title">✉ Liên hệ</div>
-      <p class="contact-email">dynamicduoo.q@gmail.com</p>
-      <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.68rem;color:var(--sky)">🌐 WordPress cũ</a>
+      <p class="contact-email" id="sidebarEmailCopy" title="Nhấn để copy" style="cursor: pointer; position: relative;">dynamicduoo.q@gmail.com 📋</p>
+      <div id="emailTooltip" class="copy-tooltip">Đã copy! ✔️</div>
+      <div>
+        <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.7rem;color:var(--sky); font-weight: 600;">🌐 WordPress cũ</a>
+      </div>
     </div>
 
   </aside>
@@ -803,28 +902,28 @@ const hcdhCount    = countChaps(hcdhPosts);
 <!-- Popup from bubble -->
 <div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
-    <span class="msg-popup-title">✉ Lời nhắn</span>
+    <span class="msg-popup-title">✉ Hòm thư nhà cá</span>
     <button class="msg-popup-close" id="msgPopupClose">✕</button>
   </div>
-  <div class="msg-widget-tabs" style="margin-bottom:9px">
-    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư</button>
+  <div class="msg-widget-tabs" style="margin-bottom:12px">
+    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư <span class="online-pulse"></span></button>
     <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
   </div>
   <div class="msg-panel active" id="msgPopupPanelPrivate">
-    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 6px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
+    <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5">Tin nhắn gửi ở đây chỉ có Admin đọc được thui nhé 🐋</p>
     <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn..." rows="3"></textarea>
+    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn gửi chủ nhà..." rows="3"></textarea>
     <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
-    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi! 🌊</div>
+    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi thành công! 🌊</div>
   </div>
   <div class="msg-panel" id="msgPopupPanelPublic">
     <div class="msg-public-feed" id="msgPopupPublicFeed">
       <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
     </div>
     <input  class="msg-inp"      id="msgPopupPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
-    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Nhắn gì đó..." rows="2"></textarea>
-    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi 🌊</button>
-    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi! 🌊</div>
+    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Cùng thả cá vào đây nào..." rows="2"></textarea>
+    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi lên tường 🌊</button>
+    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi thành công! 🌊</div>
   </div>
 </div>
 
@@ -843,6 +942,11 @@ function updateClearBtn(){ if(chipClear) chipClear.style.display=(activeTags.siz
 function applyFilter(){
   let vis=0;
   allCards.forEach(card=>{
+    // Reset animation bằng cách remove rồi add lại class (để chạy lại CSS keyframe)
+    card.style.animation = 'none';
+    card.offsetHeight; // trigger reflow
+    card.style.animation = '';
+
     const cCat  = card.dataset.cat||'';
     const cTags = (card.dataset.tags||'').split(',').map(t=>t.trim().toLowerCase());
     const catOk = activeCat===null||cCat===activeCat;
@@ -870,10 +974,29 @@ chips.forEach(chip=>{
 });
 
 /* ══════════════════════════════════════
-   REVEAL
+   REVEAL ON SCROLL
 ══════════════════════════════════════ */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }),{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ══════════════════════════════════════
+   CLICK TO COPY EMAIL
+══════════════════════════════════════ */
+(function setupCopyEmail(){
+  const copyBtn = document.getElementById('sidebarEmailCopy');
+  const tooltip = document.getElementById('emailTooltip');
+  if(!copyBtn || !tooltip) return;
+
+  copyBtn.addEventListener('click', (e) => {
+    navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
+      // Position tooltip near cursor
+      const rect = copyBtn.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left - 20) + 'px';
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.remove('show'), 2000);
+    });
+  });
+})();
 
 /* ══════════════════════════════════════
    MAIL BUBBLE
@@ -964,17 +1087,19 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
           <div class="msg-priv-card-header">
             <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
             <span class="msg-priv-time">${msgTime(m.ts)}</span>
-            <button class="msg-priv-del" data-mid="${msgEsc(m.id)}">✕</button>
+            <button class="msg-priv-del" title="Xóa tin nhắn" data-mid="${msgEsc(m.id)}">✕</button>
           </div>
           <div class="msg-priv-text">${msgEsc(m.text)}</div>
           ${replied
             ? `<div class="msg-priv-replied-wrap">
-                <span class="msg-priv-replied-label">↩ Đã trả lời:</span>
+                <span class="msg-priv-replied-label">↩ Chủ nhà trả lời:</span>
                 <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
-                <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}">✕ Xóa reply</button>
+                <div style="text-align:right">
+                  <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}">Thử lại / Xóa</button>
+                </div>
                </div>`
             : `<div>
-                <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
+                <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời cho ${msgEsc(m.name)||'bạn này'}..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
                 <div style="display:flex;justify-content:flex-end;margin-top:3px">
                   <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}">Gửi reply ↩</button>
                 </div>
@@ -1003,7 +1128,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
       const myMsgs = Object.entries(data).map(([id,v])=>({id,...v})).filter(m=>m.token===myToken&&m.adminReply).sort((a,b)=>(b.ts||0)-(a.ts||0));
       if(myMsgs.length===0){ userView.innerHTML=''; return; }
       userView.innerHTML = `<div class="msg-admin-reply-section">
-        <div class="msg-admin-reply-title">💬 Chủ nhà đã trả lời bạn:</div>
+        <div class="msg-admin-reply-title">💬 Có tin nhắn mới từ chủ nhà:</div>
         ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
           <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
           <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
@@ -1041,7 +1166,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
             <span class="msg-pub-name ${isOwner?'msg-pub-admin-name':''}">${isOwner?'🐋 '+msgEsc(m.name):msgEsc(m.name)||'Khách vô danh'}</span>
             ${isOwner?'<span class="msg-pub-owner-badge">chủ nhà</span>':''}
             <span class="msg-pub-time">${msgTime(m.ts)}</span>
-            <button class="msg-pub-del ${canDel?'show':''}" data-mid="${msgEsc(m.id)}">✕</button>
+            <button class="msg-pub-del ${canDel?'show':''}" title="Xóa" data-mid="${msgEsc(m.id)}">✕</button>
           </div>
           <div class="msg-pub-text">${msgEsc(m.text)}</div>
         </div>`;

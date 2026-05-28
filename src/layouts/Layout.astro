@@ -579,7 +579,67 @@ if (currentTruyenId && isNovelPage) {
     .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
-
+/* ── @mention tag ── */
+.reply-at {
+  display: inline-block;
+  color: var(--sky);
+  font-weight: 700;
+  font-size: .75em;
+  background: rgba(14,165,233,.08);
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-right: 2px;
+}
+[data-theme="dark"] .reply-at {
+  color: #89d0f5;
+  background: rgba(96,184,232,.12);
+}
+ 
+/* ── Inline "đang reply cho..." banner ── */
+.reply-quoting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(14,165,233,.07);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border-left: 3px solid var(--sky-light);
+}
+[data-theme="dark"] .reply-quoting {
+  background: rgba(96,184,232,.1);
+  border-left-color: #2a6a8a;
+}
+.reply-quoting-label {
+  flex: 1;
+  font-size: .68rem;
+  color: var(--sky);
+  font-style: italic;
+}
+[data-theme="dark"] .reply-quoting-label { color: #89d0f5; }
+.reply-quoting-cancel {
+  background: none; border: none; cursor: pointer;
+  font-size: .62rem; color: var(--text-dim); padding: 0 2px;
+  border-radius: 3px; transition: color .15s;
+}
+.reply-quoting-cancel:hover { color: #ef4444; }
+ 
+/* ── "↩ Reply" button trong mỗi reply item ── */
+.reply-quote-btn {
+  display: inline-block;
+  margin-top: 4px;
+  background: none; border: none; cursor: pointer;
+  font-size: .62rem; color: var(--sky); padding: 0;
+  font-family: 'Newsreader', serif; transition: color .15s;
+}
+.reply-quote-btn:hover { color: var(--sky2); text-decoration: underline; }
+[data-theme="dark"] .reply-quote-btn { color: #89d0f5; }
+ 
+/* ── Wrap chứa list reply items (dùng để scroll) ── */
+.reply-items-wrap {
+  display: flex; flex-direction: column; gap: 7px;
+  margin-bottom: 6px;
+}
     .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
     .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
     [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#4a7a96; }
@@ -1111,60 +1171,93 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
    B. CHAPTER-END COMMENT
 ══════════════════════════════════════════ */
 (function setupChapComments(){
-  const section     = document.getElementById('chapCommentSection');
+  const section       = document.getElementById('chapCommentSection');
   if(!section) return;
-
-  const cmtList     = document.getElementById('cmtList');
-  const cmtName     = document.getElementById('cmtName');
-  const cmtText     = document.getElementById('cmtText');
-  const cmtSubmit   = document.getElementById('cmtSubmit');
-  const adminStatus = document.getElementById('adminStatus');
+ 
+  const cmtList       = document.getElementById('cmtList');
+  const cmtName       = document.getElementById('cmtName');
+  const cmtText       = document.getElementById('cmtText');
+  const cmtSubmit     = document.getElementById('cmtSubmit');
+  const adminStatus   = document.getElementById('adminStatus');
   const adminLoginBtn = document.getElementById('adminLoginBtn');
   if(!cmtList) return;
-
+ 
   const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
   const myToken     = getMyToken();
-  const key         = 'chap_'+pageKey();
+  const key         = 'chap_' + pageKey();
   let isAdmin       = false;
   let lastData      = null;
-
-  window.addEventListener('dd-auth-change',e=>{
+  let listenerBound = false;
+ 
+  /* Debounce: tránh Firebase local-echo + server-confirm fire liên tiếp */
+  let rebuildTimer = null;
+  function scheduleRebuild(data){
+    lastData = data;
+    clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(() => rebuildComments(lastData), 60);
+  }
+ 
+  /* ── Auth ── */
+  window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
-    if(adminStatus) adminStatus.textContent = isAdmin ? '✅ Admin: '+ADMIN_EMAIL : '🔒 Quản trị: chưa đăng nhập';
-    if(adminLoginBtn){ adminLoginBtn.textContent = isAdmin?'Đăng xuất':'Đăng nhập Google'; adminLoginBtn.className=isAdmin?'admin-logout-btn':'admin-login-btn'; }
-    rebuildComments(lastData);
+    if(adminStatus)   adminStatus.textContent   = isAdmin ? '✅ Admin: '+ADMIN_EMAIL : '🔒 Quản trị: chưa đăng nhập';
+    if(adminLoginBtn){ adminLoginBtn.textContent = isAdmin ? 'Đăng xuất' : 'Đăng nhập Google';
+                       adminLoginBtn.className   = isAdmin ? 'admin-logout-btn' : 'admin-login-btn'; }
+    if(lastData !== null) rebuildComments(lastData);
   });
-
-  adminLoginBtn?.addEventListener('click',()=>{
-    const fb=window.__ddFirebase; if(!fb) return;
+ 
+  adminLoginBtn?.addEventListener('click', () => {
+    const fb = window.__ddFirebase; if(!fb) return;
     if(isAdmin){ fb.signOut(fb.auth); }
-    else{ const p=new fb.GoogleAuthProvider(); fb.signInWithPopup(fb.auth,p).catch(e=>alert('Lỗi đăng nhập: '+e.message)); }
+    else { const p = new fb.GoogleAuthProvider(); fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message)); }
   });
-
+ 
+  /* ══════════════════════════════════════
+     RENDER
+  ══════════════════════════════════════ */
   function rebuildComments(data){
-    lastData=data;
-    if(!data){ cmtList.innerHTML='<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>'; return; }
-    const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
-    cmtList.innerHTML = items.map(c=>{
-      const isMine   = c.token===myToken;
-      const canDel   = isAdmin||isMine;
-      const likeCount= c.likes?Object.keys(c.likes).length:0;
-      const liked    = getLiked(c.id);
-      const replies  = c.replies?Object.entries(c.replies).map(([rid,rv])=>({id:rid,...rv})).sort((a,b)=>(a.ts||0)-(b.ts||0)):[];
-
-      const repliesHtml = replies.map(r=>{
-        const rMine=r.token===myToken, rCanDel=isAdmin||rMine;
-        return `<div class="reply-item">
+    if(!cmtList) return;
+    if(!data){
+      cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>';
+      return;
+    }
+ 
+    const items = Object.entries(data)
+      .map(([id,v]) => ({id,...v}))
+      .sort((a,b) => (a.ts||0) - (b.ts||0));
+ 
+    cmtList.innerHTML = items.map(c => {
+      const isMine    = c.token === myToken;
+      const canDel    = isAdmin || isMine;
+      const likeCount = c.likes ? Object.keys(c.likes).length : 0;
+      const liked     = getLiked(c.id);
+      const replies   = c.replies
+        ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
+        : [];
+ 
+      /* Render thread replies — hỗ trợ reply-of-reply (hiện @tên) */
+      const repliesHtml = replies.map(r => {
+        const rMine  = r.token === myToken;
+        const rCanDel= isAdmin || rMine;
+        const atTag  = r.replyTo
+          ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> `
+          : '';
+        return `<div class="reply-item" id="ri-${esc(r.id)}">
           <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="reply-body">
             <span class="reply-name">${esc(r.name)||'Khách vô danh'}</span>
             <span class="reply-time">${timeAgo(r.ts)}</span>
-            <div class="reply-text">${esc(r.text)}</div>
+            <div class="reply-text">${atTag}${esc(r.text)}</div>
+            <button class="reply-quote-btn"
+              data-cid="${esc(c.id)}"
+              data-rid="${esc(r.id)}"
+              data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
           </div>
-          <button class="reply-del ${rCanDel?'show':''}" data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
+          <button class="reply-del ${rCanDel?'show':''}"
+            data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
         </div>`;
       }).join('');
-
+ 
       return `<div class="comment-card" id="cmt-${esc(c.id)}">
         <div class="comment-card-header">
           <div class="comment-card-avatar">${esc(avatarLetter(c.name))}</div>
@@ -1177,92 +1270,190 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
             ${liked?'❤️':'🤍'} <span>${likeCount}</span>
           </button>
           <button class="cmt-reply-btn" data-id="${esc(c.id)}">
-            💬 ${replies.length>0?replies.length+' reply':'Reply'}
+            💬 ${replies.length > 0 ? replies.length+' reply' : 'Reply'}
           </button>
           <button class="cmt-del-btn ${canDel?'show':''}" data-id="${esc(c.id)}">🗑 Xóa</button>
         </div>
-        <div class="reply-thread ${replies.length>0?'open':''}" id="thread-${esc(c.id)}">
-          ${repliesHtml}
+ 
+        <div class="reply-thread ${replies.length > 0 ? 'open' : ''}" id="thread-${esc(c.id)}">
+          <div class="reply-items-wrap" id="riwrap-${esc(c.id)}">
+            ${repliesHtml}
+          </div>
+ 
+          <!-- Reply form — dùng chung cho reply mới & reply-of-reply -->
           <div class="reply-form" id="rf-${esc(c.id)}">
+            <!-- Hiển thị khi đang reply một reply cụ thể -->
+            <div class="reply-quoting" id="rq-${esc(c.id)}" style="display:none">
+              <span class="reply-quoting-label"></span>
+              <button class="reply-quoting-cancel" data-cid="${esc(c.id)}">✕</button>
+            </div>
             <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" />
             <textarea class="reply-inp-text" placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
             <div class="reply-form-btns">
               <button class="reply-cancel-btn" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="reply-send-btn" data-cid="${esc(c.id)}">Gửi ✦</button>
+              <button class="reply-send-btn"   data-cid="${esc(c.id)}">Gửi ✦</button>
             </div>
           </div>
         </div>
       </div>`;
     }).join('');
+ 
     bindEvents();
   }
-
+ 
+  /* ══════════════════════════════════════
+     BIND EVENTS (sau mỗi render)
+  ══════════════════════════════════════ */
   function bindEvents(){
-    const fb=window.__ddFirebase; if(!fb) return;
-    cmtList.querySelectorAll('.cmt-like-btn').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
-        const id=btn.dataset.id;
+    const fb = window.__ddFirebase; if(!fb) return;
+ 
+    /* Like */
+    cmtList.querySelectorAll('.cmt-like-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
         if(getLiked(id)) return;
-        setLiked(id,true);
-        try{ await fb.push(fb.ref(fb.db,`comments/${key}/${id}/likes`),{ts:Date.now()}); }catch(e){}
+        setLiked(id, true);
+        try { await fb.push(fb.ref(fb.db, `comments/${key}/${id}/likes`), {ts:Date.now()}); } catch(e){}
       });
     });
-    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const cid=btn.dataset.id;
-        const thread=document.getElementById('thread-'+cid);
-        const form=document.getElementById('rf-'+cid);
-        if(thread) thread.classList.add('open');
-        if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
+ 
+    /* Mở reply form (reply bình luận gốc) */
+    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cid = btn.dataset.id;
+        openReplyForm(cid, null, null);
       });
     });
-    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open'));
+ 
+    /* Reply-of-reply: click ↩ Reply trên một reply */
+    cmtList.querySelectorAll('.reply-quote-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname);
+      });
     });
-    cmtList.querySelectorAll('.reply-send-btn').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
-        const form=document.getElementById('rf-'+btn.dataset.cid);
-        const text=(form?.querySelector('[data-role="rtext"]')?.value||'').trim();
+ 
+    /* Hủy quoting */
+    cmtList.querySelectorAll('.reply-quoting-cancel').forEach(btn => {
+      btn.addEventListener('click', () => clearQuoting(btn.dataset.cid));
+    });
+ 
+    /* Hủy reply form */
+    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open');
+        clearQuoting(btn.dataset.cid);
+      });
+    });
+ 
+    /* Gửi reply */
+    cmtList.querySelectorAll('.reply-send-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const cid  = btn.dataset.cid;
+        const form = document.getElementById('rf-'+cid);
+        const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
         if(!text) return;
-        btn.disabled=true;
-        const name=(form?.querySelector('[data-role="rname"]')?.value||'').trim()||'Khách vô danh';
-        try{
-          await fb.push(fb.ref(fb.db,`comments/${key}/${btn.dataset.cid}/replies`),{name,text,ts:Date.now(),token:myToken});
-          form.querySelector('[data-role="rtext"]').value='';
+        btn.disabled = true;
+ 
+        const name    = (form?.querySelector('[data-role="rname"]')?.value||'').trim() || 'Khách vô danh';
+        const quotBox = document.getElementById('rq-'+cid);
+        const replyTo = quotBox?.dataset.replyToId
+          ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' }
+          : null;
+ 
+        const payload = { name, text, ts: Date.now(), token: myToken };
+        if(replyTo) payload.replyTo = replyTo;
+ 
+        try {
+          await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/replies`), payload);
+          form.querySelector('[data-role="rtext"]').value = '';
           form.classList.remove('open');
-        }catch(e){alert('Lỗi: '+e.message);}
-        btn.disabled=false;
+          clearQuoting(cid);
+          /* Scroll đến reply vừa gửi sau khi Firebase cập nhật */
+          setTimeout(() => {
+            const wrap = document.getElementById('riwrap-'+cid);
+            if(wrap) wrap.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'});
+          }, 300);
+        } catch(e){ alert('Lỗi: '+e.message); }
+        btn.disabled = false;
       });
     });
-    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
+ 
+    /* Xóa comment */
+    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn => {
+      btn.addEventListener('click', async () => {
         if(!confirm('Xóa bình luận này?')) return;
-        await fb.remove(fb.ref(fb.db,`comments/${key}/${btn.dataset.id}`));
+        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`));
       });
     });
-    cmtList.querySelectorAll('.reply-del.show').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
+ 
+    /* Xóa reply */
+    cmtList.querySelectorAll('.reply-del.show').forEach(btn => {
+      btn.addEventListener('click', async () => {
         if(!confirm('Xóa reply này?')) return;
-        await fb.remove(fb.ref(fb.db,`comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`));
+        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`));
       });
     });
   }
-
-  waitFirebase(({db,ref,push,onValue})=>{
-    onValue(ref(db,'comments/'+key),snap=>rebuildComments(snap.val()));
-    cmtSubmit?.addEventListener('click',async()=>{
-      const text=(cmtText?.value||'').trim(); if(!text) return;
-      cmtSubmit.disabled=true;
-      try{
-        await push(ref(db,'comments/'+key),{
-          name:(cmtName?.value||'').trim()||'Khách vô danh',
-          text,ts:Date.now(),token:myToken
+ 
+  /* ── Helpers quoting ── */
+  function openReplyForm(cid, rid, rname){
+    const thread = document.getElementById('thread-'+cid);
+    const form   = document.getElementById('rf-'+cid);
+    if(thread) thread.classList.add('open');
+    if(form){
+      form.classList.add('open');
+      if(rid){ setQuoting(cid, rid, rname); }
+      else { clearQuoting(cid); }
+      form.querySelector('[data-role="rtext"]')?.focus();
+    }
+  }
+ 
+  function setQuoting(cid, rid, rname){
+    const box = document.getElementById('rq-'+cid);
+    if(!box) return;
+    box.style.display    = 'flex';
+    box.dataset.replyToId   = rid;
+    box.dataset.replyToName = rname;
+    const label = box.querySelector('.reply-quoting-label');
+    if(label) label.textContent = '↩ Reply cho ' + (rname||'Khách vô danh');
+  }
+ 
+  function clearQuoting(cid){
+    const box = document.getElementById('rq-'+cid);
+    if(!box) return;
+    box.style.display       = 'none';
+    box.dataset.replyToId   = '';
+    box.dataset.replyToName = '';
+  }
+ 
+  /* ══════════════════════════════════════
+     FIREBASE SUBSCRIBE + SUBMIT (1 LẦN)
+  ══════════════════════════════════════ */
+  waitFirebase(({db, ref, push, onValue}) => {
+    onValue(ref(db, 'comments/'+key), snap => scheduleRebuild(snap.val()));
+ 
+    if(listenerBound) return;
+    listenerBound = true;
+ 
+    cmtSubmit?.addEventListener('click', async () => {
+      const text = (cmtText?.value||'').trim();
+      if(!text) return;
+      cmtSubmit.disabled = true;
+      try {
+        await push(ref(db, 'comments/'+key), {
+          name  : (cmtName?.value||'').trim() || 'Khách vô danh',
+          text,
+          ts    : Date.now(),
+          token : myToken
         });
-        if(cmtText) cmtText.value='';
-      }catch(e){alert('Lỗi: '+e.message);}
-      cmtSubmit.disabled=false;
+        if(cmtText) cmtText.value = '';
+      } catch(e){ alert('Lỗi: '+e.message); }
+      cmtSubmit.disabled = false;
     });
-    cmtText?.addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) cmtSubmit?.click(); });
+ 
+    cmtText?.addEventListener('keydown', e => {
+      if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click();
+    });
   });
 })();
 </script>

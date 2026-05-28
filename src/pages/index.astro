@@ -361,6 +361,139 @@ const hcdhCount    = countChaps(hcdhPosts);
 .hidden{display:none !important;}
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
+/* ─── MESSAGE WIDGET ─── */
+.msg-widget-tabs {
+  display: flex; gap: 0; margin-bottom: 10px;
+  border: 1px solid rgba(186,230,253,.6); border-radius: var(--r-pill); overflow: hidden;
+}
+.msg-tab {
+  flex: 1; padding: 5px 0; font-size: .68rem; letter-spacing: 1px; text-transform: uppercase;
+  background: none; border: none; cursor: pointer; font-family: 'Newsreader', serif;
+  color: var(--text-mid); transition: var(--t);
+}
+.msg-tab.active { background: var(--sky); color: #fff; }
+[data-theme="dark"] .msg-tab { color: #9ac8df; }
+[data-theme="dark"] .msg-tab.active { background: #1565a0; color: #e8f6ff; }
+ 
+.msg-panel { display: none; }
+.msg-panel.active { display: block; }
+ 
+.msg-inp, .msg-textarea {
+  width: 100%; padding: 6px 11px; border: 1.5px solid var(--sky-light);
+  font-family: 'Newsreader', serif; color: var(--text-main); background: var(--cream);
+  outline: none; box-sizing: border-box; border-radius: var(--r-pill); font-size: .75rem;
+  margin-bottom: 6px;
+}
+.msg-textarea {
+  border-radius: 10px; resize: none; min-height: 62px;
+}
+.msg-inp:focus, .msg-textarea:focus { border-color: var(--sky); }
+[data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea {
+  background: #091726; border-color: #1e5a7a; color: #daeeff;
+}
+[data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color: #4a7a96; }
+ 
+.msg-send-btn {
+  width: 100%; padding: 7px; background: var(--sky); color: #fff;
+  border: none; border-radius: var(--r-pill); font-size: .74rem; font-family: 'Newsreader', serif;
+  cursor: pointer; transition: var(--t);
+}
+.msg-send-btn:hover { background: var(--sky2); }
+.msg-send-btn:disabled { opacity: .5; cursor: not-allowed; }
+ 
+.msg-sent-notice {
+  text-align: center; font-size: .74rem; color: #059669; padding: 6px 0;
+  display: none; font-style: italic;
+}
+[data-theme="dark"] .msg-sent-notice { color: #34d399; }
+ 
+/* Public feed */
+.msg-public-feed {
+  max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 8px;
+  scrollbar-width: thin; scrollbar-color: var(--sky-light) transparent;
+}
+.msg-public-feed::-webkit-scrollbar { width: 3px; }
+.msg-public-feed::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
+ 
+.msg-pub-item {
+  background: var(--sky-pale); border-radius: 10px; padding: 7px 10px;
+  border: 1px solid rgba(186,230,253,.35); font-size: .74rem;
+}
+[data-theme="dark"] .msg-pub-item {
+  background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.12);
+}
+.msg-pub-name { font-weight: 700; color: var(--sky-dark); font-size: .66rem; }
+[data-theme="dark"] .msg-pub-name { color: #89d0f5; }
+.msg-pub-time { font-size: .6rem; color: var(--text-dim); margin-left: 5px; }
+.msg-pub-text { color: var(--text-main); margin: 3px 0 0; line-height: 1.45; word-break: break-word; }
+[data-theme="dark"] .msg-pub-text { color: #cce4f8; }
+.msg-pub-del {
+  float: right; background: none; border: none; font-size: .58rem; color: var(--text-dim);
+  cursor: pointer; padding: 0 2px; transition: color .15s; display: none;
+}
+.msg-pub-del.show { display: inline; }
+.msg-pub-del:hover { color: #ef4444; }
+ 
+.msg-public-empty { font-size: .72rem; color: var(--text-dim); font-style: italic; text-align: center; padding: 10px 0; }
+[data-theme="dark"] .msg-public-empty { color: #4a7a96; }
+ 
+/* ─── FLOATING BUBBLE ─── */
+.msg-bubble-btn {
+  position: fixed; bottom: 88px; right: 22px; z-index: 410;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sky), var(--sky2));
+  border: none; cursor: pointer; color: #fff; font-size: 1.25rem;
+  box-shadow: 0 4px 18px rgba(2,132,199,.45);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .2s, box-shadow .2s;
+}
+.msg-bubble-btn:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 24px rgba(2,132,199,.55); }
+.msg-bubble-btn .msg-bubble-badge {
+  position: absolute; top: -2px; right: -2px;
+  background: #f43f5e; color: #fff; font-size: .55rem; font-weight: 700;
+  min-width: 16px; height: 16px; border-radius: 8px; padding: 0 3px;
+  display: none; align-items: center; justify-content: center;
+  border: 2px solid #fff;
+}
+.msg-bubble-badge.show { display: flex; }
+ 
+/* Popup khi click bubble */
+.msg-popup {
+  position: fixed; bottom: 148px; right: 16px; z-index: 420;
+  width: min(340px, calc(100vw - 32px));
+  background: #fff; border: 1px solid rgba(186,230,253,.6);
+  border-radius: 18px; box-shadow: 0 16px 48px rgba(2,132,199,.18);
+  padding: 16px 15px 14px;
+  opacity: 0; pointer-events: none; transform: translateY(12px) scale(.97);
+  transition: opacity .22s ease, transform .22s ease;
+}
+[data-theme="dark"] .msg-popup {
+  background: rgba(10,22,38,.98); border-color: rgba(96,184,232,.22);
+}
+.msg-popup.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+ 
+.msg-popup-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px;
+}
+.msg-popup-title {
+  font-family: 'Merriweather', serif; font-size: .78rem; color: var(--sky-dark);
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+[data-theme="dark"] .msg-popup-title { color: #89d0f5; }
+.msg-popup-close {
+  width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(186,230,253,.5);
+  background: none; cursor: pointer; font-size: .68rem; color: var(--text-dim);
+  display: flex; align-items: center; justify-content: center; transition: var(--t);
+}
+.msg-popup-close:hover { background: var(--sky-pale); color: var(--sky); }
+[data-theme="dark"] .msg-popup-close { border-color: rgba(96,184,232,.2); color: #6a9ab5; }
+ 
+/* Trên mobile: ẩn bubble nếu sidebar đang open */
+@media(max-width:900px){
+  body.novel-sidebar-open .msg-bubble-btn { display: none; }
+}
+</style>
 @media(max-width:768px){
   .home-shell{ grid-template-columns:1fr; padding:14px 12px 60px; }
   .sidebar-col{ display:flex !important; flex-direction:column; align-items:center; }
@@ -654,7 +787,37 @@ const hcdhCount    = countChaps(hcdhPosts);
         <div class="quote-src">— 1 John 4:18</div>
       </div>
     </div>
-
+<div class="widget" id="msgSidebarWidget">
+  <div class="widget-title">✉ Lời nhắn</div>
+ 
+  <!-- Tabs -->
+  <div class="msg-widget-tabs">
+    <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư</button>
+    <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Nhắn chung</button>
+  </div>
+ 
+  <!-- Panel: Riêng tư -->
+  <div class="msg-panel active" id="msgPanelPrivate">
+    <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5">
+      Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.
+    </p>
+    <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
+    <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
+    <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
+  </div>
+ 
+  <!-- Panel: Public -->
+  <div class="msg-panel" id="msgPanelPublic">
+    <div class="msg-public-feed" id="msgPublicFeed">
+      <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
+    </div>
+    <input  class="msg-inp"      id="msgPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn cho mọi người..." rows="2"></textarea>
+    <button class="msg-send-btn" id="msgPublicSend">Gửi 🌊</button>
+    <div class="msg-sent-notice" id="msgPublicDone">✓ Đã gửi! 🌊</div>
+  </div>
+</div>
     <div class="widget" style="text-align:center">
       <div class="widget-title">✉ Liên hệ</div>
       <p class="contact-email" style="font-size:.74rem;margin-bottom:6px">dynamicduoo.q@gmail.com</p>
@@ -754,5 +917,255 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     syncBtn();
   });
 })();
+<script is:inline>
+(function setupMessageWidget(){
+  /* ── Helpers ── */
+  function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function msgTime(ts){
+    if(!ts) return '';
+    const d = Date.now()-ts;
+    if(d<60000) return 'vừa xong';
+    if(d<3600000) return Math.floor(d/60000)+' phút trước';
+    if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
+    return Math.floor(d/86400000)+' ngày trước';
+  }
+  function getMsgToken(){
+    let t = localStorage.getItem('dd_token');
+    if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); }
+    return t;
+  }
+  const myToken     = getMsgToken();
+  const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
+  let isAdmin       = false;
+  window.addEventListener('dd-auth-change', e => {
+    isAdmin = e.detail.isAdmin;
+    renderPublicMessages(lastPublicData);
+  });
+ 
+  /* ── Tab switcher factory ── */
+  function setupTabs(tabSelector, panelPrefix){
+    document.querySelectorAll(tabSelector).forEach(tab => {
+      tab.addEventListener('click', () => {
+        const panel = tab.dataset.panel || tab.dataset.popupPanel;
+        document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        // Ẩn tất cả panel trong cùng container
+        const container = tab.closest('.msg-popup, .widget');
+        container?.querySelectorAll('.msg-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(panelPrefix + (panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
+      });
+    });
+  }
+  setupTabs('[data-panel]',       'msgPanel');
+  setupTabs('[data-popup-panel]', 'msgPopupPanel');
+ 
+  /* ── Bubble toggle ── */
+  const bubbleBtn  = document.getElementById('msgBubbleBtn');
+  const popup      = document.getElementById('msgPopup');
+  const popupClose = document.getElementById('msgPopupClose');
+ 
+  bubbleBtn?.addEventListener('click', e => {
+    e.stopPropagation();
+    popup?.classList.toggle('open');
+    // Ẩn badge khi mở
+    if(popup?.classList.contains('open')){
+      const badge = document.getElementById('msgBubbleBadge');
+      if(badge){ badge.textContent=''; badge.classList.remove('show'); }
+      localStorage.setItem('dd_msg_seen', Date.now());
+    }
+  });
+  popupClose?.addEventListener('click', () => popup?.classList.remove('open'));
+  document.addEventListener('click', e => {
+    if(popup?.classList.contains('open') && !popup.contains(e.target) && e.target !== bubbleBtn)
+      popup.classList.remove('open');
+  });
+ 
+  /* ── Firebase: gửi tin nhắn RIÊNG TƯ ── */
+  function bindPrivateSend(nameId, textId, sendId, doneId){
+    const nameEl = document.getElementById(nameId);
+    const textEl = document.getElementById(textId);
+    const sendEl = document.getElementById(sendId);
+    const doneEl = document.getElementById(doneId);
+    if(!sendEl) return;
+ 
+    let bound = false;
+    function doSend(){
+      const text = (textEl?.value||'').trim();
+      if(!text) return;
+      sendEl.disabled = true;
+ 
+      function waitFirebaseLocal(cb){
+        if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
+        const t = setInterval(() => { if(window.__ddFirebase?.db){ clearInterval(t); cb(window.__ddFirebase); } }, 200);
+      }
+ 
+      waitFirebaseLocal(async ({db, ref, push}) => {
+        try {
+          await push(ref(db, 'private_messages'), {
+            name  : (nameEl?.value||'').trim() || 'Khách vô danh',
+            text,
+            ts    : Date.now(),
+            token : myToken,
+            read  : false
+          });
+          if(textEl) textEl.value = '';
+          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; }, 3000); }
+        } catch(e){ alert('Lỗi gửi: '+e.message); }
+        sendEl.disabled = false;
+      });
+    }
+ 
+    sendEl.addEventListener('click', doSend);
+    textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
+  }
+ 
+  bindPrivateSend('msgPrivateName',      'msgPrivateText',      'msgPrivateSend',      'msgPrivateDone');
+  bindPrivateSend('msgPopupPrivateName', 'msgPopupPrivateText', 'msgPopupPrivateSend', 'msgPopupPrivateDone');
+ 
+  /* ── Firebase: Public messages ── */
+  let lastPublicData = null;
+  let publicUnsubDebounce = null;
+ 
+  function renderPublicMessages(data){
+    lastPublicData = data;
+    const feeds = [
+      document.getElementById('msgPublicFeed'),
+      document.getElementById('msgPopupPublicFeed')
+    ];
+    const empty = '<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
+    if(!data){
+      feeds.forEach(f => { if(f) f.innerHTML = empty; });
+      return;
+    }
+    const items = Object.entries(data)
+      .map(([id,v]) => ({id,...v}))
+      .sort((a,b) => (a.ts||0)-(b.ts||0));
+ 
+    const html = items.map(m => {
+      const isMine = m.token === myToken;
+      const canDel = isAdmin || isMine;
+      return `<div class="msg-pub-item">
+        <button class="msg-pub-del ${canDel?'show':''}" data-mid="${msgEsc(m.id)}">✕</button>
+        <span class="msg-pub-name">${msgEsc(m.name)||'Khách vô danh'}</span>
+        <span class="msg-pub-time">${msgTime(m.ts)}</span>
+        <div class="msg-pub-text">${msgEsc(m.text)}</div>
+      </div>`;
+    }).join('');
+ 
+    feeds.forEach(f => {
+      if(!f) return;
+      f.innerHTML = html || empty;
+      f.scrollTop = f.scrollHeight;
+      // Gắn delete buttons
+      f.querySelectorAll('.msg-pub-del.show').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if(!confirm('Xóa lời nhắn này?')) return;
+          if(window.__ddFirebase){
+            const {db, ref, remove} = window.__ddFirebase;
+            await remove(ref(db, 'public_messages/'+btn.dataset.mid));
+          }
+        });
+      });
+    });
+ 
+    // Hiện badge bubble nếu có tin mới
+    const lastSeen = parseInt(localStorage.getItem('dd_msg_seen')||'0');
+    const newCount = items.filter(m => (m.ts||0) > lastSeen).length;
+    const badge = document.getElementById('msgBubbleBadge');
+    if(badge && newCount > 0 && !popup?.classList.contains('open')){
+      badge.textContent = newCount > 9 ? '9+' : String(newCount);
+      badge.classList.add('show');
+    } else if(badge){
+      badge.classList.remove('show');
+    }
+  }
+ 
+  function bindPublicSend(nameId, textId, sendId, doneId){
+    const nameEl = document.getElementById(nameId);
+    const textEl = document.getElementById(textId);
+    const sendEl = document.getElementById(sendId);
+    const doneEl = document.getElementById(doneId);
+    if(!sendEl) return;
+ 
+    function doSend(){
+      const text = (textEl?.value||'').trim();
+      if(!text) return;
+      sendEl.disabled = true;
+      function waitFirebaseLocal(cb){
+        if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
+        const t = setInterval(() => { if(window.__ddFirebase?.db){ clearInterval(t); cb(window.__ddFirebase); } }, 200);
+      }
+      waitFirebaseLocal(async ({db, ref, push}) => {
+        try {
+          await push(ref(db, 'public_messages'), {
+            name  : (nameEl?.value||'').trim() || 'Khách vô danh',
+            text,
+            ts    : Date.now(),
+            token : myToken
+          });
+          if(textEl) textEl.value = '';
+          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; }, 3000); }
+        } catch(e){ alert('Lỗi gửi: '+e.message); }
+        sendEl.disabled = false;
+      });
+    }
+    sendEl.addEventListener('click', doSend);
+    textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
+  }
+ 
+  bindPublicSend('msgPublicName',      'msgPublicText',      'msgPublicSend',      'msgPublicDone');
+  bindPublicSend('msgPopupPublicName', 'msgPopupPublicText', 'msgPopupPublicSend', 'msgPopupPublicDone');
+ 
+  /* ── Subscribe realtime public messages ── */
+  function waitFirebaseLocal(cb){
+    if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
+    window.addEventListener('dd-firebase-ready', () => { if(window.__ddFirebase?.db) cb(window.__ddFirebase); }, {once:true});
+    let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60)clearInterval(t); },200);
+  }
+ 
+  waitFirebaseLocal(({db, ref, onValue}) => {
+    onValue(ref(db, 'public_messages'), snap => {
+      clearTimeout(publicUnsubDebounce);
+      publicUnsubDebounce = setTimeout(() => renderPublicMessages(snap.val()), 60);
+    });
+  });
+ 
+})();
 </script>
+</script>
+<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà">
+  ✉
+  <span class="msg-bubble-badge" id="msgBubbleBadge"></span>
+</button>
+ 
+<!-- Popup từ bubble -->
+<div class="msg-popup" id="msgPopup">
+  <div class="msg-popup-header">
+    <span class="msg-popup-title">✉ Lời nhắn</span>
+    <button class="msg-popup-close" id="msgPopupClose">✕</button>
+  </div>
+ 
+  <div class="msg-widget-tabs" style="margin-bottom:10px">
+    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư</button>
+    <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
+  </div>
+ 
+  <div class="msg-panel active" id="msgPopupPanelPrivate">
+    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
+    <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn..." rows="3"></textarea>
+    <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
+    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi! 🌊</div>
+  </div>
+ 
+  <div class="msg-panel" id="msgPopupPanelPublic">
+    <div class="msg-public-feed" id="msgPopupPublicFeed">
+      <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
+    </div>
+    <input  class="msg-inp"      id="msgPopupPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Nhắn gì đó..." rows="2"></textarea>
+    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi 🌊</button>
+    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi! 🌊</div>
+  </div>
+</div>
 </Layout>

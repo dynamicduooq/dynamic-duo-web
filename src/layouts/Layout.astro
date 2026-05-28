@@ -458,7 +458,42 @@ if (currentTruyenId && isNovelPage) {
 
     .ic-empty { font-size: .74rem; color: var(--text-dim); font-style: italic; text-align: center; padding: 16px 0; }
     [data-theme="dark"] .ic-empty { color: #4a7a96; }
-
+/* Inline reply @mention */
+.ic-reply-at {
+  display: inline-block;
+  color: var(--sky); font-weight: 700; font-size: .72em;
+  background: rgba(14,165,233,.08); border-radius: 3px;
+  padding: 0 3px; margin-right: 2px;
+}
+[data-theme="dark"] .ic-reply-at { color: #89d0f5; background: rgba(96,184,232,.12); }
+ 
+/* "↩ Reply" button trong mỗi reply của sidebar */
+.ic-rr-btn {
+  display: inline-block; margin-top: 3px;
+  background: none; border: none; cursor: pointer;
+  font-size: .58rem; color: var(--sky); padding: 0;
+  font-family: 'Newsreader', serif; transition: color .15s;
+}
+.ic-rr-btn:hover { color: var(--sky2); text-decoration: underline; }
+[data-theme="dark"] .ic-rr-btn { color: #89d0f5; }
+ 
+/* Banner "đang reply cho..." trong ic-sidebar-form */
+.ic-quoting-bar {
+  display: none; align-items: center; gap: 5px;
+  padding: 3px 8px; margin-bottom: 5px;
+  background: rgba(14,165,233,.07); border-radius: 5px;
+  border-left: 2px solid var(--sky-light);
+}
+.ic-quoting-bar.show { display: flex; }
+[data-theme="dark"] .ic-quoting-bar { background: rgba(96,184,232,.1); border-left-color: #2a6a8a; }
+.ic-quoting-label { flex: 1; font-size: .62rem; color: var(--sky); font-style: italic; }
+[data-theme="dark"] .ic-quoting-label { color: #89d0f5; }
+.ic-quoting-cancel {
+  background: none; border: none; cursor: pointer;
+  font-size: .58rem; color: var(--text-dim); padding: 0 2px; border-radius: 3px;
+  transition: color .15s;
+}
+.ic-quoting-cancel:hover { color: #ef4444; }
     /* ── MOBILE: sidebar thành overlay ── */
     @media(max-width:900px){
       .novel-layout-wrap { display: block; }
@@ -948,37 +983,70 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   const formSend   = document.getElementById('icFormSend');
   const overlay    = document.getElementById('icOverlay');
   if(!content || !sidebar || !novelWrap) return;
-
-  let currentIdx  = null;
-  let currentUnsub= null;
-  let isAdmin     = !!window.__ddIsAdmin;
-  const myToken   = getMyToken();
-
+ 
+  let currentIdx   = null;
+  let currentUnsub = null;
+  let isAdmin      = !!window.__ddIsAdmin;
+  const myToken    = getMyToken();
+ 
+  /* ── Quoting state cho reply-of-reply ── */
+  let quotingReplyId   = null;
+  let quotingReplyName = null;
+ 
+  /* Thêm quoting bar vào form nếu chưa có */
+  const formArea = document.getElementById('icFormText')?.closest('.ic-sidebar-form');
+  let quotingBar = null;
+  if(formArea){
+    quotingBar = document.createElement('div');
+    quotingBar.className = 'ic-quoting-bar';
+    quotingBar.id = 'icQuotingBar';
+    quotingBar.innerHTML = '<span class="ic-quoting-label" id="icQuotingLabel"></span>'
+      + '<button class="ic-quoting-cancel" id="icQuotingCancel">✕</button>';
+    formArea.insertBefore(quotingBar, formArea.firstChild);
+    document.getElementById('icQuotingCancel')?.addEventListener('click', clearQuoting);
+  }
+ 
+  function setQuoting(rid, rname){
+    quotingReplyId   = rid;
+    quotingReplyName = rname;
+    const bar   = document.getElementById('icQuotingBar');
+    const label = document.getElementById('icQuotingLabel');
+    if(bar)   bar.classList.add('show');
+    if(label) label.textContent = '↩ Reply cho ' + (rname || 'Khách vô danh');
+    formText?.focus();
+  }
+  function clearQuoting(){
+    quotingReplyId   = null;
+    quotingReplyName = null;
+    const bar = document.getElementById('icQuotingBar');
+    if(bar) bar.classList.remove('show');
+  }
+ 
   window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; });
-
+ 
   /* ── Mở sidebar ── */
   function openSidebar(idx){
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
     currentIdx = idx;
-
-    const paras = content.querySelectorAll('p');
+    clearQuoting();
+ 
+    const paras   = content.querySelectorAll('p');
     const preview = document.getElementById('icParaPreview');
     if(preview){
       const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
-      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b=>b.remove()); preview.textContent = clone.textContent.trim(); }
+      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b => b.remove()); preview.textContent = clone.textContent.trim(); }
     }
     if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
-
     if(paras[idx]) paras[idx].classList.add('ic-active');
-
+ 
     novelWrap.classList.add('sidebar-open');
     document.body.classList.add('novel-sidebar-open');
     if(overlay) overlay.classList.add('show');
-
+ 
     loadInlineComments(idx);
     setTimeout(() => formText?.focus(), 200);
   }
-
+ 
   /* ── Đóng sidebar ── */
   function closeSidebar(){
     novelWrap.classList.remove('sidebar-open');
@@ -987,11 +1055,12 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
     if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
     currentIdx = null;
+    clearQuoting();
   }
-
+ 
   closeBtn?.addEventListener('click', closeSidebar);
   overlay?.addEventListener('click', closeSidebar);
-
+ 
   /* ── Load comments realtime ── */
   function loadInlineComments(idx){
     if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
@@ -1003,8 +1072,8 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       });
     });
   }
-
-  /* ── Render comments ── */
+ 
+  /* ── Render comments + threaded replies ── */
   function renderInlineComments(data, key, idx){
     if(!sideList) return;
     if(!data){
@@ -1012,29 +1081,37 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       return;
     }
     const items = Object.entries(data)
-      .map(([id,v]) => ({id, ...v}))
+      .map(([id,v]) => ({id,...v}))
       .sort((a,b) => (a.ts||0) - (b.ts||0));
-
+ 
     sideList.innerHTML = items.map(c => {
       const isMine = c.token === myToken;
       const canDel = isAdmin || isMine;
       const replies = c.replies
-        ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid, ...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
+        ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
         : [];
-
+ 
       const repliesHtml = replies.map(r => {
-        const rMine = r.token === myToken;
-        const rCanDel = isAdmin || rMine;
-        return `<div class="ic-reply-item">
+        const rMine  = r.token === myToken;
+        const rCanDel= isAdmin || rMine;
+        const atTag  = r.replyTo
+          ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>`
+          : '';
+        return `<div class="ic-reply-item" id="icri-${esc(r.id)}">
           <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="ic-reply-body">
             <span class="ic-reply-name">${esc(r.name)||'Khách vô danh'}</span>
-            <div class="ic-reply-text">${esc(r.text)}</div>
+            <div class="ic-reply-text">${atTag}${esc(r.text)}</div>
+            <button class="ic-rr-btn"
+              data-action="rr-reply"
+              data-cid="${esc(c.id)}"
+              data-rid="${esc(r.id)}"
+              data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
           </div>
           ${rCanDel ? `<button class="ic-reply-del show" data-action="del-reply" data-key="${esc(key)}" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}">✕</button>` : ''}
         </div>`;
       }).join('');
-
+ 
       return `<div class="ic-item" id="icitem-${esc(c.id)}">
         <div class="ic-item-header">
           <span class="ic-item-name">${esc(c.name)||'Khách vô danh'}</span>
@@ -1042,7 +1119,9 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         </div>
         <div class="ic-item-text">${esc(c.text)}</div>
         <div class="ic-item-actions">
-          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">↩ Reply ${replies.length > 0 ? '('+replies.length+')' : ''}</button>
+          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">
+            ↩ Reply ${replies.length > 0 ? '('+replies.length+')' : ''}
+          </button>
           ${canDel ? `<button class="ic-del-btn show" data-action="del-comment" data-key="${esc(key)}" data-id="${esc(c.id)}">✕ Xóa</button>` : ''}
         </div>
         <div class="ic-replies ${replies.length > 0 ? 'open' : ''}" id="icreplies-${esc(c.id)}">
@@ -1052,22 +1131,22 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
             <textarea placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
             <div class="ic-reply-form-row">
               <button class="ic-rf-cancel" data-action="cancel-reply" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="ic-rf-send" data-action="send-reply" data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
+              <button class="ic-rf-send"   data-action="send-reply"   data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
             </div>
           </div>
         </div>
       </div>`;
     }).join('');
-
+ 
     sideList.scrollTop = sideList.scrollHeight;
   }
-
-  /* Event delegation trên sideList */
+ 
+  /* ── Event delegation trên sideList ── */
   sideList?.addEventListener('click', async e => {
     const btn = e.target.closest('[data-action]');
     if(!btn) return;
     const action = btn.dataset.action;
-
+ 
     if(action === 'del-comment'){
       if(!confirm('Xóa bình luận này?')) return;
       waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id)));
@@ -1079,7 +1158,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       return;
     }
     if(action === 'toggle-reply'){
-      const cid = btn.dataset.cid;
+      const cid     = btn.dataset.cid;
       const replies = document.getElementById('icreplies-' + cid);
       const form    = document.getElementById('icrf-' + cid);
       if(replies) replies.classList.add('open');
@@ -1087,10 +1166,26 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         form.classList.toggle('open');
         if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus();
       }
+      clearQuoting();
+      return;
+    }
+    /* Reply-of-reply: click ↩ Reply trên một reply item */
+    if(action === 'rr-reply'){
+      const cid   = btn.dataset.cid;
+      const rid   = btn.dataset.rid;
+      const rname = btn.dataset.rname;
+      const form  = document.getElementById('icrf-' + cid);
+      const replies = document.getElementById('icreplies-' + cid);
+      if(replies) replies.classList.add('open');
+      if(form){ form.classList.add('open'); form.querySelector('[data-role="rtext"]')?.focus(); }
+      setQuoting(rid, rname);
+      /* Scroll sidebar xuống để thấy form */
+      setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
       return;
     }
     if(action === 'cancel-reply'){
       document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open');
+      clearQuoting();
       return;
     }
     if(action === 'send-reply'){
@@ -1099,21 +1194,27 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       if(!text) return;
       btn.disabled = true;
       const name = (form?.querySelector('[data-role="rname"]')?.value || '').trim() || 'Khách vô danh';
+ 
+      const payload = { name, text, ts: Date.now(), token: myToken };
+      /* Gắn replyTo nếu đang quote một reply */
+      if(quotingReplyId){
+        payload.replyTo = { id: quotingReplyId, name: quotingReplyName || '' };
+      }
+ 
       waitFirebase(async ({db, ref, push}) => {
         try{
-          await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), {
-            name, text, ts: Date.now(), token: myToken
-          });
+          await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), payload);
           form.querySelector('[data-role="rtext"]').value = '';
           form.classList.remove('open');
+          clearQuoting();
         } catch(e){ alert('Lỗi: ' + e.message); }
         btn.disabled = false;
       });
       return;
     }
   });
-
-  /* Gửi comment mới */
+ 
+  /* ── Gửi comment mới vào đoạn ── */
   formSend?.addEventListener('click', async () => {
     const text = (formText?.value || '').trim();
     if(!text || currentIdx === null) return;
@@ -1122,7 +1223,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
       const key = 'inline_' + pageKey() + '_p' + currentIdx;
       try{
         await push(ref(db, 'comments/' + key), {
-          name: (formName?.value || '').trim() || 'Khách vô danh',
+          name : (formName?.value || '').trim() || 'Khách vô danh',
           text, ts: Date.now(), token: myToken
         });
         if(formText) formText.value = '';
@@ -1133,8 +1234,8 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
   formText?.addEventListener('keydown', e => {
     if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
   });
-
-  /* Gắn trigger vào từng đoạn */
+ 
+  /* ── Gắn trigger vào từng đoạn ── */
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
@@ -1143,8 +1244,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
     btn.innerHTML = '💬';
     p.appendChild(btn);
-
-    /* Realtime count badge */
+ 
     waitFirebase(({db, ref, onValue}) => {
       const key = 'inline_' + pageKey() + '_p' + idx;
       onValue(ref(db, 'comments/' + key), snap => {
@@ -1155,7 +1255,7 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
         btn.classList.toggle('has-comments', cnt > 0);
       });
     });
-
+ 
     btn.addEventListener('click', e => {
       e.stopPropagation();
       if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){

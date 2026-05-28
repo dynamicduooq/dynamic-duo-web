@@ -366,11 +366,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   display: flex; gap: 0; margin-bottom: 10px;
   border: 1px solid rgba(186,230,253,.6); border-radius: var(--r-pill); overflow: hidden;
 }
-.msg-tab {
-  flex: 1; padding: 5px 0; font-size: .68rem; letter-spacing: 1px; text-transform: uppercase;
-  background: none; border: none; cursor: pointer; font-family: 'Newsreader', serif;
-  color: var(--text-mid); transition: var(--t);
-}
+.msg-tab { flex: 1; padding: 4px 0; font-size: .62rem; letter-spacing: .5px; text-transform: uppercase; background: none; border: none; cursor: pointer; font-family: 'Newsreader', serif; color: var(--text-mid); transition: var(--t); }
 .msg-tab.active { background: var(--sky); color: #fff; }
 [data-theme="dark"] .msg-tab { color: #9ac8df; }
 [data-theme="dark"] .msg-tab.active { background: #1565a0; color: #e8f6ff; }
@@ -378,15 +374,8 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-panel { display: none; }
 .msg-panel.active { display: block; }
  
-.msg-inp, .msg-textarea {
-  width: 100%; padding: 6px 11px; border: 1.5px solid var(--sky-light);
-  font-family: 'Newsreader', serif; color: var(--text-main); background: var(--cream);
-  outline: none; box-sizing: border-box; border-radius: var(--r-pill); font-size: .75rem;
-  margin-bottom: 6px;
-}
-.msg-textarea {
-  border-radius: 10px; resize: none; min-height: 62px;
-}
+.msg-inp, .msg-textarea { width: 100%; padding: 5px 10px; border: 1.5px solid var(--sky-light); font-family: 'Newsreader', serif; color: var(--text-main); background: var(--cream); outline: none; box-sizing: border-box; border-radius: var(--r-pill); font-size: .72rem; margin-bottom: 5px; }
+.msg-textarea { border-radius: 10px; resize: none; min-height: 52px; }
 .msg-inp:focus, .msg-textarea:focus { border-color: var(--sky); }
 [data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea {
   background: #091726; border-color: #1e5a7a; color: #daeeff;
@@ -394,8 +383,8 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color: #4a7a96; }
  
 .msg-send-btn {
-  width: 100%; padding: 7px; background: var(--sky); color: #fff;
-  border: none; border-radius: var(--r-pill); font-size: .74rem; font-family: 'Newsreader', serif;
+  width: 100%; padding: 5px; background: var(--sky); color: #fff;
+  border: none; border-radius: var(--r-pill); font-size: .68rem; font-family: 'Newsreader', serif;
   cursor: pointer; transition: var(--t);
 }
 .msg-send-btn:hover { background: var(--sky2); }
@@ -417,16 +406,16 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-public-feed::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 3px; }
  
 .msg-pub-item {
-  background: var(--sky-pale); border-radius: 10px; padding: 7px 10px;
-  border: 1px solid rgba(186,230,253,.35); font-size: .74rem;
+  background: var(--sky-pale); border-radius: 10px; padding: 6px 9px;
+  border: 1px solid rgba(186,230,253,.35); font-size: .7rem;
 }
 [data-theme="dark"] .msg-pub-item {
   background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.12);
 }
-.msg-pub-name { font-weight: 700; color: var(--sky-dark); font-size: .66rem; }
+.msg-pub-name { font-weight: 700; color: var(--sky-dark); font-size: .62rem; }
 [data-theme="dark"] .msg-pub-name { color: #89d0f5; }
 .msg-pub-time { font-size: .6rem; color: var(--text-dim); margin-left: 5px; }
-.msg-pub-text { color: var(--text-main); margin: 3px 0 0; line-height: 1.45; word-break: break-word; }
+.msg-pub-text { color: var(--text-main); margin: 2px 0 0; line-height: 1.4; word-break: break-word; font-size: .68rem; }
 [data-theme="dark"] .msg-pub-text { color: #cce4f8; }
 .msg-pub-del {
   float: right; background: none; border: none; font-size: .58rem; color: var(--text-dim);
@@ -440,7 +429,7 @@ const hcdhCount    = countChaps(hcdhPosts);
  
 /* ─── FLOATING BUBBLE ─── */
 .msg-bubble-btn {
-  position: fixed; bottom: 88px; right: 22px; z-index: 410;
+  position: fixed; bottom: 100px; right: 22px; z-index: 410;
   width: 48px; height: 48px; border-radius: 50%;
   background: linear-gradient(135deg, var(--sky), var(--sky2));
   border: none; cursor: pointer; color: #fff; font-size: 1.25rem;

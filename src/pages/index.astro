@@ -205,7 +205,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:#fff; border:1px solid rgba(186,230,253,.65);
   border-radius:14px; padding:13px 12px; flex-shrink:0;
 }
-/* Dark mode for ALL widgets */
 [data-theme="dark"] .widget {
   background:rgba(10,22,38,.98);
   border-color:rgba(96,184,232,.22);
@@ -267,14 +266,14 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .quote-src { color:#6a9ab5; }
 
 /* ─── MESSAGE WIDGET ─── */
-/* Base font size for ALL message elements: .72rem */
+/* FIX 4: Tất cả font-size trong message widget đồng bộ nhỏ hơn */
 .msg-widget-tabs {
   display:flex; gap:0; margin-bottom:9px;
   border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); overflow:hidden;
 }
 [data-theme="dark"] .msg-widget-tabs { border-color:rgba(96,184,232,.25); }
 .msg-tab {
-  flex:1; padding:4px 0; font-size:.62rem; letter-spacing:.5px; text-transform:uppercase;
+  flex:1; padding:4px 0; font-size:.6rem; letter-spacing:.5px; text-transform:uppercase;
   background:none; border:none; cursor:pointer; font-family:'Newsreader',serif;
   color:var(--text-mid); transition:var(--t);
 }
@@ -284,15 +283,15 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-panel { display:none; }
 .msg-panel.active { display:block; }
 
-/* Uniform inputs — .72rem */
+/* FIX 4: Inputs đồng bộ .64rem */
 .msg-inp, .msg-textarea {
   width:100%; padding:5px 10px;
   border:1.5px solid var(--sky-light); font-family:'Newsreader',serif;
   color:var(--text-main); background:#fff; outline:none;
-  box-sizing:border-box; font-size:.72rem; margin-bottom:5px;
+  box-sizing:border-box; font-size:.64rem; margin-bottom:5px;
   border-radius:var(--r-pill);
 }
-.msg-textarea { border-radius:8px; resize:none; min-height:48px; }
+.msg-textarea { border-radius:8px; resize:none; min-height:44px; }
 .msg-inp:focus, .msg-textarea:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea {
   background:#091726; border-color:#1e5a7a; color:#daeeff;
@@ -301,18 +300,18 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 .msg-send-btn {
   width:100%; padding:5px; background:var(--sky); color:#fff;
-  border:none; border-radius:var(--r-pill); font-size:.72rem;
+  border:none; border-radius:var(--r-pill); font-size:.64rem;
   font-family:'Newsreader',serif; cursor:pointer; transition:var(--t);
 }
 .msg-send-btn:hover { background:var(--sky2); }
 .msg-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 .msg-sent-notice {
-  text-align:center; font-size:.68rem; color:#059669; padding:5px 0;
+  text-align:center; font-size:.62rem; color:#059669; padding:5px 0;
   display:none; font-style:italic;
 }
 [data-theme="dark"] .msg-sent-notice { color:#34d399; }
 
-/* Public feed */
+/* FIX 4: Public feed — font nhỏ, compact */
 .msg-public-feed {
   max-height:120px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;
   margin-bottom:7px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
@@ -322,31 +321,35 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 .msg-pub-item {
   background:var(--sky-pale); border-radius:8px; padding:5px 8px;
-  border:1px solid rgba(186,230,253,.35); font-size:.68rem;
+  border:1px solid rgba(186,230,253,.35); font-size:.62rem;
+  line-height: 1.4;
 }
 [data-theme="dark"] .msg-pub-item {
   background:rgba(21,50,80,.5);
   border-color:rgba(96,184,232,.15);
 }
-.msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
+/* FIX 4: Tên người gửi nhỏ và gọn */
+.msg-pub-name { font-weight:700; color:var(--sky-dark); font-size:.62rem; }
 [data-theme="dark"] .msg-pub-name { color:#89d0f5; }
-.msg-pub-time { font-size:.6rem; color:var(--text-dim); margin-left:4px; }
+.msg-pub-time { font-size:.56rem; color:var(--text-dim); margin-left:4px; }
 [data-theme="dark"] .msg-pub-time { color:#4a7a96; }
-.msg-pub-text { color:var(--text-main); margin:2px 0 0; line-height:1.4; word-break:break-word; font-size:.68rem; }
+.msg-pub-text { color:var(--text-main); margin:1px 0 0; line-height:1.35; word-break:break-word; font-size:.62rem; }
 [data-theme="dark"] .msg-pub-text { color:#cce4f8; }
+/* FIX 4: Dấu X nhỏ và gọn hơn */
 .msg-pub-del {
-  float:right; background:none; border:none; font-size:.58rem; color:var(--text-dim);
-  cursor:pointer; padding:0 2px; transition:color .15s; display:none;
+  float:right; background:none; border:none; font-size:.5rem; color:var(--text-dim);
+  cursor:pointer; padding:0 1px; transition:color .15s; display:none;
+  line-height:1; vertical-align:middle;
 }
 .msg-pub-del.show { display:inline; }
 .msg-pub-del:hover { color:#ef4444; }
-.msg-public-empty { font-size:.68rem; color:var(--text-dim); font-style:italic; text-align:center; padding:8px 0; }
+.msg-public-empty { font-size:.62rem; color:var(--text-dim); font-style:italic; text-align:center; padding:8px 0; }
 [data-theme="dark"] .msg-public-empty { color:#4a7a96; }
 
 /* Private admin cards */
 .msg-priv-card {
   border-radius:9px; padding:7px 9px;
-  border:1px solid rgba(186,230,253,.4); font-size:.68rem;
+  border:1px solid rgba(186,230,253,.4); font-size:.62rem;
   background:var(--sky-pale);
 }
 [data-theme="dark"] .msg-priv-card {
@@ -356,24 +359,24 @@ const hcdhCount    = countChaps(hcdhPosts);
 .msg-priv-card.unread  { border-left:3px solid var(--sky); }
 .msg-priv-card.replied { border-left:3px solid #34d399; opacity:.85; }
 .msg-priv-card-header  { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
-.msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.68rem; }
+.msg-priv-sender { font-weight:700; color:var(--sky-dark); font-size:.62rem; }
 [data-theme="dark"] .msg-priv-sender { color:#89d0f5; }
-.msg-priv-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
+.msg-priv-time { font-size:.56rem; color:var(--text-dim); margin-left:auto; }
 [data-theme="dark"] .msg-priv-time { color:#4a7a96; }
-.msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.6rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
+.msg-priv-del  { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
 .msg-priv-del:hover { color:#ef4444; }
-.msg-priv-text { color:var(--text-main); line-height:1.4; margin:2px 0 5px; word-break:break-word; font-size:.68rem; }
+.msg-priv-text { color:var(--text-main); line-height:1.4; margin:2px 0 5px; word-break:break-word; font-size:.62rem; }
 [data-theme="dark"] .msg-priv-text { color:#cce4f8; }
 .msg-priv-reply-inp {
   width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:7px;
-  font-size:.68rem; font-family:'Newsreader',serif; resize:none;
+  font-size:.62rem; font-family:'Newsreader',serif; resize:none;
   background:#fff; color:var(--text-main); outline:none; margin-bottom:4px;
 }
 .msg-priv-reply-inp:focus { border-color:var(--sky); }
 [data-theme="dark"] .msg-priv-reply-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
 .msg-priv-send-btn {
   padding:3px 10px; background:var(--sky); color:#fff; border:none;
-  border-radius:var(--r-pill); font-size:.64rem; cursor:pointer; transition:var(--t);
+  border-radius:var(--r-pill); font-size:.6rem; cursor:pointer; transition:var(--t);
 }
 .msg-priv-send-btn:hover { background:var(--sky2); }
 .msg-priv-send-btn:disabled { opacity:.5; }
@@ -382,32 +385,32 @@ const hcdhCount    = countChaps(hcdhPosts);
   border-radius:6px; border:1px solid rgba(52,211,153,.25);
 }
 [data-theme="dark"] .msg-priv-replied-wrap { background:rgba(52,211,153,.05); border-color:rgba(52,211,153,.2); }
-.msg-priv-replied-label { font-size:.6rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
-.msg-priv-replied-text  { font-size:.68rem; color:var(--text-main); line-height:1.4; }
+.msg-priv-replied-label { font-size:.56rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
+.msg-priv-replied-text  { font-size:.62rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-priv-replied-text { color:#cce4f8; }
 .msg-priv-del-reply {
-  background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim);
+  background:none; border:none; cursor:pointer; font-size:.54rem; color:var(--text-dim);
   padding:2px 4px; margin-top:2px; border-radius:3px; transition:color .15s;
 }
 .msg-priv-del-reply:hover { color:#ef4444; }
 .msg-admin-reply-section { margin-top:7px; }
-.msg-admin-reply-title   { font-size:.64rem; color:#059669; font-weight:700; margin-bottom:4px; }
+.msg-admin-reply-title   { font-size:.6rem; color:#059669; font-weight:700; margin-bottom:4px; }
 .msg-admin-reply-card    { padding:6px 8px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:8px; margin-bottom:4px; }
 [data-theme="dark"] .msg-admin-reply-card { background:rgba(52,211,153,.05); }
-.msg-admin-reply-orig    { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
-.msg-admin-reply-body    { font-size:.68rem; color:var(--text-main); line-height:1.4; }
+.msg-admin-reply-orig    { font-size:.58rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
+.msg-admin-reply-body    { font-size:.62rem; color:var(--text-main); line-height:1.4; }
 [data-theme="dark"] .msg-admin-reply-body { color:#cce4f8; }
-.msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.56rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-right:3px; }
-.msg-admin-reply-time    { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
+.msg-admin-badge         { display:inline-block; background:var(--sky); color:#fff; font-size:.52rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-right:3px; }
+.msg-admin-reply-time    { font-size:.54rem; color:var(--text-dim); text-align:right; margin-top:2px; }
 .msg-pub-admin           { background:rgba(14,165,233,.06)!important; border-color:rgba(14,165,233,.25)!important; }
 [data-theme="dark"] .msg-pub-admin { background:rgba(21,101,160,.2)!important; border-color:rgba(96,184,232,.3)!important; }
 .msg-pub-admin-name      { color:var(--sky-dark)!important; }
 [data-theme="dark"] .msg-pub-admin-name { color:#89d0f5!important; }
-.msg-pub-owner-badge     { display:inline-block; font-size:.52rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
+.msg-pub-owner-badge     { display:inline-block; font-size:.48rem; background:var(--sky); color:#fff; padding:1px 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
 
 /* Description text in private panel */
 .msg-panel p {
-  font-size:.68rem;
+  font-size:.62rem;
   color:var(--text-dim);
   margin:0 0 7px;
   font-style:italic;
@@ -415,7 +418,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 [data-theme="dark"] .msg-panel p { color:#6a9ab5; }
 
-/* ─── FLOATING MAIL BUBBLE ─── */
+/* FIX 2: FLOATING MAIL BUBBLE — xóa hiệu ứng sóng */
 .msg-bubble-btn {
   position:fixed;
   bottom: 126px;
@@ -427,22 +430,13 @@ const hcdhCount    = countChaps(hcdhPosts);
   box-shadow:0 4px 14px rgba(2,132,199,.4);
   display:flex; align-items:center; justify-content:center;
   transition:transform .2s, box-shadow .2s;
-  overflow:visible;
+  /* overflow:visible đã bỏ vì không còn ripple */
 }
 .msg-bubble-btn:hover {
   transform:scale(1.1) translateY(-2px);
   box-shadow:0 7px 20px rgba(2,132,199,.55);
 }
-.bubble-ripple {
-  position:absolute; inset:-5px; border-radius:50%;
-  border:2px solid var(--sky);
-  opacity:0; animation:bubbleRipple 2.8s ease-out infinite;
-  pointer-events:none;
-}
-@keyframes bubbleRipple {
-  0%   { transform:scale(1);   opacity:.55; }
-  100% { transform:scale(1.75); opacity:0; }
-}
+/* FIX 2: .bubble-ripple và @keyframes bubbleRipple ĐÃ XÓA */
 [data-theme="dark"] .msg-bubble-btn { background:linear-gradient(135deg,#1565a0,#0e3d6e); }
 @media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
 
@@ -478,7 +472,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .msg-popup-close { border-color:rgba(96,184,232,.2); color:#6a9ab5; }
 [data-theme="dark"] .msg-popup-close:hover { background:rgba(96,184,232,.1); }
 
-/* Popup also needs dark inputs */
 [data-theme="dark"] .msg-popup .msg-inp,
 [data-theme="dark"] .msg-popup .msg-textarea {
   background:#091726; border-color:#1e5a7a; color:#daeeff;
@@ -510,7 +503,6 @@ const hcdhCount    = countChaps(hcdhPosts);
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
     <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
     <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
-    <!-- duplicate for seamless loop -->
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
     <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
     <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
@@ -780,7 +772,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 
       <!-- Panel: Riêng tư -->
       <div class="msg-panel active" id="msgPanelPrivate">
-        <!-- User view -->
         <div id="msgPrivateUserNote">
           <p>Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.</p>
           <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
@@ -789,9 +780,8 @@ const hcdhCount    = countChaps(hcdhPosts);
           <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
           <div id="msgPrivateUserReply" style="margin-top:7px"></div>
         </div>
-        <!-- Admin view -->
         <div id="msgPrivateAdminPanel" style="display:none">
-          <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 7px;font-style:italic">📬 Tin nhắn riêng nhận được:</p>
+          <p style="font-size:.62rem;color:var(--text-dim);margin:0 0 7px;font-style:italic">📬 Tin nhắn riêng nhận được:</p>
           <div id="msgPrivateAdminList" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin"></div>
         </div>
       </div>
@@ -817,10 +807,9 @@ const hcdhCount    = countChaps(hcdhPosts);
   </aside>
 </div><!-- /home-shell -->
 
-<!-- ── FLOATING MAIL BUBBLE ── -->
+<!-- FIX 2: Button mail KHÔNG có <span class="bubble-ripple"></span> -->
 <button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
   <span>✉</span>
-  <span class="bubble-ripple"></span>
 </button>
 
 <!-- Popup from bubble -->
@@ -834,7 +823,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
   </div>
   <div class="msg-panel active" id="msgPopupPanelPrivate">
-    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 6px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
+    <p style="font-size:.62rem;color:var(--text-dim);margin:0 0 6px;font-style:italic;line-height:1.5">Chỉ admin đọc được nhé 🐋</p>
     <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
     <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn..." rows="3"></textarea>
     <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
@@ -917,7 +906,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
       popup.classList.remove('open');
   });
 
-  /* Tab switcher for popup */
   popup.querySelectorAll('[data-popup-panel]').forEach(tab => {
     tab.addEventListener('click', () => {
       const panel = tab.dataset.popupPanel;
@@ -963,7 +951,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
   }
 
-  /* Tab switcher for sidebar widget */
   document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
     tab.addEventListener('click', () => {
       const panel = tab.dataset.panel;
@@ -974,7 +961,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     });
   });
 
-  /* ── Render private messages ── */
   function renderPrivateMessages(data){
     lastPrivateData = data;
     const adminList = document.getElementById('msgPrivateAdminList');
@@ -990,7 +976,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
           <div class="msg-priv-card-header">
             <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
             <span class="msg-priv-time">${msgTime(m.ts)}</span>
-            <button class="msg-priv-del" data-mid="${msgEsc(m.id)}">🗑</button>
+            <button class="msg-priv-del" data-mid="${msgEsc(m.id)}">✕</button>
           </div>
           <div class="msg-priv-text">${msgEsc(m.text)}</div>
           ${replied
@@ -1039,7 +1025,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     }
   }
 
-  /* ── Send private (user) ── */
   function bindPrivateSend(nameId,textId,sendId,doneId){
     const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
     if(!sendEl) return;
@@ -1054,7 +1039,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   bindPrivateSend('msgPrivateName','msgPrivateText','msgPrivateSend','msgPrivateDone');
   bindPrivateSend('msgPopupPrivateName','msgPopupPrivateText','msgPopupPrivateSend','msgPopupPrivateDone');
 
-  /* ── Render public messages ── */
   function renderPublicMessages(data){
     lastPublicData = data;
     function renderFeed(feedEl){
@@ -1081,7 +1065,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     renderFeed(document.getElementById('msgPopupPublicFeed'));
   }
 
-  /* ── Send public ── */
   function bindPublicSend(nameId,textId,sendId,doneId){
     const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
     if(!sendEl) return;
@@ -1096,7 +1079,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   bindPublicSend('msgPublicName','msgPublicText','msgPublicSend','msgPublicDone');
   bindPublicSend('msgPopupPublicName','msgPopupPublicText','msgPopupPublicSend','msgPopupPublicDone');
 
-  /* ── Firebase subscribe ── */
   function wfl(cb){
     if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}
     window.addEventListener('dd-firebase-ready',()=>{if(window.__ddFirebase?.db)cb(window.__ddFirebase);},{once:true});

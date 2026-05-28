@@ -443,7 +443,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* Popup from bubble */
 .msg-popup {
-  font-size: .4rem
+  font-size: .4rem;
   position:fixed; bottom:128px; right:16px; z-index:420;
   width:min(330px,calc(100vw - 28px));
   background:var(--bg-card, #fff); border:1px solid rgba(186,230,253,.6);
@@ -578,7 +578,27 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 [data-theme="dark"] .msg-pub-name  { color: #89d0f5 !important; }
 [data-theme="dark"] .msg-pub-text  { color: #cce4f8 !important; }
-[data-theme="dark"] .msg-pub-time  { color: #4a7a96 !important; }
+[data-theme="dark"] .msg-pub-time  { color: #4a7a96 !important; }
+[data-theme="dark"] #msgPrivateAdminList .msg-public-empty {
+  font-size: .62rem !important;
+  color: #6a9ab5 !important;
+}
+[data-theme="dark"] #msgPrivateAdminList {
+  color: #cce4f8;
+  font-size: .62rem;
+}
+/* Reset font-size toàn bộ widget sidebar */
+#msgSidebarWidget { font-size: 14px; }
+#msgSidebarWidget * { font-size: inherit; }
+#msgSidebarWidget .widget-title { font-size: .68rem; }
+#msgSidebarWidget .msg-tab      { font-size: .6rem; }
+#msgSidebarWidget .msg-inp,
+#msgSidebarWidget .msg-textarea { font-size: .7rem; }
+#msgSidebarWidget .msg-send-btn { font-size: .7rem; }
+#msgSidebarWidget .msg-panel p  { font-size: .62rem; }
+#msgSidebarWidget .msg-pub-item,
+#msgSidebarWidget .msg-pub-name,
+#msgSidebarWidget .msg-pub-text { font-size: .62rem; }
 </style>
 
 <!-- TICKER -->

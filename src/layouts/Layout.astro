@@ -134,9 +134,9 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .page-content-wrap {
       background:#0e2236 !important;
       border-color:rgba(96,184,232,.16);
-      color:#daeeff;
+      color:#e0f0ff;
     }
-    [data-theme="dark"] .novel-content p { color:#cce4f8; }
+    [data-theme="dark"] .novel-content p { color:#e8f4ff; }
     [data-theme="dark"] h1,[data-theme="dark"] h2,
     [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#89d0f5; }
     [data-theme="dark"] blockquote    { background:rgba(14,36,58,.9); color:#a0c8e0; border-left-color:#1e5a7a; }
@@ -535,7 +535,7 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .ic-item-name { color: #89d0f5; }
     .ic-item-time { font-size: .6rem; color: var(--text-dim); margin-left: auto; }
     .ic-item-text { font-size: .74rem; color: var(--text-main); line-height: 1.5; margin-bottom: 6px; word-break: break-word; }
-    [data-theme="dark"] .ic-item-text { color: #cce4f8; }
+    [data-theme="dark"] .ic-item-text { color: #daeeff; }
     .ic-item-actions { display: flex; align-items: center; gap: 6px; }
     .ic-reply-toggle {
       font-size: .64rem; color: var(--sky); background: none; border: none;
@@ -707,7 +707,7 @@ if (currentTruyenId && isNovelPage) {
     .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:auto; }
     [data-theme="dark"] .comment-card-time { color:#4a7a96; }
     .comment-card-text { font-size:.86rem; color:var(--text-main); line-height:1.65; margin:0 0 10px; word-break:break-word; }
-    [data-theme="dark"] .comment-card-text { color:#cce4f8; }
+    [data-theme="dark"] .comment-card-text { color:#daeeff; }
 
     .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .cmt-like-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
@@ -734,7 +734,7 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .reply-name { color:#89d0f5; }
     .reply-time { font-size:.6rem; color:var(--text-dim); margin-left:6px; }
     .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
-    [data-theme="dark"] .reply-text { color:#b8d8f0; }
+    [data-theme="dark"] .reply-text { color:#cce4f8; }
     .reply-del { position:absolute; top:6px; right:8px; background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 4px; border-radius:3px; display:none; }
     .reply-item:hover .reply-del { opacity:1; }
     .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
@@ -1098,10 +1098,10 @@ function applyTheme(dark){ document.documentElement.setAttribute('data-theme',da
 window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
 
 (function injectThemeBtn(){
-  const navLinks = document.querySelector('.nav-links');
+  const navLinks = document.querySelector('.nav#bar');
   if(!navLinks) return;
   const btn = document.createElement('button');
-  btn.style.cssText = 'font-size:.8rem;width:32px;height:32px;border-radius:50%;border:1px solid rgba(186,230,253,.6);background:none;color:var(--text-mid);cursor:pointer;transition:all .2s ease;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;';
+  btn.style.cssText = 'font-size:.8rem;width:32px;height:32px;border-radius:50%;border:1px solid rgba(186,230,253,.6);background:none;color:var(--text-mid);cursor:pointer;transition:all .2s ease;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:48px;';
   btn.id = 'navThemeBtn';
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
   const sync = () => { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối'; };

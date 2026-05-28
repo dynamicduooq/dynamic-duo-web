@@ -398,7 +398,7 @@ const hcdhCount    = countChaps(hcdhPosts);
  
 /* Public feed */
 .msg-public-feed {
-  max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+  max-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
   margin-bottom: 8px;
   scrollbar-width: thin; scrollbar-color: var(--sky-light) transparent;
 }
@@ -429,15 +429,16 @@ const hcdhCount    = countChaps(hcdhPosts);
  
 /* ─── FLOATING BUBBLE ─── */
 .msg-bubble-btn {
-  position: fixed; bottom: 100px; right: 22px; z-index: 410;
-  width: 48px; height: 48px; border-radius: 50%;
+  position: fixed; bottom: 88px; right: 22px; z-index: 410;
+  width: 46px; height: 46px; border-radius: 50%;
   background: linear-gradient(135deg, var(--sky), var(--sky2));
-  border: none; cursor: pointer; color: #fff; font-size: 1.25rem;
+  border: none; cursor: pointer; color: #fff; font-size: 1.1rem;
   box-shadow: 0 4px 18px rgba(2,132,199,.45);
   display: flex; align-items: center; justify-content: center;
   transition: transform .2s, box-shadow .2s;
+  overflow: visible;
 }
-.msg-bubble-btn:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 24px rgba(2,132,199,.55); }
+.msg-bubble-btn:hover { transform: scale(1.12) translateY(-2px); box-shadow: 0 8px 28px rgba(2,132,199,.6); }
 .msg-bubble-btn .msg-bubble-badge {
   position: absolute; top: -2px; right: -2px;
   background: #f43f5e; color: #fff; font-size: .55rem; font-weight: 700;
@@ -492,6 +493,46 @@ const hcdhCount    = countChaps(hcdhPosts);
   .sc-cover-wrap{ width:90px; }
   .sc-cover-wrap img{ width:90px; }
 }
+/* ── Admin private message cards ── */
+.msg-priv-card {
+  border-radius: 10px; padding: 8px 10px;
+  border: 1px solid rgba(186,230,253,.4); font-size: .7rem;
+  background: var(--sky-pale);
+}
+[data-theme="dark"] .msg-priv-card { background: rgba(21,50,80,.35); border-color: rgba(96,184,232,.12); }
+.msg-priv-card.unread { border-left: 3px solid var(--sky); }
+.msg-priv-card.replied { border-left: 3px solid #34d399; opacity: .85; }
+.msg-priv-card-header { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+.msg-priv-sender { font-weight:700; color:var(--sky-dark); }
+[data-theme="dark"] .msg-priv-sender { color:#89d0f5; }
+.msg-priv-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
+.msg-priv-del { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 3px; transition:color .15s; }
+.msg-priv-del:hover { color:#ef4444; }
+.msg-priv-text { color:var(--text-main); line-height:1.45; margin:3px 0 6px; word-break:break-word; }
+[data-theme="dark"] .msg-priv-text { color:#cce4f8; }
+.msg-priv-reply-inp { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); border-radius:8px; font-size:.7rem; font-family:'Newsreader',serif; resize:none; background:var(--cream); color:var(--text-main); outline:none; margin-bottom:4px; }
+.msg-priv-reply-inp:focus { border-color:var(--sky); }
+[data-theme="dark"] .msg-priv-reply-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
+.msg-priv-send-btn { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
+.msg-priv-send-btn:hover { background:var(--sky2); }
+.msg-priv-send-btn:disabled { opacity:.5; }
+.msg-priv-replied-wrap { margin-top:5px; padding:5px 8px; background:rgba(52,211,153,.08); border-radius:7px; border:1px solid rgba(52,211,153,.25); }
+.msg-priv-replied-label { font-size:.6rem; color:#059669; font-weight:700; display:block; margin-bottom:2px; }
+.msg-priv-replied-text { font-size:.7rem; color:var(--text-main); line-height:1.4; }
+[data-theme="dark"] .msg-priv-replied-text { color:#cce4f8; }
+.msg-priv-del-reply { background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); padding:2px 4px; margin-top:3px; border-radius:3px; transition:color .15s; }
+.msg-priv-del-reply:hover { color:#ef4444; }
+.msg-admin-reply-section { margin-top:8px; }
+.msg-admin-reply-title { font-size:.66rem; color:#059669; font-weight:700; margin-bottom:5px; }
+.msg-admin-reply-card { padding:7px 9px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:9px; margin-bottom:5px; }
+.msg-admin-reply-orig { font-size:.62rem; color:var(--text-dim); font-style:italic; margin-bottom:3px; }
+.msg-admin-reply-body { font-size:.72rem; color:var(--text-main); line-height:1.4; }
+[data-theme="dark"] .msg-admin-reply-body { color:#cce4f8; }
+.msg-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.58rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-right:4px; }
+.msg-admin-reply-time { font-size:.58rem; color:var(--text-dim); text-align:right; margin-top:2px; }
+.msg-pub-admin { background:rgba(14,165,233,.06) !important; border-color:rgba(14,165,233,.25) !important; }
+.msg-pub-admin-name { color:var(--sky-dark) !important; }
+.msg-pub-owner-badge { display:inline-block; font-size:.54rem; background:var(--sky); color:#fff; padding:1px 5px; border-radius:var(--r-pill); margin-left:4px; vertical-align:middle; }
 </style>
 
 <!-- TICKER -->
@@ -785,7 +826,9 @@ const hcdhCount    = countChaps(hcdhPosts);
   </div>
  
   <!-- Panel: Riêng tư -->
-  <div class="msg-panel active" id="msgPanelPrivate">
+ <div class="msg-panel active" id="msgPanelPrivate">
+  <!-- View user thường: form gửi + xem reply của admin -->
+  <div id="msgPrivateUserNote">
     <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5">
       Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.
     </p>
@@ -793,8 +836,19 @@ const hcdhCount    = countChaps(hcdhPosts);
     <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
     <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
     <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
+    <!-- Hiện khi admin đã reply cho user này -->
+    <div id="msgPrivateUserReply" style="margin-top:8px"></div>
   </div>
- 
+
+  <!-- View admin: danh sách tin + form reply — ẩn với user thường -->
+  <div id="msgPrivateAdminPanel" style="display:none">
+    <p style="font-size:.68rem;color:var(--text-dim);margin:0 0 8px;font-style:italic">
+      📬 Tin nhắn riêng nhận được:
+    </p>
+    <div id="msgPrivateAdminList" style="max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin"></div>
+  </div>
+</div>
+
   <!-- Panel: Public -->
   <div class="msg-panel" id="msgPanelPublic">
     <div class="msg-public-feed" id="msgPublicFeed">
@@ -1195,11 +1249,12 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
  
 })();
 </script>
-<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà">
-  ✉
+<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
+  <span class="bubble-icon">✉</span>
+  <span class="bubble-ripple"></span>
   <span class="msg-bubble-badge" id="msgBubbleBadge"></span>
 </button>
- 
+
 <!-- Popup từ bubble -->
 <div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">

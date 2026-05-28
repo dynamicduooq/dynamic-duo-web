@@ -180,7 +180,6 @@ if (currentTruyenId && isNovelPage) {
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    /* ĐÃ SỬA: Đồng bộ font-size và font-family từ biến CSS */
     body { background:var(--cream); color:var(--text-main); font-family:var(--read-ff, 'Newsreader', serif); font-size:var(--read-fz, 18px); line-height:1.9; margin:0; padding:0; overflow-x:hidden; transition: font-size 0.2s, font-family 0.2s; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     a { color:inherit; text-decoration:none; }
@@ -192,10 +191,10 @@ if (currentTruyenId && isNovelPage) {
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
     /* ── NAVBAR ── */
-    /* ĐÃ SỬA: Đẩy Menu sang lề phải, loại bỏ chênh vênh */
+    /* ĐÃ SỬA: Bỏ justify-content: space-between để Logo đẩy Menu sang phải */
     nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
-    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; } /* margin-right: auto đẩy mọi thứ khác sang phải */
-    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 16px; }
+    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; } /* margin-right: auto sẽ ép Menu sang lề phải */
+    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 12px; }
     .nav-item { position:relative; }
     .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
     .nav-item > a:hover,.nav-btn:hover,.nav-item:hover > a,.nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
@@ -711,45 +710,44 @@ function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commen
   root.style.setProperty('--read-fz', fz + 'px');
   root.style.setProperty('--read-ff', ff);
 
-  window.addEventListener('DOMContentLoaded', () => {
-    if(document.querySelector('.novel-content')) {
-       localStorage.setItem('dd_last_read_url', window.location.pathname);
-       localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
-    }
-    const btn = document.getElementById('readSettingsBtn');
-    const pop = document.getElementById('rsPopup');
-    
-    // Đã thay return sớm bằng if để không chặn keyboard logic
-    if(btn && pop) {
-      // Toggle popup
-      btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
-      document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+  // Đã tháo event DOMContentLoaded ra để chạy trực tiếp (vì script để ở cuối body)
+  if(document.querySelector('.novel-content')) {
+     localStorage.setItem('dd_last_read_url', window.location.pathname);
+     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
+  }
+  
+  const btn = document.getElementById('readSettingsBtn');
+  const pop = document.getElementById('rsPopup');
+  
+  if(btn && pop) {
+    // Toggle popup
+    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
+    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
 
-      // Cỡ chữ
-      document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-      document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+    // Cỡ chữ
+    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
 
-      // Font chữ
-      const fontBtns = pop.querySelectorAll('[data-font]');
-      fontBtns.forEach(fb => {
-        if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-        fb.addEventListener('click', () => {
-          ff = fb.dataset.font;
-          root.style.setProperty('--read-ff', ff);
-          localStorage.setItem('dd_ff', ff);
-          fontBtns.forEach(b=>b.classList.remove('active'));
-          fb.classList.add('active');
-        });
+    // Font chữ
+    const fontBtns = pop.querySelectorAll('[data-font]');
+    fontBtns.forEach(fb => {
+      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
+      fb.addEventListener('click', () => {
+        ff = fb.dataset.font;
+        root.style.setProperty('--read-ff', ff);
+        localStorage.setItem('dd_ff', ff);
+        fontBtns.forEach(b=>b.classList.remove('active'));
+        fb.classList.add('active');
       });
-    }
-
-    // Keyboard shortcuts (Next/Prev chapter)
-    document.addEventListener('keydown', e => {
-      // Bỏ qua nếu đang nhập liệu văn bản
-      if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if(e.key === 'ArrowLeft') { const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); if(p && p.tagName === 'A') p.click(); }
-      if(e.key === 'ArrowRight') { const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); if(n && n.tagName === 'A') n.click(); }
     });
+  }
+
+  // Keyboard shortcuts (Next/Prev chapter)
+  document.addEventListener('keydown', e => {
+    // Bỏ qua nếu đang nhập liệu văn bản
+    if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+    if(e.key === 'ArrowLeft') { const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); if(p && p.tagName === 'A') p.click(); }
+    if(e.key === 'ArrowRight') { const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); if(n && n.tagName === 'A') n.click(); }
   });
 })();
 

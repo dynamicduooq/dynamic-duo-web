@@ -19,7 +19,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 .home-shell {
   display: grid;
   grid-template-columns: 1fr 300px; /* Đã mở rộng widget sidebar lên 300px cho thoáng */
-  gap: 28px; /* Tăng khoảng cách giữa 2 cột */
+  gap: 28px;
   max-width: 1260px; /* Tăng max-width để form rộng rãi hơn */
   margin: 0 auto;
   padding: 20px 28px 80px;
@@ -53,6 +53,12 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* ─── HERO ─── */
 .hero { text-align:center; padding:18px 0 14px; }
+.hero-greeting {
+  font-family: 'Merriweather', serif; font-size: 1.15rem; color: var(--sky-dark);
+  margin-bottom: 6px; font-weight: 600; opacity: 0; transform: translateY(10px);
+  animation: fadeUpAnim 0.8s ease forwards;
+}
+[data-theme="dark"] .hero-greeting { color: #a8daf0; }
 .hero-banner-wrap {
   position:relative; border-radius:14px; overflow:hidden;
   max-height:190px; margin:0 auto;
@@ -69,7 +75,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   display:block; margin:0 auto; padding:22px 0;
   filter:drop-shadow(0 2px 12px rgba(0,0,0,.35));
 }
-.hero-tagline { font-size:.78rem; color:var(--text-dim); font-style:italic; margin:9px 0 0; }
+.hero-tagline { font-size:.78rem; color:var(--text-dim); font-style:italic; margin:12px 0 0; }
 [data-theme="dark"] .hero-tagline { color:#8ab8d8; }
 
 /* ─── SECTION HEADER ─── */
@@ -82,14 +88,18 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sec-line { flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
 [data-theme="dark"] .sec-line { background:linear-gradient(to right,rgba(80,150,210,.4),transparent); }
 
-/* ─── FILTER BAR ─── */
+/* ─── FILTER BAR (Sticky Effect) ─── */
 .filter-bar {
-  background: var(--bg-card); border:1px solid rgba(186,230,253,.5);
+  background: rgba(255, 255, 255, 0.85); border:1px solid rgba(186,230,253,.5);
   border-radius:12px; padding:9px 12px;
   display:flex; flex-wrap:wrap; gap:5px; align-items:center;
   margin-bottom:12px;
+  position: sticky; top: 66px; z-index: 100; /* Sticky feature */
+  backdrop-filter: blur(12px); box-shadow: 0 4px 15px rgba(2,132,199,.05);
+  transition: box-shadow 0.3s ease;
 }
-[data-theme="dark"] .filter-bar { border-color:rgba(80,150,210,.3); }
+[data-theme="dark"] .filter-bar { background: rgba(15, 35, 54, 0.85); border-color:rgba(80,150,210,.3); box-shadow: 0 4px 15px rgba(0,0,0,.2);}
+.filter-bar.is-stuck { box-shadow: 0 8px 25px rgba(2,132,199,.15); }
 .fl-label { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); flex-shrink:0; }
 .fl-chips { display:flex; flex-wrap:wrap; gap:4px; flex:1; }
 .chip {
@@ -112,6 +122,25 @@ const hcdhCount    = countChaps(hcdhPosts);
   white-space:nowrap; margin-left:auto;
 }
 [data-theme="dark"] .fl-count { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.2); color:#a8daf0; }
+
+/* ─── CONTINUE READING BANNER ─── */
+.cr-banner {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+  background: linear-gradient(135deg, var(--sky-light), var(--sky-pale)); 
+  border-radius: 12px; padding: 10px 16px; margin-bottom: 16px; 
+  border: 1px solid rgba(186,230,253,.8); box-shadow: 0 4px 15px rgba(2,132,199,.1); 
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+[data-theme="dark"] .cr-banner { background: linear-gradient(135deg, rgba(30,74,106,.8), rgba(13,32,53,.8)); border-color: rgba(126,200,227,.3); }
+.cr-banner:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(2,132,199,.15); }
+.cr-icon { font-size: 1.6rem; animation: cr-float 3s ease-in-out infinite; }
+.cr-label { font-size: .65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--sky-dark); display: block; margin-bottom: 2px;}
+[data-theme="dark"] .cr-label { color: #8ab8d8; }
+.cr-title { font-size: .85rem; font-weight: 600; color: var(--text-main); font-family: 'Merriweather', serif;}
+[data-theme="dark"] .cr-title { color: #F3F9FF; }
+.cr-arrow { margin-left: auto; color: var(--sky); font-size: 1.2rem; }
+[data-theme="dark"] .cr-arrow { color: #a8daf0; }
+@keyframes cr-float { 0% { transform: translateY(0); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0); } }
 
 /* ─── STORY GRID (Added Staggered Animation & Hover 3D) ─── */
 @keyframes fadeUpAnim {
@@ -206,6 +235,14 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .ri-title { color:#e8f4ff; }
 .recent-arrow { color:var(--sky); font-size:.88rem; transition: transform 0.2s; }
 .recent-item:hover .recent-arrow { transform: translateX(3px); }
+
+/* Badge "MỚI" nhấp nháy */
+.badge-new { 
+  display: inline-block; background: #ef4444; color: #fff; font-size: .55rem; 
+  padding: 2px 5px; border-radius: var(--r-pill); margin-left: 6px; 
+  vertical-align: middle; animation: pulse-red 2s infinite; font-family: 'Newsreader', serif;
+}
+@keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,.7); } 70% { box-shadow: 0 0 0 4px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
 
 /* ─── SIDEBAR ─── */
 .sidebar-col {
@@ -595,6 +632,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
     <!-- HERO -->
     <div class="hero">
+      <div id="dynamicGreeting" class="hero-greeting">Chào bạn!</div>
       <div class="hero-banner-wrap reveal">
         <img class="hero-banner-bg" src="/dynamic-duo-web/images/banner.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
         <div class="hero-banner-overlay"></div>
@@ -617,6 +655,15 @@ const hcdhCount    = countChaps(hcdhPosts);
       <h2>📚 Tủ truyện</h2>
       <div class="sec-line"></div>
     </div>
+
+    <a href="#" id="continueReading" class="cr-banner hidden reveal">
+      <div class="cr-icon">📖</div>
+      <div style="flex:1">
+        <span class="cr-label">Tiếp tục đọc</span>
+        <div class="cr-title" id="crLink">Tên truyện</div>
+      </div>
+      <div class="cr-arrow">→</div>
+    </a>
 
     <div class="filter-bar reveal">
       <span class="fl-label">Lọc</span>
@@ -771,7 +818,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         <span class="recent-icon">📖</span>
         <div class="ri-body">
           <div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div>
-          <div class="ri-title">Chương 74 (Kết)</div>
+          <div class="ri-title">Chương 74 (Kết) <span class="badge-new">MỚI</span></div>
         </div>
         <span class="recent-arrow">→</span>
       </a>
@@ -929,6 +976,33 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 <script is:inline>
 /* ══════════════════════════════════════
+   DYNAMIC GREETING & CONTINUE READING
+══════════════════════════════════════ */
+(function setupDynamicFeatures() {
+  // Lời chào theo buổi
+  const hour = new Date().getHours();
+  let greeting = 'Chào buổi tối';
+  if (hour >= 5 && hour < 11) greeting = 'Chào buổi sáng';
+  else if (hour >= 11 && hour < 14) greeting = 'Chào buổi trưa';
+  else if (hour >= 14 && hour < 18) greeting = 'Chào buổi chiều';
+  
+  const grEl = document.getElementById('dynamicGreeting');
+  if(grEl) grEl.textContent = greeting + ', chào mừng đến với nhà cá 🐋';
+
+  // Nhắc đọc tiếp
+  const lastReadUrl = localStorage.getItem('dd_last_read_url');
+  const lastReadTitle = localStorage.getItem('dd_last_read_title');
+  const crBanner = document.getElementById('continueReading');
+  const crLink = document.getElementById('crLink');
+  
+  if (lastReadUrl && lastReadTitle && crBanner && crLink) {
+    crLink.textContent = lastReadTitle;
+    crBanner.href = lastReadUrl;
+    crBanner.classList.remove('hidden');
+  }
+})();
+
+/* ══════════════════════════════════════
    FILTER
 ══════════════════════════════════════ */
 const allCards  = document.querySelectorAll('.sc');
@@ -972,6 +1046,12 @@ chips.forEach(chip=>{
     applyFilter();
   });
 });
+
+/* Toggle shadow cho Sticky Filter khi cuộn */
+window.addEventListener('scroll', () => {
+  const fb = document.querySelector('.filter-bar');
+  if(fb) fb.classList.toggle('is-stuck', window.scrollY > 300);
+}, {passive: true});
 
 /* ══════════════════════════════════════
    REVEAL ON SCROLL

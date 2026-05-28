@@ -728,6 +728,9 @@ if (currentTruyenId && isNovelPage) {
 </footer>
 
 <div class="scroll-btns" id="scrollBtns">
+{isNovelPage && (
+    <button class="scroll-btn show" id="readSettingsBtn" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>
+  )}
   <button class="scroll-btn" id="scrollTop" title="Lên đầu">↑</button>
   <button class="scroll-btn" id="scrollBot" title="Xuống cuối">↓</button>
 </div>
@@ -794,6 +797,10 @@ function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commen
   root.style.setProperty('--read-ff', ff);
 
   window.addEventListener('DOMContentLoaded', () => {
+    if(document.querySelector('.novel-content')) {
+       localStorage.setItem('dd_last_read_url', window.location.pathname);
+       localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
+    }
     const btn = document.getElementById('readSettingsBtn');
     const pop = document.getElementById('rsPopup');
     if(!btn || !pop) return;

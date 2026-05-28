@@ -4,7 +4,7 @@ import settings from '../data/settings.json';
 
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
-const isHome      = frontmatter?.isHome === true;          // ← MỚI: flag trang chủ
+const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
 const currentTruyenId = frontmatter?.truyen_id;
 
 let chapters: any[] = [];
@@ -731,6 +731,8 @@ if (currentTruyenId && isNovelPage) {
     </div>
   ) : isHome ? (
     <!-- Trang chủ: không bọc wrapper, render trực tiếp -->
+    <slot />
+    ) : isHome ? (
     <slot />
   ) : (
     <div class="page-content-wrap"><slot /></div>

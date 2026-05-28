@@ -906,215 +906,291 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   });
 })();
 (function setupMessageWidget(){
+ 
   /* ── Helpers ── */
   function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function msgTime(ts){
     if(!ts) return '';
-    const d = Date.now()-ts;
-    if(d<60000) return 'vừa xong';
-    if(d<3600000) return Math.floor(d/60000)+' phút trước';
-    if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
-    return Math.floor(d/86400000)+' ngày trước';
+    const d = Date.now() - ts;
+    if(d < 60000)    return 'vừa xong';
+    if(d < 3600000)  return Math.floor(d/60000) + ' phút trước';
+    if(d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
+    return Math.floor(d/86400000) + ' ngày trước';
   }
   function getMsgToken(){
     let t = localStorage.getItem('dd_token');
-    if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); }
+    if(!t){ t = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('dd_token', t); }
     return t;
   }
   const myToken     = getMsgToken();
+  const ADMIN_NAME  = 'dynamic duo 𓆝';
   const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
   let isAdmin       = false;
+  let lastPublicData   = null;
+  let lastPrivateData  = null;
+  let pubDebounce      = null;
+  let privDebounce     = null;
+ 
+  /* ── Auth state ── */
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
+    updateAdminUI();
     renderPublicMessages(lastPublicData);
+    renderPrivateMessages(lastPrivateData);
   });
  
-  /* ── Tab switcher factory ── */
+  function updateAdminUI(){
+    /* Ẩn/hiện input tên khi gửi public tùy theo admin */
+    const nameEl = document.getElementById('msgPublicName');
+    if(nameEl){
+      nameEl.style.display    = isAdmin ? 'none' : '';
+      nameEl.placeholder      = isAdmin ? ADMIN_NAME : 'Tên (tùy chọn)';
+    }
+    /* Hiện/ẩn panel private admin */
+    const adminPanel = document.getElementById('msgPrivateAdminPanel');
+    if(adminPanel) adminPanel.style.display = isAdmin ? 'block' : 'none';
+    /* Đổi label panel private cho user thường */
+    const privUserNote = document.getElementById('msgPrivateUserNote');
+    if(privUserNote) privUserNote.style.display = isAdmin ? 'none' : 'block';
+    /* Hiện reply của admin cho người gửi (dựa vào token) */
+    renderPrivateMessages(lastPrivateData);
+  }
+ 
+  /* ══════════════════════════════════════
+     TAB SWITCHER
+  ══════════════════════════════════════ */
   function setupTabs(tabSelector, panelPrefix){
     document.querySelectorAll(tabSelector).forEach(tab => {
       tab.addEventListener('click', () => {
         const panel = tab.dataset.panel || tab.dataset.popupPanel;
         document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        // Ẩn tất cả panel trong cùng container
         const container = tab.closest('.msg-popup, .widget');
         container?.querySelectorAll('.msg-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById(panelPrefix + (panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
+        document.getElementById(panelPrefix + (panel.charAt(0).toUpperCase() + panel.slice(1)))?.classList.add('active');
       });
     });
   }
-  setupTabs('[data-panel]',       'msgPanel');
-  setupTabs('[data-popup-panel]', 'msgPopupPanel');
+  setupTabs('[data-panel]', 'msgPanel');
  
-  /* ── Bubble toggle ── */
-  const bubbleBtn  = document.getElementById('msgBubbleBtn');
-  const popup      = document.getElementById('msgPopup');
-  const popupClose = document.getElementById('msgPopupClose');
+  /* ══════════════════════════════════════
+     PRIVATE MESSAGES
+  ══════════════════════════════════════ */
+  function renderPrivateMessages(data){
+    lastPrivateData = data;
+    const adminList = document.getElementById('msgPrivateAdminList');
+    const userView  = document.getElementById('msgPrivateUserReply');
  
-  bubbleBtn?.addEventListener('click', e => {
-    e.stopPropagation();
-    popup?.classList.toggle('open');
-    // Ẩn badge khi mở
-    if(popup?.classList.contains('open')){
-      const badge = document.getElementById('msgBubbleBadge');
-      if(badge){ badge.textContent=''; badge.classList.remove('show'); }
-      localStorage.setItem('dd_msg_seen', Date.now());
+    /* ── View cho ADMIN: danh sách tất cả tin nhắn ── */
+    if(adminList){
+      if(!isAdmin){ adminList.innerHTML = ''; return; }
+      if(!data){
+        adminList.innerHTML = '<div class="msg-admin-empty">Chưa có tin nhắn riêng tư nào 🌊</div>';
+        return;
+      }
+      const items = Object.entries(data)
+        .map(([id,v]) => ({id,...v}))
+        .sort((a,b) => (b.ts||0) - (a.ts||0)); /* mới nhất lên đầu */
+ 
+      adminList.innerHTML = items.map(m => {
+        const replied = m.adminReply;
+        return `<div class="msg-priv-card ${replied ? 'replied' : 'unread'}" id="mpc-${msgEsc(m.id)}">
+          <div class="msg-priv-card-header">
+            <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
+            <span class="msg-priv-time">${msgTime(m.ts)}</span>
+            <button class="msg-priv-del" data-mid="${msgEsc(m.id)}">🗑</button>
+          </div>
+          <div class="msg-priv-text">${msgEsc(m.text)}</div>
+          ${replied
+            ? `<div class="msg-priv-replied-wrap">
+                <span class="msg-priv-replied-label">↩ Đã trả lời:</span>
+                <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
+                <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}">✕ Xóa reply</button>
+               </div>`
+            : `<div class="msg-priv-reply-form" id="mprf-${msgEsc(m.id)}">
+                <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
+                <div style="display:flex;gap:5px;justify-content:flex-end;margin-top:4px">
+                  <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}">Gửi reply ↩</button>
+                </div>
+               </div>`
+          }
+        </div>`;
+      }).join('');
+ 
+      /* Bind events */
+      adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const mid  = btn.dataset.mid;
+          const ta   = document.getElementById('mprft-' + mid);
+          const text = (ta?.value||'').trim();
+          if(!text) return;
+          btn.disabled = true;
+          if(window.__ddFirebase){
+            const {db, ref, update} = window.__ddFirebase;
+            try {
+              await update(ref(db, 'private_messages/' + mid + '/adminReply'), {
+                text, ts: Date.now()
+              });
+              if(ta) ta.value = '';
+            } catch(e){ alert('Lỗi: ' + e.message); }
+          }
+          btn.disabled = false;
+        });
+      });
+      adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if(!confirm('Xóa tin nhắn này?')) return;
+          if(window.__ddFirebase){
+            const {db, ref, remove} = window.__ddFirebase;
+            await remove(ref(db, 'private_messages/' + btn.dataset.mid));
+          }
+        });
+      });
+      adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if(!confirm('Xóa reply này?')) return;
+          if(window.__ddFirebase){
+            const {db, ref, remove} = window.__ddFirebase;
+            await remove(ref(db, 'private_messages/' + btn.dataset.mid + '/adminReply'));
+          }
+        });
+      });
     }
-  });
-  popupClose?.addEventListener('click', () => popup?.classList.remove('open'));
-  document.addEventListener('click', e => {
-    if(popup?.classList.contains('open') && !popup.contains(e.target) && e.target !== bubbleBtn)
-      popup.classList.remove('open');
-  });
  
-  /* ── Firebase: gửi tin nhắn RIÊNG TƯ ── */
+    /* ── View cho USER: chỉ hiện reply của admin cho tin nhắn của chính mình ── */
+    if(userView && !isAdmin){
+      if(!data){ userView.innerHTML = ''; return; }
+      const myMessages = Object.entries(data)
+        .map(([id,v]) => ({id,...v}))
+        .filter(m => m.token === myToken && m.adminReply)
+        .sort((a,b) => (b.ts||0) - (a.ts||0));
+ 
+      if(myMessages.length === 0){
+        userView.innerHTML = '';
+        return;
+      }
+      userView.innerHTML = `<div class="msg-admin-reply-section">
+        <div class="msg-admin-reply-title">💬 Chủ nhà đã trả lời bạn:</div>
+        ${myMessages.map(m => `
+          <div class="msg-admin-reply-card">
+            <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
+            <div class="msg-admin-reply-body">
+              <span class="msg-admin-badge">dynamic duo 𓆝</span>
+              ${msgEsc(m.adminReply.text)}
+            </div>
+            <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    }
+  }
+ 
+  /* ── Gửi private message (user) ── */
   function bindPrivateSend(nameId, textId, sendId, doneId){
     const nameEl = document.getElementById(nameId);
     const textEl = document.getElementById(textId);
     const sendEl = document.getElementById(sendId);
     const doneEl = document.getElementById(doneId);
     if(!sendEl) return;
- 
-    let bound = false;
     function doSend(){
       const text = (textEl?.value||'').trim();
       if(!text) return;
       sendEl.disabled = true;
- 
-      function waitFirebaseLocal(cb){
-        if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-        const t = setInterval(() => { if(window.__ddFirebase?.db){ clearInterval(t); cb(window.__ddFirebase); } }, 200);
-      }
- 
-      waitFirebaseLocal(async ({db, ref, push}) => {
+      function wfl(cb){ if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; } const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200); }
+      wfl(async ({db, ref, push}) => {
         try {
           await push(ref(db, 'private_messages'), {
-            name  : (nameEl?.value||'').trim() || 'Khách vô danh',
-            text,
-            ts    : Date.now(),
-            token : myToken,
-            read  : false
+            name: (nameEl?.value||'').trim() || 'Ẩn danh',
+            text, ts: Date.now(), token: myToken, read: false
           });
           if(textEl) textEl.value = '';
-          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; }, 3000); }
-        } catch(e){ alert('Lỗi gửi: '+e.message); }
+          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; },3500); }
+        } catch(e){ alert('Lỗi: '+e.message); }
         sendEl.disabled = false;
       });
     }
- 
     sendEl.addEventListener('click', doSend);
     textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
   }
+  bindPrivateSend('msgPrivateName', 'msgPrivateText', 'msgPrivateSend', 'msgPrivateDone');
  
-  bindPrivateSend('msgPrivateName',      'msgPrivateText',      'msgPrivateSend',      'msgPrivateDone');
-  bindPrivateSend('msgPopupPrivateName', 'msgPopupPrivateText', 'msgPopupPrivateSend', 'msgPopupPrivateDone');
- 
-  /* ── Firebase: Public messages ── */
-  let lastPublicData = null;
-  let publicUnsubDebounce = null;
- 
+  /* ══════════════════════════════════════
+     PUBLIC MESSAGES
+  ══════════════════════════════════════ */
   function renderPublicMessages(data){
     lastPublicData = data;
-    const feeds = [
-      document.getElementById('msgPublicFeed'),
-      document.getElementById('msgPopupPublicFeed')
-    ];
+    const feed = document.getElementById('msgPublicFeed');
+    if(!feed) return;
     const empty = '<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
-    if(!data){
-      feeds.forEach(f => { if(f) f.innerHTML = empty; });
-      return;
-    }
+    if(!data){ feed.innerHTML = empty; return; }
+ 
     const items = Object.entries(data)
       .map(([id,v]) => ({id,...v}))
-      .sort((a,b) => (a.ts||0)-(b.ts||0));
+      .sort((a,b) => (a.ts||0) - (b.ts||0));
  
-    const html = items.map(m => {
-      const isMine = m.token === myToken;
-      const canDel = isAdmin || isMine;
-      return `<div class="msg-pub-item">
+    feed.innerHTML = items.map(m => {
+      const isMine  = m.token === myToken;
+      const canDel  = isAdmin || isMine;
+      const isOwner = m.isAdmin === true;
+      return `<div class="msg-pub-item ${isOwner ? 'msg-pub-admin' : ''}">
         <button class="msg-pub-del ${canDel?'show':''}" data-mid="${msgEsc(m.id)}">✕</button>
-        <span class="msg-pub-name">${msgEsc(m.name)||'Khách vô danh'}</span>
+        <span class="msg-pub-name ${isOwner ? 'msg-pub-admin-name' : ''}">${isOwner ? '🐋 '+msgEsc(m.name) : msgEsc(m.name)||'Khách vô danh'}</span>
+        ${isOwner ? '<span class="msg-pub-owner-badge">chủ nhà</span>' : ''}
         <span class="msg-pub-time">${msgTime(m.ts)}</span>
         <div class="msg-pub-text">${msgEsc(m.text)}</div>
       </div>`;
     }).join('');
  
-    feeds.forEach(f => {
-      if(!f) return;
-      f.innerHTML = html || empty;
-      f.scrollTop = f.scrollHeight;
-      // Gắn delete buttons
-      f.querySelectorAll('.msg-pub-del.show').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if(!confirm('Xóa lời nhắn này?')) return;
-          if(window.__ddFirebase){
-            const {db, ref, remove} = window.__ddFirebase;
-            await remove(ref(db, 'public_messages/'+btn.dataset.mid));
-          }
-        });
+    feed.scrollTop = feed.scrollHeight;
+    feed.querySelectorAll('.msg-pub-del.show').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if(!confirm('Xóa lời nhắn này?')) return;
+        if(window.__ddFirebase){
+          const {db, ref, remove} = window.__ddFirebase;
+          await remove(ref(db, 'public_messages/' + btn.dataset.mid));
+        }
       });
     });
- 
-    // Hiện badge bubble nếu có tin mới
-    const lastSeen = parseInt(localStorage.getItem('dd_msg_seen')||'0');
-    const newCount = items.filter(m => (m.ts||0) > lastSeen).length;
-    const badge = document.getElementById('msgBubbleBadge');
-    if(badge && newCount > 0 && !popup?.classList.contains('open')){
-      badge.textContent = newCount > 9 ? '9+' : String(newCount);
-      badge.classList.add('show');
-    } else if(badge){
-      badge.classList.remove('show');
-    }
   }
  
-  function bindPublicSend(nameId, textId, sendId, doneId){
-    const nameEl = document.getElementById(nameId);
-    const textEl = document.getElementById(textId);
-    const sendEl = document.getElementById(sendId);
-    const doneEl = document.getElementById(doneId);
+  /* ── Gửi public message ── */
+  (function bindPublicSend(){
+    const nameEl = document.getElementById('msgPublicName');
+    const textEl = document.getElementById('msgPublicText');
+    const sendEl = document.getElementById('msgPublicSend');
+    const doneEl = document.getElementById('msgPublicDone');
     if(!sendEl) return;
- 
     function doSend(){
       const text = (textEl?.value||'').trim();
       if(!text) return;
       sendEl.disabled = true;
-      function waitFirebaseLocal(cb){
-        if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-        const t = setInterval(() => { if(window.__ddFirebase?.db){ clearInterval(t); cb(window.__ddFirebase); } }, 200);
-      }
-      waitFirebaseLocal(async ({db, ref, push}) => {
+      function wfl(cb){ if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; } const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200); }
+      wfl(async ({db, ref, push}) => {
         try {
+          const name = isAdmin ? ADMIN_NAME : (nameEl?.value||'').trim() || 'Khách vô danh';
           await push(ref(db, 'public_messages'), {
-            name  : (nameEl?.value||'').trim() || 'Khách vô danh',
-            text,
-            ts    : Date.now(),
-            token : myToken
+            name, text, ts: Date.now(), token: myToken,
+            isAdmin: isAdmin ? true : false   /* đánh dấu tin của chủ nhà */
           });
           if(textEl) textEl.value = '';
-          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; }, 3000); }
-        } catch(e){ alert('Lỗi gửi: '+e.message); }
+          if(doneEl){ doneEl.style.display='block'; setTimeout(()=>{ if(doneEl) doneEl.style.display='none'; },3000); }
+        } catch(e){ alert('Lỗi: '+e.message); }
         sendEl.disabled = false;
       });
     }
     sendEl.addEventListener('click', doSend);
     textEl?.addEventListener('keydown', e => { if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) doSend(); });
-  }
+  })();
  
-  bindPublicSend('msgPublicName',      'msgPublicText',      'msgPublicSend',      'msgPublicDone');
-  bindPublicSend('msgPopupPublicName', 'msgPopupPublicText', 'msgPopupPublicSend', 'msgPopupPublicDone');
- 
-  /* ── Subscribe realtime public messages ── */
-  function waitFirebaseLocal(cb){
+  /* ── Subscribe Firebase realtime ── */
+  function wfl(cb){
     if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-    window.addEventListener('dd-firebase-ready', () => { if(window.__ddFirebase?.db) cb(window.__ddFirebase); }, {once:true});
+    window.addEventListener('dd-firebase-ready', ()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
     let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60)clearInterval(t); },200);
   }
- 
-  waitFirebaseLocal(({db, ref, onValue}) => {
-    onValue(ref(db, 'public_messages'), snap => {
-      clearTimeout(publicUnsubDebounce);
-      publicUnsubDebounce = setTimeout(() => renderPublicMessages(snap.val()), 60);
-    });
+  wfl(({db, ref, onValue}) => {
+    onValue(ref(db, 'public_messages'),  snap => { clearTimeout(pubDebounce);  pubDebounce  = setTimeout(()=>renderPublicMessages(snap.val()),  60); });
+    onValue(ref(db, 'private_messages'), snap => { clearTimeout(privDebounce); privDebounce = setTimeout(()=>renderPrivateMessages(snap.val()), 60); });
   });
  
 })();

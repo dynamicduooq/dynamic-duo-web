@@ -41,31 +41,33 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 @media(max-width:960px) { .home-shell{grid-template-columns:1fr; padding:20px 18px 60px;} .sidebar-col{display:none;} }
 
-/* ─── HERO ─── */
+/* ─── HERO: namexoanen đè lên banner mờ ─── */
 .hero {
   text-align:center;
   padding:32px 0 28px;
 }
-.hero-name-img {
-  max-width:420px; width:100%;
-  margin:0 auto 18px; display:block;
-  filter:drop-shadow(0 2px 8px rgba(2,132,199,.18));
-}
 .hero-banner-wrap {
   position:relative; border-radius:16px; overflow:hidden;
-  max-height:200px; margin:0 auto;
+  max-height:240px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center;
 }
-.hero-banner-wrap img { width:100%; height:200px; object-fit:cover; display:block; }
-.hero-banner-wrap::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg, transparent 20%, rgba(2,70,130,.55) 100%);
-  pointer-events:none;
+.hero-banner-bg {
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(.55) blur(1px);
+  z-index:0;
 }
-.hero-banner-caption {
-  position:absolute; bottom:14px; left:0; right:0;
-  text-align:center; z-index:2;
-  font-family:'Literata',serif; font-size:1.05rem; font-weight:600;
-  color:#fff; letter-spacing:.5px; text-shadow:0 1px 4px rgba(0,0,0,.4);
+.hero-banner-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(2,70,130,.35) 0%, rgba(2,50,100,.6) 100%);
+  z-index:1; pointer-events:none;
+}
+.hero-name-img {
+  position:relative; z-index:2;
+  max-width:400px; width:85%;
+  display:block; margin:0 auto;
+  padding:28px 0;
+  filter:drop-shadow(0 2px 12px rgba(0,0,0,.35));
 }
 .hero-tagline {
   font-size:.88rem; color:var(--text-dim); font-style:italic; margin:12px 0 0;
@@ -78,8 +80,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   letter-spacing:2px; text-transform:uppercase; margin:0; text-align:left; white-space:nowrap;
 }
 .sec-line { flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
-.sec-link { font-size:.72rem; color:var(--sky); white-space:nowrap; }
-.sec-link:hover { text-decoration:underline; }
 
 /* ─── FILTER BAR ─── */
 .filter-bar {
@@ -100,12 +100,12 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 .chip:hover { background:var(--sky-light); color:var(--sky-dark); }
 .chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
+.chip-clear { background:none; border-color:rgba(186,230,253,.4); color:var(--text-dim); }
+.chip-clear:hover { background:rgba(239,68,68,.08); color:#ef4444; border-color:#fca5a5; }
 .fl-count { font-size:.68rem; background:var(--sky-pale); color:var(--sky); padding:2px 9px; border-radius:var(--r-pill); border:1px solid var(--sky-light); white-space:nowrap; margin-left:auto; }
 
-/* ─── STORY GRID: HÀNG NGANG ─── */
-.stories-grid {
-  display:flex; flex-direction:column; gap:10px;
-}
+/* ─── STORY GRID ─── */
+.stories-grid { display:flex; flex-direction:column; gap:10px; }
 .sc {
   display:flex; gap:0;
   background:#fff; border:1px solid rgba(186,230,253,.45);
@@ -114,8 +114,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 [data-theme="dark"] .sc { background:rgba(13,26,50,.9); }
 .sc:hover { box-shadow:0 6px 24px rgba(2,132,199,.12); transform:translateY(-2px); }
-.sc[data-hidden="true"] { display:none; }
-
 .sc-cover-wrap {
   position:relative; flex-shrink:0; width:80px; overflow:hidden;
   background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
@@ -124,64 +122,27 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sc-status {
   position:absolute; top:6px; left:0;
   font-size:.55rem; letter-spacing:1px; text-transform:uppercase;
-  padding:2px 6px; border-radius:0 4px 4px 0;
-  font-weight:700;
+  padding:2px 6px; border-radius:0 4px 4px 0; font-weight:700;
 }
-.status-ongoing { background:rgba(2,132,199,.85); color:#fff; }
-.status-complete { background:rgba(5,150,105,.85); color:#fff; }
+.status-ongoing  { background:rgba(2,132,199,.85); color:#fff; }
+.status-complete { background:rgba(5,150,105,.85);  color:#fff; }
 .status-upcoming { background:rgba(100,116,139,.75); color:#fff; }
-
-.sc-body {
-  padding:12px 14px 12px; flex:1; display:flex; flex-direction:column; gap:4px;
-  min-width:0;
-}
+.sc-body { padding:12px 14px; flex:1; display:flex; flex-direction:column; gap:4px; min-width:0; }
 .sc-shelf { font-size:.64rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
-.sc-title {
-  font-family:'Merriweather',serif; font-size:.88rem; color:var(--sky-dark);
-  margin:0; line-height:1.35;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
+.sc-title { font-family:'Merriweather',serif; font-size:.88rem; color:var(--sky-dark); margin:0; line-height:1.35; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .sc-meta { font-size:.68rem; color:var(--text-dim); font-style:italic; }
 .sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
 .sc-tag { font-size:.6rem; padding:1px 6px; border:1px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky); background:var(--sky-pale); }
 .sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
 .sc-chapters { font-size:.68rem; color:var(--text-dim); }
-.sc-link {
-  font-size:.72rem; padding:4px 12px;
-  background:var(--sky); color:#fff; border-radius:var(--r-pill);
-  transition:var(--t); flex-shrink:0;
-}
+.sc-link { font-size:.72rem; padding:4px 12px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; }
 .sc-link:hover { background:var(--sky2); }
 .sc-link.secondary { background:var(--sky-pale); color:var(--sky-dark); }
 .sc-link.secondary:hover { background:var(--sky-light); }
 
-/* ─── NOTICE / LƯU Ý ─── */
+/* ─── NOTICE: chỉ ảnh, không đổ bóng ─── */
 .notice-section { margin-top:36px; }
-.notice-container {
-  background:linear-gradient(135deg,rgba(240,249,255,.7),rgba(255,255,255,.9));
-  border:1px solid rgba(186,230,253,.6); border-radius:18px; overflow:hidden;
-}
-[data-theme="dark"] .notice-container { background:rgba(12,26,50,.8); }
-.notice-big-title {
-  text-align:center; padding:24px 20px 16px;
-  border-bottom:1px dashed rgba(186,230,253,.5);
-}
-.notice-big-title h2 { font-family:'Literata',serif; font-size:1.5rem; color:var(--sky-dark); margin:0 0 4px; }
-.notice-big-title h2 em { font-style:italic; color:var(--sky); }
-.notice-big-title p { font-size:.78rem; color:var(--text-dim); letter-spacing:2px; margin:0; }
-.notice-block { padding:16px 22px; border-bottom:1px dashed rgba(186,230,253,.4); }
-.notice-block:last-of-type { border-bottom:none; }
-.notice-block-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.notice-icon { font-size:1.1rem; }
-.notice-block-title { font-family:'Merriweather',serif; font-size:.85rem; color:var(--sky-dark); font-weight:600; }
-.notice-body { font-size:.84rem; color:var(--text-mid); line-height:1.8; margin:0; }
-.notice-body strong { color:var(--sky-dark); }
-.notice-deco { text-align:center; font-size:1.1rem; margin-top:10px; letter-spacing:4px; color:var(--sky-light); }
-.notice-wave {
-  padding:18px 22px; text-align:center;
-  background:linear-gradient(135deg,rgba(186,230,253,.15),rgba(240,249,255,.3));
-  font-size:.84rem; color:var(--text-mid); font-style:italic; line-height:1.75;
-}
+.notice-img { width:100%; display:block; border-radius:0; }
 
 /* ─── RECENT ─── */
 .recent-list { display:flex; flex-direction:column; gap:6px; }
@@ -202,61 +163,31 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sidebar-col { display:flex; flex-direction:column; gap:16px; }
 .sidebar-col > .widget { position:sticky; top:72px; }
 .sidebar-col > .widget + .widget { position:static; }
-.widget {
-  background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7);
-  border-radius:18px; padding:16px 14px;
-}
+.widget { background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7); border-radius:18px; padding:16px 14px; }
 [data-theme="dark"] .widget { background:rgba(15,42,64,.8); border-color:rgba(30,74,110,.7); }
-.widget-title {
-  font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px;
-  text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px;
-}
-/* Profile */
-.profile-avatar {
-  width:76px; height:76px; border-radius:50%; overflow:hidden;
-  margin:0 auto 10px; border:3px solid var(--sky-light);
-  background:var(--sky-pale); display:flex; align-items:center; justify-content:center;
-  font-size:2.2rem;
-}
+.widget-title { font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px; }
+.profile-avatar { width:76px; height:76px; border-radius:50%; overflow:hidden; margin:0 auto 10px; border:3px solid var(--sky-light); background:var(--sky-pale); display:flex; align-items:center; justify-content:center; font-size:2.2rem; }
 .profile-name { font-family:'Merriweather',serif; color:var(--sky-dark); font-size:.92rem; text-align:center; margin-bottom:3px; }
 .profile-tagline { font-size:.78rem; color:var(--text-mid); font-style:italic; text-align:center; line-height:1.5; margin-bottom:6px; }
 .profile-deco { text-align:center; font-size:.95rem; letter-spacing:3px; color:var(--sky-light); }
-/* Tag cloud */
 .tag-cloud { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; }
-.tc-btn {
-  display:inline-block; padding:3px 9px;
-  background:#fff; color:var(--sky); border-radius:var(--r-pill);
-  font-size:.71rem; border:1px dashed var(--sky-light);
-  transition:var(--t); cursor:pointer;
-}
+.tc-btn { display:inline-block; padding:3px 9px; background:#fff; color:var(--sky); border-radius:var(--r-pill); font-size:.71rem; border:1px dashed var(--sky-light); transition:var(--t); cursor:pointer; }
 [data-theme="dark"] .tc-btn { background:rgba(15,30,50,.8); }
 .tc-btn:hover, .tc-btn.active { background:var(--sky-pale); border-style:solid; }
-/* Category tree */
 .cat-tree { font-size:.78rem; color:var(--text-mid); }
 .cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
 .cat-tree>ul { padding-left:0; }
 .cat-tree a { color:var(--text-mid); transition:color .2s; display:block; padding:2px 0; }
 .cat-tree a:hover { color:var(--sky); }
-.cat-tree summary {
-  cursor:pointer; font-size:.8rem; color:var(--sky-dark); font-weight:600;
-  padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px;
-}
+.cat-tree summary { cursor:pointer; font-size:.8rem; color:var(--sky-dark); font-weight:600; padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px; }
 .cat-tree summary::-webkit-details-marker { display:none; }
 .cat-tree summary::before { content:'▸'; font-size:.6rem; transition:transform .2s; color:var(--sky); }
 .cat-tree details[open]>summary::before { transform:rotate(90deg); }
 .cat-count { font-size:.65rem; color:var(--text-dim); margin-left:4px; }
-/* Dark mode btn */
-.dark-btn {
-  width:100%; padding:7px; background:none;
-  border:1.5px solid var(--sky-light); border-radius:var(--r-pill);
-  color:var(--sky); font-size:.76rem; cursor:pointer; transition:var(--t);
-  font-family:'Newsreader',serif; display:flex; align-items:center; justify-content:center; gap:6px;
-}
+.dark-btn { width:100%; padding:7px; background:none; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky); font-size:.76rem; cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; display:flex; align-items:center; justify-content:center; gap:6px; }
 .dark-btn:hover { background:var(--sky-pale); }
-/* Quote */
 .quote-body { font-style:italic; font-size:.8rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding-left:10px; margin:0; }
 .quote-src { font-size:.66rem; color:var(--text-dim); margin-top:7px; text-align:right; }
-/* no results */
 .no-results { display:none; text-align:center; padding:28px; color:var(--text-dim); font-style:italic; }
 .no-results.show { display:block; }
 .hidden { display:none !important; }
@@ -266,7 +197,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 .reveal.visible { opacity:1; transform:translateY(0); }
 </style>
 
-<!-- TICKER (chỉnh nội dung tại đây) -->
+<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
@@ -276,7 +207,6 @@ const hcdhCount    = countChaps(hcdhPosts);
     <span class="ticker-item">Hạ cháy đồng hoang · Đang tiến hành 🌊</span>
     <span class="ticker-item">paired dreams, boundless gleam</span>
     <span class="ticker-item">Vật dễ vỡ · Thiếu đế xuân tâm · Sắp đào 🌤️</span>
-    <!-- Lặp lại để không bị hở -->
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
     <span class="ticker-item">Nếu đêm nay trời không mưa · Hoàn thành · {ndntkmCount} chương</span>
     <span class="ticker-item">Tôi nghĩ chúng tôi sắp chia tay · Hoàn thành · {tnctcstCount} chương</span>
@@ -293,19 +223,21 @@ const hcdhCount    = countChaps(hcdhPosts);
 
     <!-- HERO -->
     <div class="hero">
-      <img
-        src="/dynamic-duo-web/images/namexoanen.png"
-        alt="dynamic duo"
-        class="hero-name-img"
-        onerror="this.style.display='none'"
-      />
       <div class="hero-banner-wrap">
         <img
+          class="hero-banner-bg"
           src="/dynamic-duo-web/images/banner.png"
-          alt="Dynamic Duo Banner"
-          onerror="this.src='/dynamic-duo-web/images/frontpage.png'"
+          alt=""
+          aria-hidden="true"
+          onerror="this.style.display='none'"
         />
-        <div class="hero-banner-caption">paired dreams, boundless gleam.</div>
+        <div class="hero-banner-overlay"></div>
+        <img
+          class="hero-name-img"
+          src="/dynamic-duo-web/images/namexoanen.png"
+          alt="dynamic duo"
+          onerror="this.style.display='none'"
+        />
       </div>
       <p class="hero-tagline">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
@@ -329,13 +261,13 @@ const hcdhCount    = countChaps(hcdhPosts);
         <button class="chip" data-tag="niên hạ"># niên hạ</button>
         <button class="chip" data-tag="mất trí nhớ"># mất trí nhớ</button>
         <button class="chip" data-tag="gương vỡ lại lành"># gương vỡ lại lành</button>
+        <button class="chip chip-clear" id="chipClear" style="display:none">✕ Xóa lọc</button>
       </div>
       <span class="fl-count" id="flCount">6 truyện</span>
     </div>
 
     <div class="stories-grid" id="storiesGrid">
 
-      <!-- QHBCP -->
       <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
@@ -346,9 +278,7 @@ const hcdhCount    = countChaps(hcdhPosts);
           <h3 class="sc-title">Quan hệ bạn cùng phòng</h3>
           <div class="sc-meta">Hạnh Lan · Edit: Dynamic Duo</div>
           <div class="sc-tags">
-            <span class="sc-tag"># niên hạ</span>
-            <span class="sc-tag"># đam mỹ</span>
-            <span class="sc-tag"># trai thẳng</span>
+            <span class="sc-tag"># niên hạ</span><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># trai thẳng</span>
           </div>
           <div class="sc-footer">
             <span class="sc-chapters">📖 {qhbcpCount}/72 chương</span>
@@ -360,7 +290,6 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <!-- HCDH -->
       <div class="sc" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biatdxt.png" alt="Hạ cháy đồng hoang" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
@@ -371,9 +300,7 @@ const hcdhCount    = countChaps(hcdhPosts);
           <h3 class="sc-title">Hạ cháy đồng hoang</h3>
           <div class="sc-meta">Hỉ Thượng Mi Sao · Edit: Dynamic Duo</div>
           <div class="sc-tags">
-            <span class="sc-tag"># mất trí nhớ</span>
-            <span class="sc-tag"># chua xót</span>
-            <span class="sc-tag"># đồng quê</span>
+            <span class="sc-tag"># mất trí nhớ</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># đồng quê</span>
           </div>
           <div class="sc-footer">
             <span class="sc-chapters">📖 {hcdhCount}/109 chương</span>
@@ -385,7 +312,6 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <!-- NDNTKM -->
       <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
@@ -396,9 +322,7 @@ const hcdhCount    = countChaps(hcdhPosts);
           <h3 class="sc-title">Nếu đêm nay trời không mưa</h3>
           <div class="sc-meta">Tam Đạo · Edit: Dynamic Duo</div>
           <div class="sc-tags">
-            <span class="sc-tag"># HE</span>
-            <span class="sc-tag"># gương vỡ lại lành</span>
-            <span class="sc-tag"># drama motip cũ</span>
+            <span class="sc-tag"># HE</span><span class="sc-tag"># gương vỡ lại lành</span><span class="sc-tag"># drama motip cũ</span>
           </div>
           <div class="sc-footer">
             <span class="sc-chapters">📖 {ndntkmCount} chương (full)</span>
@@ -410,7 +334,6 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <!-- TNCTSCT -->
       <div class="sc" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
         <div class="sc-cover-wrap">
           <img src="/dynamic-duo-web/images/biatnctsct.png" alt="Tôi nghĩ chúng tôi sắp chia tay" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
@@ -421,9 +344,7 @@ const hcdhCount    = countChaps(hcdhPosts);
           <h3 class="sc-title">Tôi nghĩ chúng tôi sắp chia tay</h3>
           <div class="sc-meta">Hạ Nhất Thiên · Edit: Dynamic Duo</div>
           <div class="sc-tags">
-            <span class="sc-tag"># HE</span>
-            <span class="sc-tag"># chua xót</span>
-            <span class="sc-tag"># 1v1</span>
+            <span class="sc-tag"># HE</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># 1v1</span>
           </div>
           <div class="sc-footer">
             <span class="sc-chapters">📖 {tnctcstCount} chương (full)</span>
@@ -435,7 +356,6 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <!-- VDV -->
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ">
         <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:80px">☁️</div>
         <div class="sc-body">
@@ -450,7 +370,6 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
       </div>
 
-      <!-- TDXT -->
       <div class="sc" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
         <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--sky-light);width:80px">☁️</div>
         <div class="sc-body">
@@ -468,38 +387,18 @@ const hcdhCount    = countChaps(hcdhPosts);
       <div class="no-results" id="noRes">𓆝 Không tìm thấy truyện phù hợp.</div>
     </div>
 
-    <!-- LƯU Ý / NGUYÊN TẮC -->
+    <!-- LƯU Ý: ảnh, không đổ bóng, nền trắng -->
     <div class="notice-section reveal">
       <div class="sec-hd" style="margin-top:36px">
         <h2>📌 Lưu ý</h2>
         <div class="sec-line"></div>
       </div>
-      <div class="notice-container">
-        <div class="notice-big-title">
-          <h2>Dynamic <em>Duo</em></h2>
-          <p>𓆝.°• paired dreams, boundless gleam •°.𓆝</p>
-        </div>
-        <div class="notice-block">
-          <div class="notice-block-header"><span class="notice-icon">🪸</span><span class="notice-block-title">Về bể cá</span></div>
-          <p class="notice-body">Nhà có <strong>hai người</strong>, để tính và thoải mái về xưng hô. Chúng mình vô cùng hoan nghênh lời góp ý để hoàn thiện hơn, nhưng trái tim mong manh, mong cậu ghé qua đừng buông lời nặng nề •ᴗ•</p>
-          <div class="notice-deco">🐟 🐡 🐠 🫧</div>
-        </div>
-        <div class="notice-block">
-          <div class="notice-block-header"><span class="notice-icon">📚</span><span class="notice-block-title">Về gu truyện trong nhà</span></div>
-          <p class="notice-body">Truyện được chọn hoàn toàn theo gu của chúng mình. Đa số sẽ có <strong>thủy tinh</strong> và các tình tiết <strong>drama cũ rích</strong>, không phù hợp với <strong>tất cả mọi người</strong>. Chúng mình sẽ cố gắng cảnh báo trước.</p>
-          <div class="notice-deco">🌿 🪸 🌿</div>
-        </div>
-        <div class="notice-block">
-          <div class="notice-block-header"><span class="notice-icon">⚠️</span><span class="notice-block-title">Về bản edit</span></div>
-          <p class="notice-body">Chúng mình đang chập chững học tiếng Trung, các bản edit có dùng <strong>công cụ hỗ trợ</strong>. Độ chính xác không thể cam đoan 100% so với bản gốc. Nhưng chúng mình sẽ luôn cố gắng trau chuốt câu chữ mượt mà nhất.</p>
-        </div>
-        <div class="notice-block">
-          <div class="notice-block-header"><span class="notice-icon">🌊</span><span class="notice-block-title">Về lịch đăng</span></div>
-          <p class="notice-body">Hiện nhà <strong>chưa có lịch up cố định</strong>, nhưng sẽ cố gắng duy trì tiến độ đều đặn nhất có thể.</p>
-          <div class="notice-deco">⚓ 🦈 🐋</div>
-        </div>
-        <div class="notice-wave">Chào mừng các cậu ghé chơi. Mong rằng cậu sẽ để lại góc nhỏ này thật nhiều bông hoa rực rỡ... ᗒ᳨ᗕ</div>
-      </div>
+      <img
+        src="/dynamic-duo-web/images/frontpage.png"
+        alt="Lưu ý từ Dynamic Duo"
+        class="notice-img"
+        onerror="this.style.display='none'"
+      />
     </div>
 
     <!-- MỚI CẬP NHẬT -->
@@ -530,7 +429,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar-col">
-    <!-- Profile (sticky) -->
     <div class="widget">
       <div class="widget-title">✦ Về nhà cá</div>
       <div class="profile-avatar">
@@ -544,12 +442,10 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
     </div>
 
-    <!-- Dark mode -->
     <div class="widget" style="padding:12px">
       <button class="dark-btn" onclick="window.__ddToggleTheme()" id="darkBtnIdx">🌙 Chế độ tối</button>
     </div>
 
-    <!-- Tag cloud -->
     <div class="widget">
       <div class="widget-title">🏷️ Tags</div>
       <div class="tag-cloud" id="tagCloud">
@@ -566,7 +462,6 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
     </div>
 
-    <!-- Category tree -->
     <div class="widget">
       <div class="widget-title">📂 Danh mục</div>
       <div class="cat-tree">
@@ -601,14 +496,12 @@ const hcdhCount    = countChaps(hcdhPosts);
       </div>
     </div>
 
-    <!-- Quote -->
     <div class="widget">
       <div class="widget-title">✨ Góc nhỏ</div>
       <blockquote class="quote-body">"Cảm ơn các bạn đã ghé thăm. Chúng mình không dám hứa hẹn nhiều, chỉ cố gắng edit thật kỹ từng chương."</blockquote>
       <div class="quote-src">— Xê &amp; Gờ, 2026</div>
     </div>
 
-    <!-- Contact -->
     <div class="widget" style="text-align:center">
       <div class="widget-title">✉ Liên hệ</div>
       <p style="font-size:.76rem;color:var(--text-mid);margin-bottom:6px">dynamicduoo.q@gmail.com</p>
@@ -619,74 +512,111 @@ const hcdhCount    = countChaps(hcdhPosts);
 </div><!-- /home-shell -->
 
 <script is:inline>
-/* ─── FILTER ─── */
-const allCards = document.querySelectorAll('.sc');
-const chips = document.querySelectorAll('#filterChips .chip');
-const flCount = document.getElementById('flCount');
-let activeTags = new Set(), activeCat = null;
+/* ─── FILTER: AND logic ─── */
+const allCards  = document.querySelectorAll('.sc');
+const chips     = document.querySelectorAll('#filterChips .chip');
+const flCount   = document.getElementById('flCount');
+const chipClear = document.getElementById('chipClear');
+
+let activeTags = new Set(); // phải có ĐỦ tất cả tag này (AND)
+let activeCat  = null;      // lọc thêm theo danh mục
+
+function updateClearBtn() {
+  const hasFilter = activeTags.size > 0 || activeCat !== null;
+  if (chipClear) chipClear.style.display = hasFilter ? 'inline-flex' : 'none';
+}
 
 function applyFilter() {
   let vis = 0;
   allCards.forEach(card => {
     const cCat  = card.dataset.cat || '';
     const cTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
-    const catOk = !activeCat || cCat === activeCat;
-    const tagOk = activeTags.size === 0 || [...activeTags].some(t => cTags.includes(t.toLowerCase()));
-    const show  = catOk && tagOk;
+
+    const catOk = activeCat === null || cCat === activeCat;
+    // AND: TỪNG tag trong activeTags đều phải có trong cTags của card
+    const tagOk = activeTags.size === 0
+      || [...activeTags].every(t => cTags.includes(t.toLowerCase()));
+
+    const show = catOk && tagOk;
     card.classList.toggle('hidden', !show);
     if (show) vis++;
   });
+
   flCount.textContent = vis + ' truyện';
-  const nr = document.getElementById('noRes');
-  if (nr) nr.classList.toggle('show', vis === 0);
+  document.getElementById('noRes')?.classList.toggle('show', vis === 0);
+  updateClearBtn();
 }
 
 chips.forEach(chip => {
   chip.addEventListener('click', () => {
+    // Nút xóa lọc
+    if (chip.id === 'chipClear') {
+      activeTags.clear();
+      activeCat = null;
+      chips.forEach(c => c.classList.remove('active'));
+      document.querySelector('[data-tag="all"]')?.classList.add('active');
+      document.querySelectorAll('#tagCloud .tc-btn').forEach(b => b.classList.remove('active'));
+      applyFilter();
+      return;
+    }
+
     if (chip.dataset.tag) {
       const tag = chip.dataset.tag;
       if (tag === 'all') {
-        activeTags.clear(); activeCat = null;
-        chips.forEach(c => c.classList.remove('active'));
+        // Reset tags
+        activeTags.clear();
+        chips.forEach(c => c.dataset.tag && c.classList.remove('active'));
         chip.classList.add('active');
       } else {
         document.querySelector('[data-tag="all"]')?.classList.remove('active');
+        // Toggle tag: thêm hoặc bỏ
         if (activeTags.has(tag)) { activeTags.delete(tag); chip.classList.remove('active'); }
-        else { activeTags.add(tag); chip.classList.add('active'); }
+        else                      { activeTags.add(tag);    chip.classList.add('active'); }
+        // Nếu không còn tag nào → active lại "Tất cả"
         if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
       }
     } else if (chip.dataset.cat) {
       const cat = chip.dataset.cat;
+      // Toggle danh mục (chỉ 1 active)
       chips.forEach(c => c.dataset.cat && c.classList.remove('active'));
-      if (activeCat === cat) { activeCat = null; }
-      else { activeCat = cat; chip.classList.add('active'); }
+      activeCat = (activeCat === cat) ? null : cat;
+      if (activeCat) chip.classList.add('active');
     }
+
     applyFilter();
   });
 });
 
-/* tag cloud → filter */
+/* Tag cloud sidebar → AND filter */
 document.querySelectorAll('#tagCloud .tc-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('#tagCloud .tc-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeTags.clear(); activeTags.add(btn.dataset.tag); activeCat = null;
+    const tag = btn.dataset.tag;
+    if (activeTags.has(tag)) {
+      activeTags.delete(tag);
+      btn.classList.remove('active');
+    } else {
+      activeTags.add(tag);
+      btn.classList.add('active');
+    }
+    // Sync chip filter bar
     chips.forEach(c => {
-      if (c.dataset.tag) c.classList.toggle('active', c.dataset.tag === btn.dataset.tag || c.dataset.tag === 'all' && activeTags.size === 0);
+      if (c.dataset.tag === tag)   c.classList.toggle('active', activeTags.has(tag));
+      if (c.dataset.tag === 'all') c.classList.toggle('active', activeTags.size === 0);
     });
+    if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
     applyFilter();
     document.getElementById('storiesGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
 
-/* ─── DARK MODE BUTTON ─── */
+/* ─── DARK MODE ─── */
 const darkBtnIdx = document.getElementById('darkBtnIdx');
 function syncDarkBtn() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   if (darkBtnIdx) darkBtnIdx.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
 }
 syncDarkBtn();
-darkBtnIdx?.addEventListener('click', () => { window.__ddToggleTheme(); syncDarkBtn(); });
+darkBtnIdx?.addEventListener('click', () => { window.__ddToggleTheme?.(); syncDarkBtn(); });
 
 /* ─── REVEAL ─── */
 const obs = new IntersectionObserver(es => es.forEach(e => {

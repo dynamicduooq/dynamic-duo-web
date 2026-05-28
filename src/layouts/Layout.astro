@@ -102,7 +102,7 @@ if (currentTruyenId && isNovelPage) {
       --sh-soft:0 2px 8px rgba(0,0,0,.08);
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
       --t:all .2s ease;
-            /* Thêm biến font cho tính năng cài đặt đọc */
+      /* CSS Variables dùng cho phần cài đặt đọc truyện */
       --read-fz: 18px;
       --read-ff: 'Newsreader', serif;
       /* card bg cho light */
@@ -180,7 +180,8 @@ if (currentTruyenId && isNovelPage) {
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    body { background:var(--cream); color:var(--text-main); font-family:'Newsreader',serif; font-size:18px; line-height:1.9; margin:0; padding:0; overflow-x:hidden; }
+    /* ĐÃ SỬA: Đồng bộ font-size và font-family từ biến CSS */
+    body { background:var(--cream); color:var(--text-main); font-family:var(--read-ff, 'Newsreader', serif); font-size:var(--read-fz, 18px); line-height:1.9; margin:0; padding:0; overflow-x:hidden; transition: font-size 0.2s, font-family 0.2s; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     a { color:inherit; text-decoration:none; }
     ::-webkit-scrollbar { width:5px; }
@@ -191,9 +192,10 @@ if (currentTruyenId && isNovelPage) {
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
     /* ── NAVBAR ── */
-    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
-    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; }
-    .nav-links { display:flex; align-items:center; gap:2px; }
+    /* ĐÃ SỬA: Đẩy Menu sang lề phải, loại bỏ chênh vênh */
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
+    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; } /* margin-right: auto đẩy mọi thứ khác sang phải */
+    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 16px; }
     .nav-item { position:relative; }
     .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
     .nav-item > a:hover,.nav-btn:hover,.nav-item:hover > a,.nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
@@ -366,95 +368,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
-
-    /* Trigger button on paragraphs */
-    .ic-trigger { display:inline-flex; align-items:center; margin-left:6px; padding:0 4px; background:none; border:none; cursor:pointer; font-size:.75rem; opacity:0; transition:opacity .15s; vertical-align:middle; border-radius:4px; color:var(--sky); line-height:1; }
-    .novel-content p:hover .ic-trigger { opacity:.65; }
-    .ic-trigger:hover { opacity:1 !important; }
-    .ic-trigger.has-comments { opacity:.8; }
-    .novel-content p.ic-active .ic-trigger { opacity:1; }
-
-    /* ── CHAPTER-END COMMENT ── */
-    .chap-comment-section { max-width:760px; margin:0 auto; padding:0 12px 60px; }
-    .chap-comment-title { font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
-    .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
-    [data-theme="dark"] .chap-comment-title { color:#a8daf0; }
-    [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e4a6a,transparent); }
-    .admin-bar { display:none; }
-    .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:18px; margin-bottom:20px; }
-    .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
-    .comment-inp { flex:1; padding:8px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.82rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
-    .comment-inp:focus { border-color:var(--sky); }
-    [data-theme="dark"] .comment-inp { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    [data-theme="dark"] .comment-inp::placeholder { color:#3d6a82; }
-    .comment-textarea { width:100%; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.84rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:88px; margin-bottom:10px; }
-    .comment-textarea:focus { border-color:var(--sky); }
-    [data-theme="dark"] .comment-textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    [data-theme="dark"] .comment-textarea::placeholder { color:#3d6a82; }
-    .comment-submit-btn { padding:7px 20px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.8rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); }
-    .comment-submit-btn:hover { background:var(--sky2); }
-    .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; }
-    .comment-list { display:flex; flex-direction:column; gap:12px; }
-    .comment-card { background:#fff; border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
-    .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
-    .comment-card-header { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
-    .comment-card-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--sky-pale),var(--sky-light)); display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--sky-dark); flex-shrink:0; border:1.5px solid var(--sky-light); }
-    [data-theme="dark"] .comment-card-avatar { background:rgba(21,101,160,.3); border-color:rgba(126,200,227,.25); color:#a8daf0; }
-    .comment-card-name { font-weight:700; color:var(--sky-dark); font-size:.82rem; }
-    [data-theme="dark"] .comment-card-name { color:#a8daf0; }
-    /* Admin badge cho comment */
-    .comment-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.52rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-left:5px; vertical-align:middle; }
-    [data-theme="dark"] .comment-admin-badge { background:#1565a0; border:1px solid rgba(126,200,227,.3); }
-    .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:auto; }
-    [data-theme="dark"] .comment-card-time { color:#3d6a82; }
-    .comment-card-text { font-size:.86rem; color:var(--text-main); line-height:1.65; margin:0 0 10px; word-break:break-word; }
-    [data-theme="dark"] .comment-card-text { color:#F3F9FF; }
-    .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
-    .cmt-like-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
-    .cmt-like-btn:hover { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.06); }
-    .cmt-like-btn.liked { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.08); }
-    [data-theme="dark"] .cmt-like-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
-    [data-theme="dark"] .cmt-like-btn.liked { border-color:#f472b6; color:#f9a8d4; }
-    .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
-    .cmt-reply-btn:hover { border-color:var(--sky-light); color:var(--sky); background:var(--sky-pale); }
-    [data-theme="dark"] .cmt-reply-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
-    [data-theme="dark"] .cmt-reply-btn:hover { background:rgba(126,200,227,.08); color:#a8daf0; }
-    .cmt-del-btn { margin-left:auto; padding:3px 9px; border-radius:var(--r-pill); border:1px solid transparent; background:none; font-size:.68rem; color:var(--text-dim); cursor:pointer; transition:var(--t); display:none; }
-    .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
-    .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
-    .reply-thread { margin-top:10px; padding-top:10px; border-top:1px solid rgba(186,230,253,.35); display:none; flex-direction:column; gap:7px; }
-    .reply-thread.open { display:flex; }
-    [data-theme="dark"] .reply-thread { border-top-color:rgba(126,200,227,.13); }
-    .reply-item { display:flex; gap:8px; align-items:flex-start; background:var(--sky-pale); border-radius:10px; padding:9px 11px; position:relative; }
-    .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
-    [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
-    .reply-body { flex:1; min-width:0; }
-    .reply-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
-    [data-theme="dark"] .reply-name { color:#a8daf0; }
-    .reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
-    [data-theme="dark"] .reply-admin-badge { background:#1565a0; }
-    .reply-time { font-size:.6rem; color:var(--text-dim); margin-left:6px; }
-    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
-    [data-theme="dark"] .reply-text { color:#c8e0f0; }
-    .reply-del { position:absolute; top:6px; right:8px; background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 4px; border-radius:3px; display:none; }
-    .reply-item:hover .reply-del { opacity:1; }
-    .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
-    .reply-del.show { display:block; }
-    .reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
-    .reply-form.open { display:flex; }
-    .reply-inp,.reply-inp-text { padding:6px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
-    .reply-inp { border-radius:var(--r-pill); font-size:.75rem; }
-    .reply-inp-text { border-radius:10px; font-size:.76rem; resize:none; min-height:52px; }
-    .reply-inp:focus,.reply-inp-text:focus { border-color:var(--sky); }
-    [data-theme="dark"] .reply-inp,[data-theme="dark"] .reply-inp-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    [data-theme="dark"] .reply-inp::placeholder,[data-theme="dark"] .reply-inp-text::placeholder { color:#3d6a82; }
-    .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
-    .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
-    .reply-cancel-btn:hover { color:var(--sky); }
-    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
-    .reply-send-btn:hover { background:var(--sky2); }
-    .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
-    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
+    .ic-reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
     [data-theme="dark"] .reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
     .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
     [data-theme="dark"] .reply-quoting { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
@@ -497,6 +411,7 @@ if (currentTruyenId && isNovelPage) {
       border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15);
       padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95);
       transition:opacity .2s ease, transform .2s ease;
+      transform-origin: bottom right;
     }
     [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); }
     .rs-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
@@ -803,35 +718,37 @@ function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commen
     }
     const btn = document.getElementById('readSettingsBtn');
     const pop = document.getElementById('rsPopup');
-    if(!btn || !pop) return;
+    
+    // Đã thay return sớm bằng if để không chặn keyboard logic
+    if(btn && pop) {
+      // Toggle popup
+      btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
+      document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
 
-    // Toggle popup
-    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
-    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+      // Cỡ chữ
+      document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+      document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
 
-    // Cỡ chữ
-    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-
-    // Font chữ
-    const fontBtns = pop.querySelectorAll('[data-font]');
-    fontBtns.forEach(fb => {
-      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-      fb.addEventListener('click', () => {
-        ff = fb.dataset.font;
-        root.style.setProperty('--read-ff', ff);
-        localStorage.setItem('dd_ff', ff);
-        fontBtns.forEach(b=>b.classList.remove('active'));
-        fb.classList.add('active');
+      // Font chữ
+      const fontBtns = pop.querySelectorAll('[data-font]');
+      fontBtns.forEach(fb => {
+        if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
+        fb.addEventListener('click', () => {
+          ff = fb.dataset.font;
+          root.style.setProperty('--read-ff', ff);
+          localStorage.setItem('dd_ff', ff);
+          fontBtns.forEach(b=>b.classList.remove('active'));
+          fb.classList.add('active');
+        });
       });
-    });
+    }
 
     // Keyboard shortcuts (Next/Prev chapter)
     document.addEventListener('keydown', e => {
       // Bỏ qua nếu đang nhập liệu văn bản
-      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if(e.key === 'ArrowLeft') { const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); if(p && !p.classList.contains('disabled')) p.click(); }
-      if(e.key === 'ArrowRight') { const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); if(n && !n.classList.contains('disabled')) n.click(); }
+      if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if(e.key === 'ArrowLeft') { const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); if(p && p.tagName === 'A') p.click(); }
+      if(e.key === 'ArrowRight') { const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); if(n && n.tagName === 'A') n.click(); }
     });
   });
 })();

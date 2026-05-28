@@ -14,7 +14,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 ---
 
 <Layout title="Trang chủ" isHome={true}>
-<style>
+<style is:global>
 /* ─── HOME SHELL ─── */
 .home-shell {
   display: grid;
@@ -78,7 +78,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   font-family:'Merriweather',serif; font-size:.76rem; color:var(--sky-dark);
   letter-spacing:2px; text-transform:uppercase; margin:0; text-align:left; white-space:nowrap;
 }
-[data-theme="dark"] .sec-hd h2 { color:#7ec8f0; }
+[data-theme="dark"] .sec-hd h2 { color:#a8daf0; }
 .sec-line { flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
 [data-theme="dark"] .sec-line { background:linear-gradient(to right,rgba(80,150,210,.4),transparent); }
 
@@ -99,11 +99,11 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:var(--sky-pale); color:var(--sky-dark); user-select:none;
   font-family:'Newsreader',serif; white-space:nowrap;
 }
-[data-theme="dark"] .chip { color:#c0dff5; border-color:rgba(80,150,210,.35); background:rgba(20,40,65,.8); }
+[data-theme="dark"] .chip { color:#d8eeff; border-color:rgba(126,200,227,.25); background:rgba(15,35,54,.8); }
 .chip:hover { background:var(--sky-light); color:var(--sky-dark); }
-[data-theme="dark"] .chip:hover { background:rgba(80,150,210,.2); color:#e8f4ff; }
+[data-theme="dark"] .chip:hover { background:rgba(126,200,227,.15); color:#F3F9FF; }
 .chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
-[data-theme="dark"] .chip.active { background:#1a5a90; border-color:#5aacdf; color:#e8f6ff; }
+[data-theme="dark"] .chip.active { background:#1e4a6a; border-color:#7ec8e3; color:#F3F9FF; }
 .chip-clear { background:none; border-color:rgba(186,230,253,.4); color:var(--text-dim); }
 .chip-clear:hover { background:rgba(239,68,68,.08); color:#ef4444; border-color:#fca5a5; }
 .fl-count {
@@ -111,7 +111,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   padding:2px 8px; border-radius:var(--r-pill); border:1px solid var(--sky-light);
   white-space:nowrap; margin-left:auto;
 }
-[data-theme="dark"] .fl-count { background:rgba(20,50,80,.6); border-color:rgba(80,150,210,.3); color:#a8d4f0; }
+[data-theme="dark"] .fl-count { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.2); color:#a8daf0; }
 
 /* ─── STORY GRID ─── */
 .stories-grid { display:flex; flex-direction:column; gap:9px; }
@@ -141,15 +141,15 @@ const hcdhCount    = countChaps(hcdhPosts);
 .status-upcoming { background:rgba(100,116,139,.8); color:#fff; }
 .sc-body { padding:10px 12px; flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
 .sc-shelf { font-size:.6rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
-[data-theme="dark"] .sc-shelf { color:#5aacdf; }
+[data-theme="dark"] .sc-shelf { color:#7ec8e3; }
 .sc-title {
   font-family:'Merriweather',serif; font-size:.84rem; color:#0c4a6e;
   margin:0; line-height:1.35; text-align:left;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
-[data-theme="dark"] .sc-title { color:#d8eeff; }
+[data-theme="dark"] .sc-title { color:#e8f4ff; }
 .sc-meta { font-size:.65rem; color:#475569; font-style:italic; }
-[data-theme="dark"] .sc-meta { color:#8ab8d8; }
+[data-theme="dark"] .sc-meta { color:#9bbcdb; }
 .sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
 .sc-tag {
   font-size:.58rem; padding:1px 7px;
@@ -159,7 +159,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .sc-tag { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
 .sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
 .sc-chapters { font-size:.65rem; color:#475569; }
-[data-theme="dark"] .sc-chapters { color:#8ab8d8; }
+[data-theme="dark"] .sc-chapters { color:#9bbcdb; }
 .sc-link { font-size:.68rem; padding:3px 11px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; }
 .sc-link:hover { background:var(--sky2); }
 .sc-link.secondary { background:#e0f2fe; color:#0369a1; }
@@ -184,9 +184,9 @@ const hcdhCount    = countChaps(hcdhPosts);
 .recent-icon { font-size:.95rem; flex-shrink:0; }
 .ri-body { flex:1; min-width:0; }
 .ri-story { font-size:.64rem; color:#64748b; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
-[data-theme="dark"] .ri-story { color:#8ab8d8; }
+[data-theme="dark"] .ri-story { color:#9bbcdb; }
 .ri-title { font-size:.8rem; color:#0c4a6e; font-weight:600; }
-[data-theme="dark"] .ri-title { color:#d8eeff; }
+[data-theme="dark"] .ri-title { color:#e8f4ff; }
 .recent-arrow { color:var(--sky); font-size:.88rem; }
 
 /* ─── SIDEBAR ─── */
@@ -212,7 +212,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   letter-spacing:2.5px; text-transform:uppercase; color:var(--sky);
   text-align:center; margin-bottom:10px;
 }
-[data-theme="dark"] .widget-title { color:#5aacdf; }
+[data-theme="dark"] .widget-title { color:#7ec8e3; }
 
 /* Profile widget */
 .profile-avatar {
@@ -221,47 +221,47 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:var(--sky-pale); display:flex; align-items:center; justify-content:center; font-size:2rem;
 }
 .profile-name { font-family:'Merriweather',serif; color:#0c4a6e; font-size:.86rem; text-align:center; margin-bottom:2px; }
-[data-theme="dark"] .profile-name { color:#d8eeff; }
+[data-theme="dark"] .profile-name { color:#e8f4ff; }
 .profile-tagline { font-size:.72rem; color:#64748b; font-style:italic; text-align:center; line-height:1.5; margin-bottom:5px; }
-[data-theme="dark"] .profile-tagline { color:#8ab8d8; }
+[data-theme="dark"] .profile-tagline { color:#9bbcdb; }
 .profile-deco { text-align:center; font-size:.88rem; letter-spacing:3px; color:var(--sky-light); }
 
 /* Category tree */
 .cat-tree { font-size:.74rem; color:#64748b; }
-[data-theme="dark"] .cat-tree { color:#8ab8d8; }
+[data-theme="dark"] .cat-tree { color:#9bbcdb; }
 .cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
 .cat-tree > ul { padding-left:0; }
 .cat-tree a { color:#64748b; transition:color .2s; display:block; padding:2px 0; }
-[data-theme="dark"] .cat-tree a { color:#8ab8d8; }
+[data-theme="dark"] .cat-tree a { color:#9bbcdb; }
 .cat-tree a:hover { color:var(--sky); }
-[data-theme="dark"] .cat-tree a:hover { color:#d8eeff; }
+[data-theme="dark"] .cat-tree a:hover { color:#e8f4ff; }
 .cat-tree summary {
   cursor:pointer; font-size:.76rem; color:#0c4a6e; font-weight:600;
   padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px;
 }
-[data-theme="dark"] .cat-tree summary { color:#c0dff5; }
+[data-theme="dark"] .cat-tree summary { color:#d0e6f5; }
 .cat-tree summary::-webkit-details-marker { display:none; }
 .cat-tree summary::before { content:'▸'; font-size:.58rem; transition:transform .2s; color:var(--sky); }
-[data-theme="dark"] .cat-tree summary::before { color:#5aacdf; }
+[data-theme="dark"] .cat-tree summary::before { color:#7ec8e3; }
 .cat-tree details[open]>summary::before { transform:rotate(90deg); }
 .cat-count { font-size:.62rem; color:#94a3b8; margin-left:4px; }
-[data-theme="dark"] .cat-count { color:#5a7a9a; }
+[data-theme="dark"] .cat-count { color:#6a8ea8; }
 
 /* Quote widget */
 .quote-body {
   font-style:italic; font-size:.75rem; color:#475569; line-height:1.75;
   border-left:3px solid var(--sky-light); padding-left:10px; margin:0;
 }
-[data-theme="dark"] .quote-body { color:#c0dff5; border-left-color:rgba(80,150,210,.5); }
+[data-theme="dark"] .quote-body { color:#e8f4ff; border-left-color:rgba(126,200,227,.4); }
 .quote-widget-inner {
   border-radius:10px; padding:10px 12px; margin:-2px;
 }
 [data-theme="dark"] .quote-widget-inner {
-  background:rgba(12,28,48,.6);
-  border:1px solid rgba(80,150,210,.2);
+  background:rgba(15, 35, 60, 0.4);
+  border:1px solid rgba(126,200,227,.15);
 }
 .quote-src { font-size:.62rem; color:#94a3b8; margin-top:6px; text-align:right; }
-[data-theme="dark"] .quote-src { color:#5a7a9a; }
+[data-theme="dark"] .quote-src { color:#a3cbeb; }
 
 /* ─── MESSAGE WIDGET ─── */
 /* Msg widget: rộng hơn, font đồng đều, X nhỏ */
@@ -483,34 +483,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   .sc-cover-wrap { width:88px; }
   .sc-cover-wrap img { width:88px; }
   .hero-name-img { max-width:240px; }
-}
-
-/* ─── THEME TOGGLE BUTTON ─── */
-/* Fix 1: button chuyển theme — hiện ở cả desktop và mobile */
-#themeToggleBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 1px solid rgba(186,230,253,.7);
-  background: none;
-  color: var(--text-mid);
-  cursor: pointer;
-  transition: var(--t);
-  font-size: .85rem;
-  flex-shrink: 0;
-}
-#themeToggleBtn:hover {
-  background: var(--sky-pale);
-  border-color: var(--sky-light);
-}
-[data-theme="dark"] #themeToggleBtn {
-  border-color: rgba(80,150,210,.4);
-  color: #8ab8d8;
-}
-[data-theme="dark"] #themeToggleBtn:hover {
-  background: rgba(80,150,210,.15);
 }
 </style>
 
@@ -857,64 +829,6 @@ const hcdhCount    = countChaps(hcdhPosts);
 </div>
 
 <script is:inline>
-/* ══════════════════════════════════════
-   FIX 1: THEME TOGGLE — inject vào nav, hoạt động cả mobile & desktop
-══════════════════════════════════════ */
-(function setupThemeToggle(){
-  function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
-  function applyTheme(dark){
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
-    localStorage.setItem('dd-theme', dark ? 'dark' : 'light');
-  }
-  window.__ddToggleTheme = function(){ applyTheme(!isDark()); syncAllBtns(); };
-
-  function createBtn(){
-    const btn = document.createElement('button');
-    btn.id = 'themeToggleBtn';
-    btn.setAttribute('aria-label', 'Chuyển giao diện sáng/tối');
-    btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối';
-    btn.textContent = isDark() ? '☀️' : '🌙';
-    btn.addEventListener('click', window.__ddToggleTheme);
-    return btn;
-  }
-
-  function syncAllBtns(){
-    document.querySelectorAll('#themeToggleBtn').forEach(btn => {
-      btn.textContent = isDark() ? '☀️' : '🌙';
-      btn.title = isDark() ? 'Chế độ sáng' : 'Chế độ tối';
-    });
-    const mobileBtn = document.getElementById('themeToggleMobile');
-    if(mobileBtn){
-      mobileBtn.textContent = (isDark() ? '☀️' : '🌙') + ' ' + (isDark() ? 'Chế độ sáng' : 'Chế độ tối');
-    }
-  }
-
-  // Inject vào nav-links (desktop)
-  const navLinks = document.querySelector('.nav-links');
-  if(navLinks && !document.getElementById('themeToggleBtn')){
-    navLinks.appendChild(createBtn());
-  }
-
-  // Inject vào mobile-menu
-  const mobileMenu = document.getElementById('mobileMenu');
-  if(mobileMenu && !document.getElementById('themeToggleMobile')){
-    const sep = document.createElement('div');
-    sep.className = 'mobile-section-title';
-    sep.textContent = 'Giao diện';
-
-    const mBtn = document.createElement('button');
-    mBtn.id = 'themeToggleMobile';
-    mBtn.style.cssText = 'display:block;width:100%;text-align:left;padding:9px 12px;font-size:.88rem;background:none;border:none;cursor:pointer;border-radius:6px;font-family:inherit;color:var(--text-mid);transition:all .2s;';
-    mBtn.textContent = (isDark() ? '☀️' : '🌙') + ' ' + (isDark() ? 'Chế độ sáng' : 'Chế độ tối');
-    mBtn.addEventListener('click', window.__ddToggleTheme);
-    mBtn.addEventListener('mouseover', () => mBtn.style.background = 'var(--sky-pale)');
-    mBtn.addEventListener('mouseout', () => mBtn.style.background = 'none');
-
-    mobileMenu.appendChild(sep);
-    mobileMenu.appendChild(mBtn);
-  }
-})();
-
 /* ══════════════════════════════════════
    FILTER
 ══════════════════════════════════════ */

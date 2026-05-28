@@ -43,8 +43,9 @@ if (currentTruyenId && isNovelPage) {
 
   <!-- Firebase SDK -->
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getDatabase, ref, push, onValue, remove, update, get, serverTimestamp }
+    import { initializeApp }
+      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, push, onValue, remove, update, get }
       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged }
       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
@@ -59,95 +60,97 @@ if (currentTruyenId && isNovelPage) {
       databaseURL: "https://dynamic-duo-comments-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
+    const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
     let db = null, auth = null;
     try {
       const app = initializeApp(firebaseConfig);
-      db = getDatabase(app);
+      db  = getDatabase(app);
       auth = getAuth(app);
-    } catch(e) {
-      console.warn('[DD] Firebase init failed:', e.message);
-    }
+    } catch(e) { console.warn('[DD] Firebase init failed:', e.message); }
 
-    // Admin email
-    const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
+    window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get,
+                            GoogleAuthProvider, signInWithPopup, signOut,
+                            onAuthStateChanged, ADMIN_EMAIL };
+    window.__ddIsAdmin  = false;
 
-    // Expose globally
-    window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get, serverTimestamp, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, ADMIN_EMAIL };
-    window.__ddAdminUid = null;
-
-    // Watch auth state
     if (auth) {
-      onAuthStateChanged(auth, (user) => {
-        const isAdmin = user && user.email === ADMIN_EMAIL;
-        window.__ddAdminUid = isAdmin ? user.uid : null;
-        window.__ddAdminEmail = isAdmin ? user.email : null;
-        window.dispatchEvent(new CustomEvent('dd-auth-change', { detail: { isAdmin, user } }));
+      onAuthStateChanged(auth, user => {
+        window.__ddIsAdmin = !!(user && user.email === ADMIN_EMAIL);
+        window.dispatchEvent(new CustomEvent('dd-auth-change',
+          { detail: { isAdmin: window.__ddIsAdmin, user } }));
       });
     }
-
     window.dispatchEvent(new Event('dd-firebase-ready'));
   </script>
 
   <script is:inline>
-    (function(){ const t=localStorage.getItem('dd-theme'); if(t==='dark') document.documentElement.setAttribute('data-theme','dark'); })();
+    (function(){
+      const t = localStorage.getItem('dd-theme');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    })();
   </script>
 
   <style is:global>
-    /* ─── CSS VARIABLES ─── */
+    /* ── VARIABLES ── */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
-      --cream:#fafcff; --bg2:#fff;
+      --cream:#fafcff;
       --text-main:#1e3a5f; --text-mid:#64748b; --text-dim:#94a3b8;
-      --sh-card:0 4px 15px rgba(2,132,199,.12); --sh-soft:0 2px 8px rgba(0,0,0,.08);
-      --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px; --t:all .2s ease;
+      --sh-card:0 4px 15px rgba(2,132,199,.12);
+      --sh-soft:0 2px 8px rgba(0,0,0,.08);
+      --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
+      --t:all .2s ease;
     }
     [data-theme="dark"] {
       --sky:#60b8e8; --sky2:#89d0f5; --sky-dark:#c8e8f8;
       --sky-light:#1e5a7a; --sky-pale:#0c1e30;
-      --cream:#091726; --bg2:#0e2236;
+      --cream:#091726;
       --text-main:#daeeff; --text-mid:#a0c8e0; --text-dim:#6a9ab5;
     }
-    [data-theme="dark"] body { background:#091726; color:#daeeff; }
-    [data-theme="dark"] nav { background:rgba(9,23,38,.98); border-color:rgba(96,184,232,.18); }
-    [data-theme="dark"] .mobile-menu { background:rgba(9,23,38,.99); border-color:rgba(96,184,232,.2); }
+    [data-theme="dark"] body          { background:#091726; color:#daeeff; }
+    [data-theme="dark"] nav           { background:rgba(9,23,38,.98); border-color:rgba(96,184,232,.18); }
+    [data-theme="dark"] .mobile-menu  { background:rgba(9,23,38,.99); border-color:rgba(96,184,232,.2); }
     [data-theme="dark"] .dropdown-content { background:#0e2236; border-color:rgba(96,184,232,.22); }
-    [data-theme="dark"] .dd-item { color:#a0c8e0; }
+    [data-theme="dark"] .dd-item      { color:#a0c8e0; }
     [data-theme="dark"] .dd-item:hover { background:rgba(96,184,232,.1); color:#daeeff; }
     [data-theme="dark"] .nav-item > a { color:#a0c8e0; }
-    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover,
-    [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { color:#60b8e8; background:rgba(96,184,232,.1); }
-    [data-theme="dark"] .nav-logo { color:#89d0f5; }
-    [data-theme="dark"] .nav-btn { color:#a0c8e0; }
+    [data-theme="dark"] .nav-item > a:hover,
+    [data-theme="dark"] .nav-btn:hover,
+    [data-theme="dark"] .nav-item:hover > a,
+    [data-theme="dark"] .nav-item:hover > .nav-btn { color:#60b8e8; background:rgba(96,184,232,.1); }
+    [data-theme="dark"] .nav-logo     { color:#89d0f5; }
+    [data-theme="dark"] .nav-btn      { color:#a0c8e0; }
     [data-theme="dark"] .dd-section-title { color:#4a7a96; }
-    [data-theme="dark"] .novel-content, [data-theme="dark"] .page-content-wrap { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.16); color:#daeeff; }
+    [data-theme="dark"] .novel-content,
+    [data-theme="dark"] .page-content-wrap { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.16); color:#daeeff; }
     [data-theme="dark"] .novel-content p { color:#cce4f8; }
-    [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4 { color:#89d0f5; }
-    [data-theme="dark"] blockquote { background:rgba(14,36,58,.9); color:#a0c8e0; border-left-color:#1e5a7a; }
-    [data-theme="dark"] .chap-pn { border-color:#1e5a7a; color:#a0c8e0; }
+    [data-theme="dark"] h1,[data-theme="dark"] h2,
+    [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#89d0f5; }
+    [data-theme="dark"] blockquote    { background:rgba(14,36,58,.9); color:#a0c8e0; border-left-color:#1e5a7a; }
+    [data-theme="dark"] .chap-pn      { border-color:#1e5a7a; color:#a0c8e0; }
     [data-theme="dark"] .chap-pn:hover { background:rgba(96,184,232,.1); color:#daeeff; border-color:#60b8e8; }
-    [data-theme="dark"] .chap-dd-btn { background:#0c1e30; border-color:#1e5a7a; color:#a0c8e0; }
-    [data-theme="dark"] .chap-dd-btn:hover { background:rgba(96,184,232,.12); color:#daeeff; }
+    [data-theme="dark"] .chap-dd-btn  { background:#0c1e30; border-color:#1e5a7a; color:#a0c8e0; }
     [data-theme="dark"] .chap-dd-list { background:#0e2236; border-color:#1e5a7a; }
     [data-theme="dark"] .chap-dd-list a { color:#a0c8e0; border-color:rgba(96,184,232,.12); }
     [data-theme="dark"] .chap-dd-list a:hover { background:rgba(96,184,232,.1); color:#daeeff; }
     [data-theme="dark"] .chap-dd-list a.cur-chap { background:rgba(96,184,232,.15); color:#89d0f5; font-weight:700; }
-    [data-theme="dark"] footer { background:#0e2236; border-color:rgba(96,184,232,.12); color:#a0c8e0; }
-    [data-theme="dark"] .ft-logo { color:#89d0f5; }
-    [data-theme="dark"] .ft-links a { color:#a0c8e0; }
+    [data-theme="dark"] footer        { background:#0e2236; border-color:rgba(96,184,232,.12); color:#a0c8e0; }
+    [data-theme="dark"] .ft-logo      { color:#89d0f5; }
+    [data-theme="dark"] .ft-links a   { color:#a0c8e0; }
     [data-theme="dark"] .ft-links a:hover { color:#89d0f5; }
-    [data-theme="dark"] .ft-bottom { color:#4a7a96; }
-    [data-theme="dark"] .ft-brand p { color:#6a9ab5; }
-    [data-theme="dark"] .social-ic { background:rgba(14,36,58,.8); border-color:#1e5a7a; }
-    [data-theme="dark"] .tag-badge { color:#89d0f5; border-color:#1e5a7a; }
+    [data-theme="dark"] .ft-bottom    { color:#4a7a96; }
+    [data-theme="dark"] .ft-brand p   { color:#6a9ab5; }
+    [data-theme="dark"] .social-ic    { background:rgba(14,36,58,.8); border-color:#1e5a7a; }
+    [data-theme="dark"] .tag-badge    { color:#89d0f5; border-color:#1e5a7a; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(96,184,232,.1); }
-    [data-theme="dark"] .scroll-btn { background:#1a4f6e; }
+    [data-theme="dark"] .scroll-btn   { background:#1a4f6e; }
     [data-theme="dark"] .scroll-btn:hover { background:#215f84; }
     .contact-email { color:#475569; }
     [data-theme="dark"] .contact-email { color:#a0c8e0; }
 
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
     body { background:var(--cream); color:var(--text-main); font-family:'Newsreader',serif; font-size:18px; line-height:1.9; margin:0; padding:0; overflow-x:hidden; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     a { color:inherit; text-decoration:none; }
@@ -155,17 +158,17 @@ if (currentTruyenId && isNovelPage) {
     ::-webkit-scrollbar-track { background:var(--sky-pale); }
     ::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 
-    /* ─── PROGRESS BAR ─── */
+    /* ── PROGRESS ── */
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    /* ─── NAVBAR ─── */
+    /* ── NAVBAR ── */
     nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
     .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; }
     .nav-links { display:flex; align-items:center; gap:2px; }
     .nav-item { position:relative; }
-    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; font-weight:400; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
-    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
-    .dropdown-content { position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:#fff; border:1px solid rgba(186,230,253,.7); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .22s ease, transform .22s ease; z-index:600; }
+    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
+    .nav-item > a:hover,.nav-btn:hover,.nav-item:hover > a,.nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
+    .dropdown-content { position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:#fff; border:1px solid rgba(186,230,253,.7); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .22s ease,transform .22s ease; z-index:600; }
     .nav-item:hover .dropdown-content { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
     .dd-section-title { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:6px 12px 3px; }
     .dd-item { display:flex; align-items:center; gap:7px; padding:7px 12px; font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); }
@@ -182,31 +185,26 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .mobile-menu a:hover { background:rgba(96,184,232,.1); color:#89d0f5; }
     .mobile-section-title { font-size:.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:10px 12px 3px; }
     [data-theme="dark"] .mobile-section-title { color:#4a7a96; }
-    @media(max-width:700px) { .nav-links{display:none;} .nav-hamburger{display:flex;} }
+    @media(max-width:700px){ .nav-links{display:none;} .nav-hamburger{display:flex;} }
 
-    /* ─── LAYOUT ─── */
+    /* ── LAYOUT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
-    @media(max-width:640px) { .page-content-wrap { padding:24px 18px; margin:16px 12px 40px; } }
+    @media(max-width:640px){ .page-content-wrap{ padding:24px 18px; margin:16px 12px 40px; } }
 
-    /* ─── NOVEL CONTENT ─── */
-    /* Khi sidebar comment mở, thu hẹp nội dung */
-    .novel-wrap { transition: margin-right .3s ease; }
-    .novel-wrap.sidebar-open { margin-right: 360px; }
-    @media(max-width:900px) { .novel-wrap.sidebar-open { margin-right: 0; } }
-
+    /* ── NOVEL CONTENT ── */
     .novel-content { max-width:760px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
-    @media(max-width:640px) { .novel-content { padding:24px 18px; margin:16px 12px 40px; } }
-    .novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; }
+    @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
+    .novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* ─── TAGS ─── */
+    /* ── TAGS ── */
     .tag-badge { display:inline-block; padding:4px 12px; border:1.5px solid var(--sky); border-radius:var(--r-pill); font-size:.8rem; margin:3px; color:var(--sky); transition:var(--t); }
     .tag-badge:hover { background:var(--sky-pale); }
 
-    /* ─── CHAPTER NAV ─── */
+    /* ── CHAPTER NAV ── */
     .chap-nav-row { display:flex; align-items:center; justify-content:center; gap:10px; margin:22px 0; flex-wrap:wrap; max-width:820px; margin-left:auto; margin-right:auto; padding:0 12px; }
     .chap-pn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky-dark); font-size:.82rem; font-family:'Newsreader',serif; transition:var(--t); white-space:nowrap; flex-shrink:0; }
     .chap-pn:hover { background:var(--sky-pale); color:var(--sky); border-color:var(--sky); }
@@ -222,189 +220,189 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list a.cur-chap { background:var(--sky-pale); color:var(--sky); font-weight:700; }
     .chap-dd-list.up { bottom:calc(100% + 6px); top:auto; }
 
-    /* ════════════════════════════════
-       INLINE COMMENT TRIGGER
-    ════════════════════════════════ */
+    /* ══════════════════════════════════
+       INLINE COMMENT BUBBLE (Wattpad-style)
+       Popup nhỏ ngay cạnh đoạn văn
+    ══════════════════════════════════ */
+
+    /* Trigger button — xuất hiện khi hover vào đoạn */
     .ic-trigger {
       display:inline-flex; align-items:center; justify-content:center;
-      min-width:22px; height:20px; padding:0 4px;
-      border-radius:10px;
-      background:var(--sky-pale); border:1px solid var(--sky-light);
-      color:var(--sky); font-size:.62rem; cursor:pointer;
-      opacity:0; transition:opacity .18s ease;
-      vertical-align:middle; margin-left:6px; flex-shrink:0;
-      font-family:'Newsreader',serif; font-style:normal;
-      line-height:1;
+      min-width:24px; height:22px; padding:0 5px;
+      border-radius:11px;
+      background:#fff; border:1.5px solid var(--sky-light);
+      color:var(--sky); font-size:.65rem; cursor:pointer;
+      opacity:0; transition:opacity .15s, transform .15s;
+      vertical-align:middle; margin-left:8px; flex-shrink:0;
+      font-family:'Newsreader',serif; line-height:1;
+      box-shadow:0 2px 6px rgba(2,132,199,.15);
     }
-    .novel-content p:hover .ic-trigger { opacity:1; }
+    .novel-content p:hover .ic-trigger,
+    .novel-content p:focus-within .ic-trigger { opacity:1; transform:scale(1.05); }
     .ic-trigger:hover { background:var(--sky); color:#fff; opacity:1 !important; }
-    .ic-trigger.has-comments { opacity:0.8; background:rgba(14,165,233,.1); }
-    [data-theme="dark"] .ic-trigger { background:rgba(14,32,52,.9); border-color:rgba(96,184,232,.3); color:#89d0f5; }
+    .ic-trigger.has-comments { opacity:.85; background:rgba(14,165,233,.08); border-color:var(--sky); }
+    [data-theme="dark"] .ic-trigger { background:#0e2236; border-color:rgba(96,184,232,.4); color:#89d0f5; box-shadow:0 2px 6px rgba(0,0,0,.3); }
     [data-theme="dark"] .ic-trigger:hover { background:#1565a0; color:#e8f6ff; }
-    [data-theme="dark"] .ic-trigger.has-comments { background:rgba(21,101,160,.25); }
+    [data-theme="dark"] .ic-trigger.has-comments { background:rgba(21,101,160,.25); border-color:rgba(96,184,232,.6); }
 
-    /* ════════════════════════════════
-       INLINE COMMENT SIDEBAR
-    ════════════════════════════════ */
-    .ic-sidebar {
+    /* Popup bubble — cố định, xuất hiện cạnh trigger */
+    .ic-popup {
       position:fixed;
-      right:0; top:56px;
-      width:340px;
-      height:calc(100vh - 56px);
+      width:min(320px, calc(100vw - 24px));
       background:#fff;
-      border-left:1px solid rgba(186,230,253,.6);
-      box-shadow:-6px 0 24px rgba(2,132,199,.10);
-      z-index:450;
-      display:flex; flex-direction:column;
-      transform:translateX(100%);
-      transition:transform .3s cubic-bezier(.4,0,.2,1);
+      border:1px solid rgba(186,230,253,.8);
+      border-radius:16px;
+      box-shadow:0 8px 32px rgba(2,132,199,.18), 0 2px 8px rgba(0,0,0,.06);
+      z-index:800;
+      display:none;
+      flex-direction:column;
+      max-height:min(480px, 60vh);
       overflow:hidden;
+      animation:icPop .18s cubic-bezier(.34,1.56,.64,1);
     }
-    .ic-sidebar.open { transform:translateX(0); }
-    [data-theme="dark"] .ic-sidebar { background:#0e2236; border-left-color:rgba(96,184,232,.2); box-shadow:-6px 0 24px rgba(0,0,0,.4); }
+    .ic-popup.open { display:flex; }
+    @keyframes icPop { from{opacity:0;transform:scale(.92) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    [data-theme="dark"] .ic-popup { background:#0e2236; border-color:rgba(96,184,232,.3); box-shadow:0 8px 32px rgba(0,0,0,.5); }
 
-    @media(max-width:900px) {
-      .ic-sidebar { width:100%; top:auto; bottom:0; height:65vh; transform:translateY(100%); border-left:none; border-top:1px solid rgba(186,230,253,.5); border-radius:20px 20px 0 0; }
-      .ic-sidebar.open { transform:translateY(0); }
-      [data-theme="dark"] .ic-sidebar { border-top-color:rgba(96,184,232,.2); }
-    }
-
-    .ic-sidebar-header {
+    .ic-popup-header {
       display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px 12px;
-      border-bottom:1px solid rgba(186,230,253,.4);
-      flex-shrink:0;
+      padding:11px 14px 9px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0;
     }
-    [data-theme="dark"] .ic-sidebar-header { border-bottom-color:rgba(96,184,232,.15); }
-    .ic-sidebar-title { font-family:'Merriweather',serif; font-size:.8rem; color:var(--sky-dark); letter-spacing:1px; }
-    [data-theme="dark"] .ic-sidebar-title { color:#89d0f5; }
-    .ic-sidebar-para { font-size:.68rem; color:var(--text-dim); font-style:italic; margin-top:2px; }
-    [data-theme="dark"] .ic-sidebar-para { color:#6a9ab5; }
-    .ic-sidebar-close {
-      background:none; border:none; cursor:pointer;
-      color:var(--text-dim); font-size:1rem; padding:4px 8px;
-      border-radius:var(--r-sm); transition:var(--t);
-    }
-    .ic-sidebar-close:hover { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .ic-sidebar-close:hover { background:rgba(96,184,232,.1); color:#89d0f5; }
+    [data-theme="dark"] .ic-popup-header { border-bottom-color:rgba(96,184,232,.15); }
+    .ic-popup-title { font-family:'Merriweather',serif; font-size:.72rem; color:var(--sky-dark); letter-spacing:.5px; }
+    [data-theme="dark"] .ic-popup-title { color:#89d0f5; }
+    .ic-popup-close { background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:.9rem; padding:2px 6px; border-radius:6px; transition:var(--t); line-height:1; }
+    .ic-popup-close:hover { background:var(--sky-pale); color:var(--sky); }
+    [data-theme="dark"] .ic-popup-close:hover { background:rgba(96,184,232,.12); color:#89d0f5; }
 
-    .ic-sidebar-list {
-      flex:1; overflow-y:auto; padding:12px 14px;
-      display:flex; flex-direction:column; gap:8px;
-      scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent;
-    }
-    .ic-sidebar-list::-webkit-scrollbar { width:3px; }
-    .ic-sidebar-list::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+    /* Danh sách comment trong popup */
+    .ic-popup-list { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
+    .ic-popup-list::-webkit-scrollbar { width:3px; }
+    .ic-popup-list::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 
-    .ic-cmt-item {
-      background:var(--sky-pale); border-radius:12px; padding:10px 12px;
-      font-size:.78rem; color:var(--text-main); line-height:1.55; position:relative;
-      border:1px solid rgba(186,230,253,.4);
+    /* Item comment inline */
+    .ic-item {
+      background:var(--sky-pale); border-radius:12px; padding:9px 11px;
+      font-size:.76rem; line-height:1.5; position:relative;
+      border:1px solid rgba(186,230,253,.35);
     }
-    [data-theme="dark"] .ic-cmt-item { background:rgba(21,50,80,.5); border-color:rgba(96,184,232,.15); color:#cce4f8; }
-    .ic-cmt-header { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
-    .ic-cmt-name { font-weight:700; font-size:.72rem; color:var(--sky-dark); }
-    [data-theme="dark"] .ic-cmt-name { color:#89d0f5; }
-    .ic-cmt-time { font-size:.62rem; color:var(--text-dim); margin-left:auto; }
-    [data-theme="dark"] .ic-cmt-time { color:#6a9ab5; }
-    .ic-cmt-del {
-      position:absolute; top:8px; right:8px;
-      background:none; border:none; cursor:pointer;
-      font-size:.6rem; color:var(--text-dim); opacity:0;
-      transition:opacity .15s, color .15s; padding:2px 5px; border-radius:4px;
-    }
-    .ic-cmt-item:hover .ic-cmt-del { opacity:1; }
-    .ic-cmt-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+    [data-theme="dark"] .ic-item { background:rgba(21,50,80,.45); border-color:rgba(96,184,232,.12); }
+    .ic-item-header { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+    .ic-item-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
+    [data-theme="dark"] .ic-item-name { color:#89d0f5; }
+    .ic-item-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
+    .ic-item-text { color:var(--text-main); margin:0; word-break:break-word; }
+    [data-theme="dark"] .ic-item-text { color:#cce4f8; }
 
-    .ic-sidebar-form { padding:12px 14px; border-top:1px solid rgba(186,230,253,.35); flex-shrink:0; }
-    [data-theme="dark"] .ic-sidebar-form { border-top-color:rgba(96,184,232,.15); }
+    /* Actions inline item */
+    .ic-item-actions { display:flex; align-items:center; gap:6px; margin-top:6px; }
+    .ic-reply-toggle {
+      font-size:.62rem; color:var(--sky); background:none; border:none;
+      cursor:pointer; padding:0; font-family:'Newsreader',serif;
+      transition:color .15s;
+    }
+    .ic-reply-toggle:hover { color:var(--sky2); }
+    [data-theme="dark"] .ic-reply-toggle { color:#89d0f5; }
+    .ic-del-btn {
+      font-size:.6rem; color:var(--text-dim); background:none; border:none;
+      cursor:pointer; padding:0 4px; border-radius:4px; transition:var(--t);
+      margin-left:auto; display:none;
+    }
+    .ic-del-btn.show { display:inline-block; }
+    .ic-del-btn:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+
+    /* Replies trong inline */
+    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding-top:7px; border-top:1px dashed rgba(186,230,253,.5); }
+    .ic-replies.open { display:flex; }
+    [data-theme="dark"] .ic-replies { border-top-color:rgba(96,184,232,.15); }
+    .ic-reply-item {
+      display:flex; gap:6px; font-size:.72rem;
+      background:rgba(255,255,255,.6); border-radius:8px; padding:6px 8px;
+      border:1px solid rgba(186,230,253,.3); position:relative;
+    }
+    [data-theme="dark"] .ic-reply-item { background:rgba(14,34,58,.6); border-color:rgba(96,184,232,.1); }
+    .ic-reply-avatar { width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.58rem; font-weight:700; color:#0369a1; flex-shrink:0; }
+    [data-theme="dark"] .ic-reply-avatar { background:rgba(21,101,160,.4); color:#89d0f5; }
+    .ic-reply-body { flex:1; min-width:0; }
+    .ic-reply-name { font-weight:700; color:var(--sky-dark); font-size:.66rem; }
+    [data-theme="dark"] .ic-reply-name { color:#89d0f5; }
+    .ic-reply-text { color:var(--text-main); margin:2px 0 0; line-height:1.4; word-break:break-word; }
+    [data-theme="dark"] .ic-reply-text { color:#b8d8f0; }
+    .ic-reply-del { position:absolute; top:4px; right:6px; background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:1px 4px; border-radius:3px; display:none; }
+    .ic-reply-item:hover .ic-reply-del { opacity:1; }
+    .ic-reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+    .ic-reply-del.show { display:block; }
+
+    /* Reply form nhỏ trong popup */
+    .ic-reply-form { display:none; margin-top:6px; gap:5px; flex-direction:column; }
+    .ic-reply-form.open { display:flex; }
+    .ic-reply-form input, .ic-reply-form textarea {
+      padding:5px 10px; border:1.5px solid var(--sky-light);
+      border-radius:var(--r-pill); font-size:.72rem; font-family:'Newsreader',serif;
+      color:var(--text-main); background:var(--cream); outline:none; width:100%;
+    }
+    .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
+    .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color:var(--sky); }
+    [data-theme="dark"] .ic-reply-form input,
+    [data-theme="dark"] .ic-reply-form textarea { background:#091726; border-color:#1e5a7a; color:#daeeff; }
+    [data-theme="dark"] .ic-reply-form input::placeholder,
+    [data-theme="dark"] .ic-reply-form textarea::placeholder { color:#4a7a96; }
+    .ic-reply-form-row { display:flex; gap:5px; justify-content:flex-end; }
+    .ic-rf-cancel { padding:4px 10px; background:none; border:1px solid rgba(186,230,253,.5); border-radius:var(--r-pill); font-size:.68rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
+    .ic-rf-cancel:hover { border-color:var(--sky-light); color:var(--sky); }
+    .ic-rf-send { padding:4px 12px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.68rem; cursor:pointer; transition:var(--t); }
+    .ic-rf-send:hover { background:var(--sky2); }
+    .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* Form gửi comment mới trong popup */
+    .ic-popup-form { padding:10px 12px; border-top:1px solid rgba(186,230,253,.35); flex-shrink:0; }
+    [data-theme="dark"] .ic-popup-form { border-top-color:rgba(96,184,232,.15); }
     .ic-form-name {
-      width:100%; padding:7px 12px; border:1.5px solid var(--sky-light);
-      border-radius:var(--r-pill); font-size:.75rem; font-family:'Newsreader',serif;
-      color:var(--text-main); background:var(--cream); outline:none;
-      margin-bottom:7px;
+      width:100%; padding:6px 11px; border:1.5px solid var(--sky-light);
+      border-radius:var(--r-pill); font-size:.73rem; font-family:'Newsreader',serif;
+      color:var(--text-main); background:var(--cream); outline:none; margin-bottom:6px;
     }
     .ic-form-name:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-form-name { background:#091726; border-color:#1e5a7a; color:#daeeff; }
     [data-theme="dark"] .ic-form-name::placeholder { color:#4a7a96; }
+    .ic-form-body { display:flex; gap:6px; }
     .ic-form-text {
-      width:100%; padding:8px 12px; border:1.5px solid var(--sky-light);
-      border-radius:12px; font-size:.78rem; font-family:'Newsreader',serif;
+      flex:1; padding:6px 11px; border:1.5px solid var(--sky-light);
+      border-radius:10px; font-size:.75rem; font-family:'Newsreader',serif;
       color:var(--text-main); background:var(--cream); outline:none;
-      resize:vertical; min-height:72px; margin-bottom:8px;
+      resize:none; min-height:54px;
     }
     .ic-form-text:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-form-text { background:#091726; border-color:#1e5a7a; color:#daeeff; }
     [data-theme="dark"] .ic-form-text::placeholder { color:#4a7a96; }
     .ic-form-send {
-      width:100%; padding:8px; background:var(--sky); color:#fff;
-      border:none; border-radius:var(--r-pill); font-size:.78rem;
-      cursor:pointer; font-family:'Newsreader',serif; transition:var(--t);
+      align-self:flex-end; padding:7px 13px; background:var(--sky); color:#fff;
+      border:none; border-radius:var(--r-pill); font-size:.72rem;
+      cursor:pointer; transition:var(--t); flex-shrink:0;
     }
     .ic-form-send:hover { background:var(--sky2); }
     .ic-form-send:disabled { opacity:.5; cursor:not-allowed; }
-
-    .ic-empty { font-size:.76rem; color:var(--text-dim); font-style:italic; text-align:center; padding:20px 0; }
+    .ic-empty { font-size:.74rem; color:var(--text-dim); font-style:italic; text-align:center; padding:16px 0; }
     [data-theme="dark"] .ic-empty { color:#4a7a96; }
-    .ic-loading-text { font-size:.74rem; color:var(--text-dim); text-align:center; padding:16px 0; }
 
-    /* Nút mở sidebar inline comment — float trên màn hình */
-    .ic-open-btn {
-      display:none; /* ẩn mặc định, chỉ hiện khi là novel page qua JS */
-      position:fixed; right:22px; bottom:130px; z-index:400;
-      background:var(--sky); color:#fff; border:none;
-      border-radius:var(--r-pill); padding:8px 14px;
-      font-size:.74rem; cursor:pointer; font-family:'Newsreader',serif;
-      box-shadow:0 4px 14px rgba(2,132,199,.35); transition:var(--t);
-      align-items:center; gap:5px;
-    }
-    .ic-open-btn:hover { background:var(--sky2); transform:translateY(-2px); }
-    .ic-open-btn.visible { display:flex; }
-
-    /* Overlay khi sidebar mở trên mobile */
-    .ic-overlay {
-      display:none; position:fixed; inset:0; background:rgba(0,0,0,.3);
-      z-index:440; backdrop-filter:blur(2px);
-    }
-    .ic-overlay.show { display:block; }
-
-    /* ════════════════════════════════
+    /* ══════════════════════════════════
        CHAPTER-END COMMENT
-       (bình thường, dưới nội dung)
-    ════════════════════════════════ */
+    ══════════════════════════════════ */
     .chap-comment-section { max-width:760px; margin:0 auto; padding:0 12px 60px; }
-
-    .chap-comment-title {
-      font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark);
-      letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px;
-      display:flex; align-items:center; gap:10px;
-    }
-    .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right, var(--sky-light), transparent); }
+    .chap-comment-title { font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
+    .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
     [data-theme="dark"] .chap-comment-title { color:#89d0f5; }
-    [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right, #1e5a7a, transparent); }
+    [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e5a7a,transparent); }
 
-    /* Admin login bar */
-    .admin-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      background:rgba(14,165,233,.06); border:1px solid rgba(186,230,253,.5);
-      border-radius:10px; padding:8px 14px; margin-bottom:14px;
-      font-size:.72rem; color:var(--text-dim);
-    }
-    [data-theme="dark"] .admin-bar { background:rgba(21,101,160,.15); border-color:rgba(96,184,232,.2); color:#6a9ab5; }
-    .admin-login-btn {
-      padding:4px 12px; background:var(--sky); color:#fff;
-      border:none; border-radius:var(--r-pill); font-size:.7rem;
-      cursor:pointer; font-family:'Newsreader',serif; transition:var(--t);
-    }
+    /* Admin bar */
+    .admin-bar { display:flex; align-items:center; justify-content:space-between; background:rgba(14,165,233,.05); border:1px solid rgba(186,230,253,.5); border-radius:10px; padding:7px 14px; margin-bottom:14px; font-size:.72rem; color:var(--text-dim); gap:10px; }
+    [data-theme="dark"] .admin-bar { background:rgba(21,101,160,.12); border-color:rgba(96,184,232,.2); color:#6a9ab5; }
+    .admin-login-btn { padding:4px 12px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); flex-shrink:0; }
     .admin-login-btn:hover { background:var(--sky2); }
-    .admin-logout-btn {
-      padding:3px 10px; background:none; color:var(--text-dim);
-      border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill);
-      font-size:.68rem; cursor:pointer; transition:var(--t);
-    }
+    .admin-logout-btn { padding:3px 10px; background:none; color:var(--text-dim); border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.68rem; cursor:pointer; transition:var(--t); flex-shrink:0; }
     .admin-logout-btn:hover { border-color:#ef4444; color:#ef4444; }
 
-    /* Form comment */
+    /* Form */
     .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:18px; margin-bottom:20px; }
     [data-theme="dark"] .comment-form { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.18); }
     .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
@@ -412,7 +410,7 @@ if (currentTruyenId && isNovelPage) {
     .comment-inp:focus { border-color:var(--sky); }
     [data-theme="dark"] .comment-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
     [data-theme="dark"] .comment-inp::placeholder { color:#4a7a96; }
-    .comment-textarea { width:100%; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.84rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:88px; box-sizing:border-box; margin-bottom:10px; }
+    .comment-textarea { width:100%; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.84rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:88px; margin-bottom:10px; }
     .comment-textarea:focus { border-color:var(--sky); }
     [data-theme="dark"] .comment-textarea { background:#091726; border-color:#1e5a7a; color:#daeeff; }
     [data-theme="dark"] .comment-textarea::placeholder { color:#4a7a96; }
@@ -420,134 +418,80 @@ if (currentTruyenId && isNovelPage) {
     .comment-submit-btn:hover { background:var(--sky2); }
     .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* Comment list */
+    /* Cards */
     .comment-list { display:flex; flex-direction:column; gap:12px; }
-
-    .comment-card {
-      background:#fff; border:1px solid rgba(186,230,253,.45);
-      border-radius:14px; padding:16px 18px; position:relative;
-      transition:box-shadow .2s;
-    }
+    .comment-card { background:#fff; border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
     .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
     [data-theme="dark"] .comment-card { background:rgba(12,24,40,.99); border-color:rgba(96,184,232,.16); }
-
-    .comment-card-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-    .comment-card-avatar {
-      width:30px; height:30px; border-radius:50%;
-      background:linear-gradient(135deg,var(--sky-pale),var(--sky-light));
-      display:flex; align-items:center; justify-content:center;
-      font-size:.75rem; font-weight:700; color:var(--sky-dark); flex-shrink:0;
-      border:1.5px solid var(--sky-light);
-    }
+    .comment-card-header { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+    .comment-card-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--sky-pale),var(--sky-light)); display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--sky-dark); flex-shrink:0; border:1.5px solid var(--sky-light); }
     [data-theme="dark"] .comment-card-avatar { background:rgba(21,101,160,.3); border-color:rgba(96,184,232,.3); color:#89d0f5; }
     .comment-card-name { font-weight:700; color:var(--sky-dark); font-size:.82rem; }
     [data-theme="dark"] .comment-card-name { color:#89d0f5; }
     .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:auto; }
     [data-theme="dark"] .comment-card-time { color:#4a7a96; }
-    .comment-card-text { font-size:.86rem; color:var(--text-main); line-height:1.65; margin:0 0 10px; }
+    .comment-card-text { font-size:.86rem; color:var(--text-main); line-height:1.65; margin:0 0 10px; word-break:break-word; }
     [data-theme="dark"] .comment-card-text { color:#cce4f8; }
 
-    /* Actions: like + reply + delete */
-    .comment-card-actions { display:flex; align-items:center; gap:8px; }
-    .cmt-like-btn {
-      display:inline-flex; align-items:center; gap:4px;
-      padding:3px 10px; border-radius:var(--r-pill);
-      border:1px solid rgba(186,230,253,.6); background:none;
-      font-size:.72rem; color:var(--text-dim); cursor:pointer;
-      transition:var(--t); font-family:'Newsreader',serif;
-    }
+    /* Actions */
+    .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .cmt-like-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
     .cmt-like-btn:hover { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.06); }
     .cmt-like-btn.liked { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.08); }
     [data-theme="dark"] .cmt-like-btn { border-color:rgba(96,184,232,.2); color:#6a9ab5; }
-    [data-theme="dark"] .cmt-like-btn.liked { border-color:#f472b6; color:#f9a8d4; background:rgba(244,114,182,.1); }
-    .cmt-reply-btn {
-      display:inline-flex; align-items:center; gap:4px;
-      padding:3px 10px; border-radius:var(--r-pill);
-      border:1px solid rgba(186,230,253,.6); background:none;
-      font-size:.72rem; color:var(--text-dim); cursor:pointer;
-      transition:var(--t); font-family:'Newsreader',serif;
-    }
+    [data-theme="dark"] .cmt-like-btn.liked { border-color:#f472b6; color:#f9a8d4; }
+    .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
     .cmt-reply-btn:hover { border-color:var(--sky-light); color:var(--sky); background:var(--sky-pale); }
     [data-theme="dark"] .cmt-reply-btn { border-color:rgba(96,184,232,.2); color:#6a9ab5; }
-    [data-theme="dark"] .cmt-reply-btn:hover { border-color:rgba(96,184,232,.4); color:#89d0f5; background:rgba(96,184,232,.08); }
-    .cmt-del-btn {
-      margin-left:auto; padding:3px 8px; border-radius:var(--r-pill);
-      border:none; background:none; font-size:.68rem; color:var(--text-dim);
-      cursor:pointer; transition:var(--t); display:none;
-    }
-    .cmt-del-btn.admin-visible { display:inline-flex; align-items:center; gap:3px; }
-    .cmt-del-btn:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+    [data-theme="dark"] .cmt-reply-btn:hover { background:rgba(96,184,232,.08); color:#89d0f5; }
+    /* Xóa — chủ sở hữu + admin */
+    .cmt-del-btn { margin-left:auto; padding:3px 9px; border-radius:var(--r-pill); border:1px solid transparent; background:none; font-size:.68rem; color:var(--text-dim); cursor:pointer; transition:var(--t); display:none; }
+    .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
+    .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
 
     /* Reply thread */
-    .reply-thread { margin-top:10px; padding-top:10px; border-top:1px solid rgba(186,230,253,.35); display:none; flex-direction:column; gap:8px; }
+    .reply-thread { margin-top:10px; padding-top:10px; border-top:1px solid rgba(186,230,253,.35); display:none; flex-direction:column; gap:7px; }
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-top-color:rgba(96,184,232,.15); }
-    .reply-item {
-      display:flex; gap:8px; align-items:flex-start;
-      background:var(--sky-pale); border-radius:10px; padding:9px 12px;
-      position:relative;
-    }
+    .reply-item { display:flex; gap:8px; align-items:flex-start; background:var(--sky-pale); border-radius:10px; padding:9px 11px; position:relative; }
     [data-theme="dark"] .reply-item { background:rgba(21,50,80,.4); }
-    .reply-avatar {
-      width:24px; height:24px; border-radius:50%; flex-shrink:0;
-      background:linear-gradient(135deg,#bae6fd,#7dd3fc);
-      display:flex; align-items:center; justify-content:center;
-      font-size:.62rem; font-weight:700; color:#0369a1;
-      border:1px solid var(--sky-light);
-    }
+    .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
     [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#89d0f5; border-color:rgba(96,184,232,.3); }
     .reply-body { flex:1; min-width:0; }
     .reply-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
     [data-theme="dark"] .reply-name { color:#89d0f5; }
     .reply-time { font-size:.6rem; color:var(--text-dim); margin-left:6px; }
-    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; }
+    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
     [data-theme="dark"] .reply-text { color:#b8d8f0; }
-    .reply-del {
-      position:absolute; top:6px; right:8px;
-      background:none; border:none; cursor:pointer;
-      font-size:.58rem; color:var(--text-dim); opacity:0;
-      transition:opacity .15s, color .15s; padding:2px 4px; border-radius:3px; display:none;
-    }
+    .reply-del { position:absolute; top:6px; right:8px; background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 4px; border-radius:3px; display:none; }
     .reply-item:hover .reply-del { opacity:1; }
     .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
-    .reply-del.admin-visible { display:block; }
+    .reply-del.show { display:block; }
 
     /* Reply form */
-    .reply-form { display:none; margin-top:8px; }
-    .reply-form.open { display:flex; gap:6px; flex-direction:column; }
-    .reply-inp {
-      padding:7px 12px; border:1.5px solid var(--sky-light);
-      border-radius:var(--r-pill); font-size:.76rem;
-      font-family:'Newsreader',serif; color:var(--text-main);
-      background:var(--cream); outline:none;
-    }
-    .reply-inp:focus { border-color:var(--sky); }
-    [data-theme="dark"] .reply-inp { background:#091726; border-color:#1e5a7a; color:#daeeff; }
-    [data-theme="dark"] .reply-inp::placeholder { color:#4a7a96; }
-    .reply-inp-text {
-      padding:7px 12px; border:1.5px solid var(--sky-light);
-      border-radius:10px; font-size:.78rem;
-      font-family:'Newsreader',serif; color:var(--text-main);
-      background:var(--cream); outline:none; resize:none; min-height:54px;
-    }
-    .reply-inp-text:focus { border-color:var(--sky); }
-    [data-theme="dark"] .reply-inp-text { background:#091726; border-color:#1e5a7a; color:#daeeff; }
-    [data-theme="dark"] .reply-inp-text::placeholder { color:#4a7a96; }
+    .reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
+    .reply-form.open { display:flex; }
+    .reply-inp,.reply-inp-text { padding:6px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
+    .reply-inp { border-radius:var(--r-pill); font-size:.75rem; }
+    .reply-inp-text { border-radius:10px; font-size:.76rem; resize:none; min-height:52px; }
+    .reply-inp:focus,.reply-inp-text:focus { border-color:var(--sky); }
+    [data-theme="dark"] .reply-inp,[data-theme="dark"] .reply-inp-text { background:#091726; border-color:#1e5a7a; color:#daeeff; }
+    [data-theme="dark"] .reply-inp::placeholder,[data-theme="dark"] .reply-inp-text::placeholder { color:#4a7a96; }
     .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
-    .reply-cancel-btn { padding:5px 12px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.72rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
-    .reply-cancel-btn:hover { border-color:var(--sky-light); color:var(--sky); }
-    .reply-send-btn { padding:5px 14px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.72rem; cursor:pointer; transition:var(--t); }
+    .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
+    .reply-cancel-btn:hover { color:var(--sky); }
+    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 
     .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
     .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
-    [data-theme="dark"] .comment-empty, [data-theme="dark"] .comment-loading { color:#4a7a96; }
+    [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#4a7a96; }
 
-    /* ─── FOOTER ─── */
+    /* ── FOOTER ── */
     footer { background:#fff; border-top:1px solid rgba(186,230,253,.4); padding:44px 20px 26px; margin-top:auto; }
     .footer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; gap:28px; align-items:start; }
-    @media(max-width:600px) { .footer-inner{grid-template-columns:1fr; text-align:center;} .ft-social{align-items:center!important;} }
+    @media(max-width:600px){ .footer-inner{grid-template-columns:1fr;text-align:center;} .ft-social{align-items:center!important;} }
     .ft-logo { font-family:'Literata',serif; font-size:1.1rem; font-weight:600; color:var(--sky-dark); display:block; margin-bottom:5px; }
     .ft-brand p { font-size:.78rem; color:var(--text-dim); font-style:italic; margin:3px 0; }
     .ft-links { display:flex; flex-direction:column; gap:7px; align-items:center; }
@@ -559,9 +503,9 @@ if (currentTruyenId && isNovelPage) {
     .social-ic:hover { background:var(--sky-light); transform:translateY(-2px); }
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
-    /* ─── SCROLL BUTTONS ─── */
+    /* ── SCROLL BUTTONS ── */
     .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
-    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease, transform .25s ease, background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
+    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
   </style>
@@ -623,28 +567,24 @@ if (currentTruyenId && isNovelPage) {
   <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
-<!-- INLINE COMMENT SIDEBAR (chỉ dùng ở novel page) -->
+<!-- INLINE COMMENT POPUP (Wattpad-style, chỉ dùng ở novel page) -->
 {isNovelPage && (
-  <>
-    <div class="ic-overlay" id="icOverlay"></div>
-    <aside class="ic-sidebar" id="icSidebar">
-      <div class="ic-sidebar-header">
-        <div>
-          <div class="ic-sidebar-title">💬 Bình luận đoạn</div>
-          <div class="ic-sidebar-para" id="icParaLabel">Chọn đoạn để bình luận</div>
-        </div>
-        <button class="ic-sidebar-close" id="icSidebarClose">✕</button>
+  <div class="ic-popup" id="icPopup" role="dialog" aria-label="Bình luận đoạn">
+    <div class="ic-popup-header">
+      <div class="ic-popup-title" id="icPopupTitle">💬 Bình luận đoạn</div>
+      <button class="ic-popup-close" id="icPopupClose" aria-label="Đóng">✕</button>
+    </div>
+    <div class="ic-popup-list" id="icPopupList">
+      <div class="ic-empty">Đang tải...</div>
+    </div>
+    <div class="ic-popup-form">
+      <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+      <div class="ic-form-body">
+        <textarea class="ic-form-text" id="icFormText" placeholder="Bình luận đoạn này... 🌊" rows="2"></textarea>
+        <button class="ic-form-send" id="icFormSend">↑</button>
       </div>
-      <div class="ic-sidebar-list" id="icCommentList">
-        <div class="ic-empty">Bấm vào biểu tượng 💬 trên từng đoạn văn để bình luận.</div>
-      </div>
-      <div class="ic-sidebar-form" id="icSidebarForm">
-        <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" />
-        <textarea class="ic-form-text" id="icFormText" placeholder="Bình luận về đoạn này... 🌊"></textarea>
-        <button class="ic-form-send" id="icFormSend">Gửi ✦</button>
-      </div>
-    </aside>
-  </>
+    </div>
+  </div>
 )}
 
 <div class="page-wrapper">
@@ -680,15 +620,9 @@ if (currentTruyenId && isNovelPage) {
   )}
 
   {isNovelPage ? (
-    <div class="novel-wrap" id="novelWrap">
-      <div class="novel-content">
-        <slot />
-      </div>
-    </div>
+    <div class="novel-content"><slot /></div>
   ) : (
-    <div class="page-content-wrap">
-      <slot />
-    </div>
+    <div class="page-content-wrap"><slot /></div>
   )}
 
   {isNovelPage && (
@@ -714,26 +648,21 @@ if (currentTruyenId && isNovelPage) {
     </div>
   )}
 
-  <!-- ════ CHAPTER-END COMMENT ════ -->
+  <!-- CHAPTER-END COMMENT -->
   {isNovelPage && (
     <div class="chap-comment-section" id="chapCommentSection">
       <div class="chap-comment-title">💬 Bình luận chương</div>
-
-      <!-- Admin bar -->
       <div class="admin-bar" id="adminBar">
-        <span id="adminStatus">🔒 Admin: chưa đăng nhập</span>
+        <span id="adminStatus">🔒 Quản trị: chưa đăng nhập</span>
         <button class="admin-login-btn" id="adminLoginBtn">Đăng nhập Google</button>
       </div>
-
-      <!-- Form gửi comment -->
       <div class="comment-form">
         <div class="comment-form-row">
-          <input class="comment-inp" id="cmtName" placeholder="Tên của bạn (tùy chọn)" style="max-width:220px" />
+          <input class="comment-inp" id="cmtName" placeholder="Tên của bạn (tùy chọn)" style="max-width:220px" autocomplete="off" />
         </div>
         <textarea class="comment-textarea" id="cmtText" placeholder="Chia sẻ cảm nhận về chương này... 🌊"></textarea>
         <button class="comment-submit-btn" id="cmtSubmit">Gửi bình luận ✦</button>
       </div>
-
       <div id="cmtList" class="comment-list">
         <div class="comment-loading">Đang tải bình luận...</div>
       </div>
@@ -765,501 +694,478 @@ if (currentTruyenId && isNovelPage) {
   <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
 </footer>
 
-<!-- Nút mở inline comment sidebar (chỉ hiện ở novel page) -->
-{isNovelPage && (
-  <button class="ic-open-btn" id="icOpenBtn">
-    💬 <span id="icOpenBtnLabel">Bình luận đoạn</span>
-  </button>
-)}
-
 <div class="scroll-btns">
-  <button class="scroll-btn" id="scrollTop" title="Lên đầu" aria-label="Lên đầu trang">↑</button>
-  <button class="scroll-btn" id="scrollBot" title="Xuống cuối" aria-label="Xuống cuối trang">↓</button>
+  <button class="scroll-btn" id="scrollTop" title="Lên đầu">↑</button>
+  <button class="scroll-btn" id="scrollBot" title="Xuống cuối">↓</button>
 </div>
 
 <script is:inline>
-/* ══════════════════════════════════════════
-   SCROLL + PROGRESS BAR
-══════════════════════════════════════════ */
-const _st = document.getElementById('scrollTop');
-const _sb = document.getElementById('scrollBot');
-const _rp = document.getElementById('read-progress');
-if (_st) _st.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-if (_sb) _sb.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
-function _updScroll() {
-  const y = window.scrollY;
-  const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
-  const pct = y / max;
-  if (_st) _st.classList.toggle('show', y > 300);
-  if (_sb) _sb.classList.toggle('show', pct < 0.97 && max > 100);
-  if (_rp) _rp.style.width = (pct * 100) + '%';
+/* ══ HELPERS ══ */
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function timeAgo(ts){
+  if(!ts) return '';
+  const d=Date.now()-ts;
+  if(d<60000) return 'vừa xong';
+  if(d<3600000) return Math.floor(d/60000)+' phút trước';
+  if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
+  return Math.floor(d/86400000)+' ngày trước';
 }
-window.addEventListener('scroll', _updScroll, { passive: true });
-requestAnimationFrame(() => setTimeout(_updScroll, 200));
+function pageKey(){
+  return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120);
+}
+function avatarLetter(name){ return (name||'K').trim().charAt(0).toUpperCase(); }
 
-/* ══════════════════════════════════════════
-   HAMBURGER
-══════════════════════════════════════════ */
-document.getElementById('hamburger')?.addEventListener('click', () => {
-  document.getElementById('mobileMenu')?.classList.toggle('open');
-});
-document.addEventListener('click', (e) => {
-  const mm = document.getElementById('mobileMenu');
-  const hb = document.getElementById('hamburger');
-  if (mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target))
-    mm.classList.remove('open');
+/* Token để nhận diện comment "của mình" — lưu localStorage */
+function getMyToken(){
+  let t = localStorage.getItem('dd_token');
+  if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); }
+  return t;
+}
+function getLiked(id){ try{ return JSON.parse(localStorage.getItem('dd_liked')||'{}')[id]||false; }catch(e){ return false; } }
+function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked')||'{}'); o[id]=v; localStorage.setItem('dd_liked',JSON.stringify(o)); }catch(e){} }
+
+function waitFirebase(cb){
+  if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
+  window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
+  let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
+}
+
+/* ══ SCROLL + PROGRESS ══ */
+const _st=document.getElementById('scrollTop'),_sb=document.getElementById('scrollBot'),_rp=document.getElementById('read-progress');
+if(_st) _st.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+if(_sb) _sb.addEventListener('click',()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}));
+function updScroll(){
+  const y=window.scrollY, max=Math.max(1,document.body.scrollHeight-window.innerHeight), p=y/max;
+  if(_st) _st.classList.toggle('show',y>300);
+  if(_sb) _sb.classList.toggle('show',p<.97&&max>100);
+  if(_rp) _rp.style.width=(p*100)+'%';
+}
+window.addEventListener('scroll',updScroll,{passive:true});
+requestAnimationFrame(()=>setTimeout(updScroll,200));
+
+/* ══ HAMBURGER ══ */
+document.getElementById('hamburger')?.addEventListener('click',()=>document.getElementById('mobileMenu')?.classList.toggle('open'));
+document.addEventListener('click',e=>{
+  const mm=document.getElementById('mobileMenu'),hb=document.getElementById('hamburger');
+  if(mm?.classList.contains('open')&&!mm.contains(e.target)&&!hb?.contains(e.target)) mm.classList.remove('open');
 });
 
-/* ══════════════════════════════════════════
-   CHAPTER DROPDOWNS
-══════════════════════════════════════════ */
-function setupDD(btnId, listId) {
-  const btn = document.getElementById(btnId);
-  const list = document.getElementById(listId);
-  if (!btn || !list) return;
-  btn.addEventListener('click', (e) => {
+/* ══ CHAPTER DROPDOWNS ══ */
+function setupDD(btnId,listId){
+  const btn=document.getElementById(btnId),list=document.getElementById(listId);
+  if(!btn||!list) return;
+  btn.addEventListener('click',e=>{
     e.stopPropagation();
-    const wasOpen = list.classList.contains('open');
-    document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
-    if (!wasOpen) {
-      list.classList.add('open');
-      const cur = list.querySelector('.cur-chap');
-      if (cur) setTimeout(() => cur.scrollIntoView({ block: 'center' }), 30);
-    }
+    const was=list.classList.contains('open');
+    document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
+    if(!was){ list.classList.add('open'); const cur=list.querySelector('.cur-chap'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'center'}),30); }
   });
 }
-setupDD('ddBtnTop', 'ddListTop');
-setupDD('ddBtnBot', 'ddListBot');
-document.addEventListener('click', () => {
-  document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
-});
+setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
+document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
+
+/* ══ DARK MODE ══ */
+function applyTheme(dark){ document.documentElement.setAttribute('data-theme',dark?'dark':''); localStorage.setItem('dd-theme',dark?'dark':'light'); }
+window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
 
 /* ══════════════════════════════════════════
-   DARK MODE
+   A. INLINE COMMENT POPUP (Wattpad-style)
 ══════════════════════════════════════════ */
-function applyTheme(dark) {
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
-  localStorage.setItem('dd-theme', dark ? 'dark' : 'light');
-}
-window.__ddToggleTheme = function() {
-  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
-};
+(function setupInlinePopup(){
+  const content   = document.querySelector('.novel-content');
+  const popup     = document.getElementById('icPopup');
+  const popupList = document.getElementById('icPopupList');
+  const popupTitle= document.getElementById('icPopupTitle');
+  const closeBtn  = document.getElementById('icPopupClose');
+  const formName  = document.getElementById('icFormName');
+  const formText  = document.getElementById('icFormText');
+  const formSend  = document.getElementById('icFormSend');
+  if(!content||!popup) return;
 
-/* ══════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════ */
-function esc(s) {
-  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function timeAgo(ts) {
-  if (!ts) return '';
-  const d = Date.now() - ts;
-  if (d < 60000) return 'vừa xong';
-  if (d < 3600000) return Math.floor(d / 60000) + ' phút trước';
-  if (d < 86400000) return Math.floor(d / 3600000) + ' giờ trước';
-  return Math.floor(d / 86400000) + ' ngày trước';
-}
-function pageKey() {
-  return location.pathname.replace(/[^a-zA-Z0-9]/g, '_').replace(/^_+|_+$/g,'').substring(0, 120);
-}
-function avatarLetter(name) {
-  return (name || 'K').trim().charAt(0).toUpperCase();
-}
-// Like fingerprint — dùng localStorage per comment
-function getLiked(cmtId) {
-  try { return JSON.parse(localStorage.getItem('dd_liked') || '{}')[cmtId] || false; } catch(e) { return false; }
-}
-function setLiked(cmtId, val) {
-  try {
-    const obj = JSON.parse(localStorage.getItem('dd_liked') || '{}');
-    obj[cmtId] = val;
-    localStorage.setItem('dd_liked', JSON.stringify(obj));
-  } catch(e) {}
-}
+  let currentIdx  = null;
+  let currentUnsub= null;
+  let isAdmin     = !!window.__ddIsAdmin;
+  const myToken   = getMyToken();
 
-function waitFirebase(cb) {
-  if (window.__ddFirebase?.db) { cb(window.__ddFirebase); return; }
-  const handler = () => { if (window.__ddFirebase?.db) cb(window.__ddFirebase); };
-  window.addEventListener('dd-firebase-ready', handler, { once: true });
-  let attempts = 0;
-  const poll = setInterval(() => {
-    if (window.__ddFirebase?.db) { clearInterval(poll); cb(window.__ddFirebase); }
-    if (++attempts > 50) { clearInterval(poll); }
-  }, 200);
-}
+  window.addEventListener('dd-auth-change',e=>{ isAdmin=e.detail.isAdmin; });
 
-/* ══════════════════════════════════════════
-   A. INLINE COMMENT SIDEBAR
-══════════════════════════════════════════ */
-(function setupInlineSidebar() {
-  const content = document.querySelector('.novel-content');
-  const sidebar = document.getElementById('icSidebar');
-  const overlay = document.getElementById('icOverlay');
-  const closeBtn = document.getElementById('icSidebarClose');
-  const paraLabel = document.getElementById('icParaLabel');
-  const cmtList = document.getElementById('icCommentList');
-  const formName = document.getElementById('icFormName');
-  const formText = document.getElementById('icFormText');
-  const formSend = document.getElementById('icFormSend');
-  const openBtn = document.getElementById('icOpenBtn');
-  const novelWrap = document.getElementById('novelWrap');
-  if (!content || !sidebar) return;
+  /* Vị trí popup cạnh trigger */
+  function positionPopup(triggerEl){
+    const rect = triggerEl.getBoundingClientRect();
+    const pw   = Math.min(320, window.innerWidth-24);
+    const margin = 8;
+    let left = rect.right + margin;
+    if(left + pw > window.innerWidth - margin) left = rect.left - pw - margin;
+    if(left < margin) left = margin;
+    let top = rect.top - 8;
+    const maxTop = window.innerHeight - 500 - margin;
+    if(top > maxTop) top = maxTop;
+    if(top < 66) top = 66;
+    popup.style.cssText = `width:${pw}px;left:${left}px;top:${top}px;`;
+  }
 
-  // Hiện nút mở
-  if (openBtn) openBtn.classList.add('visible');
-
-  let currentParaIdx = null;
-  let currentUnsub = null;
-  let isAdmin = !!window.__ddAdminUid;
-
-  window.addEventListener('dd-auth-change', (e) => { isAdmin = e.detail.isAdmin; });
-
-  function openSidebar(idx, label) {
-    currentParaIdx = idx;
-    if (paraLabel) paraLabel.textContent = label;
-    sidebar.classList.add('open');
-    overlay?.classList.add('show');
-    novelWrap?.classList.add('sidebar-open');
-    if (openBtn) openBtn.querySelector('#icOpenBtnLabel').textContent = 'Đóng';
+  function openPopup(idx, triggerEl){
+    currentIdx = idx;
+    if(popupTitle) popupTitle.textContent = `💬 Bình luận · đoạn ${idx+1}`;
+    if(popupList) popupList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
+    popup.classList.add('open');
+    positionPopup(triggerEl);
     loadInlineComments(idx);
+    setTimeout(()=>formText?.focus(),150);
   }
 
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    overlay?.classList.remove('show');
-    novelWrap?.classList.remove('sidebar-open');
-    if (openBtn) openBtn.querySelector('#icOpenBtnLabel').textContent = 'Bình luận đoạn';
-    if (currentUnsub) { try { currentUnsub(); } catch(e){} currentUnsub = null; }
-    currentParaIdx = null;
+  function closePopup(){
+    popup.classList.remove('open');
+    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub=null; }
+    currentIdx = null;
   }
 
-  closeBtn?.addEventListener('click', closeSidebar);
-  overlay?.addEventListener('click', closeSidebar);
-  openBtn?.addEventListener('click', () => {
-    if (sidebar.classList.contains('open')) { closeSidebar(); return; }
-    // Mở sidebar với đoạn đầu tiên mặc định
-    openSidebar(0, 'Đoạn 1');
+  closeBtn?.addEventListener('click', closePopup);
+
+  /* Đóng khi click ngoài */
+  document.addEventListener('click', e=>{
+    if(popup.classList.contains('open') && !popup.contains(e.target) && !e.target.closest('.ic-trigger'))
+      closePopup();
   });
 
-  function loadInlineComments(idx) {
-    if (cmtList) cmtList.innerHTML = '<div class="ic-loading-text">Đang tải...</div>';
-    if (currentUnsub) { try { currentUnsub(); } catch(e){} }
-    waitFirebase(({ db, ref, onValue, remove }) => {
-      const key = 'inline_' + pageKey() + '_p' + idx;
-      const unsubFn = onValue(ref(db, 'comments/' + key), (snap) => {
-        if (currentParaIdx !== idx) return;
-        const data = snap.val();
-        if (!data) {
-          if (cmtList) cmtList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊</div>';
-          return;
-        }
-        const items = Object.entries(data)
-          .map(([id, v]) => ({ id, ...v }))
-          .sort((a, b) => (a.ts||0) - (b.ts||0));
-        if (cmtList) {
-          cmtList.innerHTML = items.map(c => `
-            <div class="ic-cmt-item">
-              ${isAdmin ? `<button class="ic-cmt-del" data-id="${esc(c.id)}" data-key="${esc(key)}" title="Xóa (admin)">✕</button>` : ''}
-              <div class="ic-cmt-header">
-                <span class="ic-cmt-name">${esc(c.name) || 'Khách vô danh'}</span>
-                <span class="ic-cmt-time">${timeAgo(c.ts)}</span>
-              </div>
-              <div>${esc(c.text)}</div>
-            </div>`).join('');
-          // Bind delete
-          cmtList.querySelectorAll('.ic-cmt-del').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              if (!confirm('Xóa bình luận này?')) return;
-              await remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id));
-            });
-          });
-          cmtList.scrollTop = cmtList.scrollHeight;
-        }
+  /* Reposition khi scroll / resize */
+  let lastTrigger = null;
+  window.addEventListener('scroll',()=>{
+    if(popup.classList.contains('open') && lastTrigger) positionPopup(lastTrigger);
+  },{passive:true});
+  window.addEventListener('resize',()=>{
+    if(popup.classList.contains('open') && lastTrigger) positionPopup(lastTrigger);
+  });
+
+  /* Load comments inline theo realtime */
+  function loadInlineComments(idx){
+    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub=null; }
+    waitFirebase(({db,ref,onValue,remove})=>{
+      const key = 'inline_'+pageKey()+'_p'+idx;
+      currentUnsub = onValue(ref(db,'comments/'+key), snap=>{
+        if(currentIdx !== idx) return;
+        renderInlineComments(snap.val(), key, idx, {db,ref,onValue,remove});
       });
-      currentUnsub = unsubFn;
     });
   }
 
-  // Gửi inline comment
-  formSend?.addEventListener('click', async () => {
-    const text = (formText?.value || '').trim();
-    if (!text || currentParaIdx === null) return;
-    formSend.disabled = true;
-    waitFirebase(async ({ db, ref, push }) => {
-      const key = 'inline_' + pageKey() + '_p' + currentParaIdx;
-      try {
-        await push(ref(db, 'comments/' + key), {
-          name: (formName?.value || '').trim() || 'Khách vô danh',
-          text, ts: Date.now()
+  function renderInlineComments(data, key, idx, fb){
+    if(!popupList) return;
+    if(!data){
+      popupList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊<br><small>Hãy là người đầu tiên!</small></div>';
+      return;
+    }
+    const items = Object.entries(data)
+      .map(([id,v])=>({id,...v}))
+      .sort((a,b)=>(a.ts||0)-(b.ts||0));
+
+    popupList.innerHTML = items.map(c=>{
+      const isMine = c.token === myToken;
+      const canDel = isAdmin || isMine;
+      const replies = c.replies
+        ? Object.entries(c.replies).map(([rid,rv])=>({id:rid,...rv})).sort((a,b)=>(a.ts||0)-(b.ts||0))
+        : [];
+
+      const repliesHtml = replies.map(r=>{
+        const rMine = r.token === myToken;
+        const rCanDel = isAdmin || rMine;
+        return `<div class="ic-reply-item">
+          <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
+          <div class="ic-reply-body">
+            <span class="ic-reply-name">${esc(r.name)||'Khách vô danh'}</span>
+            <div class="ic-reply-text">${esc(r.text)}</div>
+          </div>
+          <button class="ic-reply-del ${rCanDel?'show':''}" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-key="${esc(key)}">✕</button>
+        </div>`;
+      }).join('');
+
+      return `<div class="ic-item" id="icitem-${esc(c.id)}">
+        <div class="ic-item-header">
+          <span class="ic-item-name">${esc(c.name)||'Khách vô danh'}</span>
+          <span class="ic-item-time">${timeAgo(c.ts)}</span>
+        </div>
+        <div class="ic-item-text">${esc(c.text)}</div>
+        <div class="ic-item-actions">
+          <button class="ic-reply-toggle" data-cid="${esc(c.id)}">↩ Reply ${replies.length>0?'('+replies.length+')':''}</button>
+          <button class="ic-del-btn ${canDel?'show':''}" data-id="${esc(c.id)}" data-key="${esc(key)}">✕ Xóa</button>
+        </div>
+        <div class="ic-replies ${replies.length>0?'open':''}" id="icreplies-${esc(c.id)}">
+          ${repliesHtml}
+          <div class="ic-reply-form" id="icrf-${esc(c.id)}">
+            <input placeholder="Tên (tùy chọn)" data-role="rname" />
+            <textarea placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
+            <div class="ic-reply-form-row">
+              <button class="ic-rf-cancel" data-cid="${esc(c.id)}">Hủy</button>
+              <button class="ic-rf-send" data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    popupList.scrollTop = popupList.scrollHeight;
+    bindInlineEvents(fb, key, idx);
+  }
+
+  function bindInlineEvents(fb, key, idx){
+    /* Xóa comment */
+    popupList.querySelectorAll('.ic-del-btn.show').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        if(!confirm('Xóa bình luận này?')) return;
+        await fb.remove(fb.ref(fb.db,'comments/'+btn.dataset.key+'/'+btn.dataset.id));
+      });
+    });
+    /* Xóa reply */
+    popupList.querySelectorAll('.ic-reply-del.show').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        if(!confirm('Xóa reply này?')) return;
+        await fb.remove(fb.ref(fb.db,'comments/'+btn.dataset.key+'/'+btn.dataset.cid+'/replies/'+btn.dataset.rid));
+      });
+    });
+    /* Toggle reply form */
+    popupList.querySelectorAll('.ic-reply-toggle').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const cid = btn.dataset.cid;
+        const replies = document.getElementById('icreplies-'+cid);
+        const form = document.getElementById('icrf-'+cid);
+        if(replies) replies.classList.add('open');
+        if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
+      });
+    });
+    /* Cancel reply */
+    popupList.querySelectorAll('.ic-rf-cancel').forEach(btn=>{
+      btn.addEventListener('click',()=>{ document.getElementById('icrf-'+btn.dataset.cid)?.classList.remove('open'); });
+    });
+    /* Send reply */
+    popupList.querySelectorAll('.ic-rf-send').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        const form = document.getElementById('icrf-'+btn.dataset.cid);
+        const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
+        if(!text) return;
+        btn.disabled=true;
+        const name = (form?.querySelector('[data-role="rname"]')?.value||'').trim()||'Khách vô danh';
+        try{
+          await fb.push(fb.ref(fb.db,'comments/'+btn.dataset.key+'/'+btn.dataset.cid+'/replies'),{name,text,ts:Date.now(),token:myToken});
+          form.querySelector('[data-role="rtext"]').value='';
+          form.classList.remove('open');
+        }catch(e){alert('Lỗi: '+e.message);}
+        btn.disabled=false;
+      });
+    });
+  }
+
+  /* Gửi comment mới */
+  formSend?.addEventListener('click',async()=>{
+    const text=(formText?.value||'').trim();
+    if(!text||currentIdx===null) return;
+    formSend.disabled=true;
+    waitFirebase(async({db,ref,push})=>{
+      const key='inline_'+pageKey()+'_p'+currentIdx;
+      try{
+        await push(ref(db,'comments/'+key),{
+          name:(formName?.value||'').trim()||'Khách vô danh',
+          text,ts:Date.now(),token:myToken
         });
-        if (formText) formText.value = '';
-      } catch(e) { alert('Lỗi: ' + e.message); }
-      formSend.disabled = false;
+        if(formText) formText.value='';
+      }catch(e){alert('Lỗi: '+e.message);}
+      formSend.disabled=false;
     });
   });
-  formText?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
-  });
+  formText?.addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) formSend?.click(); });
 
-  // Gắn trigger vào từng đoạn
+  /* Gắn trigger vào từng đoạn */
   const paragraphs = content.querySelectorAll('p');
-  paragraphs.forEach((p, idx) => {
-    const trigger = document.createElement('button');
-    trigger.className = 'ic-trigger';
-    trigger.title = 'Bình luận đoạn ' + (idx + 1);
-    trigger.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
-    trigger.innerHTML = '💬';
-    p.appendChild(trigger);
+  paragraphs.forEach((p,idx)=>{
+    const btn = document.createElement('button');
+    btn.className  = 'ic-trigger';
+    btn.title      = 'Bình luận đoạn '+(idx+1);
+    btn.setAttribute('aria-label','Bình luận đoạn '+(idx+1));
+    btn.innerHTML  = '💬';
+    p.appendChild(btn);
 
-    // Realtime counter
-    waitFirebase(({ db, ref, onValue }) => {
-      const key = 'inline_' + pageKey() + '_p' + idx;
-      onValue(ref(db, 'comments/' + key), (snap) => {
-        const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
-        trigger.innerHTML = cnt > 0 ? `💬<span style="font-size:.58rem;margin-left:2px">${cnt}</span>` : '💬';
-        trigger.classList.toggle('has-comments', cnt > 0);
+    /* Realtime count badge */
+    waitFirebase(({db,ref,onValue})=>{
+      const key='inline_'+pageKey()+'_p'+idx;
+      onValue(ref(db,'comments/'+key),snap=>{
+        const cnt = snap.val()?Object.keys(snap.val()).length:0;
+        btn.innerHTML = cnt>0?`💬<span style="font-size:.56rem;margin-left:1px;font-style:normal">${cnt}</span>`:'💬';
+        btn.classList.toggle('has-comments',cnt>0);
       });
     });
 
-    trigger.addEventListener('click', (e) => {
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-      if (currentParaIdx === idx && sidebar.classList.contains('open')) {
-        closeSidebar(); return;
-      }
-      openSidebar(idx, `Đoạn ${idx + 1} · ${p.textContent.trim().substring(0, 30)}...`);
-      setTimeout(() => formText?.focus(), 200);
+      if(currentIdx===idx && popup.classList.contains('open')){ closePopup(); return; }
+      lastTrigger = btn;
+      openPopup(idx, btn);
     });
   });
 })();
 
 /* ══════════════════════════════════════════
-   B. CHAPTER-END COMMENT (reply + like + admin)
+   B. CHAPTER-END COMMENT (reply + like + xóa)
 ══════════════════════════════════════════ */
-(function setupChapComments() {
-  const section = document.getElementById('chapCommentSection');
-  if (!section) return;
+(function setupChapComments(){
+  const section     = document.getElementById('chapCommentSection');
+  if(!section) return;
 
   const cmtList     = document.getElementById('cmtList');
   const cmtName     = document.getElementById('cmtName');
   const cmtText     = document.getElementById('cmtText');
   const cmtSubmit   = document.getElementById('cmtSubmit');
-  const adminBar    = document.getElementById('adminBar');
   const adminStatus = document.getElementById('adminStatus');
   const adminLoginBtn = document.getElementById('adminLoginBtn');
-  if (!cmtList) return;
+  if(!cmtList) return;
 
   const ADMIN_EMAIL = 'dynamicduoo.q@gmail.com';
-  let isAdmin = false;
-  let adminUid = null;
-  const key = 'chap_' + pageKey();
+  const myToken     = getMyToken();
+  const key         = 'chap_'+pageKey();
+  let isAdmin       = false;
+  let lastData      = null;
 
-  /* ── Admin auth UI ── */
-  window.addEventListener('dd-auth-change', (e) => {
+  /* Admin auth */
+  window.addEventListener('dd-auth-change',e=>{
     isAdmin = e.detail.isAdmin;
-    adminUid = isAdmin ? e.detail.user?.uid : null;
-    if (adminStatus) {
-      adminStatus.textContent = isAdmin
-        ? `✅ Admin: ${ADMIN_EMAIL}`
-        : '🔒 Admin: chưa đăng nhập';
-    }
-    if (adminLoginBtn) {
-      adminLoginBtn.textContent = isAdmin ? 'Đăng xuất' : 'Đăng nhập Google';
-      adminLoginBtn.className = isAdmin ? 'admin-logout-btn' : 'admin-login-btn';
-    }
-    // Re-render để cập nhật nút xóa
+    if(adminStatus) adminStatus.textContent = isAdmin ? '✅ Admin: '+ADMIN_EMAIL : '🔒 Quản trị: chưa đăng nhập';
+    if(adminLoginBtn){ adminLoginBtn.textContent = isAdmin?'Đăng xuất':'Đăng nhập Google'; adminLoginBtn.className=isAdmin?'admin-logout-btn':'admin-login-btn'; }
     rebuildComments(lastData);
   });
 
-  // Login / logout
-  adminLoginBtn?.addEventListener('click', () => {
-    const fb = window.__ddFirebase;
-    if (!fb) return;
-    if (isAdmin) {
-      fb.signOut(fb.auth);
-    } else {
-      const provider = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, provider).catch(e => {
-        alert('Đăng nhập thất bại: ' + e.message);
-      });
-    }
+  adminLoginBtn?.addEventListener('click',()=>{
+    const fb=window.__ddFirebase; if(!fb) return;
+    if(isAdmin){ fb.signOut(fb.auth); }
+    else{ const p=new fb.GoogleAuthProvider(); fb.signInWithPopup(fb.auth,p).catch(e=>alert('Lỗi đăng nhập: '+e.message)); }
   });
 
-  /* ── Render comments ── */
-  let lastData = null;
-  function rebuildComments(data) {
-    lastData = data;
-    if (!data) {
-      cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>';
-      return;
-    }
-    const items = Object.entries(data)
-      .map(([id, v]) => ({ id, ...v }))
-      .sort((a, b) => (a.ts||0) - (b.ts||0));
+  /* Render */
+  function rebuildComments(data){
+    lastData=data;
+    if(!data){ cmtList.innerHTML='<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>'; return; }
+    const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+    cmtList.innerHTML = items.map(c=>{
+      const isMine   = c.token===myToken;
+      const canDel   = isAdmin||isMine;
+      const likeCount= c.likes?Object.keys(c.likes).length:0;
+      const liked    = getLiked(c.id);
+      const replies  = c.replies?Object.entries(c.replies).map(([rid,rv])=>({id:rid,...rv})).sort((a,b)=>(a.ts||0)-(b.ts||0)):[];
 
-    cmtList.innerHTML = items.map(c => {
-      const likeCount = c.likes ? Object.keys(c.likes).length : 0;
-      const liked = getLiked(c.id);
-      const replies = c.replies
-        ? Object.entries(c.replies).map(([rid, rv]) => ({ id: rid, ...rv })).sort((a,b)=>(a.ts||0)-(b.ts||0))
-        : [];
-      const replyCount = replies.length;
-
-      const repliesHtml = replies.map(r => `
-        <div class="reply-item" data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">
+      const repliesHtml = replies.map(r=>{
+        const rMine=r.token===myToken, rCanDel=isAdmin||rMine;
+        return `<div class="reply-item">
           <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="reply-body">
             <span class="reply-name">${esc(r.name)||'Khách vô danh'}</span>
             <span class="reply-time">${timeAgo(r.ts)}</span>
             <div class="reply-text">${esc(r.text)}</div>
           </div>
-          <button class="reply-del ${isAdmin ? 'admin-visible' : ''}"
-            data-rid="${esc(r.id)}" data-cid="${esc(c.id)}" title="Xóa reply">✕</button>
-        </div>`).join('');
+          <button class="reply-del ${rCanDel?'show':''}" data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
+        </div>`;
+      }).join('');
 
-      return `
-        <div class="comment-card" id="cmt-${esc(c.id)}">
-          <div class="comment-card-header">
-            <div class="comment-card-avatar">${esc(avatarLetter(c.name))}</div>
-            <span class="comment-card-name">${esc(c.name)||'Khách vô danh'}</span>
-            <span class="comment-card-time">${timeAgo(c.ts)}</span>
-          </div>
-          <p class="comment-card-text">${esc(c.text)}</p>
-          <div class="comment-card-actions">
-            <button class="cmt-like-btn ${liked ? 'liked' : ''}" data-id="${esc(c.id)}">
-              ${liked ? '❤️' : '🤍'} <span>${likeCount}</span>
-            </button>
-            <button class="cmt-reply-btn" data-id="${esc(c.id)}">
-              💬 ${replyCount > 0 ? `${replyCount} reply` : 'Reply'}
-            </button>
-            <button class="cmt-del-btn ${isAdmin ? 'admin-visible' : ''}" data-id="${esc(c.id)}">🗑 Xóa</button>
-          </div>
-          <div class="reply-thread ${replyCount > 0 ? 'open' : ''}" id="thread-${esc(c.id)}">
-            ${repliesHtml}
-            <div class="reply-form" id="replyForm-${esc(c.id)}">
-              <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" />
-              <textarea class="reply-inp-text" placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
-              <div class="reply-form-btns">
-                <button class="reply-cancel-btn" data-cid="${esc(c.id)}">Hủy</button>
-                <button class="reply-send-btn" data-cid="${esc(c.id)}">Gửi ✦</button>
-              </div>
+      return `<div class="comment-card" id="cmt-${esc(c.id)}">
+        <div class="comment-card-header">
+          <div class="comment-card-avatar">${esc(avatarLetter(c.name))}</div>
+          <span class="comment-card-name">${esc(c.name)||'Khách vô danh'}</span>
+          <span class="comment-card-time">${timeAgo(c.ts)}</span>
+        </div>
+        <p class="comment-card-text">${esc(c.text)}</p>
+        <div class="comment-card-actions">
+          <button class="cmt-like-btn ${liked?'liked':''}" data-id="${esc(c.id)}">
+            ${liked?'❤️':'🤍'} <span>${likeCount}</span>
+          </button>
+          <button class="cmt-reply-btn" data-id="${esc(c.id)}">
+            💬 ${replies.length>0?replies.length+' reply':'Reply'}
+          </button>
+          <button class="cmt-del-btn ${canDel?'show':''}" data-id="${esc(c.id)}">🗑 Xóa</button>
+        </div>
+        <div class="reply-thread ${replies.length>0?'open':''}" id="thread-${esc(c.id)}">
+          ${repliesHtml}
+          <div class="reply-form" id="rf-${esc(c.id)}">
+            <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" />
+            <textarea class="reply-inp-text" placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
+            <div class="reply-form-btns">
+              <button class="reply-cancel-btn" data-cid="${esc(c.id)}">Hủy</button>
+              <button class="reply-send-btn" data-cid="${esc(c.id)}">Gửi ✦</button>
             </div>
           </div>
-        </div>`;
+        </div>
+      </div>`;
     }).join('');
-
-    bindCommentEvents();
+    bindEvents();
   }
 
-  function bindCommentEvents() {
-    const fb = window.__ddFirebase;
-    if (!fb) return;
-
-    // Like
-    cmtList.querySelectorAll('.cmt-like-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const cid = btn.dataset.id;
-        const liked = getLiked(cid);
-        const likeRef = fb.ref(fb.db, `comments/${key}/${cid}/likes/${Date.now()}_${Math.random().toString(36).slice(2,7)}`);
-        if (liked) {
-          // Không cho unlike (đơn giản) — hoặc bỏ qua
-          return;
-        }
-        setLiked(cid, true);
-        try {
-          await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/likes`), { ts: Date.now() });
-        } catch(e) {}
+  function bindEvents(){
+    const fb=window.__ddFirebase; if(!fb) return;
+    /* Like */
+    cmtList.querySelectorAll('.cmt-like-btn').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        const id=btn.dataset.id;
+        if(getLiked(id)) return;
+        setLiked(id,true);
+        try{ await fb.push(fb.ref(fb.db,`comments/${key}/${id}/likes`),{ts:Date.now()}); }catch(e){}
       });
     });
-
-    // Reply toggle
-    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cid = btn.dataset.id;
-        const thread = document.getElementById('thread-' + cid);
-        const form = document.getElementById('replyForm-' + cid);
-        if (!thread || !form) return;
-        thread.classList.add('open');
-        form.classList.toggle('open');
-        if (form.classList.contains('open')) {
-          form.querySelector('[data-role="rtext"]')?.focus();
-        }
+    /* Reply toggle */
+    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const cid=btn.dataset.id;
+        const thread=document.getElementById('thread-'+cid);
+        const form=document.getElementById('rf-'+cid);
+        if(thread) thread.classList.add('open');
+        if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
       });
     });
-
-    // Reply cancel
-    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const form = document.getElementById('replyForm-' + btn.dataset.cid);
-        form?.classList.remove('open');
-      });
+    /* Reply cancel */
+    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open'));
     });
-
-    // Reply send
-    cmtList.querySelectorAll('.reply-send-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const cid = btn.dataset.cid;
-        const form = document.getElementById('replyForm-' + cid);
-        if (!form) return;
-        const nameEl = form.querySelector('[data-role="rname"]');
-        const textEl = form.querySelector('[data-role="rtext"]');
-        const text = (textEl?.value || '').trim();
-        if (!text) return;
-        btn.disabled = true;
-        try {
-          await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/replies`), {
-            name: (nameEl?.value || '').trim() || 'Khách vô danh',
-            text, ts: Date.now()
-          });
-          if (textEl) textEl.value = '';
+    /* Reply send */
+    cmtList.querySelectorAll('.reply-send-btn').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        const form=document.getElementById('rf-'+btn.dataset.cid);
+        const text=(form?.querySelector('[data-role="rtext"]')?.value||'').trim();
+        if(!text) return;
+        btn.disabled=true;
+        const name=(form?.querySelector('[data-role="rname"]')?.value||'').trim()||'Khách vô danh';
+        try{
+          await fb.push(fb.ref(fb.db,`comments/${key}/${btn.dataset.cid}/replies`),{name,text,ts:Date.now(),token:myToken});
+          form.querySelector('[data-role="rtext"]').value='';
           form.classList.remove('open');
-        } catch(e) { alert('Lỗi: ' + e.message); }
-        btn.disabled = false;
+        }catch(e){alert('Lỗi: '+e.message);}
+        btn.disabled=false;
       });
     });
-
-    // Delete comment (admin only)
-    cmtList.querySelectorAll('.cmt-del-btn.admin-visible').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if (!isAdmin) return;
-        if (!confirm('Xóa bình luận này?')) return;
-        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`));
+    /* Xóa comment */
+    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        if(!confirm('Xóa bình luận này?')) return;
+        await fb.remove(fb.ref(fb.db,`comments/${key}/${btn.dataset.id}`));
       });
     });
-
-    // Delete reply (admin only)
-    cmtList.querySelectorAll('.reply-del.admin-visible').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if (!isAdmin) return;
-        if (!confirm('Xóa reply này?')) return;
-        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`));
+    /* Xóa reply */
+    cmtList.querySelectorAll('.reply-del.show').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        if(!confirm('Xóa reply này?')) return;
+        await fb.remove(fb.ref(fb.db,`comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`));
       });
     });
   }
 
-  /* ── Firebase listener ── */
-  waitFirebase(({ db, ref, push, onValue }) => {
-    onValue(ref(db, 'comments/' + key), (snap) => {
-      rebuildComments(snap.val());
-    });
-
-    // Submit comment
-    cmtSubmit?.addEventListener('click', async () => {
-      const text = (cmtText?.value || '').trim();
-      if (!text) return;
-      cmtSubmit.disabled = true;
-      try {
-        await push(ref(db, 'comments/' + key), {
-          name: (cmtName?.value || '').trim() || 'Khách vô danh',
-          text, ts: Date.now()
+  waitFirebase(({db,ref,push,onValue})=>{
+    onValue(ref(db,'comments/'+key),snap=>rebuildComments(snap.val()));
+    cmtSubmit?.addEventListener('click',async()=>{
+      const text=(cmtText?.value||'').trim(); if(!text) return;
+      cmtSubmit.disabled=true;
+      try{
+        await push(ref(db,'comments/'+key),{
+          name:(cmtName?.value||'').trim()||'Khách vô danh',
+          text,ts:Date.now(),token:myToken
         });
-        if (cmtText) cmtText.value = '';
-      } catch(e) { alert('Lỗi: ' + e.message); }
-      cmtSubmit.disabled = false;
+        if(cmtText) cmtText.value='';
+      }catch(e){alert('Lỗi: '+e.message);}
+      cmtSubmit.disabled=false;
     });
-
-    cmtText?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click();
-    });
+    cmtText?.addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) cmtSubmit?.click(); });
   });
 })();
 </script>

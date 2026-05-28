@@ -56,22 +56,60 @@ if (currentTruyenId && isNovelPage) {
       --sh-card:0 4px 15px rgba(2,132,199,.12); --sh-soft:0 2px 8px rgba(0,0,0,.08);
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px; --t:all .2s ease;
     }
+
+    /* ─── DARK MODE: tăng tương phản ─── */
     [data-theme="dark"] {
-      --sky:#38bdf8; --sky2:#7dd3fc; --sky-dark:#bae6fd;
-      --sky-light:#1e4a6e; --sky-pale:#0f2a40;
-      --cream:#0b1829; --bg2:#0d1e36;
-      --text-main:#e0f2fe; --text-mid:#94a3b8; --text-dim:#4a6080;
+      --sky:#7dd3fc;
+      --sky2:#bae6fd;
+      --sky-dark:#e0f2fe;
+      --sky-light:#2a5a7a;
+      --sky-pale:#0f2235;
+      --cream:#080f1a;
+      --bg2:#0d1e30;
+      --text-main:#e8f4fd;
+      --text-mid:#b8d4e8;
+      --text-dim:#6a8fa8;
     }
-    [data-theme="dark"] body { background:#0b1829; }
-    [data-theme="dark"] nav { background:rgba(11,24,41,.97); border-color:rgba(30,74,110,.6); }
-    [data-theme="dark"] .mobile-menu { background:rgba(11,24,41,.99); border-color:rgba(30,74,110,.5); }
-    [data-theme="dark"] .dropdown-content { background:#0f2236; border-color:rgba(30,74,110,.7); }
-    [data-theme="dark"] .dd-item:hover { background:rgba(30,74,110,.5); }
-    [data-theme="dark"] .container { background:rgba(13,28,50,.98); border-color:rgba(30,74,110,.5); }
-    [data-theme="dark"] footer { background:#0d1e36; border-color:rgba(30,74,110,.4); }
-    [data-theme="dark"] .chap-dd-list { background:#0f2236; border-color:var(--sky-light); }
-    [data-theme="dark"] blockquote { background:rgba(15,42,64,.7); }
-    [data-theme="dark"] .ic-bubble { background:#0f2236; border-color:rgba(30,74,110,.6); }
+    [data-theme="dark"] body { background:#080f1a; color:#e8f4fd; }
+    [data-theme="dark"] nav { background:rgba(8,15,26,.97); border-color:rgba(42,90,122,.6); }
+    [data-theme="dark"] .mobile-menu { background:rgba(8,15,26,.99); border-color:rgba(42,90,122,.5); }
+    [data-theme="dark"] .dropdown-content { background:#0d1e30; border-color:rgba(42,90,122,.7); }
+    [data-theme="dark"] .dd-item { color:#b8d4e8; }
+    [data-theme="dark"] .dd-item:hover { background:rgba(42,90,122,.5); color:#e0f2fe; }
+    [data-theme="dark"] .container { background:rgba(13,28,50,.98); border-color:rgba(42,90,122,.5); }
+    [data-theme="dark"] footer { background:#0d1e30; border-color:rgba(42,90,122,.4); color:#b8d4e8; }
+    [data-theme="dark"] .chap-dd-list { background:#0d1e30; border-color:var(--sky-light); }
+    [data-theme="dark"] .chap-dd-list a { color:#b8d4e8; border-color:rgba(42,90,122,.3); }
+    [data-theme="dark"] .chap-dd-list a:hover { background:rgba(42,90,122,.5); color:#e0f2fe; }
+    [data-theme="dark"] blockquote { background:rgba(15,42,64,.8); color:#b8d4e8; border-left-color:#2a5a7a; }
+    [data-theme="dark"] .ic-bubble { background:#0d1e30; border-color:rgba(42,90,122,.8); color:#e8f4fd; }
+    [data-theme="dark"] .novel-content { background:rgba(13,28,50,.98); border-color:rgba(42,90,122,.5); color:#e8f4fd; }
+    [data-theme="dark"] .novel-content p { color:#ddeef8; }
+    [data-theme="dark"] .page-content-wrap { background:rgba(13,28,50,.95); border-color:rgba(42,90,122,.4); }
+    [data-theme="dark"] .chap-pn { border-color:#2a5a7a; color:#b8d4e8; }
+    [data-theme="dark"] .chap-pn:hover { background:rgba(42,90,122,.5); color:#e0f2fe; border-color:#7dd3fc; }
+    [data-theme="dark"] .chap-dd-btn { background:#0f2235; border-color:#2a5a7a; color:#b8d4e8; }
+    [data-theme="dark"] .chap-dd-btn:hover { background:rgba(42,90,122,.5); }
+    [data-theme="dark"] .ic-input { background:#0f2235; border-color:#2a5a7a; color:#e8f4fd; }
+    [data-theme="dark"] .ic-comment-item { background:rgba(42,90,122,.25); color:#ddeef8; }
+    [data-theme="dark"] .ic-bubble-header { color:#7dd3fc; }
+    [data-theme="dark"] .nav-item > a { color:#b8d4e8; }
+    [data-theme="dark"] .nav-item > a:hover,
+    [data-theme="dark"] .nav-btn:hover,
+    [data-theme="dark"] .nav-item:hover > a,
+    [data-theme="dark"] .nav-item:hover > .nav-btn { color:#7dd3fc; }
+    [data-theme="dark"] .nav-logo { color:#7dd3fc; }
+    [data-theme="dark"] .nav-btn { color:#b8d4e8; }
+    [data-theme="dark"] .ft-logo { color:#7dd3fc; }
+    [data-theme="dark"] .ft-links a { color:#b8d4e8; }
+    [data-theme="dark"] .ft-links a:hover { color:#7dd3fc; }
+    [data-theme="dark"] .ft-bottom { color:#6a8fa8; }
+    [data-theme="dark"] .tag-badge { color:#7dd3fc; border-color:#2a5a7a; }
+    [data-theme="dark"] .tag-badge:hover { background:rgba(42,90,122,.4); }
+    [data-theme="dark"] h1,
+    [data-theme="dark"] h2,
+    [data-theme="dark"] h3,
+    [data-theme="dark"] h4 { color:#7dd3fc; }
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -146,17 +184,29 @@ if (currentTruyenId && isNovelPage) {
     /* ─── LAYOUT ─── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
 
+    /* ─── NỘI DUNG KHÔNG PHẢI NOVEL (giới thiệu, about, v.v.) ─── */
+    .page-content-wrap {
+      max-width:820px;
+      margin:32px auto 60px;
+      padding:40px 50px;
+      background:rgba(255,255,255,.98);
+      border-radius:var(--r-lg);
+      box-shadow:var(--sh-soft);
+      border:1px solid rgba(186,230,253,.5);
+    }
+    @media(max-width:640px) { .page-content-wrap { padding:24px 18px; margin:16px 12px 40px; } }
+
     /* ─── NOVEL CONTENT ─── */
     .novel-content {
-  max-width: 760px;
-  margin: 32px auto 60px;
-  padding: 40px 50px;
-  background: rgba(255,255,255,.98);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-soft);
-  border: 1px solid rgba(186,230,253,.5);
-}
-@media(max-width:640px) { .novel-content { padding: 24px 18px; margin: 16px 12px 40px; } }
+      max-width:760px;
+      margin:32px auto 60px;
+      padding:40px 50px;
+      background:rgba(255,255,255,.98);
+      border-radius:var(--r-lg);
+      box-shadow:var(--sh-soft);
+      border:1px solid rgba(186,230,253,.5);
+    }
+    @media(max-width:640px) { .novel-content { padding:24px 18px; margin:16px 12px 40px; } }
     .novel-content p {
       text-align:justify; text-justify:inter-word;
       position:relative; margin-bottom:1.1em;
@@ -177,12 +227,13 @@ if (currentTruyenId && isNovelPage) {
     }
     .tag-badge:hover { background:var(--sky-pale); }
 
-    /* ─── CHAPTER NAV (Prev/Next + Dropdown) ─── */
+    /* ─── CHAPTER NAV ─── */
     .chap-nav-row {
       display:flex; align-items:center; justify-content:center;
       gap:10px; margin:22px 0; flex-wrap:wrap;
+      max-width:820px; margin-left:auto; margin-right:auto;
+      padding:0 12px;
     }
-    /* prev / next buttons */
     .chap-pn {
       display:inline-flex; align-items:center; gap:6px;
       padding:8px 18px; border:1.5px solid var(--sky-light);
@@ -193,7 +244,6 @@ if (currentTruyenId && isNovelPage) {
     .chap-pn:hover { background:var(--sky-pale); color:var(--sky); border-color:var(--sky); }
     .chap-pn.disabled { opacity:.35; pointer-events:none; }
 
-    /* dropdown chọn chương */
     .chap-dd-wrap { position:relative; }
     .chap-dd-btn {
       display:inline-flex; align-items:center; gap:8px;
@@ -220,12 +270,18 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list a:last-child { border-bottom:none; }
     .chap-dd-list a:hover { background:var(--sky-pale); color:var(--sky); }
     .chap-dd-list a.cur-chap { background:var(--sky-pale); color:var(--sky); font-weight:700; }
-    /* bottom dropdown opens upward */
     .chap-dd-list.up { bottom:calc(100% + 6px); top:auto; }
 
-    /* ─── INLINE COMMENT (kiểu Google Docs/Wattpad) ─── */
+    /* ─── INLINE COMMENT ─── */
     .novel-content p { cursor:default; }
     .novel-content p:hover .ic-trigger { opacity:1; }
+
+    /* Wrapper để giới hạn overflow */
+    .ic-wrap {
+      position:relative;
+      display:inline;
+    }
+
     .ic-trigger {
       display:inline-flex; align-items:center; justify-content:center;
       width:20px; height:20px; border-radius:50%;
@@ -236,27 +292,25 @@ if (currentTruyenId && isNovelPage) {
       position:relative; z-index:10;
     }
     .ic-trigger:hover { background:var(--sky); color:#fff; opacity:1 !important; }
-    /* bubble bình luận inline */
+
+    /* Bubble: fixed position khi mở, tránh tràn khung */
     .ic-bubble {
-      display:none; position:absolute; left:calc(100% + 14px); top:-4px;
-      width:240px; background:#fff;
+      display:none;
+      position:fixed;
+      width:min(280px, calc(100vw - 32px));
+      background:#fff;
       border:1px solid rgba(186,230,253,.8); border-radius:14px;
-      box-shadow:0 8px 28px rgba(2,132,199,.15); padding:12px 14px;
-      z-index:50; font-size:.8rem;
+      box-shadow:0 8px 28px rgba(2,132,199,.18); padding:14px 16px;
+      z-index:1000; font-size:.8rem;
       animation:bubblePop .18s ease;
+      /* JS sẽ set top/left */
     }
     .ic-bubble.open { display:block; }
-    .ic-bubble.left-side { left:auto; right:calc(100% + 14px); }
     @keyframes bubblePop { from{opacity:0;transform:scale(.9) translateY(4px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    /* cái mũi nhọn của bubble */
-    .ic-bubble::before {
-      content:''; position:absolute; left:-8px; top:12px;
-      border:4px solid transparent; border-right-color:rgba(186,230,253,.8);
-    }
-    .ic-bubble.left-side::before { left:auto; right:-8px; border-right-color:transparent; border-left-color:rgba(186,230,253,.8); }
+
     .ic-bubble-header { font-size:.68rem; color:var(--text-dim); margin-bottom:8px; letter-spacing:.3px; }
     .ic-bubble-header strong { color:var(--sky); }
-    .ic-comments-list { max-height:160px; overflow-y:auto; margin-bottom:8px; }
+    .ic-comments-list { max-height:140px; overflow-y:auto; margin-bottom:8px; }
     .ic-comment-item {
       background:var(--sky-pale); border-radius:10px; padding:7px 10px;
       margin-bottom:6px; font-size:.76rem; color:var(--text-main); line-height:1.5;
@@ -271,7 +325,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-input {
       flex:1; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill);
       font-size:.75rem; font-family:'Newsreader',serif; color:var(--text-main);
-      background:var(--cream); outline:none;
+      background:var(--cream); outline:none; min-width:0;
     }
     .ic-input:focus { border-color:var(--sky); }
     .ic-send-btn {
@@ -280,7 +334,8 @@ if (currentTruyenId && isNovelPage) {
       flex-shrink:0;
     }
     .ic-send-btn:hover { background:var(--sky2); }
-    .ic-name-row { display:flex; gap:6px; margin-bottom:5px; }
+    .ic-name-row { display:flex; gap:6px; margin-bottom:5px; flex-wrap:wrap; }
+    .ic-name-inp { width:90px !important; flex-shrink:0 !important; }
 
     /* ─── GISCUS ─── */
     .giscus-wrap { margin-top:56px; border-top:1px dashed var(--sky-light); padding-top:28px; }
@@ -301,15 +356,27 @@ if (currentTruyenId && isNovelPage) {
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
     /* ─── SCROLL BUTTONS ─── */
-    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:300; display:flex; flex-direction:column; gap:8px; }
-    .scroll-btn {
-      width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff;
-      border:none; cursor:pointer; font-size:1rem; box-shadow:var(--sh-card);
-      transition:var(--t); display:flex; align-items:center; justify-content:center;
-      opacity:0; pointer-events:none;
+    .scroll-btns {
+      position:fixed; bottom:24px; right:22px; z-index:400;
+      display:flex; flex-direction:column; gap:8px;
+      pointer-events:none;
     }
-    .scroll-btn.show { opacity:1; pointer-events:auto; }
+    .scroll-btn {
+      width:40px; height:40px; border-radius:50%;
+      background:var(--sky); color:#fff;
+      border:none; cursor:pointer; font-size:1.1rem;
+      box-shadow:0 4px 14px rgba(2,132,199,.35);
+      transition:opacity .25s ease, transform .25s ease, background .2s ease;
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      line-height:1;
+    }
+    .scroll-btn.show {
+      opacity:1; pointer-events:auto;
+    }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
+    [data-theme="dark"] .scroll-btn { background:#1e6fa0; box-shadow:0 4px 14px rgba(0,0,0,.4); }
+    [data-theme="dark"] .scroll-btn:hover { background:#2a85be; }
   </style>
 </head>
 <body>
@@ -375,7 +442,7 @@ if (currentTruyenId && isNovelPage) {
 <div class="page-wrapper">
     {/* Tags */}
     {frontmatter?.tags && frontmatter.tags.length > 0 && (
-      <div style="text-align:center;margin-bottom:22px;">
+      <div style="text-align:center;margin-bottom:22px;margin-top:16px;">
         {frontmatter.tags.map((tag: string) => (
           <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag)}/`} class="tag-badge"># {tag}</a>
         ))}
@@ -412,9 +479,15 @@ if (currentTruyenId && isNovelPage) {
     )}
 
     {/* NỘI DUNG */}
-    <div class={isNovelPage ? 'novel-content' : ''}>
-      <slot />
-    </div>
+    {isNovelPage ? (
+      <div class="novel-content">
+        <slot />
+      </div>
+    ) : (
+      <div class="page-content-wrap">
+        <slot />
+      </div>
+    )}
 
     {/* ── CHAPTER NAV CUỐI TRANG ── */}
     {isNovelPage && (
@@ -447,7 +520,7 @@ if (currentTruyenId && isNovelPage) {
 
     {/* Giscus */}
     {isNovelPage && (
-      <div class="giscus-wrap">
+      <div class="giscus-wrap" style="max-width:760px;margin:0 auto;padding:0 12px;">
         <script src="https://giscus.app/client.js"
           data-repo="dynamicduooq/dynamic-duo-web"
           data-repo-id="R_kgDOSn8PYg"
@@ -466,8 +539,6 @@ if (currentTruyenId && isNovelPage) {
       </div>
     )}
 
-  </div>
-    )}
 </div>
 
 <!-- FOOTER -->
@@ -497,8 +568,8 @@ if (currentTruyenId && isNovelPage) {
 
 <!-- SCROLL BUTTONS -->
 <div class="scroll-btns">
-  <button class="scroll-btn" id="scrollTop" title="Lên đầu" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
-  <button class="scroll-btn" id="scrollBot" title="Xuống cuối" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>
+  <button class="scroll-btn" id="scrollTop" title="Lên đầu" aria-label="Lên đầu trang">↑</button>
+  <button class="scroll-btn" id="scrollBot" title="Xuống cuối" aria-label="Xuống cuối trang">↓</button>
 </div>
 
 <script is:inline>
@@ -506,15 +577,22 @@ if (currentTruyenId && isNovelPage) {
 const _st = document.getElementById('scrollTop');
 const _sb = document.getElementById('scrollBot');
 const _rp = document.getElementById('read-progress');
+
+if (_st) _st.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+if (_sb) _sb.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+
 function _updScroll() {
   const y = window.scrollY;
-  const max = document.body.scrollHeight - window.innerHeight;
-  _st?.classList.toggle('show', y > 300);
-  _sb?.classList.toggle('show', y < max - 80);
-  if (_rp && max > 0) _rp.style.width = (y / max * 100) + '%';
+  const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+  const pct = y / max;
+
+  if (_st) _st.classList.toggle('show', y > 300);
+  if (_sb) _sb.classList.toggle('show', pct < 0.97 && max > 100);
+  if (_rp) _rp.style.width = (pct * 100) + '%';
 }
 window.addEventListener('scroll', _updScroll, { passive: true });
-setTimeout(_updScroll, 150);
+/* delay để body đã render xong */
+requestAnimationFrame(() => setTimeout(_updScroll, 200));
 
 /* ─── HAMBURGER ─── */
 document.getElementById('hamburger')?.addEventListener('click', () => {
@@ -538,7 +616,6 @@ function setupDD(btnId, listId) {
     document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
     if (!wasOpen) {
       list.classList.add('open');
-      /* scroll current chapter into view */
       const cur = list.querySelector('.cur-chap');
       if (cur) setTimeout(() => cur.scrollIntoView({ block: 'center' }), 30);
     }
@@ -550,12 +627,11 @@ document.addEventListener('click', () => {
   document.querySelectorAll('.chap-dd-list.open').forEach(el => el.classList.remove('open'));
 });
 
-/* ─── INLINE COMMENT (Wattpad/GDocs style) ─── */
+/* ─── INLINE COMMENT (fixed-position bubble, mobile-safe) ─── */
 (function setupInlineComments() {
   const content = document.querySelector('.novel-content');
   if (!content) return;
 
-  // Storage key per page
   const storageKey = 'dd-ic-' + location.pathname;
   let store = {};
   try { store = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
@@ -587,86 +663,116 @@ document.addEventListener('click', () => {
       </div>`).join('');
   }
 
-  function buildBubble(idx, p) {
-    const bubble = document.createElement('div');
-    bubble.className = 'ic-bubble';
-    bubble.setAttribute('data-para', idx);
+  /* Bubble được gắn vào body, dùng position:fixed */
+  const bubble = document.createElement('div');
+  bubble.className = 'ic-bubble';
+  document.body.appendChild(bubble);
 
-    /* check if bubble should open left (near right edge) */
-    const rect = p.getBoundingClientRect();
-    if (rect.right + 260 > window.innerWidth) bubble.classList.add('left-side');
+  let currentIdx = null;
 
-    function refresh() {
-      const comments = store[idx] || [];
-      bubble.innerHTML = `
-        <div class="ic-bubble-header">💬 <strong>${comments.length}</strong> bình luận · đoạn ${idx + 1}</div>
-        <div class="ic-comments-list">${renderComments(comments, idx)}</div>
-        <div class="ic-name-row">
-          <input class="ic-input ic-name-inp" placeholder="Tên (tùy chọn)" style="width:90px;flex-shrink:0" />
-          <input class="ic-input ic-text-inp" placeholder="Viết bình luận..." style="flex:1" />
-        </div>
-        <div class="ic-reply-row">
-          <button class="ic-send-btn">Gửi ✦</button>
-        </div>`;
+  function positionBubble(trigger) {
+    const rect = trigger.getBoundingClientRect();
+    const bw = Math.min(280, window.innerWidth - 32);
+    const margin = 8;
 
-      /* send */
-      bubble.querySelector('.ic-send-btn').addEventListener('click', () => {
-        const name = bubble.querySelector('.ic-name-inp').value.trim();
-        const text = bubble.querySelector('.ic-text-inp').value.trim();
-        if (!text) return;
-        if (!store[idx]) store[idx] = [];
-        store[idx].push({ name, text, ts: Date.now(), replies: [] });
-        saveStore();
-        refresh();
-      });
+    /* Tính top: canh theo trigger */
+    let top = rect.top + window.scrollY - 4;
+    /* Giới hạn không vượt viewport bottom */
+    const maxTop = window.scrollY + window.innerHeight - 400 - margin;
+    if (top > maxTop) top = maxTop;
+    if (top < window.scrollY + 70) top = window.scrollY + 70;
 
-      /* reply */
-      bubble.querySelectorAll('.ic-reply-btn').forEach(rb => {
-        rb.addEventListener('click', () => {
-          const ci = parseInt(rb.dataset.ci);
-          const rName = prompt('Tên của bạn (tùy chọn):') || '';
-          const rText = prompt('Trả lời:') || '';
-          if (!rText.trim()) return;
-          if (!store[idx][ci].replies) store[idx][ci].replies = [];
-          store[idx][ci].replies.push({ name: rName, text: rText, ts: Date.now() });
-          saveStore();
-          refresh();
-        });
-      });
+    /* Tính left: ưu tiên bên phải, fallback bên trái, fallback center */
+    let left = rect.right + margin;
+    if (left + bw > window.innerWidth - margin) {
+      left = rect.left - bw - margin;
+    }
+    if (left < margin) {
+      /* Trên mobile: center dưới trigger */
+      left = Math.max(margin, (window.innerWidth - bw) / 2);
+      top = rect.bottom + window.scrollY + margin;
     }
 
-    refresh();
-    return bubble;
+    bubble.style.width = bw + 'px';
+    bubble.style.left = left + 'px';
+    bubble.style.top = top + 'px';
+  }
+
+  function refreshBubble(idx) {
+    const comments = store[idx] || [];
+    bubble.setAttribute('data-para', idx);
+    bubble.innerHTML = `
+      <div class="ic-bubble-header">💬 <strong>${comments.length}</strong> bình luận · đoạn ${idx + 1}</div>
+      <div class="ic-comments-list">${renderComments(comments, idx)}</div>
+      <div class="ic-name-row">
+        <input class="ic-input ic-name-inp" placeholder="Tên (tùy chọn)" style="width:80px;flex:0 0 80px" />
+        <input class="ic-input ic-text-inp" placeholder="Viết bình luận..." />
+      </div>
+      <div class="ic-reply-row">
+        <button class="ic-send-btn">Gửi ✦</button>
+      </div>`;
+
+    bubble.querySelector('.ic-send-btn').addEventListener('click', () => {
+      const name = bubble.querySelector('.ic-name-inp').value.trim();
+      const text = bubble.querySelector('.ic-text-inp').value.trim();
+      if (!text) return;
+      if (!store[idx]) store[idx] = [];
+      store[idx].push({ name, text, ts: Date.now(), replies: [] });
+      saveStore();
+      refreshBubble(idx);
+    });
+
+    bubble.querySelectorAll('.ic-reply-btn').forEach(rb => {
+      rb.addEventListener('click', () => {
+        const ci = parseInt(rb.dataset.ci);
+        const rName = prompt('Tên của bạn (tùy chọn):') || '';
+        const rText = prompt('Trả lời:') || '';
+        if (!rText.trim()) return;
+        if (!store[idx][ci].replies) store[idx][ci].replies = [];
+        store[idx][ci].replies.push({ name: rName, text: rText, ts: Date.now() });
+        saveStore();
+        refreshBubble(idx);
+      });
+    });
   }
 
   content.querySelectorAll('p').forEach((p, idx) => {
-    /* trigger icon */
     const trigger = document.createElement('span');
     trigger.className = 'ic-trigger';
     trigger.title = 'Bình luận đoạn này';
     trigger.textContent = '💬';
     p.appendChild(trigger);
 
-    const bubble = buildBubble(idx, p);
-    p.style.position = 'relative';
-    p.appendChild(bubble);
-
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = bubble.classList.contains('open');
-      document.querySelectorAll('.ic-bubble.open').forEach(b => b.classList.remove('open'));
-      if (!isOpen) {
-        bubble.classList.add('open');
-        bubble.querySelector('.ic-text-inp')?.focus();
+      if (currentIdx === idx && bubble.classList.contains('open')) {
+        bubble.classList.remove('open');
+        currentIdx = null;
+        return;
       }
+      currentIdx = idx;
+      refreshBubble(idx);
+      positionBubble(trigger);
+      bubble.classList.add('open');
+      setTimeout(() => bubble.querySelector('.ic-text-inp')?.focus(), 50);
     });
   });
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.ic-bubble') && !e.target.closest('.ic-trigger')) {
-      document.querySelectorAll('.ic-bubble.open').forEach(b => b.classList.remove('open'));
+      bubble.classList.remove('open');
+      currentIdx = null;
     }
   });
+
+  /* Reposition on scroll/resize */
+  window.addEventListener('scroll', () => {
+    if (bubble.classList.contains('open') && currentIdx !== null) {
+      const triggers = content.querySelectorAll('.ic-trigger');
+      const t = triggers[currentIdx];
+      if (t) positionBubble(t);
+    }
+  }, { passive: true });
 })();
 
 /* ─── DARK MODE ─── */

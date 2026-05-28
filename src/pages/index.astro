@@ -21,6 +21,10 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:linear-gradient(90deg,rgba(224,242,254,.5),rgba(240,249,255,.7),rgba(224,242,254,.5));
   border-top:1px solid var(--sky-light); border-bottom:1px solid var(--sky-light);
 }
+[data-theme="dark"] .ticker-wrap {
+  background:linear-gradient(90deg,rgba(15,34,60,.6),rgba(20,45,75,.7),rgba(15,34,60,.6));
+  border-color:rgba(42,90,122,.5);
+}
 .ticker-track { display:flex; white-space:nowrap; animation:ticker 40s linear infinite; }
 .ticker-track:hover { animation-play-state:paused; }
 .ticker-item {
@@ -38,10 +42,12 @@ const hcdhCount    = countChaps(hcdhPosts);
   max-width:1160px;
   margin:0 auto;
   padding:28px 32px 80px;
+  /* quan trọng: align-items:start để sticky hoạt động */
+  align-items:start;
 }
 @media(max-width:960px) { .home-shell{grid-template-columns:1fr; padding:20px 18px 60px;} .sidebar-col{display:none;} }
 
-/* ─── HERO: namexoanen đè lên banner mờ ─── */
+/* ─── HERO ─── */
 .hero {
   text-align:center;
   padding:32px 0 28px;
@@ -87,7 +93,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   display:flex; flex-wrap:wrap; gap:6px; align-items:center;
   margin-bottom:16px;
 }
-[data-theme="dark"] .filter-bar { background:rgba(15,34,64,.85); }
+[data-theme="dark"] .filter-bar { background:rgba(13,28,52,.9); border-color:rgba(42,90,122,.5); }
 .fl-label { font-size:.66rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); flex-shrink:0; }
 .fl-chips { display:flex; flex-wrap:wrap; gap:4px; flex:1; }
 .chip {
@@ -97,8 +103,11 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:var(--sky-pale); color:var(--text-mid); user-select:none;
   font-family:'Newsreader',serif; white-space:nowrap;
 }
+[data-theme="dark"] .chip { color:#b8d4e8; border-color:rgba(42,90,122,.5); }
 .chip:hover { background:var(--sky-light); color:var(--sky-dark); }
+[data-theme="dark"] .chip:hover { color:#e0f2fe; }
 .chip.active { background:var(--sky); color:#fff; border-color:var(--sky); }
+[data-theme="dark"] .chip.active { background:#1e6fa0; border-color:#7dd3fc; }
 .chip-clear { background:none; border-color:rgba(186,230,253,.4); color:var(--text-dim); }
 .chip-clear:hover { background:rgba(239,68,68,.08); color:#ef4444; border-color:#fca5a5; }
 .fl-count { font-size:.68rem; background:var(--sky-pale); color:var(--sky); padding:2px 9px; border-radius:var(--r-pill); border:1px solid var(--sky-light); white-space:nowrap; margin-left:auto; }
@@ -111,8 +120,9 @@ const hcdhCount    = countChaps(hcdhPosts);
   border-radius:14px; overflow:hidden;
   transition:var(--t); box-shadow:0 2px 8px rgba(2,132,199,.05);
 }
-[data-theme="dark"] .sc { background:rgba(13,26,50,.9); }
+[data-theme="dark"] .sc { background:rgba(13,26,50,.9); border-color:rgba(42,90,122,.4); }
 .sc:hover { box-shadow:0 6px 24px rgba(2,132,199,.12); transform:translateY(-2px); }
+[data-theme="dark"] .sc:hover { box-shadow:0 6px 24px rgba(0,0,0,.3); }
 .sc-cover-wrap {
   position:relative; flex-shrink:0; width:80px; overflow:hidden;
   background:linear-gradient(135deg,var(--sky-pale),rgba(186,230,253,.3));
@@ -129,17 +139,20 @@ const hcdhCount    = countChaps(hcdhPosts);
 .sc-body { padding:12px 14px; flex:1; display:flex; flex-direction:column; gap:4px; min-width:0; }
 .sc-shelf { font-size:.64rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); }
 .sc-title { font-family:'Merriweather',serif; font-size:.88rem; color:var(--sky-dark); margin:0; line-height:1.35; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+[data-theme="dark"] .sc-title { color:#b8d4e8; }
 .sc-meta { font-size:.68rem; color:var(--text-dim); font-style:italic; }
 .sc-tags { display:flex; flex-wrap:wrap; gap:3px; }
 .sc-tag { font-size:.6rem; padding:1px 6px; border:1px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky); background:var(--sky-pale); }
+[data-theme="dark"] .sc-tag { border-color:rgba(42,90,122,.6); }
 .sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:4px; }
 .sc-chapters { font-size:.68rem; color:var(--text-dim); }
 .sc-link { font-size:.72rem; padding:4px 12px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; }
 .sc-link:hover { background:var(--sky2); }
 .sc-link.secondary { background:var(--sky-pale); color:var(--sky-dark); }
+[data-theme="dark"] .sc-link.secondary { color:#b8d4e8; }
 .sc-link.secondary:hover { background:var(--sky-light); }
 
-/* ─── NOTICE: chỉ ảnh, không đổ bóng ─── */
+/* ─── NOTICE ─── */
 .notice-section { margin-top:36px; }
 .notice-img { width:100%; display:block; border-radius:0; }
 
@@ -150,42 +163,72 @@ const hcdhCount    = countChaps(hcdhPosts);
   background:#fff; border:1px solid rgba(186,230,253,.4); border-radius:10px;
   transition:var(--t); color:var(--text-main);
 }
-[data-theme="dark"] .recent-item { background:rgba(13,26,50,.9); }
+[data-theme="dark"] .recent-item { background:rgba(13,26,50,.9); border-color:rgba(42,90,122,.4); color:#b8d4e8; }
 .recent-item:hover { background:var(--sky-pale); border-color:var(--sky-light); transform:translateX(3px); }
+[data-theme="dark"] .recent-item:hover { background:rgba(42,90,122,.25); }
 .recent-icon { font-size:1rem; flex-shrink:0; }
 .ri-body { flex:1; min-width:0; }
 .ri-story { font-size:.68rem; color:var(--text-dim); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
 .ri-title { font-size:.84rem; color:var(--sky-dark); font-weight:600; }
+[data-theme="dark"] .ri-title { color:#7dd3fc; }
 .recent-arrow { color:var(--sky); font-size:.9rem; }
 
-/* ─── SIDEBAR ─── */
-.sidebar-col { display:flex; flex-direction:column; gap:16px; }
-.sidebar-col > .widget { position:static; top:72px; }
-.sidebar-col > .widget + .widget { position:static; }
-.widget { background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7); border-radius:18px; padding:16px 14px; }
-[data-theme="dark"] .widget { background:rgba(15,42,64,.8); border-color:rgba(30,74,110,.7); }
+/* ─── SIDEBAR: sticky ─── */
+.sidebar-col {
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  /* STICKY: sidebar cố định khi scroll */
+  position:sticky;
+  top:72px; /* 56px navbar + 16px gap */
+  max-height:calc(100vh - 88px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  /* Ẩn scrollbar sidebar nhưng vẫn scroll được */
+  scrollbar-width:thin;
+  scrollbar-color:var(--sky-light) transparent;
+  padding-bottom:8px;
+}
+.sidebar-col::-webkit-scrollbar { width:3px; }
+.sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
+.sidebar-col::-webkit-scrollbar-track { background:transparent; }
+
+.widget {
+  background:rgba(240,249,255,.65); border:1px solid rgba(186,230,253,.7);
+  border-radius:18px; padding:16px 14px;
+  flex-shrink:0;
+}
+[data-theme="dark"] .widget { background:rgba(13,30,55,.85); border-color:rgba(42,90,122,.6); }
 .widget-title { font-family:'Merriweather',serif; font-size:.72rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--sky); text-align:center; margin-bottom:12px; }
 .profile-avatar { width:76px; height:76px; border-radius:50%; overflow:hidden; margin:0 auto 10px; border:3px solid var(--sky-light); background:var(--sky-pale); display:flex; align-items:center; justify-content:center; font-size:2.2rem; }
 .profile-name { font-family:'Merriweather',serif; color:var(--sky-dark); font-size:.92rem; text-align:center; margin-bottom:3px; }
+[data-theme="dark"] .profile-name { color:#7dd3fc; }
 .profile-tagline { font-size:.78rem; color:var(--text-mid); font-style:italic; text-align:center; line-height:1.5; margin-bottom:6px; }
 .profile-deco { text-align:center; font-size:.95rem; letter-spacing:3px; color:var(--sky-light); }
 .tag-cloud { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; }
 .tc-btn { display:inline-block; padding:3px 9px; background:#fff; color:var(--sky); border-radius:var(--r-pill); font-size:.71rem; border:1px dashed var(--sky-light); transition:var(--t); cursor:pointer; }
-[data-theme="dark"] .tc-btn { background:rgba(15,30,50,.8); }
+[data-theme="dark"] .tc-btn { background:rgba(13,30,55,.8); color:#7dd3fc; border-color:rgba(42,90,122,.6); }
 .tc-btn:hover, .tc-btn.active { background:var(--sky-pale); border-style:solid; }
+[data-theme="dark"] .tc-btn:hover,
+[data-theme="dark"] .tc-btn.active { background:rgba(42,90,122,.35); }
 .cat-tree { font-size:.78rem; color:var(--text-mid); }
 .cat-tree ul { list-style:none; padding-left:12px; margin:3px 0; }
 .cat-tree>ul { padding-left:0; }
 .cat-tree a { color:var(--text-mid); transition:color .2s; display:block; padding:2px 0; }
+[data-theme="dark"] .cat-tree a { color:#b8d4e8; }
 .cat-tree a:hover { color:var(--sky); }
 .cat-tree summary { cursor:pointer; font-size:.8rem; color:var(--sky-dark); font-weight:600; padding:3px 0; list-style:none; display:flex; align-items:center; gap:5px; }
+[data-theme="dark"] .cat-tree summary { color:#7dd3fc; }
 .cat-tree summary::-webkit-details-marker { display:none; }
 .cat-tree summary::before { content:'▸'; font-size:.6rem; transition:transform .2s; color:var(--sky); }
 .cat-tree details[open]>summary::before { transform:rotate(90deg); }
 .cat-count { font-size:.65rem; color:var(--text-dim); margin-left:4px; }
 .dark-btn { width:100%; padding:7px; background:none; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); color:var(--sky); font-size:.76rem; cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; display:flex; align-items:center; justify-content:center; gap:6px; }
+[data-theme="dark"] .dark-btn { border-color:rgba(42,90,122,.7); color:#7dd3fc; }
 .dark-btn:hover { background:var(--sky-pale); }
+[data-theme="dark"] .dark-btn:hover { background:rgba(42,90,122,.3); }
 .quote-body { font-style:italic; font-size:.8rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding-left:10px; margin:0; }
+[data-theme="dark"] .quote-body { color:#b8d4e8; border-left-color:#2a5a7a; }
 .quote-src { font-size:.66rem; color:var(--text-dim); margin-top:7px; text-align:right; }
 .no-results { display:none; text-align:center; padding:28px; color:var(--text-dim); font-style:italic; }
 .no-results.show { display:block; }
@@ -241,7 +284,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       <p class="hero-tagline">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
-    <!-- LƯU Ý: ảnh, không đổ bóng, nền trắng -->
+    <!-- LƯU Ý -->
     <div class="notice-section reveal">
       <div class="sec-hd" style="margin-top:36px">
         <h2>📌 Lưu ý</h2>
@@ -254,6 +297,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         onerror="this.style.display='none'"
       />
     </div>
+
 
     <!-- FILTER + STORIES -->
     <div class="sec-hd">
@@ -426,7 +470,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
   </div><!-- /main-col -->
 
-  <!-- ── SIDEBAR ── -->
+  <!-- ── SIDEBAR: sticky ── -->
   <aside class="sidebar-col">
     <div class="widget">
       <div class="widget-title">✦ Về nhà cá</div>
@@ -442,7 +486,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     </div>
 
     <div class="widget" style="padding:12px">
-    <button class="dark-btn" id="darkBtnIdx">🌙 Chế độ tối</button>
+      <button class="dark-btn" id="darkBtnIdx">🌙 Chế độ tối</button>
     </div>
 
     <div class="widget">
@@ -517,8 +561,8 @@ const chips     = document.querySelectorAll('#filterChips .chip');
 const flCount   = document.getElementById('flCount');
 const chipClear = document.getElementById('chipClear');
 
-let activeTags = new Set(); // phải có ĐỦ tất cả tag này (AND)
-let activeCat  = null;      // lọc thêm theo danh mục
+let activeTags = new Set();
+let activeCat  = null;
 
 function updateClearBtn() {
   const hasFilter = activeTags.size > 0 || activeCat !== null;
@@ -530,17 +574,13 @@ function applyFilter() {
   allCards.forEach(card => {
     const cCat  = card.dataset.cat || '';
     const cTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
-
     const catOk = activeCat === null || cCat === activeCat;
-    // AND: TỪNG tag trong activeTags đều phải có trong cTags của card
     const tagOk = activeTags.size === 0
       || [...activeTags].every(t => cTags.includes(t.toLowerCase()));
-
     const show = catOk && tagOk;
     card.classList.toggle('hidden', !show);
     if (show) vis++;
   });
-
   flCount.textContent = vis + ' truyện';
   document.getElementById('noRes')?.classList.toggle('show', vis === 0);
   updateClearBtn();
@@ -548,7 +588,6 @@ function applyFilter() {
 
 chips.forEach(chip => {
   chip.addEventListener('click', () => {
-    // Nút xóa lọc
     if (chip.id === 'chipClear') {
       activeTags.clear();
       activeCat = null;
@@ -558,46 +597,33 @@ chips.forEach(chip => {
       applyFilter();
       return;
     }
-
     if (chip.dataset.tag) {
       const tag = chip.dataset.tag;
       if (tag === 'all') {
-        // Reset tags
         activeTags.clear();
         chips.forEach(c => c.dataset.tag && c.classList.remove('active'));
         chip.classList.add('active');
       } else {
         document.querySelector('[data-tag="all"]')?.classList.remove('active');
-        // Toggle tag: thêm hoặc bỏ
         if (activeTags.has(tag)) { activeTags.delete(tag); chip.classList.remove('active'); }
         else                      { activeTags.add(tag);    chip.classList.add('active'); }
-        // Nếu không còn tag nào → active lại "Tất cả"
         if (activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
       }
     } else if (chip.dataset.cat) {
       const cat = chip.dataset.cat;
-      // Toggle danh mục (chỉ 1 active)
       chips.forEach(c => c.dataset.cat && c.classList.remove('active'));
       activeCat = (activeCat === cat) ? null : cat;
       if (activeCat) chip.classList.add('active');
     }
-
     applyFilter();
   });
 });
 
-/* Tag cloud sidebar → AND filter */
 document.querySelectorAll('#tagCloud .tc-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const tag = btn.dataset.tag;
-    if (activeTags.has(tag)) {
-      activeTags.delete(tag);
-      btn.classList.remove('active');
-    } else {
-      activeTags.add(tag);
-      btn.classList.add('active');
-    }
-    // Sync chip filter bar
+    if (activeTags.has(tag)) { activeTags.delete(tag); btn.classList.remove('active'); }
+    else                      { activeTags.add(tag);    btn.classList.add('active'); }
     chips.forEach(c => {
       if (c.dataset.tag === tag)   c.classList.toggle('active', activeTags.has(tag));
       if (c.dataset.tag === 'all') c.classList.toggle('active', activeTags.size === 0);
@@ -613,23 +639,18 @@ const obs = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
 }), { threshold: .1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
 /* ─── DARK MODE BUTTON SYNC ─── */
 (function() {
   const btn = document.getElementById('darkBtnIdx');
   if (!btn) return;
-
   function syncBtn() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     btn.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
   }
-
-  syncBtn(); // sync text khi load
-
+  syncBtn();
   btn.addEventListener('click', () => {
-    // Gọi hàm toggle từ Layout (đã được định nghĩa trước đó)
-    if (typeof window.__ddToggleTheme === 'function') {
-      window.__ddToggleTheme();
-    }
+    if (typeof window.__ddToggleTheme === 'function') window.__ddToggleTheme();
     syncBtn();
   });
 })();

@@ -227,7 +227,8 @@ if (currentTruyenId && isNovelPage) {
     .mobile-theme-row:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .mobile-theme-row { color:#8fbcd4; }
     [data-theme="dark"] .mobile-theme-row:hover { background:rgba(126,200,227,.1); color:#a8daf0; }
-    @media(max-width:700px){ .nav-links{display:none;} .nav-hamburger{display:flex;} }
+    @media(max-width:700px){ .nav-links{display:none;}  #navThemeBtnMobile { display: flex; } /* Hiện nút theme cạnh hamburger */
+}
 
     /* ── LAYOUT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
@@ -642,6 +643,7 @@ if (currentTruyenId && isNovelPage) {
         <div class="dd-section-title">Truyện</div>
         <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
         <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
+        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
       </div>
     </div>
     <div class="nav-item">
@@ -661,7 +663,8 @@ if (currentTruyenId && isNovelPage) {
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
     <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
   </div>
-  <div style="display:flex;align-items:center;gap:6px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện" style="display: flex;">🌙</button>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>

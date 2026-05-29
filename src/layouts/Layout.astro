@@ -114,13 +114,25 @@ if (isNovelPage) {
   <style is:global>
   /* Style cho hộp lời nhắn của Editor */
 .editor-note-box {
+  margin-top: 50px; /* Tạo khoảng cách rộng với kết thúc truyện */
+  padding: 20px;
   background: var(--sky-pale);
-  border-left: 4px solid var(--sky);
-  padding: 15px 20px;
-  margin-bottom: 30px;
-  border-radius: var(--r-sm);
-  font-family: var(--read-ff);
-  box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.05);
+  border-radius: var(--r-md);
+  border-top: 2px dashed var(--sky-light); /* Thêm đường kẻ nét đứt ở trên */
+  position: relative;
+}
+
+/* Thêm một biểu tượng nhỏ ở giữa đường kẻ để trang trí */
+.editor-note-box::before {
+  content: "𓆝";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  padding: 0 15px;
+  color: var(--sky-light);
+  font-size: 1.2rem;
 }
 
 .note-label {
@@ -883,15 +895,14 @@ if (isNovelPage) {
 
       <!-- Khung nội dung truyện gốc -->
 <div class="novel-content" id="novelContent">
-  <!-- Hiển thị lời nhắn của Editor nếu có -->
+  <slot />
+    <!-- Hiển thị lời nhắn của Editor nếu có -->
   {frontmatter?.editor_note && (
     <div class="editor-note-box">
       <div class="note-label">🌸 Lời nhắn của Editor:</div>
       <div class="note-text">{frontmatter.editor_note}</div>
     </div>
   )}
-
-  <slot />
 </div>      
       <div class="chap-like-area">
         <button class="chap-like-btn" id="btnLikeChapter">

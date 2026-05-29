@@ -10,8 +10,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Siêu Admin · Dynamic Duo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Literata:wght@400;600&display=swap" rel="stylesheet" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Literata:wght@400;600&display=swap" rel="stylesheet" />  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>
@@ -107,7 +107,7 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getDatabase, ref, onValue, remove, get, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // CẤU HÌNH FIREBASE CỦA BẠN (Giữ nguyên)
+    // CẤU HÌNH FIREBASE CỦA BẠN
     const firebaseConfig = {
       apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
       authDomain: "dynamic-duo-comments.firebaseapp.com",
@@ -158,6 +158,7 @@
       <div class="sidebar-section">Nội dung</div>
       <div class="sidebar-link" data-nav="stories">📚 Quản lý Truyện</div>
       <div class="sidebar-link" data-nav="bulk-upload">🚀 Đăng nhanh (Bulk)</div>
+      <div class="sidebar-link" data-nav="tags">🏷️ Quản lý Tags</div>
 
       <div class="sidebar-section">Cộng đồng (Firebase)</div>
       <div class="sidebar-link" data-nav="fb-comments">💬 Bình luận</div>
@@ -191,6 +192,13 @@
             <div style="font-size: 2.2rem; font-weight: bold; color: var(--purple)" id="stat-users">0</div>
             <div style="font-size: .75rem; color: var(--text-dim); font-weight:bold; letter-spacing:1px">NGƯỜI DÙNG UNIQUE</div>
           </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+            <h3 style="margin-top:0; color:var(--sky-dark); font-family:'Literata', serif;">📈 Biểu đồ Lượt xem (7 ngày gần nhất)</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="viewsChart"></canvas>
+            </div>
+            <p style="font-size: .75rem; color: var(--text-dim); text-align:center; font-style:italic;">*Lưu ý: Dữ liệu ngày chỉ bắt đầu được ghi nhận từ hôm nay.</p>
         </div>
       </section>
 
@@ -305,6 +313,26 @@
             <div id="bulk-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--text-dim); white-space:pre-wrap"></div>
         </div>
       </section>
+      
+      <section class="section" id="sec-tags">
+        <h2 class="page-title">Quản lý Tags (Hệ thống)</h2>
+        <div class="card">
+            <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Trong Astro, Tags được lưu trực tiếp bên trong Frontmatter của từng file chương truyện (.md). Dưới đây là bộ công cụ giúp bạn đổi tên Tag hàng loạt trên GitHub.</p>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top: 20px;">
+                <div class="field">
+                    <label>Tag cũ (Cần thay thế)</label>
+                    <input type="text" id="tag-old" placeholder="VD: hiện đai (gõ sai dấu)" />
+                </div>
+                <div class="field">
+                    <label>Tag mới</label>
+                    <input type="text" id="tag-new" placeholder="VD: hiện đại" />
+                </div>
+            </div>
+            <button class="btn btn-sky" onclick="bulkReplaceTags()">Tiến hành Cập nhật Hàng loạt</button>
+            <div id="tag-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--sky-dark); white-space:pre-wrap; background: var(--sky-pale); padding: 10px; border-radius: 6px; display: none;"></div>
+        </div>
+      </section>
 
       <section class="section" id="sec-fb-comments">
         <h2 class="page-title">Quản lý Bình luận (Firebase)</h2>
@@ -389,6 +417,13 @@
     
     <div class="field"><label>Tên bộ truyện</label><input type="text" id="edit-st-title" /></div>
     <div class="field"><label>Tác giả</label><input type="text" id="edit-st-author" /></div>
+    
+    <div class="field">
+        <label>Tags (Cách nhau dấu phẩy)</label>
+        <input type="text" id="edit-st-tags" placeholder="đam mỹ, HE, niên hạ..." />
+        <small style="color:var(--amber); font-size: 0.7rem; display:block; margin-top: 4px;">Lưu ý: Sửa tag ở đây CHỈ cập nhật vào trang giới thiệu (index.astro), KHÔNG sửa tag bên trong các chương truyện. Để sửa tag toàn bộ chương, vui lòng dùng chức năng "Quản lý Tags" ở menu bên trái.</small>
+    </div>
+
     <div class="field"><label>Mô tả ngắn (Tagline)</label><textarea id="edit-st-desc" rows="2"></textarea></div>
     <div class="field"><label>Văn án chi tiết (Hỗ trợ HTML/Markdown cơ bản)</label><textarea id="edit-st-body" rows="6"></textarea></div>
     
@@ -405,18 +440,16 @@
    ========================================================================== */
 const REPO = 'dynamicduooq/dynamic-duo-web';
 const BRANCH = 'main';
-// MẬT KHẨU ADMIN (Bảo mật cơ bản ở Client)
 const ADMIN_PASS = 'dynamicduo2026'; 
 
 let GH_TOKEN = localStorage.getItem('dd_gh_token') || '';
-let currentStory = null; // Object {id, title, cat, path}
-let currentChap = null;  // Object {name, sha}
-let loadedChapters = []; // Lưu trữ danh sách chương để search/sort
+let currentStory = null; 
+let currentChap = null;  
+let loadedChapters = []; 
 let chapSortAsc = true;
 
 const $ = id => document.getElementById(id);
 
-// Thông báo Toast
 function showToast(msg, type = 'success') { 
     const el = $('toast');
     el.textContent = msg; 
@@ -485,6 +518,9 @@ function navTo(id) {
   if(id === 'fb-messages') loadFbMessages();
   if(id === 'fb-readers') loadFbReaders();
   if(id === 'bulk-upload') populateBulkUploadSelect();
+  if(id === 'tags') {
+      $('tag-old').value = ''; $('tag-new').value = ''; $('tag-log').style.display = 'none';
+  }
 }
 document.querySelectorAll('.sidebar-link').forEach(l => {
     l.onclick = () => navTo(l.dataset.nav);
@@ -510,7 +546,6 @@ const b64Decode = str => decodeURIComponent(escape(atob(str)));
 /* ==========================================================================
    QUẢN LÝ TRUYỆN 
    ========================================================================== */
-// (FIX): Đã nạp đầy đủ danh sách các truyện bạn đang có
 let storiesList = [
   { id: 'ha-chay-dong-hoang', shortId: 'hcdh', title: 'Hạ cháy đồng hoang', cat: 'ca-duoi-nuoc' },
   { id: 'quan-he-ban-cung-phong', shortId: 'qhbcp', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
@@ -540,12 +575,13 @@ function renderStoriesTable() {
 
 function populateBulkUploadSelect() {
     const sel = $('bulk-story-select');
-sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');}
+    sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');
+}
 
 let currentEditStoryId = null;
 let currentEditStoryPath = null;
 let currentEditStorySha = null;
-let currentRawAstroCode = ""; // Lưu giữ toàn bộ code gốc
+let currentRawAstroCode = ""; 
 
 async function editStoryInfo(id) {
     const story = storiesList.find(s => s.id === id);
@@ -560,15 +596,25 @@ async function editStoryInfo(id) {
         currentRawAstroCode = b64Decode(file.content.replace(/\n/g,''));
         currentEditStorySha = file.sha;
 
-        // Bóc tách dữ liệu từ code bằng Regex thông minh
+        // Bóc tách dữ liệu
         const titleMatch = currentRawAstroCode.match(/const title = "(.*?)";/);
         const authorMatch = currentRawAstroCode.match(/const author = "(.*?)";/);
         const descMatch = currentRawAstroCode.match(/const description = "(.*?)";/);
+        // FIX Regex tìm list tag trong Astro
+        const tagsMatch = currentRawAstroCode.match(/const tags = \[(.*?)\];/);
         const bodyMatch = currentRawAstroCode.match(/<div class="desc">([\s\S]*?)<\/div>/);
 
         $('edit-st-title').value = titleMatch ? titleMatch[1] : '';
         $('edit-st-author').value = authorMatch ? authorMatch[1] : '';
         $('edit-st-desc').value = descMatch ? descMatch[1] : '';
+        
+        if (tagsMatch && tagsMatch[1]) {
+            // Chuyển mảng string ["tag1", "tag2"] thành "tag1, tag2"
+            $('edit-st-tags').value = tagsMatch[1].replace(/["']/g, '').split(',').map(s=>s.trim()).join(', ');
+        } else {
+            $('edit-st-tags').value = '';
+        }
+        
         $('edit-st-body').value = bodyMatch ? bodyMatch[1].trim() : '';
 
     } catch(e) {
@@ -581,6 +627,7 @@ async function saveStoryInfo() {
     const title = $('edit-st-title').value;
     const author = $('edit-st-author').value;
     const desc = $('edit-st-desc').value;
+    const tagsRaw = $('edit-st-tags').value;
     const body = $('edit-st-body').value;
 
     if(!title) return showToast('Tên truyện không được để trống', 'error');
@@ -589,12 +636,23 @@ async function saveStoryInfo() {
     btn.textContent = 'Đang lưu...'; btn.disabled = true;
 
     try {
-        // Nhúng nội dung mới vào lại bản code cũ an toàn
         let updatedCode = currentRawAstroCode;
         
         updatedCode = updatedCode.replace(/const title = "(.*?)";/, `const title = "${title.replace(/"/g, '\\"')}";`);
         updatedCode = updatedCode.replace(/const author = "(.*?)";/, `const author = "${author.replace(/"/g, '\\"')}";`);
         updatedCode = updatedCode.replace(/const description = "(.*?)";/, `const description = "${desc.replace(/"/g, '\\"')}";`);
+        
+        // Cập nhật mảng Tags
+        if(tagsRaw.trim()) {
+            const tagsFormatted = tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ');
+            // Nếu đã có dòng const tags thì thay thế, nếu chưa có thì chèn vào
+            if(/const tags = \[.*?\];/.test(updatedCode)) {
+                updatedCode = updatedCode.replace(/const tags = \[.*?\];/, `const tags = [${tagsFormatted}];`);
+            } else {
+                updatedCode = updatedCode.replace(/const description = "(.*?)";/, `const description = "$1";\nconst tags = [${tagsFormatted}];`);
+            }
+        }
+        
         updatedCode = updatedCode.replace(/<div class="desc">([\s\S]*?)<\/div>/, `<div class="desc">\n${body}\n  </div>`);
 
         let latestSha = currentEditStorySha;
@@ -604,7 +662,7 @@ async function saveStoryInfo() {
         } catch(e){}
         
         await ghAPI(currentEditStoryPath, 'PUT', {
-            message: `📝 Admin: Cập nhật văn án truyện ${currentEditStoryId}`,
+            message: `📝 Admin: Cập nhật thông tin truyện ${currentEditStoryId}`,
             content: b64Encode(updatedCode),
             sha: latestSha,
             branch: BRANCH
@@ -711,14 +769,14 @@ async function bulkDeleteChaps() {
 
 
 /* ==========================================================================
-   EDITOR SOẠN THẢO (BẢO TỒN FRONTMATTER GỐC)
+   EDITOR SOẠN THẢO 
    ========================================================================== */
 let editorDraftInterval;
 
 async function openEditor(mode, name, sha) {
   navTo('editor');
   currentChap = (mode === 'edit') ? { name, sha } : null;
-  window.__currentRawFm = ""; // Biến lưu Frontmatter gốc
+  window.__currentRawFm = ""; 
   
   const draftKey = mode === 'new' ? `draft_new_${currentStory.id}` : `draft_edit_${currentStory.id}_${name}`;
   const draftData = localStorage.getItem(draftKey);
@@ -736,26 +794,37 @@ async function openEditor(mode, name, sha) {
         $('ed-title').value = d.title; $('ed-content').value = d.content;
     }
   } else {
-    // Mode EDIT
     $('ed-content').value = '⏳ Đang tải nội dung file từ GitHub...';
     try {
         const file = await ghAPI(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${name}?ref=${BRANCH}`);
         const raw = b64Decode(file.content.replace(/\n/g,''));
         
-        // (FIX) Trích xuất và lưu giữ vĩnh viễn thẻ cấu hình Astro
         const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/);
         let body = raw;
         if(fmMatch) {
             body = raw.slice(fmMatch[0].length).trim();
             const fmText = fmMatch[1];
-            window.__currentRawFm = fmText; // Ghi nhớ cấu hình gốc
+            window.__currentRawFm = fmText; 
             
             const getVal = (key) => { const m = fmText.match(new RegExp(`^${key}:\\s*(.+)$`, 'm')); return m ? m[1].replace(/^"|"$/g, '').trim() : ''; };
             
+            // Xử lý Tag riêng vì nó là mảng
+            const tagsMatch = fmText.match(/^tags:\s*\[(.*?)\]/m) || fmText.match(/^tags:\s*\n((?:  - .*\n?)+)/m);
+            let tagsVal = '';
+            if (tagsMatch) {
+                if (tagsMatch[1].includes('-')) {
+                    // Định dạng list: - "tag1"
+                    tagsVal = tagsMatch[1].split('\n').map(t => t.replace(/-\s*"?|"?\s*$/g, '').trim()).filter(Boolean).join(', ');
+                } else {
+                    // Định dạng array: ["tag1", "tag2"]
+                    tagsVal = tagsMatch[1].replace(/["']/g, '').split(',').map(s=>s.trim()).join(', ');
+                }
+            }
+
             $('ed-title').value = getVal('title');
             $('ed-num').value = getVal('chuong');
             $('ed-desc').value = getVal('description');
-            $('ed-tags').value = getVal('tags');
+            $('ed-tags').value = tagsVal;
             $('ed-status').value = getVal('draft') === 'true' ? 'draft' : 'published';
             $('ed-note').value = getVal('editor_note');
         }
@@ -779,7 +848,6 @@ async function openEditor(mode, name, sha) {
   }, 10000); 
 }
 
-// Format tools
 function fmt(cmd) {
   const ta = $('ed-content');
   const start = ta.selectionStart;
@@ -855,18 +923,19 @@ function togglePreview() {
     }
 }
 
-// (FIX LỖI) LƯU CHƯƠNG LÊN GITHUB
 $('ed-saveBtn').onclick = async () => {
   if(!$('ed-title').value || !$('ed-num').value) return showToast('Vui lòng nhập Tiêu đề và Số chương', 'error');
 
   const btn = $('ed-saveBtn');
   btn.disabled = true; btn.textContent = 'Đang đẩy lên Git...';
   
-  // KIỂM SOÁT FRONTMATTER (Không ghi đè dữ liệu cũ của Astro)
   let finalFm = "";
+  const tagsRaw = $('ed-tags').value;
+  const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
+
   if (currentChap && window.__currentRawFm) {
       finalFm = window.__currentRawFm;
-      // Hàm thay thế thông minh: Nếu có thì đè, chưa có thì chèn thêm
+      
       const setKey = (key, val, isStr=true) => {
           const regex = new RegExp(`^${key}:.*$`, 'm');
           const strVal = isStr ? `"${val}"` : val;
@@ -881,31 +950,39 @@ $('ed-saveBtn').onclick = async () => {
       setKey('description', $('ed-desc').value.replace(/"/g, '\\"'));
       setKey('draft', $('ed-status').value === 'draft' ? 'true' : 'false', false);
       if($('ed-note').value) setKey('editor_note', $('ed-note').value.replace(/"/g, '\\"'));
+      
+      // Xử lý ghi đè mảng tags
+      if (/^tags:\s*\[.*?\]/m.test(finalFm)) {
+          finalFm = finalFm.replace(/^tags:\s*\[.*?\]/m, `tags: [${tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ')}]`);
+      } else if (/^tags:\s*\n(?:  - .*\n?)+/m.test(finalFm)) {
+          finalFm = finalFm.replace(/^tags:\s*\n(?:  - .*\n?)+/m, `tags:${tagsFormatted}\n`);
+      } else {
+          finalFm += `\ntags:${tagsFormatted}`;
+      }
+
   } else {
-      // Trường hợp tạo mới hoàn toàn
       finalFm = `layout: "../../../layouts/Layout.astro"
 title: "${$('ed-title').value.replace(/"/g, '\\"')}"
 truyen_id: "${currentStory.shortId || currentStory.id}"
 chuong: ${parseInt($('ed-num').value)}
 date: "${new Date().toISOString().split('T')[0]}"
+tags:${tagsFormatted}
 description: "${$('ed-desc').value.replace(/"/g, '\\"')}"
 draft: ${$('ed-status').value === 'draft' ? 'true' : 'false'}
 editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
   }
   
-  const content = `---\n${finalFm}\n---\n\n${$('ed-content').value}`;
+  const content = `---\n${finalFm.trim()}\n---\n\n${$('ed-content').value}`;
   
-  // (Lưu ý: Nếu đang Edit, giữ nguyên tên file cũ để không bị đổi ID URL)
   const filename = currentChap ? currentChap.name : `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;
   const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}/${filename}`;
   
-  // (FIX LỖI SHA): Lấy SHA mới nhất ngay lúc này
   let latestSha = currentChap ? currentChap.sha : null;
   if(currentChap) {
       try {
           const checkFile = await ghAPI(path);
           latestSha = checkFile.sha;
-      } catch(e){} // Kệ nếu lỗi mạng
+      } catch(e){} 
   }
   
   try {
@@ -917,11 +994,8 @@ editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
       });
       
       showToast('Đã xuất bản thành công!');
-      
-      // Update lại SHA cho frontend nếu bạn muốn bấm lưu liên tiếp nhiều lần
       if(currentChap) { currentChap.sha = res.content.sha; }
       
-      // Clear draft
       const draftKey = currentChap ? `draft_edit_${currentStory.id}_${currentChap.name}` : `draft_new_${currentStory.id}`;
       localStorage.removeItem(draftKey);
       
@@ -936,9 +1010,8 @@ editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
   }
 };
 
-
 /* ==========================================================================
-   BULK UPLOAD (Đăng nhiều chương một lúc)
+   BULK UPLOAD 
    ========================================================================== */
 async function processBulkUpload() {
     const rawText = $('bulk-content').value;
@@ -987,7 +1060,7 @@ date: "${new Date().toISOString().split('T')[0]}"
 
 
 /* ==========================================================================
-   FIREBASE (Comments, Messages, Readers Analytics)
+   FIREBASE & CHART.JS
    ========================================================================== */
 function loadFirebaseStats() {
   window.addEventListener('firebase-ready', () => {
@@ -996,9 +1069,18 @@ function loadFirebaseStats() {
     const get = window.__fbGet;
     
     get(ref(db, 'page_views')).then(snap => {
+      const data = snap.val() || {};
       let total = 0;
-      snap.forEach(s => total += (s.val().views || 0));
+      const dailyDataAgg = {};
+      
+      for (const page in data) {
+          total += (data[page].views || 0);
+          if (data[page].daily) {
+              dailyDataAgg[page] = data[page].daily;
+          }
+      }
       $('stat-views').textContent = total.toLocaleString();
+      renderViewsChart(dailyDataAgg);
     });
     
     get(ref(db, 'private_messages')).then(snap => { $('stat-users').textContent = snap.size; });
@@ -1008,6 +1090,63 @@ function loadFirebaseStats() {
         $('stat-cmts').textContent = cmts;
     });
   });
+}
+
+let viewsChartInstance = null;
+
+function renderViewsChart(dailyData) {
+    const ctx = document.getElementById('viewsChart');
+    if(!ctx) return;
+    
+    const labels = [];
+    const dataPoints = [];
+    
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0]; 
+        const shortDate = `${d.getDate()}/${d.getMonth()+1}`;
+        
+        labels.push(shortDate);
+        let dailyTotal = 0;
+        for (const page in dailyData) {
+            if (dailyData[page] && dailyData[page][dateStr]) {
+                dailyTotal += dailyData[page][dateStr];
+            }
+        }
+        dataPoints.push(dailyTotal);
+    }
+
+    if(viewsChartInstance) viewsChartInstance.destroy();
+    
+    viewsChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Lượt xem toàn trang',
+                data: dataPoints,
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#0284c7',
+                pointRadius: 4,
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 1 } },
+                x: { grid: { display: false } }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
 }
 
 function loadFbComments() {
@@ -1080,9 +1219,91 @@ function loadFbReaders() {
 
 window.delFb = (path) => { if(confirm('Chắc chắn xóa?')) window.__fbRemove(window.__fbRef(window.__fbDb, path)); };
 
+/* ==========================================================================
+   QUẢN LÝ VÀ ĐỔI TAG HÀNG LOẠT
+   ========================================================================== */
+async function bulkReplaceTags() {
+    const oldTag = $('tag-old').value.trim();
+    const newTag = $('tag-new').value.trim();
+    const log = $('tag-log');
+    
+    if(!oldTag) return showToast('Vui lòng nhập Tag cũ cần đổi', 'error');
+    if(!confirm(`Bạn sắp đổi toàn bộ tag "${oldTag}" thành "${newTag}" trên tất cả các chương truyện. Tiến hành?`)) return;
+    
+    log.style.display = 'block';
+    log.innerHTML = '🔄 Đang quét toàn bộ file trên GitHub...\n';
+    const btn = event.target; btn.disabled = true;
+
+    try {
+        let updateCount = 0;
+        for (const story of storiesList) {
+            log.innerHTML += `\nĐang kiểm tra: ${story.title}...\n`;
+            const path = `/contents/src/pages/${story.cat}/${story.id}?ref=${BRANCH}`;
+            try {
+                const files = await ghAPI(path);
+                const mdFiles = files.filter(f => f.name.endsWith('.md'));
+                
+                for (const file of mdFiles) {
+                    const fileData = await ghAPI(file.path);
+                    let rawContent = b64Decode(fileData.content.replace(/\n/g,''));
+                    
+                    const tagsRegexList = /tags:\s*\n((?:  - .*\n?)+)/;
+                    const tagsRegexArray = /tags:\s*\[(.*?)\]/;
+                    
+                    let matchList = rawContent.match(tagsRegexList);
+                    let matchArray = rawContent.match(tagsRegexArray);
+                    
+                    if (matchList || matchArray) {
+                        let isUpdated = false;
+                        
+                        if (matchList && matchList[1].includes(`"${oldTag}"`)) {
+                            let newTagsStr;
+                            if(newTag === "") {
+                                newTagsStr = matchList[1].replace(new RegExp(`  - "${oldTag}"\\n?`, 'g'), '');
+                            } else {
+                                newTagsStr = matchList[1].replace(new RegExp(`"${oldTag}"`, 'g'), `"${newTag}"`);
+                            }
+                            rawContent = rawContent.replace(tagsRegexList, newTagsStr ? `tags:\n${newTagsStr}` : '');
+                            isUpdated = true;
+                        } 
+                        else if (matchArray && (matchArray[1].includes(`"${oldTag}"`) || matchArray[1].includes(`'${oldTag}'`))) {
+                            let newTagsStr;
+                            if (newTag === "") {
+                                newTagsStr = matchArray[1].replace(new RegExp(`"${oldTag}"\\s*,?|'${oldTag}'\\s*,?`, 'g'), '').replace(/,\s*$/, '').trim();
+                            } else {
+                                newTagsStr = matchArray[1].replace(new RegExp(`"${oldTag}"`, 'g'), `"${newTag}"`).replace(new RegExp(`'${oldTag}'`, 'g'), `"${newTag}"`);
+                            }
+                            rawContent = rawContent.replace(tagsRegexArray, newTagsStr ? `tags: [${newTagsStr}]` : '');
+                            isUpdated = true;
+                        }
+
+                        if (isUpdated) {
+                            await ghAPI(file.path, 'PUT', {
+                                message: `🏷️ Admin: Đổi tag [${oldTag} -> ${newTag}]`,
+                                content: b64Encode(rawContent),
+                                sha: fileData.sha,
+                                branch: BRANCH
+                            });
+                            
+                            log.innerHTML += `  ✅ Đã sửa file: ${file.name}\n`;
+                            updateCount++;
+                        }
+                    }
+                }
+            } catch(e) { log.innerHTML += `  ❌ Bỏ qua thư mục do lỗi cấp quyền.\n`; }
+        }
+        
+        log.innerHTML += `\n🎉 Hoàn tất! Đã cập nhật tag trong ${updateCount} file.`;
+        showToast('Đổi Tag hoàn tất!');
+    } catch(e) {
+        log.innerHTML += `\n❌ Lỗi hệ thống: ${e.message}`;
+    } finally {
+        btn.disabled = false;
+    }
+}
 
 /* ==========================================================================
-   CẤU HÌNH (settings.json) & BACKUP (JSZip)
+   CẤU HÌNH & BACKUP
    ========================================================================== */
 async function loadSettingsJSON() {
   $('settings-json').value = 'Đang tải file cấu hình từ GitHub...';
@@ -1095,36 +1316,25 @@ async function loadSettingsJSON() {
 
 async function saveSettingsJSON() {
   const content = $('settings-json').value;
-  try {
-      JSON.parse(content); 
-  } catch(e) {
-      return showToast('Lỗi Cú Pháp JSON. Vui lòng kiểm tra lại!', 'error');
-  }
+  try { JSON.parse(content); } catch(e) { return showToast('Lỗi Cú Pháp JSON!', 'error'); }
   const sha = $('settings-json').dataset.sha;
   
   const btn = event.target;
   btn.textContent = 'Đang lưu...'; btn.disabled = true;
   
   try {
-      await ghAPI('/contents/src/data/settings.json', 'PUT', {
-        message: '⚙️ Admin cập nhật cấu hình hệ thống', content: b64Encode(content), sha, branch: BRANCH
-      });
+      await ghAPI('/contents/src/data/settings.json', 'PUT', { message: '⚙️ Admin cập nhật cấu hình', content: b64Encode(content), sha, branch: BRANCH });
       showToast('Đã lưu cấu hình!');
   } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
-  
   btn.textContent = 'Lưu Cấu hình'; btn.disabled = false;
 }
 
 async function performBackup() {
-    const btn = $('btn-backup');
-    const log = $('backup-log');
-    btn.disabled = true;
-    log.innerHTML = 'Đang khởi tạo JSZip...<br>';
+    const btn = $('btn-backup'); const log = $('backup-log');
+    btn.disabled = true; log.innerHTML = 'Đang khởi tạo JSZip...<br>';
     
     try {
-        const zip = new JSZip();
-        const rootFolder = zip.folder("dynamic-duo-backup");
-        
+        const zip = new JSZip(); const rootFolder = zip.folder("dynamic-duo-backup");
         for(const s of storiesList) {
             log.innerHTML += `Đang tải: ${s.title}...<br>`;
             const path = `/contents/src/pages/${s.cat}/${s.id}?ref=${BRANCH}`;
@@ -1143,42 +1353,31 @@ async function performBackup() {
         
         log.innerHTML += 'Đang nén file ZIP... Vui lòng chờ.<br>';
         const content = await zip.generateAsync({type:"blob"});
-        
         const a = document.createElement("a");
         a.href = URL.createObjectURL(content);
         a.download = `Backup-Dynamic-Duo-${new Date().toISOString().split('T')[0]}.zip`;
         a.click();
-        
         log.innerHTML += '✅ Hoàn tất tải xuống ZIP!';
-    } catch(e) {
-        log.innerHTML += `<span style="color:red">Lỗi hệ thống: ${e.message}</span>`;
-    } finally {
-        btn.disabled = false;
-    }
+    } catch(e) { log.innerHTML += `<span style="color:red">Lỗi hệ thống: ${e.message}</span>`; } 
+    finally { btn.disabled = false; }
 }
 
-
-/* ==========================================================================
-   MODALS CONTROL
-   ========================================================================== */
 function openStoryModal() { openModal('storyModal'); }
 function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); }
 
 async function saveNewStory() {
-    const title = $('st-title').value;
-    const id = $('st-id').value;
-    const cat = $('st-cat').value;
-    const author = $('st-author').value;
+    const title = $('st-title').value; const id = $('st-id').value;
+    const cat = $('st-cat').value; const author = $('st-author').value;
     
-    if(!title || !id) return showToast('Tên và Slug không được để trống', 'error');
+    if(!title || !id) return showToast('Tên và Slug không được trống', 'error');
     
-    // Tạo index.astro cơ bản cho thư mục truyện
     const fm = `---
 import Layout from "../../../layouts/Layout.astro";
 const title = "${title}";
 const author = "${author}";
 const description = "${$('st-desc').value}";
+const tags = [${$('st-tags').value.split(',').map(t => `"${t.trim()}"`).join(', ')}];
 ---
 <Layout title={title}>
   <div class="story-info">
@@ -1186,19 +1385,16 @@ const description = "${$('st-desc').value}";
     <p>Tác giả: {author}</p>
     <div class="desc">${$('st-body').value}</div>
   </div>
-</Layout>
-`;
+</Layout>`;
+
     try {
-        await ghAPI(`/contents/src/pages/${cat}/${id}/index.astro`, 'PUT', {
-            message: `📚 Thêm truyện mới: ${title}`, content: b64Encode(fm), branch: BRANCH
-        });
+        await ghAPI(`/contents/src/pages/${cat}/${id}/index.astro`, 'PUT', { message: `📚 Thêm truyện mới: ${title}`, content: b64Encode(fm), branch: BRANCH });
         showToast('Tạo thư mục truyện thành công!');
         closeModal('storyModal');
-        storiesList.push({ id, title, cat });
+        storiesList.push({ id, title, cat, shortId: id });
         renderStoriesTable();
     } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
 }
-
 </script>
 </body>
 </html>

@@ -1534,17 +1534,28 @@ p.insertBefore(btn, p.firstChild); // Chèn vào trước ký tự đầu tiên
 })();
 
 /* ══════════════════════════════════════════
-   E. THỐNG KÊ LƯỢT XEM (ADMIN)
+   E. THỐNG KÊ LƯỢT XEM (LƯU THEO NGÀY ĐỂ VẼ BIỂU ĐỒ)
 ══════════════════════════════════════════ */
 waitFirebase(({db, ref, get, update, onValue}) => {
   const isNovel = document.querySelector('.novel-content') !== null;
   if(!isNovel) return;
+  
   const key = pageKey();
+  const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
   const viewRef = ref(db, 'page_views/' + key);
+  
   get(viewRef).then(snap => {
      let views = (snap.val() && snap.val().views) || 0;
-     if(!window.__ddIsAdmin) { update(ref(db, 'page_views'), { [key + '/views']: views + 1 }).catch(()=>{}); }
+     let dailyViews = (snap.val() && snap.val().daily && snap.val().daily[today]) || 0;
+     
+     if(!window.__ddIsAdmin) { 
+         // Cập nhật cả view tổng VÀ view của ngày hôm nay
+         update(ref(db, 'page_views/' + key), { 
+             views: views + 1,
+             [`daily/${today}`]: dailyViews + 1
+         }).catch(()=>{}); 
+     }
   });
 
   onValue(viewRef, snap => {
@@ -1552,6 +1563,7 @@ waitFirebase(({db, ref, get, update, onValue}) => {
       if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
   });
 
+  // Load số lượng comment / like
   onValue(ref(db, 'comments/chap_' + key), snap => {
       const data = snap.val() || {};
       let cmtCount = Object.keys(data).length; let likeCount = 0;

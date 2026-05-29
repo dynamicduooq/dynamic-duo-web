@@ -588,7 +588,43 @@ if (isNovelPage) {
     .tool-fab-toggle:hover { opacity: 1; transform: scale(1.05); }
     [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
-  </style>
+/* FIX NỘI DUNG VÀO GIỮA TRÊN MOBILE */
+    @media(max-width: 768px) {
+      .novel-content {
+        padding: 30px 18px !important; /* Thu nhỏ lề */
+        margin: 15px auto !important;
+        width: 95% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      /* Kéo bong bóng bình luận sát lề để không đẩy chữ */
+      .ic-trigger { left: -12px !important; opacity: 0.5; }
+    }
+
+    /* FIX THANH ĐIỀU HƯỚNG CHƯƠNG TRÊN 1 HÀNG */
+    .chap-nav-row {
+      display: flex !important;
+      flex-wrap: nowrap !important; /* Không cho xuống dòng */
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 5px;
+    }
+    .chap-pn, .chap-dd-btn {
+      flex: 1; /* Chia đều độ rộng */
+      min-width: 0;
+      text-align: center;
+      font-size: 0.7rem !important; /* Chữ nhỏ lại cho vừa mobile */
+      padding: 6px 4px !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    /* Trên mobile quá nhỏ thì ẩn chữ "Chương" để tiết kiệm chỗ */
+    @media(max-width: 480px) {
+      .chap-pn { flex: 0.8; }
+      .chap-dd-wrap { flex: 1.4; }
+    }  
+</style>
 </head>
 <body>
 

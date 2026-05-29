@@ -1,4 +1,3 @@
-# KHÔNG thêm dấu --- vào file này nhé
 backend:
   name: git-gateway
   branch: main
@@ -9,13 +8,14 @@ media_folder: "public/images/uploads"
 public_folder: "/dynamic-duo-web/images/uploads"
 
 collections:
+  # 1. QUẢN LÝ ĐẦU TRUYỆN
   - name: "stories"
     label: "📖 Quản lý Đầu truyện"
     folder: "src/data/truyen"
     create: true
     slug: "{{id}}"
     fields:
-      - { label: "Mã truyện (Vd: qhbcp)", name: "id", widget: "string", hint: "Mã này viết liền không dấu, dùng để link với các chương truyện" }
+      - { label: "Mã truyện (Vd: qhbcp)", name: "id", widget: "string", hint: "Mã này viết liền không dấu, dùng để tạo đường dẫn/thư mục" }
       - { label: "Tên truyện", name: "title", widget: "string" }
       - { label: "Tác giả", name: "author", widget: "string" }
       - { label: "Tình trạng", name: "status", widget: "select", options: ["Đang tiến hành", "Hoàn thành", "Sắp đào"] }
@@ -23,12 +23,17 @@ collections:
       - { label: "Ảnh bìa", name: "cover", widget: "image", required: false }
       - { label: "Giới thiệu / Văn án", name: "description", widget: "markdown" }
 
+  # 2. CÁ DƯỚI NƯỚC (ĐANG LÀM)
   - name: "ongoing"
     label: "🐠 Cá dưới nước (Chương truyện)"
     folder: "src/pages/ca-duoi-nuoc"
+    # Tự động tạo thư mục con theo mã truyện (Vd: src/pages/ca-duoi-nuoc/qhbcp/chuong-1.md)
+    path: "{{truyen_id}}/chuong-{{chuong}}"
     create: true
-    slug: "{{truyen_id}}-chuong-{{chuong}}"
+    slug: "chuong-{{chuong}}"
     fields:
+      # Tự động chèn biến layout vào Frontmatter để Astro render giao diện, đi ngược lên 3 thư mục để trỏ về đúng file Layout
+      - { label: "Layout", name: "layout", widget: "hidden", default: "../../../layouts/Layout.astro" }
       - { label: "Trạng thái xuất bản", name: "draft", widget: "boolean", default: false, hint: "Bật nút này nếu bạn chỉ muốn lưu nháp (tích trữ bản thảo), chưa muốn đăng lên web" }
       - { label: "Thuộc truyện nào?", name: "truyen_id", widget: "relation", collection: "stories", search_fields: ["title", "id"], value_field: "id", display_fields: ["title"], hint: "Tìm và chọn truyện (Chỉ hiện khi bạn đã tạo truyện ở mục Đầu truyện)" }
       - { label: "Số chương", name: "chuong", widget: "number", value_type: "int", hint: "Dùng để sắp xếp thứ tự trước sau" }
@@ -39,12 +44,15 @@ collections:
       - { label: "Lời Editor lảm nhảm", name: "editor_note", widget: "markdown", required: false, hint: "Lưu ý/Ghi chú của editor ở đầu hoặc cuối chương (Không nên viết chung vào nội dung)" }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
+  # 3. CÁ TRÊN BÀN (HOÀN THÀNH)
   - name: "completed"
     label: "🍽️ Cá trên bàn (Chương truyện)"
     folder: "src/pages/ca-tren-ban"
+    path: "{{truyen_id}}/chuong-{{chuong}}"
     create: true
-    slug: "{{truyen_id}}-chuong-{{chuong}}"
+    slug: "chuong-{{chuong}}"
     fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "../../../layouts/Layout.astro" }
       - { label: "Trạng thái xuất bản", name: "draft", widget: "boolean", default: false }
       - { label: "Thuộc truyện nào?", name: "truyen_id", widget: "relation", collection: "stories", search_fields: ["title", "id"], value_field: "id", display_fields: ["title"] }
       - { label: "Số chương", name: "chuong", widget: "number", value_type: "int" }
@@ -55,20 +63,24 @@ collections:
       - { label: "Lời Editor lảm nhảm", name: "editor_note", widget: "markdown", required: false }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
+  # 4. CÁ TRÊN TRỜI (ĐẶT GẠCH)
   - name: "upcoming"
     label: "🌤️ Cá trên trời (Đang đặt gạch)"
     folder: "src/pages/ca-tren-troi"
+    path: "{{truyen_id}}/chuong-{{chuong}}"
     create: true
-    slug: "{{truyen_id}}-chuong-{{chuong}}"
+    slug: "chuong-{{chuong}}"
     fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "../../../layouts/Layout.astro" }
       - { label: "Trạng thái xuất bản", name: "draft", widget: "boolean", default: false }
-      - { label: "Thuộc truyện nào?", name: "truyen_id", widget: "string", hint: "Vì phần này chỉ đặt gạch, chưa cần nối dữ liệu nên bạn tự gõ mã truyện" }
+      - { label: "Thuộc truyện nào?", name: "truyen_id", widget: "string", hint: "Tự gõ mã truyện vào đây vì đây là truyện dự kiến" }
       - { label: "Số chương", name: "chuong", widget: "number", value_type: "int" }
       - { label: "Tên chương", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Thể loại (Tags)", name: "tags", widget: "list" }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
+  # 5. CÀI ĐẶT GIAO DIỆN
   - name: "settings"
     label: "⚙️ Cài đặt Giao diện"
     files:

@@ -593,23 +593,32 @@ if (isNovelPage) {
    ========================================= */
 @media (max-width: 768px) {
   .novel-content {
-    width: 94% !important; /* Để khoảng thở 3% mỗi bên giúp chữ không quá sát viền */
+    width: 92% !important; 
     max-width: 100%;
-    margin: 12px auto !important;
-    padding: 20px 16px !important; /* Giảm padding dọc cho cân đối với màn hình điện thoại */
+    margin: 16px auto !important;
+    padding: 24px 20px !important;
     box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04); /* Thêm độ sâu nhẹ cho khung truyện */
+    transition: all 0.3s ease-in-out;
   }
 
-  /* Tinh chỉnh bong bóng bình luận */
+  /* Bong bóng bình luận (Inline comment) */
   .ic-trigger { 
-    left: -10px !important; 
-    opacity: 0.4 !important; 
-    transition: opacity 0.3s ease; /* Thêm hiệu ứng sáng lên khi chạm */
+    left: -12px !important; 
+    opacity: 0.5 !important; 
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   
-  .ic-trigger:active, 
   .ic-trigger:hover {
     opacity: 0.9 !important; 
+    transform: scale(1.1); /* Phóng to nhẹ khi lia chuột */
+  }
+
+  .ic-trigger:active {
+    opacity: 1 !important;
+    transform: scale(0.95); /* Lún nhẹ khi bấm */
   }
 }
 
@@ -619,49 +628,84 @@ if (isNovelPage) {
 .chap-nav-row {
   display: flex !important;
   flex-wrap: nowrap !important;
-  justify-content: space-between; /* Dàn đều khoảng cách giữa các nút */
+  justify-content: center; 
   align-items: center;
-  gap: 8px; /* Tăng khoảng cách nhẹ để tránh người dùng bấm nhầm trên màn hình cảm ứng */
-  padding: 12px 0; 
+  gap: 12px; /* Khoảng cách tiêu chuẩn, cân đối */
+  padding: 16px 0; 
   width: 100%;
+  margin: 0 auto;
 }
 
+/* Nút điều hướng (Chương trước, Chương sau, Nút chọn chương) */
 .chap-pn, 
 .chap-dd-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1; 
   min-width: 0;
-  text-align: center;
-  font-size: 0.8rem !important; /* 0.7rem hơi nhỏ, 0.8rem vừa đủ đọc và vẫn gọn */
-  padding: 8px 4px !important; /* Tăng padding dọc để nút dễ bấm (Touch target) */
+  height: 42px; /* Fix cứng chiều cao để các nút luôn bằng nhau */
+  font-size: 0.85rem !important; 
+  font-weight: 500;
+  color: #4b5563; /* Màu chữ dịu mắt */
+  background-color: #f3f4f6; /* Nền xám nhạt hiện đại */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px; /* Bo góc nút */
+  padding: 0 12px !important; 
   
-  /* Cụm 3 thuộc tính cắt chữ thừa thành dấu ... */
+  /* Cắt chữ thừa */
   white-space: nowrap !important; 
   overflow: hidden;
   text-overflow: ellipsis;
   
-  /* Tùy chọn: Bo góc nhẹ cho nút mượt mà hơn */
-  border-radius: 6px; 
+  /* Hiệu ứng */
+  cursor: pointer;
+  user-select: none; /* Tránh bôi đen chữ khi bấm nhanh */
+  transition: all 0.2s ease;
 }
 
-/* Màn hình siêu nhỏ (Dưới 480px) */
+.chap-pn:hover, 
+.chap-dd-btn:hover {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+  color: #1f2937;
+}
+
+/* Hiệu ứng nảy/lún khi chạm (Rất quan trọng cho trải nghiệm Mobile) */
+.chap-pn:active, 
+.chap-dd-btn:active {
+  transform: scale(0.96);
+  background-color: #d1d5db;
+}
+
+/* =========================================
+   3. RESPONSIVE CHO MÀN HÌNH SIÊU NHỎ
+   ========================================= */
 @media (max-width: 480px) {
   .chap-nav-row {
-    gap: 6px;
+    gap: 8px; 
+    padding: 12px 0;
+  }
+  
+  .chap-pn, 
+  .chap-dd-btn {
+    height: 38px; /* Thu nhỏ nút lại một chút */
+    font-size: 0.75rem !important; 
+    padding: 0 8px !important;
   }
   
   .chap-pn { 
     flex: 1; 
-    font-size: 0.75rem !important; 
   }
   
-  /* Nếu .chap-dd-wrap bọc .chap-dd-btn, ta cấp flex lớn hơn cho vùng chọn chương */
+  /* Khung chọn chương giữa được ưu tiên diện tích lớn hơn chút */
   .chap-dd-wrap { 
-    flex: 1.5; 
+    flex: 1.2; 
     min-width: 0;
   }
   
   .chap-dd-wrap .chap-dd-btn {
-    width: 100%; /* Đảm bảo nút dropdown chiếm trọn wrap */
+    width: 100%; 
   }
 }
 </style>

@@ -12,7 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Literata:wght@400;600&display=swap" rel="stylesheet" />
   
-  <!-- Thư viện nén file ZIP để Backup -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>
@@ -104,7 +103,6 @@
     .badge-pub { background: var(--green); color: #fff; }
   </style>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getDatabase, ref, onValue, remove, get, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
@@ -127,7 +125,6 @@
 
 <div id="toast" class="toast"></div>
 
-<!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div id="loginScreen">
   <div style="width: 360px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(14,165,233,.1); text-align: center;">
     <h2 style="font-family: 'Literata'; color: var(--sky-dark); margin-top:0;">Siêu Admin Panel<br><span style="font-size:1rem; color:var(--text-dim)">Dynamic Duo 𓆝</span></h2>
@@ -143,7 +140,6 @@
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app" style="display:none;">
   <div class="topbar">
     <div class="topbar-logo">🌊 Dynamic Duo Workspace</div>
@@ -155,7 +151,6 @@
   </div>
 
   <div class="admin-layout">
-    <!-- SIDEBAR MENU -->
     <aside class="sidebar">
       <div class="sidebar-section">Hệ thống</div>
       <div class="sidebar-link active" data-nav="dashboard">📊 Dashboard</div>
@@ -175,10 +170,8 @@
       <div class="sidebar-link" data-nav="backup">📦 Sao lưu (Backup)</div>
     </aside>
 
-    <!-- KHU VỰC NỘI DUNG CHÍNH -->
     <main class="main">
       
-      <!-- DASHBOARD -->
       <section class="section active" id="sec-dashboard">
         <h2 class="page-title">Tổng quan hệ thống</h2>
         <div class="stat-grid">
@@ -201,7 +194,6 @@
         </div>
       </section>
 
-      <!-- STORIES -->
       <section class="section" id="sec-stories">
         <h2 class="page-title">Danh sách Truyện 
           <button class="btn btn-sky btn-sm" onclick="openStoryModal()">+ Thêm truyện mới</button>
@@ -212,7 +204,6 @@
         </table>
       </section>
 
-      <!-- CHAPTER LIST -->
       <section class="section" id="sec-chapter-list">
         <h2 class="page-title"><span id="cl-title">Danh sách chương</span>
           <div style="display:flex; gap:8px">
@@ -239,7 +230,6 @@
         </table>
       </section>
 
-      <!-- EDITOR -->
       <section class="section" id="sec-editor">
         <h2 class="page-title">Biên tập Chương
           <div style="display:flex; gap:8px">
@@ -259,7 +249,7 @@
           </div>
           
           <div class="field" style="grid-column: 1 / 3"><label>Mô tả SEO (Meta Description)</label><input type="text" id="ed-desc" placeholder="Tóm tắt ngắn gọn chương này để Google index..." /></div>
-          <div class="field"><label>Tags</label><input type="text" id="ed-tags" placeholder="Cắt nhau bằng dấu phẩy..." /></div>
+          <div class="field"><label>Tags</label><input type="text" id="ed-tags" placeholder="Cách nhau bằng dấu phẩy..." /></div>
           
           <div class="field" style="grid-column: 1 / -1"><label>Ghi chú của Editor</label><textarea id="ed-note" rows="2" placeholder="Hiển thị ở đầu hoặc cuối chương..."></textarea></div>
         </div>
@@ -280,7 +270,6 @@
               <button class="editor-btn" onclick="fmt('color')" style="border:none; padding:2px 5px">Tô màu</button>
             </div>
 
-            <!-- Find & Replace -->
             <div style="display:flex; align-items:center; gap:5px; margin-left:auto; background:#fff; padding:2px; border-radius:4px; border:1px solid var(--sky-light)">
                 <input type="text" id="fr-find" placeholder="Tìm..." style="width:80px; font-size:.75rem; border:none; outline:none; padding:2px 5px">
                 <input type="text" id="fr-replace" placeholder="Thay bằng..." style="width:80px; font-size:.75rem; border:none; border-left:1px solid #ccc; outline:none; padding:2px 5px">
@@ -300,11 +289,10 @@
         </div>
       </section>
 
-      <!-- BULK UPLOAD -->
       <section class="section" id="sec-bulk-upload">
         <h2 class="page-title">Đăng chương hàng loạt (Bulk Upload)</h2>
         <div class="card">
-            <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Tính năng này cho phép dán nguyên một cụm văn bản lớn (từ file txt/docx) chứa nhiều chương. Hệ thống sẽ tự động cắt chúng ra dựa trên từ khóa "Chương [số]".</p>
+            <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Tính năng này cho phép dán nguyên một cụm văn bản lớn chứa nhiều chương. Hệ thống tự động cắt dựa trên từ khóa "Chương [số]".</p>
             <div class="field">
                 <label>Chọn Truyện Đích</label>
                 <select id="bulk-story-select"></select>
@@ -318,19 +306,16 @@
         </div>
       </section>
 
-      <!-- FIREBASE COMMENTS -->
       <section class="section" id="sec-fb-comments">
         <h2 class="page-title">Quản lý Bình luận (Firebase)</h2>
         <div id="fb-comments-list" style="display:flex; flex-direction:column; gap:12px"></div>
       </section>
 
-      <!-- FIREBASE MESSAGES -->
       <section class="section" id="sec-fb-messages">
         <h2 class="page-title">Hòm thư riêng (Inbox)</h2>
         <div id="fb-msgs-list" style="display:flex; flex-direction:column; gap:12px"></div>
       </section>
 
-      <!-- FIREBASE READERS -->
       <section class="section" id="sec-fb-readers">
         <h2 class="page-title">Thống kê Độc giả (Token / ID)</h2>
         <div class="card">
@@ -341,7 +326,6 @@
         </div>
       </section>
 
-      <!-- SETTINGS SYSTEM -->
       <section class="section" id="sec-settings">
         <h2 class="page-title">Cấu hình Chung (settings.json)</h2>
         <div class="card">
@@ -351,7 +335,6 @@
         </div>
       </section>
 
-      <!-- SETTINGS UI -->
       <section class="section" id="sec-settings-ui">
         <h2 class="page-title">Giao diện & Banner</h2>
         <div class="card">
@@ -359,7 +342,6 @@
         </div>
       </section>
 
-      <!-- BACKUP -->
       <section class="section" id="sec-backup">
         <h2 class="page-title">Sao lưu Hệ thống (Backup)</h2>
         <div class="card" style="text-align:center; padding: 40px 20px">
@@ -375,7 +357,6 @@
   </div>
 </div>
 
-<!-- MODAL THÊM TRUYỆN -->
 <div class="modal-overlay" id="storyModal">
   <div class="modal-content">
     <h3 style="margin-top:0; border-bottom:1px solid var(--sky-light); padding-bottom:10px; color:var(--sky-dark)">Tạo Truyện Mới</h3>
@@ -384,9 +365,9 @@
     <div class="field"><label>Slug (Đường dẫn tĩnh - không dấu, gạch nối)</label><input type="text" id="st-id" placeholder="VD: suong-mu-thang-tam" /></div>
     <div class="field"><label>Phân loại (Thư mục)</label>
       <select id="st-cat">
-        <option value="ca-duoi-nuoc">Cá dưới nước (Đang làm)</option>
-        <option value="ca-tren-ban">Cá trên bàn (Đã hoàn thành)</option>
-        <option value="ca-tren-troi">Cá trên trời (Sắp làm)</option>
+        <option value="ca-duoi-nuoc">Cá dưới nước</option>
+        <option value="ca-tren-ban">Cá trên bàn</option>
+        <option value="ca-tren-troi">Cá trên trời</option>
       </select>
     </div>
     <div class="field"><label>Tác giả</label><input type="text" id="st-author" /></div>
@@ -397,6 +378,20 @@
     <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px">
       <button class="btn btn-outline" onclick="closeModal('storyModal')">Hủy bỏ</button>
       <button class="btn btn-sky" onclick="saveNewStory()">Tạo Thư Mục Truyện</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editStoryModal">
+  <div class="modal-content" style="max-width: 800px">
+    <h3 style="margin-top:0; border-bottom:1px solid var(--sky-light); padding-bottom:10px; color:var(--sky-dark)">Cập nhật thông tin truyện</h3>
+    <p style="font-size: .85rem; color: var(--text-mid); margin-top: 0">Bạn đang chỉnh sửa trực tiếp file <code>index.astro</code> của bộ truyện. Cẩn thận không làm hỏng cú pháp code nhé.</p>
+    
+    <textarea id="st-edit-body" style="width:100%; height:400px; font-family:monospace; font-size:.9rem; padding:15px; border:1px solid var(--sky-light); border-radius:var(--r-md); background:#f8fafc; line-height: 1.5; outline:none;"></textarea>
+    
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px">
+      <button class="btn btn-outline" onclick="closeModal('editStoryModal')">Hủy bỏ</button>
+      <button class="btn btn-sky" id="btn-save-story-info" onclick="saveStoryInfo()">🚀 Lưu lên GitHub</button>
     </div>
   </div>
 </div>
@@ -430,7 +425,7 @@ function showToast(msg, type = 'success') {
 /* ==========================================================================
    AUTH & LOGIN
    ========================================================================== */
-if(GH_TOKEN) $('ghToken').value = GH_TOKEN; // Nhớ token cũ
+if(GH_TOKEN) $('ghToken').value = GH_TOKEN;
 
 $('loginBtn').onclick = async () => {
   if($('adminPass').value !== ADMIN_PASS) {
@@ -450,13 +445,12 @@ $('loginBtn').onclick = async () => {
     const user = await res.json();
     
     GH_TOKEN = token;
-    localStorage.setItem('dd_gh_token', token); // Lưu token cho lần sau
+    localStorage.setItem('dd_gh_token', token);
     
     $('ghUser').textContent = 'Admin: ' + user.login;
     $('loginScreen').style.display = 'none';
     $('app').style.display = 'block';
     
-    // Init app
     navTo('dashboard');
     loadStoriesFromLocalOrAPI();
     loadFirebaseStats();
@@ -470,7 +464,7 @@ $('loginBtn').onclick = async () => {
 };
 
 /* ==========================================================================
-   ROUTING TẠI CHỖ (SPA Navigation)
+   ROUTING (SPA Navigation)
    ========================================================================== */
 function navTo(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -482,7 +476,6 @@ function navTo(id) {
   const link = document.querySelector(`[data-nav="${id}"]`);
   if(link) link.classList.add('active');
   
-  // Triggers
   if(id === 'stories') renderStoriesTable();
   if(id === 'settings') loadSettingsJSON();
   if(id === 'fb-comments') loadFbComments();
@@ -512,18 +505,19 @@ const b64Encode = str => btoa(unescape(encodeURIComponent(str)));
 const b64Decode = str => decodeURIComponent(escape(atob(str)));
 
 /* ==========================================================================
-   QUẢN LÝ TRUYỆN (Danh sách tĩnh + Auto fetch nếu cần)
+   QUẢN LÝ TRUYỆN 
    ========================================================================== */
+// (FIX): Đã nạp đầy đủ danh sách các truyện bạn đang có
 let storiesList = [
-  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
   { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', cat: 'ca-duoi-nuoc' },
+  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
+  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', cat: 'ca-tren-ban' },
   { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', cat: 'ca-tren-ban' },
-  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', cat: 'ca-tren-ban' }
+  { id: 'vat-de-vo', title: 'Vật dễ vỡ', cat: 'ca-tren-ban' },
+  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', cat: 'ca-tren-ban' }
 ];
 
 function loadStoriesFromLocalOrAPI() {
-    // Trong thực tế, bạn có thể quét folder `src/pages/ca-duoi-nuoc` để lấy danh sách thư mục
-    // Ở đây ta dùng mảng tĩnh để đảm bảo API không bị gọi quá giới hạn (Rate limit).
     $('stat-stories').textContent = storiesList.length;
 }
 
@@ -534,7 +528,7 @@ function renderStoriesTable() {
       <td style="font-size:.75rem; font-family:monospace; color:var(--text-dim)">src/pages/${s.cat}/${s.id}</td>
       <td><span class="badge badge-pub">Hoạt động</span></td>
       <td>
-        <button class="btn btn-outline btn-sm" onclick="editStoryInfo('${s.id}')">Sửa thông tin</button>
+        <button class="btn btn-outline btn-sm" onclick="editStoryInfo('${s.id}')">✏️ Sửa thông tin</button>
         <button class="btn btn-sky btn-sm" onclick="openStoryManager('${s.id}')">Quản lý Chương</button>
       </td>
     </tr>
@@ -547,7 +541,65 @@ function populateBulkUploadSelect() {
 }
 
 /* ==========================================================================
-   QUẢN LÝ CHƯƠNG (Danh sách, Xóa, Sắp xếp)
+   (FIX LỖI) SỬA THÔNG TIN TRUYỆN (FILE INDEX.ASTRO)
+   ========================================================================== */
+let currentEditStoryId = null;
+let currentEditStoryPath = null;
+let currentEditStorySha = null;
+
+async function editStoryInfo(id) {
+    const story = storiesList.find(s => s.id === id);
+    currentEditStoryId = id;
+    currentEditStoryPath = `/contents/src/pages/${story.cat}/${story.id}/index.astro`;
+    
+    $('st-edit-body').value = 'Đang tải nội dung file index.astro...';
+    openModal('editStoryModal');
+    
+    try {
+        const file = await ghAPI(`${currentEditStoryPath}?ref=${BRANCH}`);
+        $('st-edit-body').value = b64Decode(file.content.replace(/\n/g,''));
+        currentEditStorySha = file.sha;
+    } catch(e) {
+        $('st-edit-body').value = `Không tìm thấy file ${currentEditStoryPath}\n\n(Lỗi: ${e.message})`;
+        currentEditStorySha = null;
+    }
+}
+
+async function saveStoryInfo() {
+    const content = $('st-edit-body').value.trim();
+    if(!content) return;
+    if(!currentEditStorySha && !confirm('File này dường như chưa tồn tại. Bạn muốn tạo mới nó không?')) return;
+    
+    const btn = $('btn-save-story-info');
+    btn.textContent = 'Đang lưu...'; btn.disabled = true;
+    
+    try {
+        // Lấy SHA mới nhất chống lỗi 409
+        let latestSha = currentEditStorySha;
+        if(latestSha) {
+            try {
+                const check = await ghAPI(currentEditStoryPath);
+                latestSha = check.sha;
+            } catch(e){}
+        }
+        
+        await ghAPI(currentEditStoryPath, 'PUT', {
+            message: `📝 Admin: Cập nhật thông tin trang truyện ${currentEditStoryId}`,
+            content: b64Encode(content),
+            sha: latestSha,
+            branch: BRANCH
+        });
+        showToast('Lưu thông tin thành công!');
+        closeModal('editStoryModal');
+    } catch(e) {
+        showToast('Lỗi khi lưu: ' + e.message, 'error');
+    } finally {
+        btn.textContent = '🚀 Lưu lên GitHub'; btn.disabled = false;
+    }
+}
+
+/* ==========================================================================
+   QUẢN LÝ CHƯƠNG 
    ========================================================================== */
 async function openStoryManager(id) {
   currentStory = storiesList.find(s => s.id === id);
@@ -575,7 +627,6 @@ function renderChapTable(chaps) {
   }
   
   $('chapTbody').innerHTML = chaps.map((f, i) => {
-    // Trích xuất số chương từ tên file chuong-01.md
     const match = f.name.match(/chuong-(\d+)/);
     const num = match ? parseInt(match[1]) : i + 1;
     return `
@@ -606,7 +657,6 @@ function sortChapters() {
     renderChapTable(sorted);
 }
 
-// Xóa 1 chương
 async function delChap(name, sha) {
     if(!confirm(`Xóa vĩnh viễn file ${name}?`)) return;
     try {
@@ -618,7 +668,6 @@ async function delChap(name, sha) {
     } catch(e) { showToast('Lỗi khi xóa: ' + e.message, 'error'); }
 }
 
-// Xóa nhiều chương
 function toggleSelectAllChaps(el) {
     document.querySelectorAll('.chap-checkbox').forEach(cb => cb.checked = el.checked);
 }
@@ -642,15 +691,15 @@ async function bulkDeleteChaps() {
 
 
 /* ==========================================================================
-   EDITOR SOẠN THẢO (Parses Frontmatter, Tools, Live Preview)
+   EDITOR SOẠN THẢO (BẢO TỒN FRONTMATTER GỐC)
    ========================================================================== */
 let editorDraftInterval;
 
 async function openEditor(mode, name, sha) {
   navTo('editor');
   currentChap = (mode === 'edit') ? { name, sha } : null;
+  window.__currentRawFm = ""; // Biến lưu Frontmatter gốc
   
-  // Khôi phục nháp nếu có
   const draftKey = mode === 'new' ? `draft_new_${currentStory.id}` : `draft_edit_${currentStory.id}_${name}`;
   const draftData = localStorage.getItem(draftKey);
   
@@ -673,20 +722,20 @@ async function openEditor(mode, name, sha) {
         const file = await ghAPI(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${name}?ref=${BRANCH}`);
         const raw = b64Decode(file.content.replace(/\n/g,''));
         
-        // Parsing Frontmatter (Hệ thống parsing thông minh)
+        // (FIX) Trích xuất và lưu giữ vĩnh viễn thẻ cấu hình Astro
         const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/);
         let body = raw;
         if(fmMatch) {
             body = raw.slice(fmMatch[0].length).trim();
             const fmText = fmMatch[1];
+            window.__currentRawFm = fmText; // Ghi nhớ cấu hình gốc
             
-            // Regex lấy giá trị
-            const getVal = (key) => { const m = fmText.match(new RegExp(`${key}:\\s*(.+)`)); return m ? m[1].replace(/^"|"$/g, '').trim() : ''; };
+            const getVal = (key) => { const m = fmText.match(new RegExp(`^${key}:\\s*(.+)$`, 'm')); return m ? m[1].replace(/^"|"$/g, '').trim() : ''; };
             
             $('ed-title').value = getVal('title');
             $('ed-num').value = getVal('chuong');
             $('ed-desc').value = getVal('description');
-            $('ed-tags').value = getVal('tags'); // Nếu tags là dạng mảng thì cần parser xịn hơn, tạm thời string regex
+            $('ed-tags').value = getVal('tags');
             $('ed-status').value = getVal('draft') === 'true' ? 'draft' : 'published';
             $('ed-note').value = getVal('editor_note');
         }
@@ -702,16 +751,15 @@ async function openEditor(mode, name, sha) {
   
   updateWordCount();
   
-  // Auto Save Nháp
   clearInterval(editorDraftInterval);
   editorDraftInterval = setInterval(() => {
       const data = { title: $('ed-title').value, content: $('ed-content').value, time: new Date().toLocaleTimeString() };
       localStorage.setItem(draftKey, JSON.stringify(data));
       $('ed-last-save').textContent = 'Đã lưu nháp lúc ' + data.time;
-  }, 10000); // Lưu mỗi 10s
+  }, 10000); 
 }
 
-// Hàm format văn bản (Toolbar nâng cao)
+// Format tools
 function fmt(cmd) {
   const ta = $('ed-content');
   const start = ta.selectionStart;
@@ -737,7 +785,6 @@ function fmt(cmd) {
   updateWordCount();
 }
 
-// Find & Replace hàng loạt
 function findAndReplace() {
     const f = $('fr-find').value;
     const r = $('fr-replace').value;
@@ -757,7 +804,6 @@ function updateWordCount() {
 }
 $('ed-content').oninput = updateWordCount;
 
-// Toggle Preview Realtime
 let isPreview = false;
 function togglePreview() {
     isPreview = !isPreview;
@@ -774,7 +820,6 @@ function togglePreview() {
             .replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid var(--sky); padding-left:10px; color:gray">$1</blockquote>')
             .replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
             
-        // Phục hồi lại thẻ HTML do sanitize ở trên (Hơi tricky một xíu cho div color)
         html = html.replace(/&lt;span style=&quot;color:(.*?)&quot;&gt;(.*?)&lt;\/span&gt;/g, '<span style="color:$1">$2</span>');
         html = html.replace(/&lt;div style=&quot;text-align:center&quot;&gt;/g, '<div style="text-align:center">').replace(/&lt;\/div&gt;/g, '</div>');
         html = html.replace(/&lt;u&gt;(.*?)&lt;\/u&gt;/g, '<u>$1</u>');
@@ -790,44 +835,76 @@ function togglePreview() {
     }
 }
 
-// Lưu lên GitHub
+// (FIX LỖI) LƯU CHƯƠNG LÊN GITHUB
 $('ed-saveBtn').onclick = async () => {
   if(!$('ed-title').value || !$('ed-num').value) return showToast('Vui lòng nhập Tiêu đề và Số chương', 'error');
 
   const btn = $('ed-saveBtn');
   btn.disabled = true; btn.textContent = 'Đang đẩy lên Git...';
   
-  // Tự động chèn biến Layout
-  const fm = `---
-layout: "../../../layouts/Layout.astro"
+  // KIỂM SOÁT FRONTMATTER (Không ghi đè dữ liệu cũ của Astro)
+  let finalFm = "";
+  if (currentChap && window.__currentRawFm) {
+      finalFm = window.__currentRawFm;
+      // Hàm thay thế thông minh: Nếu có thì đè, chưa có thì chèn thêm
+      const setKey = (key, val, isStr=true) => {
+          const regex = new RegExp(`^${key}:.*$`, 'm');
+          const strVal = isStr ? `"${val}"` : val;
+          if (regex.test(finalFm)) {
+              finalFm = finalFm.replace(regex, `${key}: ${strVal}`);
+          } else {
+              finalFm += `\n${key}: ${strVal}`;
+          }
+      };
+      setKey('title', $('ed-title').value.replace(/"/g, '\\"'));
+      setKey('chuong', parseInt($('ed-num').value), false);
+      setKey('description', $('ed-desc').value.replace(/"/g, '\\"'));
+      setKey('draft', $('ed-status').value === 'draft' ? 'true' : 'false', false);
+      if($('ed-note').value) setKey('editor_note', $('ed-note').value.replace(/"/g, '\\"'));
+  } else {
+      // Trường hợp tạo mới hoàn toàn
+      finalFm = `layout: "../../../layouts/Layout.astro"
 title: "${$('ed-title').value.replace(/"/g, '\\"')}"
 truyen_id: "${currentStory.id}"
 chuong: ${parseInt($('ed-num').value)}
 date: "${new Date().toISOString().split('T')[0]}"
 description: "${$('ed-desc').value.replace(/"/g, '\\"')}"
 draft: ${$('ed-status').value === 'draft' ? 'true' : 'false'}
-editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"
----`;
+editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
+  }
   
-  const content = fm + '\n\n' + $('ed-content').value;
-  const filename = `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;
+  const content = `---\n${finalFm}\n---\n\n${$('ed-content').value}`;
+  
+  // (Lưu ý: Nếu đang Edit, giữ nguyên tên file cũ để không bị đổi ID URL)
+  const filename = currentChap ? currentChap.name : `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;
   const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}/${filename}`;
+  
+  // (FIX LỖI SHA): Lấy SHA mới nhất ngay lúc này
+  let latestSha = currentChap ? currentChap.sha : null;
+  if(currentChap) {
+      try {
+          const checkFile = await ghAPI(path);
+          latestSha = checkFile.sha;
+      } catch(e){} // Kệ nếu lỗi mạng
+  }
   
   try {
       const res = await ghAPI(path, 'PUT', {
-        message: `🚀 Editor: Lưu ${filename}`,
+        message: `🚀 Editor: Cập nhật ${filename}`,
         content: b64Encode(content),
-        sha: currentChap ? currentChap.sha : null,
+        sha: latestSha,
         branch: BRANCH
       });
       
       showToast('Đã xuất bản thành công!');
       
+      // Update lại SHA cho frontend nếu bạn muốn bấm lưu liên tiếp nhiều lần
+      if(currentChap) { currentChap.sha = res.content.sha; }
+      
       // Clear draft
       const draftKey = currentChap ? `draft_edit_${currentStory.id}_${currentChap.name}` : `draft_new_${currentStory.id}`;
       localStorage.removeItem(draftKey);
       
-      // Trở về danh sách chương
       setTimeout(()=> {
           openStoryManager(currentStory.id);
       }, 1000);
@@ -852,22 +929,18 @@ async function processBulkUpload() {
     const log = $('bulk-log');
     log.innerHTML = 'Bắt đầu xử lý...\n';
     
-    // Tách chương. Giả định dấu hiệu là "Chương X: Tiêu đề"
-    // Regex: lookahead phân tách đoạn bắt đầu bằng "Chương "
     const chapters = rawText.split(/(?=Chương \d+)/gi).map(s => s.trim()).filter(s => s.length > 50);
-    
     log.innerHTML += `Tìm thấy ${chapters.length} chương. Bắt đầu đẩy lên GitHub...\n\n`;
     
     let success = 0;
     for(const text of chapters) {
-        // Trích xuất số chương
         const numMatch = text.match(/Chương (\d+)/i);
         if(!numMatch) {
             log.innerHTML += `❌ Bỏ qua 1 đoạn không xác định được số chương.\n`;
             continue;
         }
         const num = parseInt(numMatch[1]);
-        const titleMatch = text.split('\n')[0]; // Dòng đầu làm tiêu đề
+        const titleMatch = text.split('\n')[0]; 
         
         const fm = `---
 layout: "../../../layouts/Layout.astro"
@@ -889,7 +962,6 @@ date: "${new Date().toISOString().split('T')[0]}"
             log.innerHTML += `❌ Lỗi đăng ${filename}: ${e.message}\n`;
         }
     }
-    
     showToast(`Hoàn tất Bulk Upload! Thành công ${success}/${chapters.length}`);
 }
 
@@ -932,7 +1004,6 @@ function loadFbComments() {
           </div>
           <div style="font-size:.9rem; color:var(--text-main)">${d.text}</div>
           <div style="margin-top:10px; text-align:right">
-            <button class="btn btn-outline btn-sm" onclick="replyComment('${pageId}', '${cmt.key}')">↩ Reply</button>
             <button class="btn btn-red btn-sm" onclick="delFb('comments/${pageId}/${cmt.key}')">🗑 Xóa</button>
           </div>
         </div>`;
@@ -1005,7 +1076,7 @@ async function loadSettingsJSON() {
 async function saveSettingsJSON() {
   const content = $('settings-json').value;
   try {
-      JSON.parse(content); // Test valid JSON
+      JSON.parse(content); 
   } catch(e) {
       return showToast('Lỗi Cú Pháp JSON. Vui lòng kiểm tra lại!', 'error');
   }
@@ -1024,7 +1095,6 @@ async function saveSettingsJSON() {
   btn.textContent = 'Lưu Cấu hình'; btn.disabled = false;
 }
 
-// Chức năng Tạo ZIP Backup
 async function performBackup() {
     const btn = $('btn-backup');
     const log = $('backup-log');
@@ -1035,7 +1105,6 @@ async function performBackup() {
         const zip = new JSZip();
         const rootFolder = zip.folder("dynamic-duo-backup");
         
-        // Quét từng truyện để tải file
         for(const s of storiesList) {
             log.innerHTML += `Đang tải: ${s.title}...<br>`;
             const path = `/contents/src/pages/${s.cat}/${s.id}?ref=${BRANCH}`;
@@ -1043,7 +1112,7 @@ async function performBackup() {
                 const files = await ghAPI(path);
                 const storyFolder = rootFolder.folder(s.id);
                 for(const f of files) {
-                    if(f.name.endsWith('.md')) {
+                    if(f.name.endsWith('.md') || f.name.endsWith('.astro')) {
                         const fileData = await ghAPI(f.path);
                         const content = b64Decode(fileData.content.replace(/\n/g, ''));
                         storyFolder.file(f.name, content);
@@ -1055,7 +1124,6 @@ async function performBackup() {
         log.innerHTML += 'Đang nén file ZIP... Vui lòng chờ.<br>';
         const content = await zip.generateAsync({type:"blob"});
         
-        // Tạo link download
         const a = document.createElement("a");
         a.href = URL.createObjectURL(content);
         a.download = `Backup-Dynamic-Duo-${new Date().toISOString().split('T')[0]}.zip`;
@@ -1071,7 +1139,7 @@ async function performBackup() {
 
 
 /* ==========================================================================
-   MODAL THÊM TRUYỆN MỚI
+   MODALS CONTROL
    ========================================================================== */
 function openStoryModal() { openModal('storyModal'); }
 function openModal(id) { $(id).classList.add('open'); }
@@ -1085,22 +1153,27 @@ async function saveNewStory() {
     
     if(!title || !id) return showToast('Tên và Slug không được để trống', 'error');
     
+    // Tạo index.astro cơ bản cho thư mục truyện
     const fm = `---
-layout: "../../../layouts/Layout.astro"
-title: "${title}"
-author: "${author}"
-tags: [${$('st-tags').value.split(',').map(t => `"${t.trim()}"`).join(', ')}]
-description: "${$('st-desc').value}"
+import Layout from "../../../layouts/Layout.astro";
+const title = "${title}";
+const author = "${author}";
+const description = "${$('st-desc').value}";
 ---
-${$('st-body').value}
+<Layout title={title}>
+  <div class="story-info">
+    <h1>{title}</h1>
+    <p>Tác giả: {author}</p>
+    <div class="desc">${$('st-body').value}</div>
+  </div>
+</Layout>
 `;
     try {
-        await ghAPI(`/contents/src/pages/${cat}/${id}/index.md`, 'PUT', {
+        await ghAPI(`/contents/src/pages/${cat}/${id}/index.astro`, 'PUT', {
             message: `📚 Thêm truyện mới: ${title}`, content: b64Encode(fm), branch: BRANCH
         });
         showToast('Tạo thư mục truyện thành công!');
         closeModal('storyModal');
-        // Thêm vào danh sách tạm để hiển thị
         storiesList.push({ id, title, cat });
         renderStoriesTable();
     } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }

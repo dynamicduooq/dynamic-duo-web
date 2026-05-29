@@ -111,6 +111,41 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
+  /* Style cho hộp lời nhắn của Editor */
+.editor-note-box {
+  background: var(--sky-pale);
+  border-left: 4px solid var(--sky);
+  padding: 15px 20px;
+  margin-bottom: 30px;
+  border-radius: var(--r-sm);
+  font-family: var(--read-ff);
+  box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.05);
+}
+
+.note-label {
+  font-weight: bold;
+  color: var(--sky-dark);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.note-text {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+[data-theme="dark"] .editor-note-box {
+  background: rgba(14, 165, 233, 0.1);
+  border-left-color: var(--sky);
+}
+[data-theme="dark"] .note-text {
+  color: #8fbcd4;
+}
   /* ── AUTO AUDIO PLAYER ── */
     .auto-audio-player {
       max-width: 100%; margin: 0 auto 24px; padding: 14px 16px;
@@ -128,6 +163,26 @@ if (isNovelPage) {
     .aa-btn.play:hover { background: var(--sky2); }
     .aa-btn.pause { background: #f59e0b; color: #fff; }
     .aa-btn.stop { background: #ef4444; color: #fff; }
+    .aa-settings { 
+      display: flex; gap: 15px; align-items: center; 
+      padding: 10px 0; border-top: 1px solid rgba(186,230,253,0.3);
+      width: 100%;
+    }
+    .aa-field { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-mid); }
+    .aa-field label { font-weight: bold; }
+    
+    #aaVoiceSelect { 
+      padding: 3px 8px; border-radius: 6px; border: 1px solid var(--sky-light); 
+      background: #fff; font-family: inherit; font-size: 0.75rem; outline: none;
+      max-width: 150px;
+    }
+    #aaRateRange { cursor: pointer; accent-color: var(--sky); width: 80px; }
+    #aaRateValue { min-width: 25px; font-weight: bold; color: var(--sky); }
+
+    @media(max-width: 640px) {
+      .aa-settings { flex-direction: column; align-items: flex-start; gap: 8px; }
+      #aaVoiceSelect { max-width: 100%; }
+    }
     /* ── VARIABLES ── */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
@@ -742,8 +797,7 @@ if (isNovelPage) {
         : <span class="chap-pn disabled">← Chương trước</span>}
         
       <!-- NÚT MỤC LỤC TRUYỆN MỚI THÊM -->
-      <a href={`/dynamic-duo-web/truyen/${currentTruyenId}/`} class="chap-pn" style="font-weight:600; color:var(--sky-dark)" title="Quay lại mục lục">📖 Mục lục</a>
-      
+<a href={`${currentFolder}/`} class="chap-pn" style="font-weight:600; color:var(--sky-dark)" title="Quay lại mục lục">📖 Mục lục</a>      
       {chapters.length > 1 && (
         <div class="chap-dd-wrap" id="ddTop">
           <button class="chap-dd-btn" id="ddBtnTop">⚓ Chọn chương ▾</button>
@@ -765,12 +819,27 @@ if (isNovelPage) {
   {isNovelPage ? (
     <div class="novel-layout-wrap" id="novelLayoutWrap">
     <!-- TRÌNH PHÁT AUDIO TỰ ĐỘNG BẰNG TRÌNH DUYỆT -->
-      {isNovelPage && (
+{isNovelPage && (
         <div class="auto-audio-player">
           <div class="aa-header">
             <span class="aa-icon">🎧</span>
-            <span>Nghe tự động (Giọng máy)</span>
+            <span>Nghe tự động</span>
           </div>
+
+          <div class="aa-settings">
+            <!-- Chọn giọng đọc -->
+            <div class="aa-field">
+              <label>Giọng:</label>
+              <select id="aaVoiceSelect"><option value="">Đang tải...</option></select>
+            </div>
+            <!-- Chọn tốc độ -->
+            <div class="aa-field">
+              <label>Tốc độ:</label>
+              <input type="range" id="aaRateRange" min="0.5" max="2" value="1" step="0.1" />
+              <span id="aaRateValue">1x</span>
+            </div>
+          </div>
+
           <div class="aa-controls">
             <button id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
             <button id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
@@ -780,8 +849,17 @@ if (isNovelPage) {
       )}
 
       <!-- Khung nội dung truyện gốc -->
-      <div class="novel-content" id="novelContent"><slot /></div>
-      
+<div class="novel-content" id="novelContent">
+  <!-- Hiển thị lời nhắn của Editor nếu có -->
+  {frontmatter?.editor_note && (
+    <div class="editor-note-box">
+      <div class="note-label">🌸 Lời nhắn của Editor:</div>
+      <div class="note-text">{frontmatter.editor_note}</div>
+    </div>
+  )}
+
+  <slot />
+</div>      
       <div class="chap-like-area">
         <button class="chap-like-btn" id="btnLikeChapter">
           <span class="heart">🤍</span> Yêu thích chương này <span class="count" id="chapLikeCount" style="font-weight:bold;margin-left:4px">0</span>
@@ -1060,59 +1138,96 @@ document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddTog
 document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
 syncThemeBtns();
 // LOGIC ĐỌC TRUYỆN TỰ ĐỘNG
-  document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const btnPlay = document.getElementById('btnPlayTTS');
     const btnPause = document.getElementById('btnPauseTTS');
     const btnStop = document.getElementById('btnStopTTS');
+    const voiceSelect = document.getElementById('aaVoiceSelect');
+    const rateRange = document.getElementById('aaRateRange');
+    const rateValue = document.getElementById('aaRateValue');
     const content = document.getElementById('novelContent');
 
-    if(btnPlay && content && 'speechSynthesis' in window) {
-      let synth = window.speechSynthesis;
-      let utterance = new SpeechSynthesisUtterance();
+    if(!btnPlay || !('speechSynthesis' in window)) return;
 
-      btnPlay.addEventListener('click', () => {
-        if(synth.paused) {
-          synth.resume();
-        } else {
-          // Lấy toàn bộ text, xóa các khoảng trắng thừa
-          const textToRead = content.innerText; 
-          utterance.text = textToRead;
-          utterance.lang = 'vi-VN'; // Cài đặt tiếng Việt
-          utterance.rate = 0.95;    // Tốc độ đọc (1 là bình thường)
-          synth.speak(utterance);
+    let synth = window.speechSynthesis;
+    let utterance = new SpeechSynthesisUtterance();
+    let voices = [];
+
+    // 1. TẢI DANH SÁCH GIỌNG ĐỌC
+    function populateVoices() {
+      // Lọc các giọng tiếng Việt (vi-VN)
+      voices = synth.getVoices().filter(v => v.lang.includes('vi'));
+      
+      if(voices.length === 0) {
+        // Nếu không có tiếng Việt, lấy tất cả các giọng
+        voices = synth.getVoices();
+      }
+
+      voiceSelect.innerHTML = voices
+        .map((voice, i) => `<option value="${i}">${voice.name} (${voice.lang})</option>`)
+        .join('');
+    }
+
+    // Trình duyệt tải giọng đọc không đồng bộ nên cần sự kiện này
+    populateVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    // 2. THAY ĐỔI TỐC ĐỘ
+    rateRange.addEventListener('input', () => {
+      rateValue.textContent = rateRange.value + 'x';
+    });
+
+    // 3. LOGIC ĐIỀU KHIỂN
+    btnPlay.addEventListener('click', () => {
+      if(synth.paused) {
+        synth.resume();
+      } else {
+        synth.cancel(); // Xóa các lệnh đọc cũ nếu có
+
+        const textToRead = content.innerText;
+        utterance.text = textToRead;
+        
+        // Gán giọng đọc đã chọn
+        if(voices[voiceSelect.value]) {
+          utterance.voice = voices[voiceSelect.value];
         }
-        btnPlay.style.display = 'none';
-        btnPause.style.display = 'block';
-        btnStop.style.display = 'block';
-      });
+        
+        // Gán tốc độ đọc
+        utterance.rate = parseFloat(rateRange.value);
+        utterance.lang = 'vi-VN';
 
-      btnPause.addEventListener('click', () => {
-        synth.pause();
-        btnPlay.style.display = 'block';
-        btnPlay.textContent = '▶ Tiếp tục';
-        btnPause.style.display = 'none';
-      });
+        synth.speak(utterance);
+      }
+      btnPlay.style.display = 'none';
+      btnPause.style.display = 'block';
+      btnStop.style.display = 'block';
+    });
 
-      btnStop.addEventListener('click', () => {
-        synth.cancel();
-        btnPlay.style.display = 'block';
-        btnPlay.textContent = '▶ Nghe';
-        btnPause.style.display = 'none';
-        btnStop.style.display = 'none';
-      });
+    btnPause.addEventListener('click', () => {
+      synth.pause();
+      btnPlay.style.display = 'block';
+      btnPlay.textContent = '▶ Tiếp tục';
+      btnPause.style.display = 'none';
+    });
 
-      utterance.onend = () => {
-        btnPlay.style.display = 'block';
-        btnPlay.textContent = '▶ Nghe';
-        btnPause.style.display = 'none';
-        btnStop.style.display = 'none';
-      };
-    } else if(btnPlay) {
-      btnPlay.textContent = 'Trình duyệt không hỗ trợ';
-      btnPlay.disabled = true;
+    btnStop.addEventListener('click', () => {
+      synth.cancel();
+      resetUI();
+    });
+
+    utterance.onend = resetUI;
+
+    function resetUI() {
+      btnPlay.style.display = 'block';
+      btnPlay.textContent = '▶ Nghe';
+      btnPause.style.display = 'none';
+      btnStop.style.display = 'none';
     }
   });
-/* ══ ADMIN AUTH & STATS BUTTON ══ */
+  
+  /* ══ ADMIN AUTH & STATS BUTTON ══ */
 (function setupAdminBtn(){
   const btn = document.getElementById('footerAdmin');
   const statsBtn = document.getElementById('fabStats');

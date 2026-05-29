@@ -84,4 +84,107 @@ const chapters = allPosts
       ))}
     </div>
   </div>
+  <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
+<div class="public-reviews-widget" data-truyen-id="tnctsct">
+  <div class="prw-header">
+    <h3>⭐ Đánh giá từ độc giả</h3>
+    <div class="prw-stats">
+      <span class="prw-avg">0.0</span>
+      <span class="prw-stars">☆☆☆☆☆</span>
+      <span class="prw-count">(0 đánh giá)</span>
+    </div>
+  </div>
+  <div class="prw-list" id="prwList">
+     <div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:gray">Đang tải đánh giá...</div>
+  </div>
+</div>
+
+<style>
+  .public-reviews-widget {
+    margin-top: 40px; padding-top: 24px;
+    border-top: 2px dashed var(--sky-light);
+    font-family: var(--read-ff, 'Newsreader', serif);
+  }
+  [data-theme="dark"] .public-reviews-widget { border-color: rgba(126,200,227,0.2); }
+  .prw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+  .prw-header h3 { margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif;}
+  [data-theme="dark"] .prw-header h3 { color: #a8daf0; }
+  .prw-stats { display: flex; align-items: center; gap: 8px; }
+  .prw-avg { font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;}
+  [data-theme="dark"] .prw-avg { color: #a8daf0; }
+  .prw-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
+  .prw-count { font-size: 0.8rem; color: var(--text-dim); }
+  
+  .prw-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .prw-item {
+    background: var(--sky-pale); border: 1px solid rgba(186,230,253,0.5);
+    padding: 18px; border-radius: 14px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .prw-item:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(2,132,199,0.08); }
+  [data-theme="dark"] .prw-item { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.15); }
+  [data-theme="dark"] .prw-item:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+  .prw-item-name { font-weight: 600; font-size: 0.95rem; color: var(--sky-dark); display: block; margin-bottom: 2px;}
+  [data-theme="dark"] .prw-item-name { color: #a8daf0; }
+  .prw-item-stars { color: #fbbf24; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 8px; display: block;}
+  .prw-item-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; margin: 0 0 10px 0; }
+  [data-theme="dark"] .prw-item-text { color: #F3F9FF; }
+  .prw-item-time { font-size: 0.75rem; color: var(--text-dim); font-style: italic;}
+</style>
+
+<script is:inline>
+  (function loadPublicReviews() {
+    const widget = document.querySelector('.public-reviews-widget');
+    const listEl = document.getElementById('prwList');
+    if(!widget || !listEl) return;
+    const truyenId = widget.dataset.truyenId;
+    
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function timeAgo(ts){
+      if(!ts) return ''; const d=Date.now()-ts;
+      if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
+      if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
+    }
+
+    function initFetch(fb) {
+      fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
+        const data = snap.val() || {};
+        const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
+        
+        widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
+        
+        let avg = 0;
+        if(items.length > 0) {
+           const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
+           avg = (total / items.length).toFixed(1);
+        }
+        widget.querySelector('.prw-avg').textContent = avg > 0 ? avg : '0.0';
+        
+        let starHtml = ''; const fullStars = Math.round(avg);
+        for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
+        widget.querySelector('.prw-stars').textContent = starHtml;
+
+        if(items.length === 0) {
+           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+        } else {
+           listEl.innerHTML = items.map(rv => {
+              const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+              const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:.6rem; padding:2px 8px; border-radius:99px; margin-left:6px; vertical-align:middle; font-family:sans-serif">chủ nhà</span>' : '';
+              return `
+                <div class="prw-item">
+                  <span class="prw-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
+                  <span class="prw-item-stars">${stars}</span>
+                  <p class="prw-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
+                  <div class="prw-item-time">${timeAgo(rv.ts)}</div>
+                </div>
+              `;
+           }).join('');
+        }
+      });
+    }
+
+    if(window.__ddFirebase?.db) { initFetch(window.__ddFirebase); }
+    else { window.addEventListener('dd-firebase-ready', () => initFetch(window.__ddFirebase), {once:true}); }
+  })();
+</script>
+<!-- ========================================================== -->
 </Layout>

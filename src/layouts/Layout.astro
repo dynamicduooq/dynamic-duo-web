@@ -292,26 +292,34 @@ if (isNovelPage) {
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
 
-    /* ── BONG BÓNG INLINE COMMENT ── */
+/* ── BONG BÓNG INLINE COMMENT (FIX LỀ TRÁI) ── */
+    .novel-content p { position: relative; } /* Bắt buộc để canh lề cho bong bóng */
     .ic-trigger {
+      position: absolute; 
+      left: -50px; /* Đẩy ra rìa trái của văn bản */
+      top: -2px;
       display: inline-flex; align-items: center; justify-content: center;
-      margin-left: 8px; padding: 4px;
-      background: transparent; border: none; cursor: pointer;
+      padding: 4px; background: transparent; border: none; cursor: pointer;
       font-size: 1.1rem; opacity: 0;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      vertical-align: middle; color: var(--sky);
-      transform: translateY(2px) scale(0.9);
+      color: var(--sky);
+      transform: translateX(-5px) scale(0.9);
       filter: grayscale(100%) opacity(0.5);
+      z-index: 10;
+    }
+    @media(max-width: 768px) { .ic-trigger { left: -35px; } }
+    @media(max-width: 640px) { 
+      .ic-trigger { left: -15px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 2px; } 
     }
     .novel-content p:hover .ic-trigger {
-      opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1);
+      opacity: 0.6; transform: translateX(0) scale(1); filter: grayscale(0%) opacity(1);
     }
     .ic-trigger:hover {
-      opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important;
+      opacity: 1 !important; transform: translateX(2px) scale(1.2) !important;
       color: var(--sky2); filter: grayscale(0%) opacity(1) !important;
     }
     .ic-trigger.has-comments {
-      opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1);
+      opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateX(0) scale(1);
     }
     .novel-content p.ic-active .ic-trigger {
       opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1);
@@ -1335,7 +1343,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.className = 'ic-trigger'; btn.title = 'Bình luận đoạn ' + (idx + 1);
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
     btn.innerHTML = '💬'; 
-    p.appendChild(btn);
+p.insertBefore(btn, p.firstChild); // Chèn vào trước ký tự đầu tiên
 
     waitFirebase(({db, ref, onValue}) => {
       const key = 'inline_' + pageKey() + '_p' + idx;
@@ -1365,7 +1373,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const myToken = getMyToken();
   const storageKey = 'dd_liked_' + key;
 
-  // Lấy trạng thái lưu ở máy lúc load trang
   if(localStorage.getItem(storageKey) === 'true') {
     btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️';
   }
@@ -1373,26 +1380,24 @@ document.addEventListener('DOMContentLoaded', () => {
   waitFirebase(({db, ref, onValue, update, remove}) => {
     const likeRef = ref(db, 'chapter_likes/' + key);
     
-    // Lắng nghe dữ liệu realtime
     onValue(likeRef, snap => {
       const data = snap.val() || {};
       countEl.textContent = Object.keys(data).length;
-      
-      // FIX LỖI GIAO DIỆN: Bổ sung logic tháo tim nếu data không còn
       if(data[myToken]) { 
-          btn.classList.add('liked'); 
-          btn.querySelector('.heart').textContent = '❤️'; 
-          localStorage.setItem(storageKey, 'true'); 
+         btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true'); 
       } else {
-          btn.classList.remove('liked'); 
-          btn.querySelector('.heart').textContent = '🤍'; 
-          localStorage.removeItem(storageKey);
+         btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; localStorage.removeItem(storageKey); 
       }
     });
 
-    btn.addEventListener('click', async () => {
+    // Tránh bị gán event nhiều lần
+    if(btn.dataset.bound) return;
+    btn.dataset.bound = "true";
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
       const isLiked = btn.classList.contains('liked');
-      btn.disabled = true; // Khóa nút chống spam click
+      btn.style.pointerEvents = 'none'; // Khóa nút tạm thời
       
       try {
         if(isLiked) {
@@ -1400,18 +1405,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
         }
-      } catch(e) { 
-          console.error('Lỗi like:', e); 
-          alert('Không thể thả tim! Có thể do Firebase Rules chặn. (Lỗi: ' + e.message + ')');
+      } catch(error) { 
+        console.error('Lỗi like:', error);
+        alert('Không thể thả tim! (Vui lòng báo Admin check lại kết nối)');
+      } finally {
+        btn.style.pointerEvents = 'auto'; // Mở lại nút
       }
-      
-      btn.disabled = false; // Mở lại nút
     });
   });
 })();
 
 /* ══════════════════════════════════════════
-   D. NOVEL REVIEW SYSTEM
+   D. NOVEL REVIEW SYSTEM (ĐÃ VÁ LỖI NHÂN ĐÔI)
 ══════════════════════════════════════════ */
 (function setupNovelReview(){
   const truyenId = document.querySelector('.page-wrapper')?.dataset.truyenId;
@@ -1429,11 +1434,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const openModal = () => { overlay.classList.add('show'); modal.classList.add('show'); document.getElementById('toolFabWrap')?.classList.remove('open'); };
   const closeModal = () => { overlay.classList.remove('show'); modal.classList.remove('show'); };
-  btnOpen.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', closeModal);
+  
+  // FIX: Chống gán sự kiện click nhiều lần cho nút mở/đóng
+  if (!btnOpen.dataset.bound) {
+      btnOpen.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', closeModal);
+      btnOpen.dataset.bound = "true";
+  }
 
-  if(starSelect) {
+  // FIX: Chống gán sự kiện click nhiều lần cho các ngôi sao
+  if(starSelect && !starSelect.dataset.bound) {
     const stars = starSelect.querySelectorAll('span');
     stars.forEach(s => {
       s.addEventListener('click', () => {
@@ -1441,6 +1452,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
       });
     });
+    starSelect.dataset.bound = "true";
   }
 
   waitFirebase(({db, ref, onValue, push, remove}) => {
@@ -1450,13 +1462,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = snap.val() || {};
       const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
       
-      document.getElementById('rvCount').textContent = `${items.length} đánh giá`;
+      const rvCountEl = document.getElementById('rvCount');
+      if(rvCountEl) rvCountEl.textContent = `${items.length} đánh giá`;
+      
       let avg = 0;
       if(items.length > 0) {
          const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
          avg = (total / items.length).toFixed(1);
       }
-      document.getElementById('rvAvg').textContent = avg > 0 ? avg : '0.0';
+      const rvAvgEl = document.getElementById('rvAvg');
+      if(rvAvgEl) rvAvgEl.textContent = avg > 0 ? avg : '0.0';
       
       const displayStars = document.getElementById('rvStarsDisplay');
       if(displayStars) {
@@ -1496,18 +1511,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    submitBtn?.addEventListener('click', async () => {
-      const text = document.getElementById('rvText')?.value.trim();
-      const name = document.getElementById('rvName')?.value.trim() || 'Khách';
-      if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+    // FIX CHÍNH: Chống spam click và gán sự kiện gửi 2 lần
+    if(submitBtn && !submitBtn.dataset.boundSubmit) {
+      submitBtn.dataset.boundSubmit = "true";
       
-      submitBtn.disabled = true;
-      try {
-        await push(reviewRef, { name: window.__ddIsAdmin ? ADMIN_DISPLAY_NAME : name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
-        document.getElementById('rvText').value = ''; saveName(name);
-      } catch(e) { alert('Lỗi: ' + e.message); }
-      submitBtn.disabled = false;
-    });
+      submitBtn.addEventListener('click', async () => {
+        const text = document.getElementById('rvText')?.value.trim();
+        const name = document.getElementById('rvName')?.value.trim() || 'Khách';
+        if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+        
+        submitBtn.disabled = true;
+        try {
+          await push(reviewRef, { name: window.__ddIsAdmin ? ADMIN_DISPLAY_NAME : name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
+          document.getElementById('rvText').value = ''; saveName(name);
+        } catch(e) { alert('Lỗi: ' + e.message); }
+        
+        // Mở khóa nút sau khi gửi xong
+        setTimeout(() => submitBtn.disabled = false, 500);
+      });
+    }
   });
 })();
 

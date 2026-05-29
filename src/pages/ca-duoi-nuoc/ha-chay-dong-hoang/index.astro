@@ -82,59 +82,90 @@ const pct = Math.round((chapters.length / total) * 100);
       ))}
     </div>
   </div>
-  <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
-<div class="public-reviews-widget" data-truyen-id="hcdh">
-  <div class="prw-header">
-    <h3>⭐ Đánh giá từ độc giả</h3>
-    <div class="prw-stats">
-      <span class="prw-avg">0.0</span>
-      <span class="prw-stars">☆☆☆☆☆</span>
-      <span class="prw-count">(0 đánh giá)</span>
+<div class="story-review-section" data-truyen-id="hcdh">
+  <div class="sr-header">
+    <h3>⭐ Đánh giá truyện</h3>
+    <div class="sr-stats">
+      <span class="sr-avg" id="srAvg">0.0</span>
+      <span class="sr-stars-display" id="srStarsDisplay">☆☆☆☆☆</span>
+      <span class="sr-count" id="srCount">(0 đánh giá)</span>
     </div>
   </div>
-  <div class="prw-list" id="prwList">
-     <div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:gray">Đang tải đánh giá...</div>
+
+  <div class="sr-form">
+    <div class="sr-star-select" id="srStarSelect">
+      <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
+    </div>
+    <input class="sr-inp" id="srName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" />
+    <textarea class="sr-textarea" id="srText" placeholder="Nêu cảm nhận của bạn về bộ truyện này nhé..." rows="3"></textarea>
+    <div style="text-align:right">
+      <button class="sr-submit-btn" id="srSubmit">Gửi đánh giá</button>
+    </div>
+  </div>
+
+  <div class="sr-list" id="srList">
+    <div style="text-align:center; padding: 20px; color: var(--text-dim); font-style: italic;">Đang tải đánh giá...</div>
   </div>
 </div>
 
 <style>
-  .public-reviews-widget {
+  /* Giao diện khu vực Đánh giá */
+  .story-review-section {
     margin-top: 40px; padding-top: 24px;
     border-top: 2px dashed var(--sky-light);
     font-family: var(--read-ff, 'Newsreader', serif);
   }
-  [data-theme="dark"] .public-reviews-widget { border-color: rgba(126,200,227,0.2); }
-  .prw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
-  .prw-header h3 { margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif;}
-  [data-theme="dark"] .prw-header h3 { color: #a8daf0; }
-  .prw-stats { display: flex; align-items: center; gap: 8px; }
-  .prw-avg { font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;}
-  [data-theme="dark"] .prw-avg { color: #a8daf0; }
-  .prw-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
-  .prw-count { font-size: 0.8rem; color: var(--text-dim); }
+  [data-theme="dark"] .story-review-section { border-color: rgba(126,200,227,0.2); }
   
-  .prw-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .prw-item {
-    background: var(--sky-pale); border: 1px solid rgba(186,230,253,0.5);
-    padding: 18px; border-radius: 14px; transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .prw-item:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(2,132,199,0.08); }
-  [data-theme="dark"] .prw-item { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.15); }
-  [data-theme="dark"] .prw-item:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-  .prw-item-name { font-weight: 600; font-size: 0.95rem; color: var(--sky-dark); display: block; margin-bottom: 2px;}
-  [data-theme="dark"] .prw-item-name { color: #a8daf0; }
-  .prw-item-stars { color: #fbbf24; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 8px; display: block;}
-  .prw-item-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; margin: 0 0 10px 0; }
-  [data-theme="dark"] .prw-item-text { color: #F3F9FF; }
-  .prw-item-time { font-size: 0.75rem; color: var(--text-dim); font-style: italic;}
+  .sr-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+  .sr-header h3 { margin: 0; font-size: 1.2rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;}
+  [data-theme="dark"] .sr-header h3 { color: #a8daf0; }
+  .sr-stats { display: flex; align-items: center; gap: 8px; }
+  .sr-avg { font-weight: bold; font-size: 1.8rem; color: var(--sky-dark); line-height: 1;}
+  [data-theme="dark"] .sr-avg { color: #a8daf0; }
+  .sr-stars-display { color: #fbbf24; font-size: 1.2rem; letter-spacing: 2px; }
+  .sr-count { font-size: 0.85rem; color: var(--text-dim); font-style: italic;}
+  
+  /* Form gửi đánh giá */
+  .sr-form { background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.4); }
+  [data-theme="dark"] .sr-form { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
+  .sr-star-select { font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;}
+  .sr-star-select span { transition: color 0.2s; }
+  .sr-star-select span:hover, .sr-star-select span.active { color: #fbbf24; }
+  .sr-inp, .sr-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 10px; transition: all 0.2s;}
+  .sr-inp:focus, .sr-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+  [data-theme="dark"] .sr-inp, [data-theme="dark"] .sr-textarea { background: #091620; border-color: #1e4a6a; color: #F3F9FF; }
+  .sr-submit-btn { padding: 8px 20px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s; }
+  .sr-submit-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
+  .sr-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
+
+  /* Danh sách đánh giá */
+  .sr-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .sr-item { background: var(--bg-card); border: 1px solid var(--sky-light); padding: 16px; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
+  .sr-item:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(2,132,199,0.08); }
+  [data-theme="dark"] .sr-item { border-color: rgba(126,200,227,0.15); background: rgba(10,25,45,0.4); }
+  .sr-item-hd { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .sr-item-name { font-weight: bold; font-size: .9rem; color: var(--sky-dark); display: block; margin-bottom: 2px;}
+  [data-theme="dark"] .sr-item-name { color: #a8daf0; }
+  .sr-item-stars { color: #fbbf24; font-size: .9rem; letter-spacing: 1px; display: block;}
+  .sr-item-text { font-size: .9rem; color: var(--text-main); margin: 0 0 10px 0; line-height: 1.6; word-break: break-word;}
+  [data-theme="dark"] .sr-item-text { color: #F3F9FF; }
+  .sr-item-time { font-size: .75rem; color: var(--text-dim); font-style: italic;}
+  .sr-del-btn { font-size: .75rem; color: #ef4444; background: none; border: none; cursor: pointer; display: none; padding: 0;}
+  .sr-del-btn.show { display: block; }
+  .sr-del-btn:hover { text-decoration: underline; }
 </style>
 
 <script is:inline>
-  (function loadPublicReviews() {
-    const widget = document.querySelector('.public-reviews-widget');
-    const listEl = document.getElementById('prwList');
-    if(!widget || !listEl) return;
-    const truyenId = widget.dataset.truyenId;
+  (function initStoryReview() {
+    const section = document.querySelector('.story-review-section');
+    if(!section) return;
+    const truyenId = section.dataset.truyenId;
+    const listEl = document.getElementById('srList');
+    const submitBtn = document.getElementById('srSubmit');
+    const starSelect = document.getElementById('srStarSelect');
+    
+    let selectedStars = 5;
     
     function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function timeAgo(ts){
@@ -142,46 +173,106 @@ const pct = Math.round((chapters.length / total) * 100);
       if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
       if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
     }
+    function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
 
-    function initFetch(fb) {
-      fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
+    const myToken = getMyToken();
+    const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
+    
+    // Khôi phục tên đã nhập
+    const savedName = localStorage.getItem('dd_commenter_name');
+    if(savedName) document.getElementById('srName').value = savedName;
+
+    // Click chọn sao
+    if(starSelect) {
+      const stars = starSelect.querySelectorAll('span');
+      stars.forEach(s => {
+        s.addEventListener('click', () => {
+          selectedStars = parseInt(s.dataset.val);
+          stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
+        });
+      });
+    }
+
+    function setupFirebaseLogic(fb) {
+      const reviewRef = fb.ref(fb.db, 'novel_reviews/' + truyenId);
+      
+      // Lắng nghe dữ liệu hiển thị
+      fb.onValue(reviewRef, snap => {
         const data = snap.val() || {};
         const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
         
-        widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
+        document.getElementById('srCount').textContent = `(${items.length} đánh giá)`;
         
         let avg = 0;
         if(items.length > 0) {
            const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
            avg = (total / items.length).toFixed(1);
         }
-        widget.querySelector('.prw-avg').textContent = avg > 0 ? avg : '0.0';
+        document.getElementById('srAvg').textContent = avg > 0 ? avg : '0.0';
         
         let starHtml = ''; const fullStars = Math.round(avg);
         for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
-        widget.querySelector('.prw-stars').textContent = starHtml;
+        document.getElementById('srStarsDisplay').textContent = starHtml;
 
         if(items.length === 0) {
-           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Hãy là người đầu tiên bóc tem truyện nhé! ⭐</div>';
         } else {
            listEl.innerHTML = items.map(rv => {
+              const isMine = rv.token === myToken; const canDel = window.__ddIsAdmin || isMine;
               const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
               const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:.6rem; padding:2px 8px; border-radius:99px; margin-left:6px; vertical-align:middle; font-family:sans-serif">chủ nhà</span>' : '';
               return `
-                <div class="prw-item">
-                  <span class="prw-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
-                  <span class="prw-item-stars">${stars}</span>
-                  <p class="prw-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
-                  <div class="prw-item-time">${timeAgo(rv.ts)}</div>
+                <div class="sr-item">
+                   <div class="sr-item-hd">
+                      <div>
+                        <span class="sr-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
+                        <span class="sr-item-stars">${stars}</span>
+                      </div>
+                      ${canDel ? `<button class="sr-del-btn show" data-id="${esc(rv.id)}">Xóa</button>` : ''}
+                   </div>
+                   <p class="sr-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
+                   <div class="sr-item-time">${timeAgo(rv.ts)}</div>
                 </div>
               `;
            }).join('');
+
+           listEl.querySelectorAll('.sr-del-btn').forEach(b => {
+              b.addEventListener('click', async () => {
+                 if(!confirm('Xóa đánh giá này?')) return;
+                 await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
+              });
+           });
         }
       });
+
+      // Gửi đánh giá
+      if(submitBtn && !submitBtn.dataset.bound) {
+        submitBtn.dataset.bound = "true";
+        submitBtn.addEventListener('click', async () => {
+          const text = document.getElementById('srText')?.value.trim();
+          let name = document.getElementById('srName')?.value.trim() || 'Khách';
+          if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+          
+          if(window.__ddIsAdmin) name = ADMIN_DISPLAY_NAME;
+          else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
+          
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Đang gửi...';
+          try {
+            await fb.push(reviewRef, { name: name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
+            document.getElementById('srText').value = '';
+          } catch(e) { alert('Lỗi khi gửi: ' + e.message); }
+          
+          setTimeout(() => {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Gửi đánh giá';
+          }, 500);
+        });
+      }
     }
 
-    if(window.__ddFirebase?.db) { initFetch(window.__ddFirebase); }
-    else { window.addEventListener('dd-firebase-ready', () => initFetch(window.__ddFirebase), {once:true}); }
+    if(window.__ddFirebase?.db) { setupFirebaseLogic(window.__ddFirebase); }
+    else { window.addEventListener('dd-firebase-ready', () => setupFirebaseLogic(window.__ddFirebase), {once:true}); }
   })();
 </script>
 </Layout>

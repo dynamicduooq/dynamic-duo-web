@@ -855,7 +855,6 @@ if (isNovelPage) {
   <div class="tool-fab-menu" id="toolFabMenu">
     {isHome && <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>}
     {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
-    {isNovelPage && <button class="fab-btn" id="btnOpenReview" title="Đánh giá truyện" style="background:#f59e0b">⭐</button>}
     {isNovelPage && <button class="fab-btn" id="fabStats" title="Thống kê" style="background:#10b981; display:none;">📊</button>}
     <button class="fab-btn" id="fabUp" title="Lên đầu">↑</button>
     <button class="fab-btn" id="fabDown" title="Xuống cuối">↓</button>
@@ -1412,124 +1411,6 @@ p.insertBefore(btn, p.firstChild); // Chèn vào trước ký tự đầu tiên
         btn.style.pointerEvents = 'auto'; // Mở lại nút
       }
     });
-  });
-})();
-
-/* ══════════════════════════════════════════
-   D. NOVEL REVIEW SYSTEM (ĐÃ VÁ LỖI NHÂN ĐÔI)
-══════════════════════════════════════════ */
-(function setupNovelReview(){
-  const truyenId = document.querySelector('.page-wrapper')?.dataset.truyenId;
-  const btnOpen = document.getElementById('btnOpenReview');
-  const modal = document.getElementById('rvModal');
-  const overlay = document.getElementById('rvOverlay');
-  if(!truyenId || !btnOpen || !modal) return;
-
-  const closeBtn = document.getElementById('rvClose');
-  const submitBtn = document.getElementById('rvSubmit');
-  const starSelect = document.getElementById('rvStarSelect');
-  const listEl = document.getElementById('rvList');
-  const myToken = getMyToken();
-  let selectedStars = 5;
-
-  const openModal = () => { overlay.classList.add('show'); modal.classList.add('show'); document.getElementById('toolFabWrap')?.classList.remove('open'); };
-  const closeModal = () => { overlay.classList.remove('show'); modal.classList.remove('show'); };
-  
-  // FIX: Chống gán sự kiện click nhiều lần cho nút mở/đóng
-  if (!btnOpen.dataset.bound) {
-      btnOpen.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
-      overlay.addEventListener('click', closeModal);
-      btnOpen.dataset.bound = "true";
-  }
-
-  // FIX: Chống gán sự kiện click nhiều lần cho các ngôi sao
-  if(starSelect && !starSelect.dataset.bound) {
-    const stars = starSelect.querySelectorAll('span');
-    stars.forEach(s => {
-      s.addEventListener('click', () => {
-        selectedStars = parseInt(s.dataset.val);
-        stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
-      });
-    });
-    starSelect.dataset.bound = "true";
-  }
-
-  waitFirebase(({db, ref, onValue, push, remove}) => {
-    const reviewRef = ref(db, 'novel_reviews/' + truyenId);
-    
-    onValue(reviewRef, snap => {
-      const data = snap.val() || {};
-      const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
-      
-      const rvCountEl = document.getElementById('rvCount');
-      if(rvCountEl) rvCountEl.textContent = `${items.length} đánh giá`;
-      
-      let avg = 0;
-      if(items.length > 0) {
-         const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
-         avg = (total / items.length).toFixed(1);
-      }
-      const rvAvgEl = document.getElementById('rvAvg');
-      if(rvAvgEl) rvAvgEl.textContent = avg > 0 ? avg : '0.0';
-      
-      const displayStars = document.getElementById('rvStarsDisplay');
-      if(displayStars) {
-         let starHtml = ''; const fullStars = Math.round(avg);
-         for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
-         displayStars.textContent = starHtml;
-      }
-
-      if(items.length === 0) {
-         listEl.innerHTML = '<div class="ic-empty">Chưa có đánh giá nào. Hãy là người đầu tiên!</div>';
-      } else {
-         listEl.innerHTML = items.map(rv => {
-            const isMine = rv.token === myToken; const canDel = window.__ddIsAdmin || isMine;
-            const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
-            const badge = rv.isAdmin ? '<span class="ic-item-admin-badge" style="margin-left:5px">chủ nhà</span>' : '';
-            return `
-              <div class="rv-item">
-                 <div class="rv-item-hd">
-                    <div>
-                      <span class="rv-item-name">${esc(rv.name)||'Khách vô danh'}</span>${badge}
-                      <div class="rv-item-stars">${stars}</div>
-                    </div>
-                    ${canDel ? `<button class="rv-del-btn show" data-id="${esc(rv.id)}">Xóa</button>` : ''}
-                 </div>
-                 <p class="rv-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
-                 <div class="rv-item-time">${timeAgo(rv.ts)}</div>
-              </div>
-            `;
-         }).join('');
-
-         listEl.querySelectorAll('.rv-del-btn').forEach(b => {
-            b.addEventListener('click', async () => {
-               if(!confirm('Xóa đánh giá này?')) return;
-               await remove(ref(db, `novel_reviews/${truyenId}/${b.dataset.id}`));
-            });
-         });
-      }
-    });
-
-    // FIX CHÍNH: Chống spam click và gán sự kiện gửi 2 lần
-    if(submitBtn && !submitBtn.dataset.boundSubmit) {
-      submitBtn.dataset.boundSubmit = "true";
-      
-      submitBtn.addEventListener('click', async () => {
-        const text = document.getElementById('rvText')?.value.trim();
-        const name = document.getElementById('rvName')?.value.trim() || 'Khách';
-        if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
-        
-        submitBtn.disabled = true;
-        try {
-          await push(reviewRef, { name: window.__ddIsAdmin ? ADMIN_DISPLAY_NAME : name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
-          document.getElementById('rvText').value = ''; saveName(name);
-        } catch(e) { alert('Lỗi: ' + e.message); }
-        
-        // Mở khóa nút sau khi gửi xong
-        setTimeout(() => submitBtn.disabled = false, 500);
-      });
-    }
   });
 })();
 

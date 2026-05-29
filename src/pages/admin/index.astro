@@ -314,26 +314,39 @@
         </div>
       </section>
       
-      <section class="section" id="sec-tags">
-        <h2 class="page-title">Quản lý Tags (Hệ thống)</h2>
+<section class="section" id="sec-tags">
+        <h2 class="page-title">Quản lý Tags (Hàng loạt)</h2>
         <div class="card">
-            <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Trong Astro, Tags được lưu trực tiếp bên trong Frontmatter của từng file chương truyện (.md). Dưới đây là bộ công cụ giúp bạn đổi tên Tag hàng loạt trên GitHub.</p>
+            <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Bộ công cụ tự động chèn/sửa/xóa Tag trực tiếp vào các file chương truyện (.md) trên GitHub.</p>
             
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top: 20px;">
                 <div class="field">
-                    <label>Tag cũ (Cần thay thế)</label>
-                    <input type="text" id="tag-old" placeholder="VD: hiện đai (gõ sai dấu)" />
+                    <label>Hành động</label>
+                    <select id="tag-action" onchange="toggleTagInputs()">
+                        <option value="replace">🔄 Đổi tên Tag (Thay thế)</option>
+                        <option value="add">➕ Thêm Tag mới</option>
+                        <option value="delete">🗑️ Xóa Tag</option>
+                    </select>
                 </div>
                 <div class="field">
-                    <label>Tag mới</label>
+                    <label>Áp dụng cho</label>
+                    <select id="tag-target-story">
+                        </select>
+                </div>
+                <div class="field" id="wrap-tag-old">
+                    <label>Tag cũ (Cần đổi/xóa)</label>
+                    <input type="text" id="tag-old" placeholder="VD: hiện đai" />
+                </div>
+                <div class="field" id="wrap-tag-new">
+                    <label>Tag mới (Sẽ được thêm/đổi thành)</label>
                     <input type="text" id="tag-new" placeholder="VD: hiện đại" />
                 </div>
             </div>
-            <button class="btn btn-sky" onclick="bulkReplaceTags()">Tiến hành Cập nhật Hàng loạt</button>
-            <div id="tag-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--sky-dark); white-space:pre-wrap; background: var(--sky-pale); padding: 10px; border-radius: 6px; display: none;"></div>
+            <button class="btn btn-sky" onclick="processBulkTags()">🚀 Tiến hành Thực thi</button>
+            <div id="tag-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--sky-dark); white-space:pre-wrap; background: var(--sky-pale); padding: 10px; border-radius: 6px; display: none; max-height: 250px; overflow-y: auto;"></div>
         </div>
       </section>
-
+      
       <section class="section" id="sec-fb-comments">
         <h2 class="page-title">Quản lý Bình luận (Firebase)</h2>
         <div id="fb-comments-list" style="display:flex; flex-direction:column; gap:12px"></div>
@@ -520,6 +533,9 @@ function navTo(id) {
   if(id === 'bulk-upload') populateBulkUploadSelect();
   if(id === 'tags') {
       $('tag-old').value = ''; $('tag-new').value = ''; $('tag-log').style.display = 'none';
+      toggleTagInputs();
+      $('tag-target-story').innerHTML = '<option value="all">TẤT CẢ TRUYỆN</option>' + 
+          storiesList.map(s => `<option value="${s.id}">${s.title}</option>`).join('');
   }
 }
 document.querySelectorAll('.sidebar-link').forEach(l => {
@@ -1220,24 +1236,43 @@ function loadFbReaders() {
 window.delFb = (path) => { if(confirm('Chắc chắn xóa?')) window.__fbRemove(window.__fbRef(window.__fbDb, path)); };
 
 /* ==========================================================================
-   QUẢN LÝ VÀ ĐỔI TAG HÀNG LOẠT
+   CÔNG CỤ QUẢN LÝ VÀ ĐỔI TAG HÀNG LOẠT (NÂNG CẤP)
    ========================================================================== */
-async function bulkReplaceTags() {
+function toggleTagInputs() {
+    const action = $('tag-action').value;
+    $('wrap-tag-old').style.display = (action === 'add') ? 'none' : 'block';
+    $('wrap-tag-new').style.display = (action === 'delete') ? 'none' : 'block';
+}
+
+async function processBulkTags() {
+    const action = $('tag-action').value;
+    const targetStory = $('tag-target-story').value;
     const oldTag = $('tag-old').value.trim();
     const newTag = $('tag-new').value.trim();
     const log = $('tag-log');
     
-    if(!oldTag) return showToast('Vui lòng nhập Tag cũ cần đổi', 'error');
-    if(!confirm(`Bạn sắp đổi toàn bộ tag "${oldTag}" thành "${newTag}" trên tất cả các chương truyện. Tiến hành?`)) return;
+    if(action !== 'add' && !oldTag) return showToast('Vui lòng nhập Tag cũ', 'error');
+    if(action !== 'delete' && !newTag) return showToast('Vui lòng nhập Tag mới', 'error');
+    
+    let actionText = action === 'add' ? `THÊM tag "${newTag}"` : 
+                     action === 'delete' ? `XÓA tag "${oldTag}"` : 
+                     `ĐỔI tag "${oldTag}" thành "${newTag}"`;
+                     
+    let targetText = targetStory === 'all' ? 'TẤT CẢ các bộ truyện' : 'bộ truyện đã chọn';
+
+    if(!confirm(`⚠️ Bạn sắp ${actionText} cho ${targetText}. Thao tác này sẽ tự động ghi đè lên hàng loạt file.\nBạn có chắc chắn muốn tiến hành?`)) return;
     
     log.style.display = 'block';
-    log.innerHTML = '🔄 Đang quét toàn bộ file trên GitHub...\n';
+    log.innerHTML = `🔄 Bắt đầu thực thi: ${actionText}...\n`;
     const btn = event.target; btn.disabled = true;
 
     try {
         let updateCount = 0;
-        for (const story of storiesList) {
-            log.innerHTML += `\nĐang kiểm tra: ${story.title}...\n`;
+        // Lọc danh sách truyện cần chạy
+        const storiesToProcess = targetStory === 'all' ? storiesList : storiesList.filter(s => s.id === targetStory);
+
+        for (const story of storiesToProcess) {
+            log.innerHTML += `\n📂 Quét thư mục: ${story.title}...\n`;
             const path = `/contents/src/pages/${story.cat}/${story.id}?ref=${BRANCH}`;
             try {
                 const files = await ghAPI(path);
@@ -1247,61 +1282,77 @@ async function bulkReplaceTags() {
                     const fileData = await ghAPI(file.path);
                     let rawContent = b64Decode(fileData.content.replace(/\n/g,''));
                     
-                    const tagsRegexList = /tags:\s*\n((?:  - .*\n?)+)/;
-                    const tagsRegexArray = /tags:\s*\[(.*?)\]/;
+                    // Regex tách nguyên khối Frontmatter
+                    const fmMatch = rawContent.match(/^---\n([\s\S]*?)\n---/);
+                    if (!fmMatch) continue;
                     
-                    let matchList = rawContent.match(tagsRegexList);
-                    let matchArray = rawContent.match(tagsRegexArray);
+                    let fmText = fmMatch[1];
+                    let tagsMatch = fmText.match(/^tags:\s*\[(.*?)\]/m) || fmText.match(/^tags:\s*\n((?:  - .*\n?)+)/m);
                     
-                    if (matchList || matchArray) {
-                        let isUpdated = false;
-                        
-                        if (matchList && matchList[1].includes(`"${oldTag}"`)) {
-                            let newTagsStr;
-                            if(newTag === "") {
-                                newTagsStr = matchList[1].replace(new RegExp(`  - "${oldTag}"\\n?`, 'g'), '');
-                            } else {
-                                newTagsStr = matchList[1].replace(new RegExp(`"${oldTag}"`, 'g'), `"${newTag}"`);
-                            }
-                            rawContent = rawContent.replace(tagsRegexList, newTagsStr ? `tags:\n${newTagsStr}` : '');
-                            isUpdated = true;
-                        } 
-                        else if (matchArray && (matchArray[1].includes(`"${oldTag}"`) || matchArray[1].includes(`'${oldTag}'`))) {
-                            let newTagsStr;
-                            if (newTag === "") {
-                                newTagsStr = matchArray[1].replace(new RegExp(`"${oldTag}"\\s*,?|'${oldTag}'\\s*,?`, 'g'), '').replace(/,\s*$/, '').trim();
-                            } else {
-                                newTagsStr = matchArray[1].replace(new RegExp(`"${oldTag}"`, 'g'), `"${newTag}"`).replace(new RegExp(`'${oldTag}'`, 'g'), `"${newTag}"`);
-                            }
-                            rawContent = rawContent.replace(tagsRegexArray, newTagsStr ? `tags: [${newTagsStr}]` : '');
-                            isUpdated = true;
-                        }
-
-                        if (isUpdated) {
-                            await ghAPI(file.path, 'PUT', {
-                                message: `🏷️ Admin: Đổi tag [${oldTag} -> ${newTag}]`,
-                                content: b64Encode(rawContent),
-                                sha: fileData.sha,
-                                branch: BRANCH
-                            });
-                            
-                            log.innerHTML += `  ✅ Đã sửa file: ${file.name}\n`;
-                            updateCount++;
+                    // Chuyển Tag cũ thành mảng chuẩn để xử lý (tránh bị lỗi Regex)
+                    let tagsArray = [];
+                    if (tagsMatch && tagsMatch[1]) {
+                        if (tagsMatch[1].includes('-')) {
+                            tagsArray = tagsMatch[1].split('\n').map(t => t.replace(/-\s*"?|"?\s*$/g, '').trim()).filter(Boolean);
+                        } else {
+                            tagsArray = tagsMatch[1].replace(/["']/g, '').split(',').map(s=>s.trim()).filter(Boolean);
                         }
                     }
+
+                    let isModified = false;
+
+                    // XỬ LÝ THEO YÊU CẦU
+                    if (action === 'replace') {
+                        const idx = tagsArray.indexOf(oldTag);
+                        if (idx !== -1) { tagsArray[idx] = newTag; isModified = true; }
+                    } else if (action === 'add') {
+                        if (!tagsArray.includes(newTag)) { tagsArray.push(newTag); isModified = true; }
+                    } else if (action === 'delete') {
+                        const idx = tagsArray.indexOf(oldTag);
+                        if (idx !== -1) { tagsArray.splice(idx, 1); isModified = true; }
+                    }
+
+                    // GHI ĐÈ FILE NẾU CÓ SỰ THAY ĐỔI
+                    if (isModified) {
+                        const tagsFormatted = tagsArray.length > 0 ? tagsArray.map(t => `"${t}"`).join(', ') : '';
+                        let newFmText = fmText;
+                        
+                        if (tagsMatch) {
+                            if(tagsFormatted === '') {
+                                newFmText = newFmText.replace(tagsMatch[0], ''); // Xóa hẳn dòng tags nếu trống
+                            } else {
+                                newFmText = newFmText.replace(tagsMatch[0], `tags: [${tagsFormatted}]`);
+                            }
+                        } else {
+                            newFmText += `\ntags: [${tagsFormatted}]`; // Chưa có thì chèn thêm dòng mới
+                        }
+                        
+                        const updatedContent = rawContent.replace(fmText, newFmText);
+                        
+                        await ghAPI(file.path, 'PUT', {
+                            message: `🏷️ Admin: ${actionText} (Chương: ${file.name})`,
+                            content: b64Encode(updatedContent),
+                            sha: fileData.sha,
+                            branch: BRANCH
+                        });
+                        
+                        log.innerHTML += `  ✅ Đã cập nhật tag cho: ${file.name}\n`;
+                        updateCount++;
+                    }
                 }
-            } catch(e) { log.innerHTML += `  ❌ Bỏ qua thư mục do lỗi cấp quyền.\n`; }
+            } catch(e) { log.innerHTML += `  ❌ Bỏ qua thư mục do lỗi mạng hoặc cấp quyền.\n`; }
         }
         
-        log.innerHTML += `\n🎉 Hoàn tất! Đã cập nhật tag trong ${updateCount} file.`;
-        showToast('Đổi Tag hoàn tất!');
+        log.innerHTML += `\n🎉 Hoàn tất! Đã cập nhật tag trong tổng cộng ${updateCount} chương.`;
+        showToast('Xử lý Tag hoàn tất!');
     } catch(e) {
         log.innerHTML += `\n❌ Lỗi hệ thống: ${e.message}`;
     } finally {
         btn.disabled = false;
+        // Đẩy scroll xuống dưới cùng khung log
+        log.scrollTop = log.scrollHeight;
     }
 }
-
 /* ==========================================================================
    CẤU HÌNH & BACKUP
    ========================================================================== */

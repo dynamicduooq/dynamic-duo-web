@@ -106,10 +106,9 @@ const pct = Math.round((chapters.length / total) * 100);
   </div>
 
   <!-- DANH SÁCH ĐÁNH GIÁ -->
-  <div class="prw-list" id="prwList">
-     <div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Đang tải đánh giá...</div>
+<div class="prw-list" id="prwList">
+     <div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Đang tải đánh giá...</div>
   </div>
-</div>
 
 <!-- LƯU Ý: Phải có is:global thì CSS mới ăn vào phần HTML tạo bằng Javascript -->
 <style is:global>
@@ -145,7 +144,7 @@ const pct = Math.round((chapters.length / total) * 100);
   .prw-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
 
   /* DANH SÁCH REVIEW (DẠNG LƯỚI CARD) */
-  .prw-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.prw-list { display: flex; flex-direction: column; gap: 12px; }
   
   /* TỪNG THẺ REVIEW MỘT */
   .prw-item {
@@ -234,7 +233,7 @@ const pct = Math.round((chapters.length / total) * 100);
         widget.querySelector('.prw-stars').textContent = starHtml;
 
         if(items.length === 0) {
-           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+           listEl.innerHTML = '<div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
         } else {
            listEl.innerHTML = items.map(rv => {
               const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);

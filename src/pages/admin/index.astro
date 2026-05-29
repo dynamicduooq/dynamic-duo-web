@@ -239,13 +239,14 @@
       </section>
 
       <section class="section" id="sec-editor">
-        <h2 class="page-title">Biên tập Chương
+<h2 class="page-title">Biên tập Chương
           <div style="display:flex; gap:8px">
-            <button class="btn btn-outline btn-sm" id="btn-save-draft">💾 Lưu Nháp (Local)</button>
+            <button class="btn btn-outline btn-sm" onclick="navTo('chapter-list')">← Quay lại danh sách</button>
+            <button class="btn btn-outline btn-sm" id="btn-save-draft">💾 Lưu Nháp</button>
             <button class="btn btn-sky" id="ed-saveBtn">🚀 Xuất bản (GitHub)</button>
           </div>
         </h2>
-        
+
         <div class="card" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px">
           <div class="field"><label>Tiêu đề chương (*)</label><input type="text" id="ed-title" placeholder="VD: Chương 1 - Gặp gỡ" /></div>
           <div class="field"><label>Số chương (*)</label><input type="number" id="ed-num" placeholder="Dùng để sắp xếp" /></div>
@@ -513,9 +514,9 @@ $('loginBtn').onclick = async () => {
 };
 
 /* ==========================================================================
-   ROUTING (SPA Navigation)
+   ROUTING TÍCH HỢP LỊCH SỬ TRÌNH DUYỆT (BROWSER BACK/FORWARD)
    ========================================================================== */
-function navTo(id) {
+function navTo(id, pushHistory = true) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
   
@@ -533,11 +534,26 @@ function navTo(id) {
   if(id === 'bulk-upload') populateBulkUploadSelect();
   if(id === 'tags') {
       $('tag-old').value = ''; $('tag-new').value = ''; $('tag-log').style.display = 'none';
-      toggleTagInputs();
+      if(typeof toggleTagInputs === 'function') toggleTagInputs();
       $('tag-target-story').innerHTML = '<option value="all">TẤT CẢ TRUYỆN</option>' + 
           storiesList.map(s => `<option value="${s.id}">${s.title}</option>`).join('');
   }
+
+  // Đẩy ID vào lịch sử URL của trình duyệt
+  if (pushHistory) {
+      window.history.pushState({ section: id }, '', `#${id}`);
+  }
 }
+
+// Bắt sự kiện khi người dùng ấn nút Back/Forward trên trình duyệt
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.section) {
+        navTo(e.state.section, false); // false để không tạo vòng lặp vô tận
+    } else {
+        navTo('dashboard', false); // Mặc định về Dashboard nếu hết lịch sử
+    }
+});
+
 document.querySelectorAll('.sidebar-link').forEach(l => {
     l.onclick = () => navTo(l.dataset.nav);
 });
@@ -1027,7 +1043,7 @@ editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
 };
 
 /* ==========================================================================
-   BULK UPLOAD 
+   BULK UPLOAD (ĐÃ NÂNG CẤP REGEX)
    ========================================================================== */
 async function processBulkUpload() {
     const rawText = $('bulk-content').value;
@@ -1038,27 +1054,34 @@ async function processBulkUpload() {
     const log = $('bulk-log');
     log.innerHTML = 'Bắt đầu xử lý...\n';
     
-    const chapters = rawText.split(/(?=Chương \d+)/gi).map(s => s.trim()).filter(s => s.length > 50);
+    // Thuật toán tách: Tìm chữ "Chương" có số đằng sau, nằm ở đầu một dòng mới
+    const chapters = rawText.split(/(?=(?:^|\n)\s*Chương\s+\d+)/i).map(s => s.trim()).filter(s => s.length > 50);
     log.innerHTML += `Tìm thấy ${chapters.length} chương. Bắt đầu đẩy lên GitHub...\n\n`;
     
     let success = 0;
     for(const text of chapters) {
-        const numMatch = text.match(/Chương (\d+)/i);
+        const lines = text.split('\n');
+        const titleLine = lines[0].trim();
+        const numMatch = titleLine.match(/Chương\s+(\d+)/i);
+        
         if(!numMatch) {
             log.innerHTML += `❌ Bỏ qua 1 đoạn không xác định được số chương.\n`;
             continue;
         }
+        
         const num = parseInt(numMatch[1]);
-        const titleMatch = text.split('\n')[0]; 
+        const titleMatch = titleLine.replace(/["']/g, ''); 
         
         const fm = `---
 layout: "../../../layouts/Layout.astro"
-title: "${titleMatch.replace(/"/g, '')}"
+title: "${titleMatch}"
 truyen_id: "${shortId}"
 chuong: ${num}
 date: "${new Date().toISOString().split('T')[0]}"
 ---`;
-        const content = fm + '\n\n' + text.substring(titleMatch.length).trim();
+        // Cắt bỏ dòng tiêu đề khỏi phần nội dung để tránh bị lặp lại khi đọc
+        const bodyContent = lines.slice(1).join('\n').trim();
+        const content = fm + '\n\n' + bodyContent;
         const filename = `chuong-${String(num).padStart(2,'0')}.md`;
         
         try {
@@ -1073,7 +1096,6 @@ date: "${new Date().toISOString().split('T')[0]}"
     }
     showToast(`Hoàn tất Bulk Upload! Thành công ${success}/${chapters.length}`);
 }
-
 
 /* ==========================================================================
    FIREBASE & CHART.JS

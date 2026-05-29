@@ -62,8 +62,7 @@ Truyện được chọn và edit hoàn toàn dựa trên gu đọc của hai đ
 <div style="margin-top: 40px; padding: 24px; background: var(--sky-pale); border-radius: var(--r-md); border: 1px solid rgba(186,230,253,.5);">
 <p style="font-size: .85rem; color: var(--text-mid); margin: 0; text-align: center; line-height: 1.8;">
 ✉ <strong style="color: var(--sky-dark); font-size: 1rem;">dynamicduoo.q@gmail.com</strong>
-
-<span style="font-size:.78rem;color:var(--text-dim)">Liên hệ góp ý, báo lỗi, hoặc chỉ để hỏi thăm!</span>
+    <span style="font-size:.78rem;color:var(--text-dim)">Liên hệ góp ý, báo lỗi, hoặc chỉ để hỏi thăm!</span>
 </p>
 </div>
 <div style="text-align: center; margin-top: 45px; padding: 20px 0;">

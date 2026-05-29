@@ -29,9 +29,7 @@ const storiesData = storiesList.map(story => {
 });
 
 // 4. Các mâm truyện tự động lọc dựa vào SỐ CHƯƠNG THỰC TẾ
-const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
-const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 ---
 
 <Layout frontmatter={{ title: 'Cá trên bàn' }}>

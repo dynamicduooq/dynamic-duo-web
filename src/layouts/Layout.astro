@@ -169,6 +169,27 @@ if (isNovelPage) {
       padding: 10px 0; border-top: 1px solid rgba(186,230,253,0.3);
       width: 100%;
     }
+    .aa-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; }
+    .aa-main-btns { display: flex; gap: 6px; align-items: center; }
+    .aa-btn-tool { background: none; border: 1px solid var(--sky-light); border-radius: 8px; cursor: pointer; padding: 4px 8px; font-size: 1rem; transition: var(--t); }
+    .aa-btn-tool:hover { background: var(--sky-light); }
+    
+    /* Panel cài đặt ẩn hiện */
+    .aa-settings-collapse {
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      border-top: 0px solid transparent;
+    }
+    .aa-settings-collapse.open {
+      max-height: 200px; /* Độ cao tối đa khi mở */
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--sky-light);
+    }
+    .aa-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    @media(max-width: 600px) { .aa-settings-grid { grid-template-columns: 1fr; } }
     .aa-field { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-mid); }
     .aa-field label { font-weight: bold; }
     
@@ -821,26 +842,36 @@ if (isNovelPage) {
     <div class="novel-layout-wrap" id="novelLayoutWrap">
     <!-- TRÌNH PHÁT AUDIO TỰ ĐỘNG BẰNG TRÌNH DUYỆT -->
 {isNovelPage && (
-        <div class="auto-audio-player">
-          <div class="aa-header">
-            <span class="aa-icon">🎧</span>
-            <span>Nghe tự động</span>
-          </div>
+  <div class="auto-audio-player">
+    <div class="aa-top-row">
+      <div class="aa-header">
+        <span class="aa-icon">🎧</span>
+        <span>Nghe tự động</span>
+      </div>
+      <div class="aa-main-btns">
+        <button id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
+        <button id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
+        <button id="btnStopTTS" class="aa-btn stop" style="display:none;">⏹ Tắt</button>
+        <!-- Nút Toggle Cài đặt -->
+        <button id="btnToggleAudioSet" class="aa-btn-tool" title="Cài đặt giọng đọc">⚙️</button>
+      </div>
+    </div>
 
-          <div class="aa-settings">
-            <!-- Chọn giọng đọc -->
-            <div class="aa-field">
-              <label>Giọng:</label>
-              <select id="aaVoiceSelect"><option value="">Đang tải...</option></select>
-            </div>
-            <!-- Chọn tốc độ -->
-            <div class="aa-field">
-              <label>Tốc độ:</label>
-              <input type="range" id="aaRateRange" min="0.5" max="2" value="1" step="0.1" />
-              <span id="aaRateValue">1x</span>
-            </div>
-          </div>
-
+    <!-- Khu vực cài đặt ẩn/hiện -->
+    <div class="aa-settings-collapse" id="aaSettings">
+      <div class="aa-settings-grid">
+        <div class="aa-field">
+          <label>Giọng:</label>
+          <select id="aaVoiceSelect"><option value="">Đang tải...</option></select>
+        </div>
+        <div class="aa-field">
+          <label>Tốc độ:</label>
+          <input type="range" id="aaRateRange" min="0.5" max="2" value="1" step="0.1" />
+          <span id="aaRateValue">1x</span>
+        </div>
+      </div>
+    </div>
+  </div>
           <div class="aa-controls">
             <button id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
             <button id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
@@ -1138,117 +1169,147 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
 document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
 document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
 syncThemeBtns();
-// LOGIC ĐỌC TRUYỆN TỰ ĐỘNG
+/* ══════════════════════════════════════════
+   LOGIC ĐỌC TRUYỆN TỰ ĐỘNG (TTS)
+   ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-    const btnPlay = document.getElementById('btnPlayTTS');
-    const btnPause = document.getElementById('btnPauseTTS');
-    const btnStop = document.getElementById('btnStopTTS');
-    const voiceSelect = document.getElementById('aaVoiceSelect');
-    const rateRange = document.getElementById('aaRateRange');
-    const rateValue = document.getElementById('aaRateValue');
-    const content = document.getElementById('novelContent');
+  // 1. Khai báo các phần tử UI
+  const btnPlay = document.getElementById('btnPlayTTS');
+  const btnPause = document.getElementById('btnPauseTTS');
+  const btnStop = document.getElementById('btnStopTTS');
+  const btnToggle = document.getElementById('btnToggleAudioSet');
+  const settingsPanel = document.getElementById('aaSettings');
+  const voiceSelect = document.getElementById('aaVoiceSelect');
+  const rateRange = document.getElementById('aaRateRange');
+  const rateValue = document.getElementById('aaRateValue');
+  const content = document.getElementById('novelContent');
 
-    if(!btnPlay || !('speechSynthesis' in window)) return;
+  // Kiểm tra sự tồn tại và hỗ trợ của trình duyệt
+  if (!btnPlay || !content || !('speechSynthesis' in window)) {
+    if (btnPlay) btnPlay.textContent = "Không hỗ trợ Audio";
+    return;
+  }
 
-    let synth = window.speechSynthesis;
-    let utterance = new SpeechSynthesisUtterance();
-    let voices = [];
+  // 2. Khởi tạo Speech Synthesis
+  const synth = window.speechSynthesis;
+  let utterance = new SpeechSynthesisUtterance();
+  let voices = [];
 
-    // 1. TẢI DANH SÁCH GIỌNG ĐỌC
-    function populateVoices() {
-      // Lọc các giọng tiếng Việt (vi-VN)
-      voices = synth.getVoices().filter(v => v.lang.includes('vi'));
-      
-      if(voices.length === 0) {
-        // Nếu không có tiếng Việt, lấy tất cả các giọng
-        voices = synth.getVoices();
-      }
+  // Hàm tải danh sách giọng đọc
+  function populateVoices() {
+    voices = synth.getVoices().filter(v => v.lang.includes('vi') || v.lang.includes('en'));
+    if (voices.length === 0) voices = synth.getVoices(); // Fallback nếu không lọc được
 
-      voiceSelect.innerHTML = voices
-        .map((voice, i) => `<option value="${i}">${voice.name} (${voice.lang})</option>`)
-        .join('');
-    }
+    voiceSelect.innerHTML = voices
+      .map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`)
+      .join('');
+  }
 
-    // Trình duyệt tải giọng đọc không đồng bộ nên cần sự kiện này
-    populateVoices();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = populateVoices;
-    }
+  populateVoices();
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = populateVoices;
+  }
 
-    // 2. THAY ĐỔI TỐC ĐỘ
-    rateRange.addEventListener('input', () => {
-      rateValue.textContent = rateRange.value + 'x';
-    });
-
-    // 3. LOGIC ĐIỀU KHIỂN
-    btnPlay.addEventListener('click', () => {
-      if(synth.paused) {
-        synth.resume();
-      } else {
-        synth.cancel(); // Xóa các lệnh đọc cũ nếu có
-
-        const textToRead = content.innerText;
-        utterance.text = textToRead;
-        
-        // Gán giọng đọc đã chọn
-        if(voices[voiceSelect.value]) {
-          utterance.voice = voices[voiceSelect.value];
-        }
-        
-        // Gán tốc độ đọc
-        utterance.rate = parseFloat(rateRange.value);
-        utterance.lang = 'vi-VN';
-
-        synth.speak(utterance);
-      }
-      btnPlay.style.display = 'none';
-      btnPause.style.display = 'block';
-      btnStop.style.display = 'block';
-    });
-
-    btnPause.addEventListener('click', () => {
-      synth.pause();
-      btnPlay.style.display = 'block';
-      btnPlay.textContent = '▶ Tiếp tục';
-      btnPause.style.display = 'none';
-    });
-
-    btnStop.addEventListener('click', () => {
-      synth.cancel();
-      resetUI();
-    });
-
-    utterance.onend = resetUI;
-
-    function resetUI() {
-      btnPlay.style.display = 'block';
-      btnPlay.textContent = '▶ Nghe';
-      btnPause.style.display = 'none';
-      btnStop.style.display = 'none';
-    }
+  // 3. Logic Toggle Settings
+  btnToggle?.addEventListener('click', () => {
+    settingsPanel.classList.toggle('open');
   });
-  
-  /* ══ ADMIN AUTH & STATS BUTTON ══ */
+
+  // Hiển thị tốc độ đọc
+  rateRange?.addEventListener('input', () => {
+    rateValue.textContent = rateRange.value + 'x';
+  });
+
+  // 4. Hàm Reset giao diện khi dừng/hết bài
+  function resetUI() {
+    btnPlay.style.display = 'block';
+    btnPlay.textContent = '▶ Nghe';
+    btnPause.style.display = 'none';
+    btnStop.style.display = 'none';
+  }
+
+  // 5. Nút PLAY / RESUME
+  btnPlay.addEventListener('click', () => {
+    if (synth.paused) {
+      synth.resume(); // Nếu đang tạm dừng thì tiếp tục
+    } else {
+      synth.cancel(); // Xóa các lệnh cũ
+
+      // --- XỬ LÝ CHỐNG ĐỌC BONG BÓNG THOẠI & RÁC ---
+      const clone = content.cloneNode(true);
+      // Loại bỏ tất cả bong bóng thoại, ghi chú editor, và các thẻ không cần thiết
+      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style').forEach(el => el.remove());
+      
+      const textToRead = clone.innerText.trim();
+      if (!textToRead) return alert("Không tìm thấy nội dung để đọc!");
+
+      utterance.text = textToRead;
+      utterance.lang = 'vi-VN';
+      
+      // Gán giọng đọc đã chọn
+      if (voices[voiceSelect.value]) {
+        utterance.voice = voices[voiceSelect.value];
+      }
+      
+      // Gán tốc độ đọc
+      utterance.rate = parseFloat(rateRange.value || 1);
+
+      synth.speak(utterance);
+    }
+
+    // Cập nhật nút
+    btnPlay.style.display = 'none';
+    btnPause.style.display = 'block';
+    btnStop.style.display = 'block';
+  });
+
+  // 6. Nút PAUSE
+  btnPause.addEventListener('click', () => {
+    synth.pause();
+    btnPlay.style.display = 'block';
+    btnPlay.textContent = '▶ Tiếp tục';
+    btnPause.style.display = 'none';
+  });
+
+  // 7. Nút STOP
+  btnStop.addEventListener('click', () => {
+    synth.cancel();
+    resetUI();
+  });
+
+  // Khi đọc hết bài
+  utterance.onend = resetUI;
+  utterance.onerror = (e) => {
+    console.error("TTS Error:", e);
+    resetUI();
+  };
+});
+
+
+/* ══════════════════════════════════════════
+   ADMIN AUTH & STATS BUTTON (GIỮ NGUYÊN)
+   ══════════════════════════════════════════ */
 (function setupAdminBtn(){
   const btn = document.getElementById('footerAdmin');
   const statsBtn = document.getElementById('fabStats');
-  let isAdmin = !!window.__ddIsAdmin;
   
   function syncBtn(){
+    const isAdmin = !!window.__ddIsAdmin;
     if(statsBtn) statsBtn.style.display = isAdmin ? 'flex' : 'none';
     if(btn) btn.style.opacity = isAdmin ? "1" : "0.3";
   }
+  
   syncBtn();
-  window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; syncBtn(); });
+  window.addEventListener('dd-auth-change', syncBtn);
   
   btn?.addEventListener('click', (e) => {
     e.preventDefault();
     const fb = window.__ddFirebase; if(!fb) return;
-    if(isAdmin){
+    if(window.__ddIsAdmin){
       if(confirm('Đăng xuất Admin?')) fb.signOut(fb.auth);
     } else {
       const p = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi: '+e.message));
+      fb.signInWithPopup(fb.auth, p).catch(err => alert('Lỗi: ' + err.message));
     }
   });
 })();

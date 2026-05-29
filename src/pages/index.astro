@@ -9,9 +9,12 @@ const storiesList = [
   { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biaqhbcp.png', tags: ['niên hạ', 'đam mỹ', 'trai thẳng'], tong_so_chuong: 72 },
   { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', author: 'Hỉ Thượng Mi Sao', cover: '/dynamic-duo-web/images/biahcdh.png', tags: ['mất trí nhớ', 'chua xót', 'đồng quê'], tong_so_chuong: 109 },
   { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', author: 'Tam Đạo', cover: '/dynamic-duo-web/images/biandntkm.png', tags: ['HE', 'gương vỡ lại lành', 'drama motip cũ'], tong_so_chuong: 76 },
-  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatnctsct.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74 }
+  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatnctsct.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74 },
+  
+  // THÊM 2 BỘ NÀY VÀO ĐÂY:
+  { id: 'vat-de-vo', title: 'Vật dễ vỡ', author: 'Hồi Nam Tước', cover: '/dynamic-duo-web/images/biavdv.png', tags: ['đam mỹ', 'ngược'], tong_so_chuong: 0 },
+  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biatdxt.png', tags: ['đam mỹ', 'cổ đại'], tong_so_chuong: 0 }
 ];
-
 // 3. Thuật toán tự động đếm chương và phân loại
 const storiesData = storiesList.map(story => {
   const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
@@ -633,34 +636,37 @@ const recentChaps = allChaps
           </div>
         </div>
       ))}
-
-      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
-        <div class="sc-body">
-          <div class="sc-shelf">🌤️ Sắp đào</div>
-          <h3 class="sc-title">Vật dễ vỡ</h3>
-          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
-          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span></div>
-          <div class="sc-footer">
-            <span class="sc-chapters">Sắp cập nhật</span>
-            <a href="/dynamic-duo-web/truyen/vat-de-vo/" class="sc-link secondary">Xem →</a>
-          </div>
+<!-- TỰ ĐỘNG HIỂN THỊ CÁC TRUYỆN SẮP ĐÀO (CHƯA CÓ CHƯƠNG) -->
+{caTrenTroiList.map(story => (
+  <div class="sc reveal" data-cat="upcoming" data-tags={story.tags.join(',')}>
+    <div class="sc-cover-wrap">
+      {/* Hiển thị bìa nếu có, nếu không có sẽ hiện ảnh mặc định */}
+      <img 
+        src={story.cover} 
+        alt={story.title} 
+        loading="lazy" 
+        onerror="this.src='/dynamic-duo-web/images/frontpage.png'; this.style.opacity='0.6'" 
+      />
+      <span class="sc-status status-upcoming">Sắp đào</span>
+    </div>
+    <div class="sc-body">
+      <div class="sc-shelf">🌤️ Cá trên trời</div>
+      <h3 class="sc-title">{story.title}</h3>
+      <div class="sc-meta">{story.author} · Edit: Dynamic Duo</div>
+      <div class="sc-tags">
+        {story.tags.map((tag: string) => (
+          <span class="sc-tag"># {tag}</span>
+        ))}
+      </div>
+      <div class="sc-footer">
+        <span class="sc-chapters">Sắp cập nhật</span>
+        <div style="display:flex;gap:5px">
+          <a href={story.url} class="sc-link secondary">Xem giới thiệu →</a>
         </div>
       </div>
-
-      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
-        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
-        <div class="sc-body">
-          <div class="sc-shelf">🌤️ Sắp đào</div>
-          <h3 class="sc-title">Thiếu đế xuân tâm</h3>
-          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
-          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># cổ đại</span></div>
-          <div class="sc-footer">
-            <span class="sc-chapters">Sắp cập nhật</span>
-            <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/" class="sc-link secondary">Xem →</a>
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
+))}
 
       <div class="no-results" id="noRes">
         <span class="fish-icon">𓆝</span>

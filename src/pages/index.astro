@@ -60,9 +60,19 @@ const hcdhCount    = countChaps(hcdhPosts);
 }
 [data-theme="dark"] .hero-greeting { color: #a8daf0; }
 .hero-banner-wrap {
-  position:relative; border-radius:14px; overflow:hidden;
-  max-height:190px; margin:0 auto;
+  position:relative; 
+  border-radius:18px; /* Bo góc to ra xíu */
+  overflow:hidden;
+  max-width: 90%; /* Thu nhỏ ảnh lại so với toàn màn hình */
+  max-height:220px; 
+  margin:0 auto;
   display:flex; align-items:center; justify-content:center;
+  border: 6px solid #fff; /* Tạo khung viền trắng */
+  box-shadow: 0 8px 25px rgba(2,132,199,.15); /* Thêm bóng đổ tạo chiều sâu */
+}
+[data-theme="dark"] .hero-banner-wrap {
+    border-color: rgba(30,74,106,.8);
+    box-shadow: 0 8px 25px rgba(0,0,0,.4);
 }
 .hero-banner-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
 .hero-banner-overlay {

@@ -1,8 +1,9 @@
+---
 backend:
   # ĐÃ SỬA: Bắt buộc dùng git-gateway khi kết nối với Netlify Identity
   name: git-gateway
   branch: main
-
+---
 locale: "vi"
 
 media_folder: "public/images/uploads"

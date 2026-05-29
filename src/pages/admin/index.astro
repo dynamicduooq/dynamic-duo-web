@@ -239,7 +239,7 @@
       </section>
 
       <section class="section" id="sec-editor">
-<h2 class="page-title">Biên tập Chương
+        <h2 class="page-title">Biên tập Chương
           <div style="display:flex; gap:8px">
             <button class="btn btn-outline btn-sm" onclick="navTo('chapter-list')">← Quay lại danh sách</button>
             <button class="btn btn-outline btn-sm" id="btn-save-draft">💾 Lưu Nháp</button>
@@ -315,7 +315,7 @@
         </div>
       </section>
       
-<section class="section" id="sec-tags">
+      <section class="section" id="sec-tags">
         <h2 class="page-title">Quản lý Tags (Hàng loạt)</h2>
         <div class="card">
             <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Bộ công cụ tự động chèn/sửa/xóa Tag trực tiếp vào các file chương truyện (.md) trên GitHub.</p>
@@ -332,7 +332,7 @@
                 <div class="field">
                     <label>Áp dụng cho</label>
                     <select id="tag-target-story">
-                        </select>
+                    </select>
                 </div>
                 <div class="field" id="wrap-tag-old">
                     <label>Tag cũ (Cần đổi/xóa)</label>
@@ -347,7 +347,7 @@
             <div id="tag-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--sky-dark); white-space:pre-wrap; background: var(--sky-pale); padding: 10px; border-radius: 6px; display: none; max-height: 250px; overflow-y: auto;"></div>
         </div>
       </section>
-      
+
       <section class="section" id="sec-fb-comments">
         <h2 class="page-title">Quản lý Bình luận (Firebase)</h2>
         <div id="fb-comments-list" style="display:flex; flex-direction:column; gap:12px"></div>
@@ -405,13 +405,6 @@
     
     <div class="field"><label>Tên bộ truyện</label><input type="text" id="st-title" placeholder="VD: Sương mù tháng tám" /></div>
     <div class="field"><label>Slug (Đường dẫn tĩnh - không dấu, gạch nối)</label><input type="text" id="st-id" placeholder="VD: suong-mu-thang-tam" /></div>
-    <div class="field"><label>Phân loại (Thư mục)</label>
-      <select id="st-cat">
-        <option value="ca-duoi-nuoc">Cá dưới nước</option>
-        <option value="ca-tren-ban">Cá trên bàn</option>
-        <option value="ca-tren-troi">Cá trên trời</option>
-      </select>
-    </div>
     <div class="field"><label>Tác giả</label><input type="text" id="st-author" /></div>
     <div class="field"><label>Tags (Cách nhau dấu phẩy)</label><input type="text" id="st-tags" placeholder="đam mỹ, hiện đại..." /></div>
     <div class="field"><label>Mô tả ngắn (Tagline)</label><textarea id="st-desc" rows="2"></textarea></div>
@@ -431,7 +424,7 @@
     
     <div class="field"><label>Tên bộ truyện</label><input type="text" id="edit-st-title" /></div>
     <div class="field"><label>Tác giả</label><input type="text" id="edit-st-author" /></div>
-    
+    <div class="field"><label>Tổng số chương (Dự kiến)</label><input type="number" id="edit-st-max-chuong" placeholder="VD: 75" /></div>
     <div class="field">
         <label>Tags (Cách nhau dấu phẩy)</label>
         <input type="text" id="edit-st-tags" placeholder="đam mỹ, HE, niên hạ..." />
@@ -539,18 +532,16 @@ function navTo(id, pushHistory = true) {
           storiesList.map(s => `<option value="${s.id}">${s.title}</option>`).join('');
   }
 
-  // Đẩy ID vào lịch sử URL của trình duyệt
   if (pushHistory) {
       window.history.pushState({ section: id }, '', `#${id}`);
   }
 }
 
-// Bắt sự kiện khi người dùng ấn nút Back/Forward trên trình duyệt
 window.addEventListener('popstate', (e) => {
     if (e.state && e.state.section) {
-        navTo(e.state.section, false); // false để không tạo vòng lặp vô tận
+        navTo(e.state.section, false); 
     } else {
-        navTo('dashboard', false); // Mặc định về Dashboard nếu hết lịch sử
+        navTo('dashboard', false); 
     }
 });
 
@@ -595,7 +586,7 @@ function renderStoriesTable() {
   $('storyTbody').innerHTML = storiesList.map(s => `
     <tr>
       <td><b>${s.title}</b></td>
-      <td style="font-size:.75rem; font-family:monospace; color:var(--text-dim)">src/pages/${s.cat}/${s.id}</td>
+      <td style="font-size:.75rem; font-family:monospace; color:var(--text-dim)">src/pages/truyen/${s.id}</td>
       <td><span class="badge badge-pub">Hoạt động</span></td>
       <td>
         <button class="btn btn-outline btn-sm" onclick="editStoryInfo('${s.id}')">✏️ Sửa thông tin</button>
@@ -607,7 +598,7 @@ function renderStoriesTable() {
 
 function populateBulkUploadSelect() {
     const sel = $('bulk-story-select');
-    sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');
+    sel.innerHTML = storiesList.map(s => `<option value="truyen|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');
 }
 
 let currentEditStoryId = null;
@@ -618,7 +609,7 @@ let currentRawAstroCode = "";
 async function editStoryInfo(id) {
     const story = storiesList.find(s => s.id === id);
     currentEditStoryId = id;
-    currentEditStoryPath = `/contents/src/pages/${story.cat}/${story.id}/index.astro`;
+    currentEditStoryPath = `/contents/src/pages/truyen/${story.id}/index.astro`;
     
     $('edit-st-title').value = '⏳ Đang tải...';
     openModal('editStoryModal');
@@ -628,20 +619,19 @@ async function editStoryInfo(id) {
         currentRawAstroCode = b64Decode(file.content.replace(/\n/g,''));
         currentEditStorySha = file.sha;
 
-        // Bóc tách dữ liệu
         const titleMatch = currentRawAstroCode.match(/const title = "(.*?)";/);
         const authorMatch = currentRawAstroCode.match(/const author = "(.*?)";/);
         const descMatch = currentRawAstroCode.match(/const description = "(.*?)";/);
-        // FIX Regex tìm list tag trong Astro
+        const maxChuongMatch = currentRawAstroCode.match(/const tong_so_chuong = (\d+);/);
         const tagsMatch = currentRawAstroCode.match(/const tags = \[(.*?)\];/);
         const bodyMatch = currentRawAstroCode.match(/<div class="desc">([\s\S]*?)<\/div>/);
 
         $('edit-st-title').value = titleMatch ? titleMatch[1] : '';
         $('edit-st-author').value = authorMatch ? authorMatch[1] : '';
         $('edit-st-desc').value = descMatch ? descMatch[1] : '';
+        $('edit-st-max-chuong').value = maxChuongMatch ? maxChuongMatch[1] : '';
         
         if (tagsMatch && tagsMatch[1]) {
-            // Chuyển mảng string ["tag1", "tag2"] thành "tag1, tag2"
             $('edit-st-tags').value = tagsMatch[1].replace(/["']/g, '').split(',').map(s=>s.trim()).join(', ');
         } else {
             $('edit-st-tags').value = '';
@@ -661,6 +651,7 @@ async function saveStoryInfo() {
     const desc = $('edit-st-desc').value;
     const tagsRaw = $('edit-st-tags').value;
     const body = $('edit-st-body').value;
+    const maxChuong = $('edit-st-max-chuong').value || 0;
 
     if(!title) return showToast('Tên truyện không được để trống', 'error');
     
@@ -674,10 +665,14 @@ async function saveStoryInfo() {
         updatedCode = updatedCode.replace(/const author = "(.*?)";/, `const author = "${author.replace(/"/g, '\\"')}";`);
         updatedCode = updatedCode.replace(/const description = "(.*?)";/, `const description = "${desc.replace(/"/g, '\\"')}";`);
         
-        // Cập nhật mảng Tags
+        if(/const tong_so_chuong = \d+;/.test(updatedCode)) {
+             updatedCode = updatedCode.replace(/const tong_so_chuong = \d+;/, `const tong_so_chuong = ${maxChuong};`);
+        } else {
+             updatedCode = updatedCode.replace(/const description = "(.*?)";/, `const description = "$1";\nconst tong_so_chuong = ${maxChuong};`);
+        }
+
         if(tagsRaw.trim()) {
             const tagsFormatted = tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ');
-            // Nếu đã có dòng const tags thì thay thế, nếu chưa có thì chèn vào
             if(/const tags = \[.*?\];/.test(updatedCode)) {
                 updatedCode = updatedCode.replace(/const tags = \[.*?\];/, `const tags = [${tagsFormatted}];`);
             } else {
@@ -721,7 +716,7 @@ async function openStoryManager(id) {
 async function fetchChapters() {
   $('chapTbody').innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px">⏳ Đang lấy dữ liệu từ GitHub...</td></tr>';
   try {
-      const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}?ref=${BRANCH}`;
+      const path = `/contents/src/pages/truyen/${currentStory.id}?ref=${BRANCH}`;
       const files = await ghAPI(path);
       loadedChapters = files.filter(f => f.name.endsWith('.md') && f.name !== 'index.md');
       renderChapTable(loadedChapters);
@@ -770,7 +765,7 @@ function sortChapters() {
 async function delChap(name, sha) {
     if(!confirm(`Xóa vĩnh viễn file ${name}?`)) return;
     try {
-        await ghAPI(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${name}`, 'DELETE', {
+        await ghAPI(`/contents/src/pages/truyen/${currentStory.id}/${name}`, 'DELETE', {
             message: `🗑 Xóa chương: ${name}`, sha: sha, branch: BRANCH
         });
         showToast(`Đã xóa ${name}`);
@@ -789,7 +784,7 @@ async function bulkDeleteChaps() {
     let success = 0;
     for(const cb of selected) {
         try {
-            await ghAPI(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${cb.dataset.name}`, 'DELETE', {
+            await ghAPI(`/contents/src/pages/truyen/${currentStory.id}/${cb.dataset.name}`, 'DELETE', {
                 message: `🗑 Bulk delete: ${cb.dataset.name}`, sha: cb.dataset.sha, branch: BRANCH
             });
             success++;
@@ -828,7 +823,7 @@ async function openEditor(mode, name, sha) {
   } else {
     $('ed-content').value = '⏳ Đang tải nội dung file từ GitHub...';
     try {
-        const file = await ghAPI(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${name}?ref=${BRANCH}`);
+        const file = await ghAPI(`/contents/src/pages/truyen/${currentStory.id}/${name}?ref=${BRANCH}`);
         const raw = b64Decode(file.content.replace(/\n/g,''));
         
         const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/);
@@ -840,15 +835,12 @@ async function openEditor(mode, name, sha) {
             
             const getVal = (key) => { const m = fmText.match(new RegExp(`^${key}:\\s*(.+)$`, 'm')); return m ? m[1].replace(/^"|"$/g, '').trim() : ''; };
             
-            // Xử lý Tag riêng vì nó là mảng
             const tagsMatch = fmText.match(/^tags:\s*\[(.*?)\]/m) || fmText.match(/^tags:\s*\n((?:  - .*\n?)+)/m);
             let tagsVal = '';
             if (tagsMatch) {
                 if (tagsMatch[1].includes('-')) {
-                    // Định dạng list: - "tag1"
                     tagsVal = tagsMatch[1].split('\n').map(t => t.replace(/-\s*"?|"?\s*$/g, '').trim()).filter(Boolean).join(', ');
                 } else {
-                    // Định dạng array: ["tag1", "tag2"]
                     tagsVal = tagsMatch[1].replace(/["']/g, '').split(',').map(s=>s.trim()).join(', ');
                 }
             }
@@ -983,7 +975,6 @@ $('ed-saveBtn').onclick = async () => {
       setKey('draft', $('ed-status').value === 'draft' ? 'true' : 'false', false);
       if($('ed-note').value) setKey('editor_note', $('ed-note').value.replace(/"/g, '\\"'));
       
-      // Xử lý ghi đè mảng tags
       if (/^tags:\s*\[.*?\]/m.test(finalFm)) {
           finalFm = finalFm.replace(/^tags:\s*\[.*?\]/m, `tags: [${tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ')}]`);
       } else if (/^tags:\s*\n(?:  - .*\n?)+/m.test(finalFm)) {
@@ -1007,7 +998,7 @@ editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
   const content = `---\n${finalFm.trim()}\n---\n\n${$('ed-content').value}`;
   
   const filename = currentChap ? currentChap.name : `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;
-  const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}/${filename}`;
+  const path = `/contents/src/pages/truyen/${currentStory.id}/${filename}`;
   
   let latestSha = currentChap ? currentChap.sha : null;
   if(currentChap) {
@@ -1054,7 +1045,6 @@ async function processBulkUpload() {
     const log = $('bulk-log');
     log.innerHTML = 'Bắt đầu xử lý...\n';
     
-    // Thuật toán tách: Tìm chữ "Chương" có số đằng sau, nằm ở đầu một dòng mới
     const chapters = rawText.split(/(?=(?:^|\n)\s*Chương\s+\d+)/i).map(s => s.trim()).filter(s => s.length > 50);
     log.innerHTML += `Tìm thấy ${chapters.length} chương. Bắt đầu đẩy lên GitHub...\n\n`;
     
@@ -1079,13 +1069,12 @@ truyen_id: "${shortId}"
 chuong: ${num}
 date: "${new Date().toISOString().split('T')[0]}"
 ---`;
-        // Cắt bỏ dòng tiêu đề khỏi phần nội dung để tránh bị lặp lại khi đọc
         const bodyContent = lines.slice(1).join('\n').trim();
         const content = fm + '\n\n' + bodyContent;
         const filename = `chuong-${String(num).padStart(2,'0')}.md`;
         
         try {
-            await ghAPI(`/contents/src/pages/${cat}/${id}/${filename}`, 'PUT', {
+            await ghAPI(`/contents/src/pages/truyen/${id}/${filename}`, 'PUT', {
                 message: `🚀 Bulk Upload: ${filename}`, content: b64Encode(content), branch: BRANCH
             });
             log.innerHTML += `✅ Đã đăng: ${filename}\n`;
@@ -1258,20 +1247,15 @@ function loadFbReaders() {
 window.delFb = (path) => { if(confirm('Chắc chắn xóa?')) window.__fbRemove(window.__fbRef(window.__fbDb, path)); };
 
 /* ==========================================================================
-   CÔNG CỤ QUẢN LÝ VÀ ĐỔI TAG HÀNG LOẠT (NÂNG CẤP)
+   QUẢN LÝ VÀ ĐỔI TAG HÀNG LOẠT
    ========================================================================== */
-function toggleTagInputs() {
-    const action = $('tag-action').value;
-    $('wrap-tag-old').style.display = (action === 'add') ? 'none' : 'block';
-    $('wrap-tag-new').style.display = (action === 'delete') ? 'none' : 'block';
-}
-
-async function processBulkTags() {
-    const action = $('tag-action').value;
-    const targetStory = $('tag-target-story').value;
+async function bulkReplaceTags() {
     const oldTag = $('tag-old').value.trim();
     const newTag = $('tag-new').value.trim();
     const log = $('tag-log');
+    
+    const action = $('tag-action').value;
+    const targetStory = $('tag-target-story').value;
     
     if(action !== 'add' && !oldTag) return showToast('Vui lòng nhập Tag cũ', 'error');
     if(action !== 'delete' && !newTag) return showToast('Vui lòng nhập Tag mới', 'error');
@@ -1290,12 +1274,11 @@ async function processBulkTags() {
 
     try {
         let updateCount = 0;
-        // Lọc danh sách truyện cần chạy
         const storiesToProcess = targetStory === 'all' ? storiesList : storiesList.filter(s => s.id === targetStory);
 
         for (const story of storiesToProcess) {
             log.innerHTML += `\n📂 Quét thư mục: ${story.title}...\n`;
-            const path = `/contents/src/pages/${story.cat}/${story.id}?ref=${BRANCH}`;
+            const path = `/contents/src/pages/truyen/${story.id}?ref=${BRANCH}`;
             try {
                 const files = await ghAPI(path);
                 const mdFiles = files.filter(f => f.name.endsWith('.md'));
@@ -1304,14 +1287,12 @@ async function processBulkTags() {
                     const fileData = await ghAPI(file.path);
                     let rawContent = b64Decode(fileData.content.replace(/\n/g,''));
                     
-                    // Regex tách nguyên khối Frontmatter
                     const fmMatch = rawContent.match(/^---\n([\s\S]*?)\n---/);
                     if (!fmMatch) continue;
                     
                     let fmText = fmMatch[1];
                     let tagsMatch = fmText.match(/^tags:\s*\[(.*?)\]/m) || fmText.match(/^tags:\s*\n((?:  - .*\n?)+)/m);
                     
-                    // Chuyển Tag cũ thành mảng chuẩn để xử lý (tránh bị lỗi Regex)
                     let tagsArray = [];
                     if (tagsMatch && tagsMatch[1]) {
                         if (tagsMatch[1].includes('-')) {
@@ -1323,7 +1304,6 @@ async function processBulkTags() {
 
                     let isModified = false;
 
-                    // XỬ LÝ THEO YÊU CẦU
                     if (action === 'replace') {
                         const idx = tagsArray.indexOf(oldTag);
                         if (idx !== -1) { tagsArray[idx] = newTag; isModified = true; }
@@ -1334,19 +1314,18 @@ async function processBulkTags() {
                         if (idx !== -1) { tagsArray.splice(idx, 1); isModified = true; }
                     }
 
-                    // GHI ĐÈ FILE NẾU CÓ SỰ THAY ĐỔI
                     if (isModified) {
                         const tagsFormatted = tagsArray.length > 0 ? tagsArray.map(t => `"${t}"`).join(', ') : '';
                         let newFmText = fmText;
                         
                         if (tagsMatch) {
                             if(tagsFormatted === '') {
-                                newFmText = newFmText.replace(tagsMatch[0], ''); // Xóa hẳn dòng tags nếu trống
+                                newFmText = newFmText.replace(tagsMatch[0], ''); 
                             } else {
                                 newFmText = newFmText.replace(tagsMatch[0], `tags: [${tagsFormatted}]`);
                             }
                         } else {
-                            newFmText += `\ntags: [${tagsFormatted}]`; // Chưa có thì chèn thêm dòng mới
+                            newFmText += `\ntags: [${tagsFormatted}]`;
                         }
                         
                         const updatedContent = rawContent.replace(fmText, newFmText);
@@ -1371,10 +1350,10 @@ async function processBulkTags() {
         log.innerHTML += `\n❌ Lỗi hệ thống: ${e.message}`;
     } finally {
         btn.disabled = false;
-        // Đẩy scroll xuống dưới cùng khung log
         log.scrollTop = log.scrollHeight;
     }
 }
+
 /* ==========================================================================
    CẤU HÌNH & BACKUP
    ========================================================================== */
@@ -1402,14 +1381,70 @@ async function saveSettingsJSON() {
   btn.textContent = 'Lưu Cấu hình'; btn.disabled = false;
 }
 
-async function performBackup()
+async function performBackup() {
+    const btn = $('btn-backup'); 
+    const log = $('backup-log');
+    btn.disabled = true; 
+    log.innerHTML = 'Đang khởi tạo JSZip...<br>';
+    
+    try {
+        const zip = new JSZip(); 
+        const rootFolder = zip.folder("dynamic-duo-backup");
+        let successCount = 0;
+        
+        for(const s of storiesList) {
+            log.innerHTML += `Đang tải: ${s.title}...<br>`;
+            const path = `/contents/src/pages/truyen/${s.id}?ref=${BRANCH}`;
+            try {
+                const files = await ghAPI(path);
+                
+                if(!Array.isArray(files)) {
+                    log.innerHTML += `<span style="color:var(--amber)">  ↳ Bỏ qua (Thư mục trống hoặc chưa có trên Git)</span><br>`;
+                    continue;
+                }
+                
+                const storyFolder = rootFolder.folder(s.id);
+                for(const f of files) {
+                    if(f.name.endsWith('.md') || f.name.endsWith('.astro')) {
+                        const fileData = await ghAPI(`/contents/${f.path}?ref=${BRANCH}`);
+                        const content = b64Decode(fileData.content.replace(/\n/g, ''));
+                        storyFolder.file(f.name, content);
+                        successCount++;
+                    }
+                }
+                log.innerHTML += `<span style="color:var(--green)">  ↳ Tải thành công</span><br>`;
+            } catch(e) { 
+                log.innerHTML += `<span style="color:red">  ↳ Lỗi tải ${s.title}: ${e.message}</span><br>`; 
+            }
+        }
+        
+        if (successCount === 0) {
+            log.innerHTML += '<br><span style="color:red">❌ Không có file nào được tải về! Backup hủy bỏ.</span>';
+            return;
+        }
+
+        log.innerHTML += '<br>Đang nén file ZIP... Vui lòng chờ.<br>';
+        const content = await zip.generateAsync({type:"blob"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(content);
+        a.download = `Backup-Dynamic-Duo-${new Date().toISOString().split('T')[0]}.zip`;
+        a.click();
+        
+        log.innerHTML += '✅ Hoàn tất tải xuống ZIP!';
+    } catch(e) { 
+        log.innerHTML += `<br><span style="color:red">Lỗi hệ thống: ${e.message}</span>`; 
+    } finally { 
+        btn.disabled = false; 
+    }
+}
+
 function openStoryModal() { openModal('storyModal'); }
 function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); }
 
 async function saveNewStory() {
     const title = $('st-title').value; const id = $('st-id').value;
-    const cat = $('st-cat').value; const author = $('st-author').value;
+    const author = $('st-author').value;
     
     if(!title || !id) return showToast('Tên và Slug không được trống', 'error');
     
@@ -1418,6 +1453,8 @@ import Layout from "../../../layouts/Layout.astro";
 const title = "${title}";
 const author = "${author}";
 const description = "${$('st-desc').value}";
+const tong_so_chuong = 0;
+const hoan_thanh = false;
 const tags = [${$('st-tags').value.split(',').map(t => `"${t.trim()}"`).join(', ')}];
 ---
 <Layout title={title}>
@@ -1429,10 +1466,10 @@ const tags = [${$('st-tags').value.split(',').map(t => `"${t.trim()}"`).join(', 
 </Layout>`;
 
     try {
-        await ghAPI(`/contents/src/pages/${cat}/${id}/index.astro`, 'PUT', { message: `📚 Thêm truyện mới: ${title}`, content: b64Encode(fm), branch: BRANCH });
+        await ghAPI(`/contents/src/pages/truyen/${id}/index.astro`, 'PUT', { message: `📚 Thêm truyện mới: ${title}`, content: b64Encode(fm), branch: BRANCH });
         showToast('Tạo thư mục truyện thành công!');
         closeModal('storyModal');
-        storiesList.push({ id, title, cat, shortId: id });
+        storiesList.push({ id, title, shortId: id });
         renderStoriesTable();
     } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
 }

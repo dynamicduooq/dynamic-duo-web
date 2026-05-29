@@ -10,6 +10,8 @@ const chapters = allPosts
   .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
   const tong_so_chuong = 80; // Điền tổng số chương của truyện này (nếu chưa rõ thì để 9999)
 const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
+const total = tong_so_chuong; 
+const pct = Math.floor((chapters.length / total) * 100); // Thêm 2 dòng cho tất cả index
 ---
 
 <Layout frontmatter={{

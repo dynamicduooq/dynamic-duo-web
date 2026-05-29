@@ -383,15 +383,18 @@
 </div>
 
 <div class="modal-overlay" id="editStoryModal">
-  <div class="modal-content" style="max-width: 800px">
+  <div class="modal-content" style="max-width: 600px">
     <h3 style="margin-top:0; border-bottom:1px solid var(--sky-light); padding-bottom:10px; color:var(--sky-dark)">Cập nhật thông tin truyện</h3>
-    <p style="font-size: .85rem; color: var(--text-mid); margin-top: 0">Bạn đang chỉnh sửa trực tiếp file <code>index.astro</code> của bộ truyện. Cẩn thận không làm hỏng cú pháp code nhé.</p>
+    <p style="font-size: .85rem; color: var(--text-mid); margin-top: 0">Sửa nội dung dễ dàng, hệ thống sẽ tự động ghép code an toàn.</p>
     
-    <textarea id="st-edit-body" style="width:100%; height:400px; font-family:monospace; font-size:.9rem; padding:15px; border:1px solid var(--sky-light); border-radius:var(--r-md); background:#f8fafc; line-height: 1.5; outline:none;"></textarea>
+    <div class="field"><label>Tên bộ truyện</label><input type="text" id="edit-st-title" /></div>
+    <div class="field"><label>Tác giả</label><input type="text" id="edit-st-author" /></div>
+    <div class="field"><label>Mô tả ngắn (Tagline)</label><textarea id="edit-st-desc" rows="2"></textarea></div>
+    <div class="field"><label>Văn án chi tiết (Hỗ trợ HTML/Markdown cơ bản)</label><textarea id="edit-st-body" rows="6"></textarea></div>
     
     <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px">
       <button class="btn btn-outline" onclick="closeModal('editStoryModal')">Hủy bỏ</button>
-      <button class="btn btn-sky" id="btn-save-story-info" onclick="saveStoryInfo()">🚀 Lưu lên GitHub</button>
+      <button class="btn btn-sky" id="btn-save-story-info" onclick="saveStoryInfo()">🚀 Lưu thay đổi</button>
     </div>
   </div>
 </div>
@@ -539,52 +542,70 @@ function populateBulkUploadSelect() {
     const sel = $('bulk-story-select');
 sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');}
 
-/* ==========================================================================
-   (FIX LỖI) SỬA THÔNG TIN TRUYỆN (FILE INDEX.ASTRO)
-   ========================================================================== */
 let currentEditStoryId = null;
 let currentEditStoryPath = null;
 let currentEditStorySha = null;
+let currentRawAstroCode = ""; // Lưu giữ toàn bộ code gốc
 
 async function editStoryInfo(id) {
     const story = storiesList.find(s => s.id === id);
     currentEditStoryId = id;
     currentEditStoryPath = `/contents/src/pages/${story.cat}/${story.id}/index.astro`;
     
-    $('st-edit-body').value = 'Đang tải nội dung file index.astro...';
+    $('edit-st-title').value = '⏳ Đang tải...';
     openModal('editStoryModal');
     
     try {
         const file = await ghAPI(`${currentEditStoryPath}?ref=${BRANCH}`);
-        $('st-edit-body').value = b64Decode(file.content.replace(/\n/g,''));
+        currentRawAstroCode = b64Decode(file.content.replace(/\n/g,''));
         currentEditStorySha = file.sha;
+
+        // Bóc tách dữ liệu từ code bằng Regex thông minh
+        const titleMatch = currentRawAstroCode.match(/const title = "(.*?)";/);
+        const authorMatch = currentRawAstroCode.match(/const author = "(.*?)";/);
+        const descMatch = currentRawAstroCode.match(/const description = "(.*?)";/);
+        const bodyMatch = currentRawAstroCode.match(/<div class="desc">([\s\S]*?)<\/div>/);
+
+        $('edit-st-title').value = titleMatch ? titleMatch[1] : '';
+        $('edit-st-author').value = authorMatch ? authorMatch[1] : '';
+        $('edit-st-desc').value = descMatch ? descMatch[1] : '';
+        $('edit-st-body').value = bodyMatch ? bodyMatch[1].trim() : '';
+
     } catch(e) {
-        $('st-edit-body').value = `Không tìm thấy file ${currentEditStoryPath}\n\n(Lỗi: ${e.message})`;
-        currentEditStorySha = null;
+        showToast('Không tải được file (Lỗi: ' + e.message + ')', 'error');
+        closeModal('editStoryModal');
     }
 }
 
 async function saveStoryInfo() {
-    const content = $('st-edit-body').value.trim();
-    if(!content) return;
-    if(!currentEditStorySha && !confirm('File này dường như chưa tồn tại. Bạn muốn tạo mới nó không?')) return;
+    const title = $('edit-st-title').value;
+    const author = $('edit-st-author').value;
+    const desc = $('edit-st-desc').value;
+    const body = $('edit-st-body').value;
+
+    if(!title) return showToast('Tên truyện không được để trống', 'error');
     
     const btn = $('btn-save-story-info');
     btn.textContent = 'Đang lưu...'; btn.disabled = true;
-    
+
     try {
-        // Lấy SHA mới nhất chống lỗi 409
+        // Nhúng nội dung mới vào lại bản code cũ an toàn
+        let updatedCode = currentRawAstroCode;
+        
+        updatedCode = updatedCode.replace(/const title = "(.*?)";/, `const title = "${title.replace(/"/g, '\\"')}";`);
+        updatedCode = updatedCode.replace(/const author = "(.*?)";/, `const author = "${author.replace(/"/g, '\\"')}";`);
+        updatedCode = updatedCode.replace(/const description = "(.*?)";/, `const description = "${desc.replace(/"/g, '\\"')}";`);
+        updatedCode = updatedCode.replace(/<div class="desc">([\s\S]*?)<\/div>/, `<div class="desc">\n${body}\n  </div>`);
+
         let latestSha = currentEditStorySha;
-        if(latestSha) {
-            try {
-                const check = await ghAPI(currentEditStoryPath);
-                latestSha = check.sha;
-            } catch(e){}
-        }
+        try {
+            const check = await ghAPI(currentEditStoryPath);
+            latestSha = check.sha;
+        } catch(e){}
         
         await ghAPI(currentEditStoryPath, 'PUT', {
-            message: `📝 Admin: Cập nhật thông tin trang truyện ${currentEditStoryId}`,
-            content: b64Encode(content),
+            message: `📝 Admin: Cập nhật văn án truyện ${currentEditStoryId}`,
+            content: b64Encode(updatedCode),
             sha: latestSha,
             branch: BRANCH
         });
@@ -593,7 +614,7 @@ async function saveStoryInfo() {
     } catch(e) {
         showToast('Lỗi khi lưu: ' + e.message, 'error');
     } finally {
-        btn.textContent = '🚀 Lưu lên GitHub'; btn.disabled = false;
+        btn.textContent = '🚀 Lưu thay đổi'; btn.disabled = false;
     }
 }
 

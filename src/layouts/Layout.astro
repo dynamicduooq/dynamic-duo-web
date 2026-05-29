@@ -38,6 +38,10 @@ if (currentTruyenId && isNovelPage) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{frontmatter?.title || 'Trang chủ'} | {settings.site_name}</title>
   <meta name="description" content={frontmatter?.description || settings.tagline} />
+  
+  <!-- Favicon cho Tab Web -->
+  <link rel="icon" type="image/png" href="/dynamic-duo-web/logo2.png" />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
@@ -282,20 +286,18 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list a:hover { background:var(--sky-pale); color:var(--sky); }
     .chap-dd-list a.cur-chap { background:rgba(14,165,233,.1); color:var(--sky-dark); font-weight:700; }
 
-    /* ── NOVEL LAYOUT ── */
+    /* ── NOVEL LAYOUT VÀ CHỐNG COPY ── */
     .novel-layout-wrap { max-width:800px; margin:0 auto; padding:0 16px; position:relative; }
     .novel-content { max-width:760px; margin:24px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); position:relative; }
+    
+    /* CHỐNG RE-UP (Vô hiệu hóa bôi đen) */
     .novel-content {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
 
-user-select: none; / Không cho bôi đen */
-
--webkit-user-select: none;
-
--moz-user-select: none;
-
--ms-user-select: none;
-
-}
     @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
     .novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
@@ -432,7 +434,88 @@ user-select: none; / Không cho bôi đen */
     .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
-    .ic-reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
+
+    /* ── CHAPTER-END COMMENT ── */
+    .chap-comment-section { max-width:760px; margin:0 auto; padding:0 12px 60px; }
+    .chap-comment-title { font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
+    .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
+    [data-theme="dark"] .chap-comment-title { color:#a8daf0; }
+    [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e4a6a,transparent); }
+    .admin-bar { display:none; }
+    .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:18px; margin-bottom:20px; }
+    .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
+    .comment-inp { flex:1; padding:8px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.82rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
+    .comment-inp:focus { border-color:var(--sky); }
+    [data-theme="dark"] .comment-inp { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-inp::placeholder { color:#3d6a82; }
+    .comment-textarea { width:100%; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.84rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:88px; margin-bottom:10px; }
+    .comment-textarea:focus { border-color:var(--sky); }
+    [data-theme="dark"] .comment-textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-textarea::placeholder { color:#3d6a82; }
+    .comment-submit-btn { padding:7px 20px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.8rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); }
+    .comment-submit-btn:hover { background:var(--sky2); }
+    .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; }
+    .comment-list { display:flex; flex-direction:column; gap:12px; }
+    .comment-card { background:#fff; border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
+    .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
+    .comment-card-header { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+    .comment-card-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--sky-pale),var(--sky-light)); display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--sky-dark); flex-shrink:0; border:1.5px solid var(--sky-light); }
+    [data-theme="dark"] .comment-card-avatar { background:rgba(21,101,160,.3); border-color:rgba(126,200,227,.25); color:#a8daf0; }
+    .comment-card-name { font-weight:700; color:var(--sky-dark); font-size:.82rem; }
+    [data-theme="dark"] .comment-card-name { color:#a8daf0; }
+    /* Admin badge cho comment */
+    .comment-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.52rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-left:5px; vertical-align:middle; }
+    [data-theme="dark"] .comment-admin-badge { background:#1565a0; border:1px solid rgba(126,200,227,.3); }
+    .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:auto; }
+    [data-theme="dark"] .comment-card-time { color:#3d6a82; }
+    .comment-card-text { font-size:.86rem; color:var(--text-main); line-height:1.65; margin:0 0 10px; word-break:break-word; }
+    [data-theme="dark"] .comment-card-text { color:#F3F9FF; }
+    .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .cmt-like-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
+    .cmt-like-btn:hover { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.06); }
+    .cmt-like-btn.liked { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.08); }
+    [data-theme="dark"] .cmt-like-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
+    [data-theme="dark"] .cmt-like-btn.liked { border-color:#f472b6; color:#f9a8d4; }
+    .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
+    .cmt-reply-btn:hover { border-color:var(--sky-light); color:var(--sky); background:var(--sky-pale); }
+    [data-theme="dark"] .cmt-reply-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
+    [data-theme="dark"] .cmt-reply-btn:hover { background:rgba(126,200,227,.08); color:#a8daf0; }
+    .cmt-del-btn { margin-left:auto; padding:3px 9px; border-radius:var(--r-pill); border:1px solid transparent; background:none; font-size:.68rem; color:var(--text-dim); cursor:pointer; transition:var(--t); display:none; }
+    .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
+    .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
+    .reply-thread { margin-top:10px; padding-top:10px; border-top:1px solid rgba(186,230,253,.35); display:none; flex-direction:column; gap:7px; }
+    .reply-thread.open { display:flex; }
+    [data-theme="dark"] .reply-thread { border-top-color:rgba(126,200,227,.13); }
+    .reply-item { display:flex; gap:8px; align-items:flex-start; background:var(--sky-pale); border-radius:10px; padding:9px 11px; position:relative; }
+    .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
+    [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
+    .reply-body { flex:1; min-width:0; }
+    .reply-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
+    [data-theme="dark"] .reply-name { color:#a8daf0; }
+    .reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
+    [data-theme="dark"] .reply-admin-badge { background:#1565a0; }
+    .reply-time { font-size:.6rem; color:var(--text-dim); margin-left:6px; }
+    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
+    [data-theme="dark"] .reply-text { color:#c8e0f0; }
+    .reply-del { position:absolute; top:6px; right:8px; background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 4px; border-radius:3px; display:none; }
+    .reply-item:hover .reply-del { opacity:1; }
+    .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+    .reply-del.show { display:block; }
+    .reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
+    .reply-form.open { display:flex; }
+    .reply-inp,.reply-inp-text { padding:6px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
+    .reply-inp { border-radius:var(--r-pill); font-size:.75rem; }
+    .reply-inp-text { border-radius:10px; font-size:.76rem; resize:none; min-height:52px; }
+    .reply-inp:focus,.reply-inp-text:focus { border-color:var(--sky); }
+    [data-theme="dark"] .reply-inp,[data-theme="dark"] .reply-inp-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .reply-inp::placeholder,[data-theme="dark"] .reply-inp-text::placeholder { color:#3d6a82; }
+    .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
+    .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
+    .reply-cancel-btn:hover { color:var(--sky); }
+    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
+    .reply-send-btn:hover { background:var(--sky2); }
+    .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
+    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
     [data-theme="dark"] .reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
     .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
     [data-theme="dark"] .reply-quoting { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
@@ -493,21 +576,19 @@ user-select: none; / Không cho bôi đen */
     [data-theme="dark"] .rs-btn { color:#8fbcd4; }
     [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
     
-    /* Tags */
-    .tag-badge { display:inline-block; margin:2px 3px; padding:3px 10px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.72rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); }
-    .tag-badge:hover { background:var(--sky-light); }
-
-    /* Admin floating button */
-    #adminFloatingBtn {
-      opacity:0.15; position:fixed; bottom:8px; right:8px; z-index:410;
+    /* Admin floating button & Stats Button */
+    #adminFloatingBtn, #adminStatsBtn {
+      opacity:0.15; position:fixed; z-index:410;
       width:18px; height:18px; border-radius:50%;
-      background:linear-gradient(135deg,#1565a0,#0e3d6e);
       border:none; cursor:pointer; color:#fff; font-size:.5rem;
       box-shadow:none; display:none; align-items:center; justify-content:center;
       transition:transform .2s,box-shadow .2s;
     }
-    #adminFloatingBtn:hover { opacity:1; transform:none; box-shadow:none; }
+    #adminFloatingBtn { bottom:8px; right:8px; background:linear-gradient(135deg,#1565a0,#0e3d6e); }
+    #adminStatsBtn { bottom:8px; right:32px; background:linear-gradient(135deg,#10b981,#059669); }
+    #adminFloatingBtn:hover, #adminStatsBtn:hover { opacity:1; transform:none; box-shadow:none; }
     #adminFloatingBtn.visible { display:flex; opacity:1; width:40px; height:40px; bottom:172px; right:22px; font-size:.88rem; }
+    #adminStatsBtn.visible { display:flex; opacity:1; width:40px; height:40px; bottom:172px; right:74px; font-size:.88rem; }
   </style>
 </head>
 <body>
@@ -743,6 +824,21 @@ user-select: none; / Không cho bôi đen */
 )}
 
 {isNovelPage && (
+  <div class="rs-popup" id="statsPopup" style="bottom: 130px;">
+    <div class="rs-title" style="color: #10b981;">📊 Thống kê Chương</div>
+    <div style="font-size: .8rem; color: var(--text-main); display: flex; flex-direction: column; gap: 10px;">
+       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>👁 Lượt xem:</span> <strong id="statViews" style="color:var(--sky)">0</strong></div>
+       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>💬 Bình luận:</span> <strong id="statCmts" style="color:var(--sky)">0</strong></div>
+       <div style="display:flex; justify-content:space-between;"><span>❤️ Lượt thích:</span> <strong id="statLikes" style="color:var(--sky)">0</strong></div>
+    </div>
+    <p style="font-size:.6rem;color:var(--text-dim);text-align:center;margin:12px 0 0;font-style:italic">Cập nhật theo thời gian thực</p>
+  </div>
+)}
+
+{isNovelPage && (
+  <button id="adminStatsBtn" title="Thống kê">📊</button>
+)}
+{isNovelPage && (
   <button id="adminFloatingBtn" title="Quản trị viên" aria-label="Admin login">🔑</button>
 )}
 
@@ -773,6 +869,71 @@ function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked'
 function getSavedName(){ return localStorage.getItem('dd_commenter_name') || ''; }
 function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commenter_name', name.trim()); }
 
+/* CÀI ĐẶT ĐỌC TRUYỆN, PHÍM TẮT VÀ LỊCH SỬ */
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.documentElement;
+  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
+  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
+  
+  // Lưu lịch sử đọc nếu đang ở trang truyện
+  const novelContent = document.querySelector('.novel-content');
+  if(novelContent) {
+     localStorage.setItem('dd_last_read_url', window.location.pathname);
+     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
+  }
+  
+  // Setup Cài đặt hiển thị
+  const btn = document.getElementById('readSettingsBtn');
+  const pop = document.getElementById('rsPopup');
+  
+  if(btn && pop) {
+    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); document.getElementById('statsPopup')?.classList.remove('open'); });
+    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+
+    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+
+    const fontBtns = pop.querySelectorAll('[data-font]');
+    fontBtns.forEach(fb => {
+      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
+      fb.addEventListener('click', () => {
+        ff = fb.dataset.font;
+        root.style.setProperty('--read-ff', ff);
+        localStorage.setItem('dd_ff', ff);
+        fontBtns.forEach(b=>b.classList.remove('active'));
+        fb.classList.add('active');
+      });
+    });
+  }
+
+  // Keyboard shortcuts (Next/Prev chapter) & Chống Copy Re-up
+  if(document.querySelector('.novel-content')) {
+    // Chống copy chuột phải và bôi đen
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
+
+    // Bắt sự kiện bàn phím
+    document.addEventListener('keydown', e => {
+      // 1. Phím tắt chuyển trang
+      if(!document.activeElement || !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+        if(e.key === 'ArrowLeft') { 
+          const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); 
+          if(p && p.tagName === 'A' && !p.classList.contains('disabled')) window.location.href = p.href; 
+        }
+        if(e.key === 'ArrowRight') { 
+          const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); 
+          if(n && n.tagName === 'A' && !n.classList.contains('disabled')) window.location.href = n.href; 
+        }
+      }
+      
+      // 2. Chặn các phím tắt tải trang/lưu trang
+      if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) {
+        e.preventDefault();
+      }
+    });
+  }
+});
+
 /* Admin name constant */
 const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
 
@@ -781,6 +942,61 @@ function waitFirebase(cb){
   window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
   let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
 }
+
+/* ══ THỐNG KÊ LƯỢT XEM VÀ BÌNH LUẬN DÀNH CHO ADMIN ══ */
+waitFirebase(({db, ref, get, update, onValue}) => {
+  const isNovel = document.querySelector('.novel-content') !== null;
+  if(!isNovel) return;
+  const key = pageKey();
+
+  // 1. Logic Tăng Lượt Xem
+  const viewRef = ref(db, 'page_views/' + key);
+  get(viewRef).then(snap => {
+     let views = (snap.val() && snap.val().views) || 0;
+     if(!window.__ddIsAdmin) { // Khách đọc thì mới tăng view
+       update(ref(db, 'page_views'), { [key + '/views']: views + 1 }).catch(() => console.log("Cần cấp quyền ghi page_views trong Firebase Rules"));
+     }
+  });
+
+  // 2. Nút Thống Kê (chỉ hiện khi đăng nhập Admin)
+  window.addEventListener('dd-auth-change', e => {
+    const btn = document.getElementById('adminStatsBtn');
+    if(btn) {
+      btn.style.display = e.detail.isAdmin ? 'flex' : 'none';
+      if(e.detail.isAdmin) btn.classList.add('visible');
+    }
+  });
+
+  const btn = document.getElementById('adminStatsBtn');
+  const pop = document.getElementById('statsPopup');
+  
+  if(btn && pop) {
+    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); document.getElementById('rsPopup')?.classList.remove('open');});
+    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+    
+    // Lấy số liệu Realtime Views
+    onValue(viewRef, snap => {
+       const vEl = document.getElementById('statViews');
+       if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
+    });
+
+    // Tính tổng lượt Comment & Like của chương
+    onValue(ref(db, 'comments/chap_' + key), snap => {
+       const data = snap.val() || {};
+       let cmtCount = Object.keys(data).length;
+       let likeCount = 0;
+       Object.values(data).forEach(c => {
+          if(c.likes) likeCount += Object.keys(c.likes).length;
+          if(c.replies) cmtCount += Object.keys(c.replies).length;
+       });
+       const cEl = document.getElementById('statCmts');
+       const lEl = document.getElementById('statLikes');
+       if(cEl) cEl.textContent = cmtCount;
+       if(lEl) lEl.textContent = likeCount;
+    });
+  }
+});
+
 
 /* ══ SCROLL + PROGRESS ══ */
 const _st=document.getElementById('scrollTop'),_sb=document.getElementById('scrollBot'),_rp=document.getElementById('read-progress');
@@ -1123,22 +1339,19 @@ syncThemeBtns();
     if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
   });
 
-  // Khởi tạo các nút Trigger cho Inline Comment
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
     btn.className = 'ic-trigger';
     btn.title     = 'Bình luận đoạn ' + (idx + 1);
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
-    // Dùng emoji sạch, không viền, không nền
-    btn.innerHTML = '💬'; 
+    btn.innerHTML = '💬';
     p.appendChild(btn);
 
     waitFirebase(({db, ref, onValue}) => {
       const key = 'inline_' + pageKey() + '_p' + idx;
       onValue(ref(db, 'comments/' + key), snap => {
         const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
-        // Bọc badge vào thẻ span để style trong suốt
         btn.innerHTML = cnt > 0
           ? `💬<span>${cnt}</span>`
           : '💬';
@@ -1388,58 +1601,6 @@ syncThemeBtns();
     });
   });
 })();
-
-// Dịch vụ nhận diện phím tắt chuyển chương và các script DOM
-document.addEventListener('DOMContentLoaded', () => {
-  // Script xử lý bánh răng đọc truyện
-  const root = document.documentElement;
-  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
-  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
-
-  const btn = document.getElementById('readSettingsBtn');
-  const pop = document.getElementById('rsPopup');
-  
-  if(btn && pop) {
-    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
-    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
-
-    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-
-    const fontBtns = pop.querySelectorAll('[data-font]');
-    fontBtns.forEach(fb => {
-      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-      fb.addEventListener('click', () => {
-        ff = fb.dataset.font;
-        root.style.setProperty('--read-ff', ff);
-        localStorage.setItem('dd_ff', ff);
-        fontBtns.forEach(b=>b.classList.remove('active'));
-        fb.classList.add('active');
-      });
-    });
-  }
-
-  // Chuyển trang qua bàn phím
-  document.addEventListener('keydown', e => {
-    if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-    
-    if(e.key === 'ArrowLeft') { 
-      const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
-      if(p && !p.classList.contains('disabled')) window.location.href = p.href; 
-    }
-    if(e.key === 'ArrowRight') { 
-      const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); 
-      if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
-    }
-  });
-
-  // Lưu lịch sử đọc
-  const novelContent = document.querySelector('.novel-content');
-  if(novelContent) {
-     localStorage.setItem('dd_last_read_url', window.location.pathname);
-     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
-  }
-});
 </script>
 </body>
 </html>

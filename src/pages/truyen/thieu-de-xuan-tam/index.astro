@@ -29,11 +29,44 @@ const pct = Math.floor((chapters.length / total) * 100); // Thêm 2 dòng cho t�
     .intro-block { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.5); border-radius: var(--r-md); padding: 20px 24px; margin: 24px 0; font-size: .9rem; color: var(--text-mid); line-height: 1.8; }
     .intro-block h4 { font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sky-dark); text-align: left; margin: 0 0 10px; }
     .intro-block p { margin: 0 0 8px; }
-    .char-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; text-align: center; margin: 20px 0; }
-    .char-name { font-family: 'Merriweather', serif; font-size: .95rem; color: var(--sky-dark); }
-    .char-role { font-size: .72rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
-    .char-divider { font-size: 1.2rem; color: var(--sky-light); }
-    .toc-section { margin-top: 32px; }
+/* THIẾT KẾ GRID NHÂN VẬT CÔNG - THỤ */
+    .char-grid { 
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; 
+      align-items: stretch; margin: 36px 0; 
+    }
+    .char-box { 
+      background: var(--bg-card); border: 1px solid var(--sky-light); 
+      border-radius: 16px; padding: 20px 16px; text-align: center; 
+      box-shadow: 0 4px 15px rgba(14,165,233,0.05); transition: transform 0.2s;
+    }
+    .char-box:hover { transform: translateY(-4px); border-color: var(--sky); }
+    [data-theme="dark"] .char-box { background: rgba(15,35,54,0.4); border-color: rgba(126,200,227,0.2); }
+    
+    .char-role { 
+      font-size: 0.7rem; font-weight: bold; text-transform: uppercase; 
+      letter-spacing: 2px; padding: 4px 16px; border-radius: 99px; 
+      display: inline-block; margin-bottom: 12px;
+    }
+    /* Màu riêng cho Công (Đỏ nhạt) và Thụ (Xanh nhạt) */
+    .char-role.top { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;} 
+    .char-role.bot { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc;} 
+    [data-theme="dark"] .char-role.top { background: rgba(220,38,38,0.15); color: #fca5a5; border-color: rgba(248,113,113,0.3);}
+    [data-theme="dark"] .char-role.bot { background: rgba(14,165,233,0.15); color: #7dd3fc; border-color: rgba(56,189,248,0.3);}
+    
+    .char-name { font-family: 'Merriweather', serif; font-size: 1.2rem; color: var(--sky-dark); margin-bottom: 8px; font-weight: bold;}
+    [data-theme="dark"] .char-name { color: #a8daf0; }
+    
+    .char-attr { font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; font-style: italic;}
+    [data-theme="dark"] .char-attr { color: #b8d4e8; }
+    
+    .char-divider { display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--sky-light); }
+    
+    /* Reponsive trên điện thoại */
+    @media (max-width: 600px) { 
+      .char-grid { grid-template-columns: 1fr; gap: 12px; } 
+      .char-divider { transform: rotate(90deg); margin: 5px 0;} 
+    }
+   .toc-section { margin-top: 32px; }
     .toc-title { font-family: 'Merriweather', serif; font-size: .88rem; color: var(--sky-dark); letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px dashed var(--sky-light); }
     .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
     @media (max-width: 480px) { .toc-grid { grid-template-columns: 1fr; } }
@@ -60,12 +93,25 @@ const pct = Math.floor((chapters.length / total) * 100); // Thêm 2 dòng cho t�
     </div>
   </div>
 
-  <div class="char-grid">
-    <div><div class="char-name">Triệu Húc</div><div class="char-role">Công</div></div>
+<div class="char-grid">
+    <!-- KHUNG CHO CÔNG -->
+    <div class="char-box">
+       <div class="char-role top">Công</div>
+       <div class="char-name">Triệu Húc</div>
+       <div class="char-attr">Hoàng đế nhỏ tuổi, cố chấp điên cuồng, dục vọng chiếm hữu cao</div>
+    </div>
+    
+    <!-- BIỂU TƯỢNG Ở GIỮA -->
     <div class="char-divider">✧ ✖ ✧</div>
-    <div><div class="char-name">Phó Nguyên Thanh</div><div class="char-role">Thụ</div></div>
+    
+    <!-- KHUNG CHO THỤ -->
+    <div class="char-box">
+       <div class="char-role bot">Thụ</div>
+       <div class="char-name">Phó Nguyên Thanh</div>
+       <div class="char-attr">Quyền hoạn thê thảm, đẹp mà mạnh mẽ, không thiết sống</div>
+    </div>
   </div>
-
+  
   <div class="intro-block">
 <p>
 <strong>Giới thiệu:</strong>

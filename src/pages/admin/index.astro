@@ -1,6 +1,6 @@
 ---
 // src/pages/admin/index.astro
-// Siêu Admin Panel: Quản lý truyện, Markdown Editor, Firebase (Comments/Views), System Settings
+// Siêu Admin Panel: Quản lý toàn diện Website Dynamic Duo
 ---
 
 <!DOCTYPE html>
@@ -8,11 +8,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin · Dynamic Duo</title>
+  <title>Siêu Admin · Dynamic Duo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Literata:wght@400;600&display=swap" rel="stylesheet" />
   
-  <!-- JSZip for Backup Feature -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>
@@ -27,420 +26,316 @@
     *, *::before, *::after { box-sizing: border-box; }
     body { margin: 0; padding: 0; background: var(--cream); font-family: 'Newsreader', serif; font-size: 16px; color: var(--text-main); }
     
-    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--sky-pale); }
     ::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 4px; }
 
-    /* ── TOPBAR ── */
+    /* TOPBAR */
     .topbar {
       position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--sky-light);
       display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px;
       box-shadow: 0 2px 10px rgba(14,165,233,.05);
     }
     .topbar-logo { font-family: 'Literata', serif; font-weight: 600; font-size: 1.1rem; color: var(--sky-dark); display: flex; align-items: center; gap: 8px;}
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
     
     .btn { padding: 6px 16px; border-radius: var(--r-sm); font-size: .85rem; font-family: 'Newsreader', serif; cursor: pointer; transition: var(--t); border: 1px solid transparent; font-weight:600; display: inline-flex; align-items: center; gap: 6px; justify-content: center; }
-    .btn-sky { background: var(--sky); color: #fff; border-color: var(--sky); box-shadow: 0 2px 6px rgba(14,165,233,.2); }
-    .btn-sky:hover { background: var(--sky2); border-color: var(--sky2); transform: translateY(-1px); }
+    .btn-sky { background: var(--sky); color: #fff; border-color: var(--sky); }
     .btn-outline { background: #fff; color: var(--sky-dark); border-color: var(--sky-light); }
-    .btn-outline:hover { background: var(--sky-pale); border-color: var(--sky); color: var(--sky); }
-    .btn-red { background: var(--red); color: #fff; border-color: var(--red); }
-    .btn-red:hover { background: #dc2626; }
-    .btn-green { background: var(--green); color: #fff; border-color: var(--green); }
-    .btn-green:hover { background: #059669; }
+    .btn-red { background: var(--red); color: #fff; }
+    .btn-green { background: var(--green); color: #fff; }
     .btn-sm { padding: 4px 10px; font-size: .75rem; }
 
-    /* ── LAYOUT ── */
+    /* LAYOUT */
     .admin-layout { display: flex; min-height: calc(100vh - 56px); }
-    .sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--sky-light); padding: 20px 0; overflow-y: auto; }
-    .sidebar-section { padding: 8px 20px; font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-top: 10px; font-family: sans-serif; font-weight: bold; }
-    .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: .9rem; color: var(--text-mid); cursor: pointer; transition: var(--t); border-left: 3px solid transparent; font-weight: 500; }
-    .sidebar-link:hover, .sidebar-link.active { background: var(--sky-pale); color: var(--sky-dark); border-left-color: var(--sky); font-weight: 700; }
+    .sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--sky-light); padding: 20px 0; overflow-y: auto; position: sticky; top: 56px; height: calc(100vh - 56px); }
+    .sidebar-section { padding: 12px 20px 6px; font-size: .65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-family: sans-serif; font-weight: bold; }
+    .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: .9rem; color: var(--text-mid); cursor: pointer; transition: var(--t); border-left: 3px solid transparent; }
+    .sidebar-link:hover, .sidebar-link.active { background: var(--sky-pale); color: var(--sky-dark); border-left-color: var(--sky); font-weight: bold; }
     
-    .main { flex: 1; padding: 30px 40px; max-width: 1200px; margin: 0 auto; overflow-x: hidden; }
+    .main { flex: 1; padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
 
-    /* ── LOGIN SCREEN ── */
-    #loginScreen { position: fixed; inset: 0; z-index: 200; background: var(--cream); display: flex; align-items: center; justify-content: center; }
-    .login-card { width: 400px; background: #fff; border: 1px solid var(--sky-light); border-radius: var(--r-lg); padding: 40px; box-shadow: 0 10px 40px rgba(14,165,233,.1); text-align: center; }
-    .field { margin-bottom: 16px; text-align: left; position: relative; }
-    .field label { display: block; font-size: .8rem; font-family: sans-serif; font-weight: bold; color: var(--text-mid); margin-bottom: 6px; }
-    .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--sky-light); border-radius: var(--r-md); font-family: 'Newsreader', serif; font-size: .95rem; color: var(--text-main); background: #fff; transition: var(--t); }
-    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.15); }
-    .error-msg { background: #fef2f2; border: 1px solid #fca5a5; border-radius: var(--r-sm); padding: 10px; font-size: .85rem; color: var(--red); margin-bottom: 16px; display: none; }
+    /* FORM & INPUTS */
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: .75rem; font-family: sans-serif; font-weight: bold; color: var(--text-mid); margin-bottom: 6px; text-transform: uppercase; }
+    .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--sky-light); border-radius: var(--r-md); font-family: 'Newsreader', serif; font-size: .95rem; }
+    .field input:focus { outline: none; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.1); }
 
-    /* ── SECTIONS & CARDS ── */
-    .section { display: none; animation: fadeIn 0.3s ease; }
-    .section.active { display: block; }
-    @keyframes fadeIn { from {opacity: 0; transform: translateY(10px)} to {opacity: 1; transform: translateY(0)} }
+    /* SECTIONS */
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(5px)} to {opacity: 1; transform: translateY(0)} }
     
-    .page-title { font-family: 'Literata', serif; font-size: 1.5rem; color: var(--sky-dark); margin: 0 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--sky-pale); padding-bottom: 12px; }
+    .page-title { font-family: 'Literata', serif; font-size: 1.4rem; color: var(--sky-dark); margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--sky-pale); padding-bottom: 10px; }
+    .card { background: #fff; border: 1px solid var(--sky-light); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
     
-    .card { background: #fff; border: 1px solid var(--sky-light); border-radius: var(--r-md); padding: 20px; box-shadow: 0 4px 15px rgba(14,165,233,.03); margin-bottom: 20px; }
-    
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: #fff; border: 1px solid var(--sky-light); border-radius: var(--r-md); padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(14,165,233,.05); }
-    .stat-num { font-family: 'Literata', serif; font-size: 2.2rem; font-weight: bold; color: var(--sky-dark); line-height: 1; }
-    .stat-label { font-size: .75rem; color: var(--text-dim); margin-top: 8px; font-family: sans-serif; text-transform: uppercase; font-weight: bold; }
-
-    /* ── TABLE & LISTS ── */
-    .toolbar-row { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
-    .search-box { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid var(--sky-light); border-radius: var(--r-sm); font-family: 'Newsreader', serif; }
-    
-    .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--r-md); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.02); border: 1px solid var(--sky-light); }
-    .data-table th { text-align: left; padding: 12px; background: var(--sky-pale); font-size: .75rem; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif; color: var(--sky-dark); border-bottom: 2px solid var(--sky-light); }
-    .data-table td { padding: 12px; border-bottom: 1px solid rgba(186,230,253,.4); font-size: .9rem; color: var(--text-main); vertical-align: middle; }
+    /* DATA TABLE */
+    .data-table { width: 100%; border-collapse: collapse; border: 1px solid var(--sky-light); }
+    .data-table th { text-align: left; padding: 12px; background: var(--sky-pale); font-size: .7rem; text-transform: uppercase; font-family: sans-serif; color: var(--sky-dark); }
+    .data-table td { padding: 12px; border-bottom: 1px solid var(--sky-pale); font-size: .9rem; }
     .data-table tr:hover td { background: #f8fafc; }
-    .data-table tr.dragging { opacity: 0.5; background: var(--sky-pale); }
-    .drag-handle { cursor: grab; color: var(--text-dim); padding: 0 10px; font-size: 1.2rem; }
-    
-    .badge { padding: 2px 8px; border-radius: var(--r-pill); font-size: .7rem; font-family: sans-serif; font-weight: bold; }
-    .badge-draft { background: #fef08a; color: #b45309; }
-    .badge-live { background: #dcfce7; color: #166534; }
 
-    /* ── EDITOR ADVANCED ── */
-    .editor-wrap { border: 1px solid var(--sky-light); border-radius: var(--r-md); background: #fff; overflow: hidden; display: flex; flex-direction: column; }
-    .editor-toolbar { background: var(--sky-pale); padding: 8px 12px; border-bottom: 1px solid var(--sky-light); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-    .editor-btn { background: #fff; border: 1px solid var(--sky-light); border-radius: 4px; padding: 4px 8px; font-size: .8rem; cursor: pointer; color: var(--text-main); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-    .editor-btn:hover { background: var(--sky); color: #fff; border-color: var(--sky); }
-    
-    /* Search & Replace Bar */
-    .snr-bar { display: none; padding: 8px 12px; background: #fff; border-bottom: 1px solid var(--sky-light); gap: 8px; align-items: center; }
-    .snr-bar.open { display: flex; }
-    .snr-input { padding: 4px 8px; border: 1px solid var(--sky-light); border-radius: 4px; font-size: .85rem; flex: 1; }
+    /* EDITOR TOOLBAR */
+    .editor-wrap { border: 1px solid var(--sky-light); border-radius: var(--r-md); background: #fff; display: flex; flex-direction: column; }
+    .editor-toolbar { background: var(--sky-pale); padding: 8px; border-bottom: 1px solid var(--sky-light); display: flex; gap: 4px; flex-wrap: wrap; }
+    .editor-btn { background: #fff; border: 1px solid var(--sky-light); border-radius: 4px; padding: 4px 8px; font-size: .8rem; cursor: pointer; }
+    .editor-btn:hover { background: var(--sky); color: #fff; }
+    .editor-textarea { width: 100%; min-height: 500px; padding: 20px; border: none; font-family: 'Newsreader', serif; font-size: 1.1rem; line-height: 1.8; resize: vertical; outline: none; }
 
-    .editor-textarea { width: 100%; min-height: 500px; padding: 20px; border: none; font-family: 'Newsreader', serif; font-size: 1.05rem; line-height: 1.8; color: var(--text-main); resize: vertical; outline: none; }
-    .editor-footer { background: #f8fafc; padding: 8px 16px; border-top: 1px solid var(--sky-light); display: flex; justify-content: space-between; font-size: .75rem; color: var(--text-dim); font-family: sans-serif; }
-
-    /* ── FIREBASE DASHBOARD ── */
-    .fb-list { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding-right: 10px; }
-    .fb-item { padding: 12px; border: 1px solid var(--sky-light); border-radius: var(--r-md); background: #fff; }
-    .fb-item-hd { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: .85rem; }
-    .fb-item-body { font-size: .95rem; line-height: 1.5; color: var(--text-main); background: var(--sky-pale); padding: 10px; border-radius: var(--r-sm); margin-bottom: 8px;}
-    
-    /* Chart */
-    .chart-container { display: flex; align-items: flex-end; gap: 4px; height: 150px; padding: 20px 0 0; border-bottom: 1px solid var(--text-dim); margin-top: 20px; }
-    .chart-bar { flex: 1; background: var(--sky); border-radius: 4px 4px 0 0; position: relative; transition: height 0.3s; min-height: 2px;}
-    .chart-bar:hover { background: var(--sky2); }
-    .chart-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: .65rem; color: var(--text-dim); font-family: sans-serif; white-space: nowrap; }
-    .chart-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: .7rem; font-weight: bold; color: var(--sky-dark); }
-
-    /* Components */
-    .toast { position: fixed; bottom: 20px; right: 20px; z-index: 1000; padding: 12px 20px; border-radius: var(--r-md); font-size: .9rem; box-shadow: 0 4px 15px rgba(0,0,0,.1); opacity: 0; transform: translateY(20px); transition: var(--t); pointer-events: none; font-weight: bold; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .toast.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-    .toast.error { background: #fef2f2; color: var(--red); border: 1px solid #fca5a5; }
-
+    /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
     .modal-overlay.open { display: flex; }
-    .modal-content { background: #fff; width: 90%; max-width: 500px; border-radius: var(--r-lg); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
-    .modal-title { margin: 0 0 16px; font-family: 'Literata', serif; font-size: 1.2rem; }
-    .color-swatch { width: 24px; height: 24px; border-radius: 4px; display: inline-block; cursor: pointer; border: 1px solid #ccc; }
+    .modal-content { background: #fff; width: 90%; max-width: 600px; border-radius: var(--r-lg); padding: 24px; max-height: 90vh; overflow-y: auto; }
+
+    /* LOGIN */
+    #loginScreen { position: fixed; inset: 0; z-index: 1000; background: var(--cream); display: flex; align-items: center; justify-content: center; }
+
+    .toast { position: fixed; bottom: 20px; right: 20px; z-index: 1100; padding: 12px 24px; border-radius: var(--r-md); background: #333; color: #fff; transform: translateY(100px); transition: var(--t); }
+    .toast.show { transform: translateY(0); }
   </style>
-  
-  <!-- Firebase SDK (Version matching web index) -->
+
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getDatabase, ref, onValue, remove, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import { getDatabase, ref, onValue, remove, get, update } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
       authDomain: "dynamic-duo-comments.firebaseapp.com",
       projectId: "dynamic-duo-comments",
-      storageBucket: "dynamic-duo-comments.firebasestorage.app",
-      messagingSenderId: "948025586876",
-      appId: "1:948025586876:web:848f38701acfdb9b844cb9",
       databaseURL: "https://dynamic-duo-comments-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
-    try {
-      const app = initializeApp(firebaseConfig);
-      window.__fbDb = getDatabase(app);
-      window.__fbRef = ref;
-      window.__fbOnValue = onValue;
-      window.__fbRemove = remove;
-      window.__fbGet = get;
-      window.dispatchEvent(new Event('firebase-ready'));
-    } catch(e) { console.error('Firebase Init Error', e); }
+    const app = initializeApp(firebaseConfig);
+    window.__fbDb = getDatabase(app);
+    window.__fbRef = ref; window.__fbOnValue = onValue; window.__fbRemove = remove; window.__fbGet = get; window.__fbUpdate = update;
+    window.dispatchEvent(new Event('firebase-ready'));
   </script>
 </head>
 <body>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<!-- MODALS -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal-content" style="max-width: 400px;">
-    <h3 class="modal-title" id="confirmTitle">Xác nhận</h3>
-    <p id="confirmMsg" style="margin-bottom: 20px; line-height: 1.5;"></p>
-    <div style="display:flex; justify-content: flex-end; gap: 10px;">
-      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Hủy</button>
-      <button class="btn btn-red" id="confirmOkBtn">Đồng ý</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="bulkUploadModal">
-  <div class="modal-content" style="max-width: 700px;">
-    <h3 class="modal-title">Bulk Upload - Dán nhiều chương</h3>
-    <p style="font-size: .85rem; color: var(--text-mid); margin-bottom: 12px;">Hệ thống sẽ tự động cắt các chương dựa theo từ khóa "Chương X". Hãy đảm bảo định dạng rõ ràng.</p>
-    <textarea id="bulkText" style="width: 100%; height: 300px; padding: 10px; font-family: monospace; border: 1px solid var(--sky-light); border-radius: var(--r-md);" placeholder="Chương 1: Bắt đầu...&#10;Nội dung chương 1...&#10;Chương 2: Tiếp diễn...&#10;Nội dung chương 2..."></textarea>
-    <div style="display:flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
-      <button class="btn btn-outline" onclick="closeModal('bulkUploadModal')">Hủy</button>
-      <button class="btn btn-sky" id="bulkProcessBtn">Xử lý & Cắt chương</button>
-    </div>
-  </div>
-</div>
+<div id="toast" class="toast"></div>
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <div class="login-card">
-    <div style="font-family: 'Literata'; font-size: 1.8rem; color: var(--sky-dark); font-weight: bold; margin-bottom: 8px;">dynamic duo 𓆝</div>
-    <div style="color: var(--text-dim); margin-bottom: 24px; font-style: italic;">CMS Admin Panel</div>
-    <div class="error-msg" id="loginError"></div>
-    <div class="field">
-      <label>GitHub Personal Access Token (repo scope)</label>
-      <input type="password" id="ghToken" placeholder="ghp_..." autocomplete="off" />
-    </div>
-    <div class="field">
-      <label>Mật khẩu Admin</label>
-      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="off" />
-    </div>
-    <button class="btn btn-sky" style="width: 100%; padding: 12px; font-size: 1rem; margin-top: 8px;" id="loginBtn">Đăng nhập Hệ thống</button>
+  <div style="width: 350px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.1); text-align: center;">
+    <h2 style="font-family: 'Literata'; color: var(--sky-dark);">Dynamic Duo Admin</h2>
+    <div class="field" style="margin-top:20px"><input type="password" id="ghToken" placeholder="GitHub Token (ghp_...)" /></div>
+    <div class="field"><input type="password" id="adminPass" placeholder="Mật khẩu Admin" /></div>
+    <button class="btn btn-sky" style="width: 100%" id="loginBtn">Đăng nhập</button>
   </div>
 </div>
 
 <!-- MAIN APP -->
 <div id="app" style="display:none;">
-  <!-- TOPBAR -->
   <div class="topbar">
-    <div class="topbar-logo">⚙ Dynamic Duo Workspace</div>
-    <div class="topbar-right">
-      <div id="autoSaveIndicator" style="font-size:.75rem; color:var(--text-dim); font-style:italic; margin-right:10px;"></div>
-      <a href="/dynamic-duo-web/" target="_blank" class="btn btn-outline btn-sm">🌍 Xem Web</a>
-      <button class="btn btn-red btn-sm" onclick="logout()">Đăng xuất</button>
+    <div class="topbar-logo">🌊 Dynamic Duo Workspace</div>
+    <div style="display:flex; gap:10px">
+      <span id="ghUser" style="font-size: .8rem; color: var(--text-dim)"></span>
+      <button class="btn btn-red btn-sm" onclick="location.reload()">Đăng xuất</button>
     </div>
   </div>
 
   <div class="admin-layout">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <aside class="sidebar">
       <div class="sidebar-section">Hệ thống</div>
       <div class="sidebar-link active" data-nav="dashboard">📊 Dashboard</div>
-      
-      <div class="sidebar-section">Quản lý Truyện</div>
-      <div class="sidebar-link" data-nav="stories">📚 Danh sách Truyện</div>
-      <div class="sidebar-link" data-nav="new-story">✨ Thêm Truyện Mới</div>
-      
-      <div class="sidebar-section">Độc giả & Tương tác</div>
-      <div class="sidebar-link" data-nav="fb-comments">💬 Bình luận Web</div>
-      <div class="sidebar-link" data-nav="fb-messages">✉️ Hộp thư (Private)</div>
-      
-      <div class="sidebar-section">Cài đặt Trang</div>
       <div class="sidebar-link" data-nav="settings">⚙️ Cấu hình Site</div>
-      <div class="sidebar-link" data-nav="backup" style="color: var(--purple);">📦 Backup (ZIP)</div>
-    </div>
 
-    <!-- MAIN -->
-    <div class="main">
+      <div class="sidebar-section">Truyện & Chương</div>
+      <div class="sidebar-link" data-nav="stories">📚 Quản lý Truyện</div>
+      
+      <div class="sidebar-section">Tương tác</div>
+      <div class="sidebar-link" data-nav="fb-comments">💬 Bình luận</div>
+      <div class="sidebar-link" data-nav="fb-messages">✉️ Hòm thư</div>
+      
+      <div class="sidebar-section">Công cụ</div>
+      <div class="sidebar-link" data-nav="backup">📦 Backup ZIP</div>
+    </aside>
+
+    <main class="main">
       
       <!-- DASHBOARD -->
-      <div class="section active" id="sec-dashboard">
-        <h2 class="page-title">Tổng quan Hệ thống</h2>
-        <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-num" id="db-stories">0</div><div class="stat-label">Tổng truyện</div>
+      <section class="section active" id="sec-dashboard">
+        <h2 class="page-title">Tổng quan hệ thống</h2>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px">
+          <div class="card" style="text-align:center">
+            <div style="font-size: 2rem; font-weight: bold; color: var(--sky)" id="stat-stories">0</div>
+            <div style="font-size: .7rem; color: var(--text-dim); font-weight:bold">TRUYỆN</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-num" id="db-views">0</div><div class="stat-label">Lượt xem (Firebase)</div>
+          <div class="card" style="text-align:center">
+            <div style="font-size: 2rem; font-weight: bold; color: var(--green)" id="stat-views">0</div>
+            <div style="font-size: .7rem; color: var(--text-dim); font-weight:bold">LƯỢT XEM</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-num" id="db-comments">0</div><div class="stat-label">Bình luận (Firebase)</div>
+          <div class="card" style="text-align:center">
+            <div style="font-size: 2rem; font-weight: bold; color: var(--amber)" id="stat-cmts">0</div>
+            <div style="font-size: .7rem; color: var(--text-dim); font-weight:bold">BÌNH LUẬN</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size: 2rem; font-weight: bold; color: var(--purple)" id="stat-users">0</div>
+            <div style="font-size: .7rem; color: var(--text-dim); font-weight:bold">ĐỘC GIẢ (Token)</div>
           </div>
         </div>
-        
-        <div class="card">
-          <h3 style="margin-top:0; color:var(--sky-dark);">Biểu đồ lượt xem (Top 5 trang)</h3>
-          <div class="chart-container" id="viewChart">
-            <!-- Rendered via JS -->
-            <div style="font-size: .8rem; color: var(--text-dim);">Đang tải dữ liệu từ Firebase...</div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      <!-- STORIES LIST -->
-      <div class="section" id="sec-stories">
-        <h2 class="page-title">Quản lý Truyện
-          <div class="toolbar-row" style="margin:0;">
-            <input type="text" class="search-box" id="storySearch" placeholder="Tìm kiếm truyện..." />
-          </div>
+      <!-- STORIES -->
+      <section class="section" id="sec-stories">
+        <h2 class="page-title">Danh sách Truyện 
+          <button class="btn btn-sky btn-sm" onclick="openStoryModal()">+ Thêm truyện</button>
         </h2>
         <table class="data-table">
-          <thead><tr><th>Tên Truyện</th><th>Phân loại</th><th>Chương</th><th>Thao tác</th></tr></thead>
+          <thead><tr><th>Tên truyện</th><th>ID / Path</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
           <tbody id="storyTbody"></tbody>
         </table>
-      </div>
+      </section>
 
       <!-- CHAPTER LIST -->
-      <div class="section" id="sec-chapter-list">
-        <h2 class="page-title">
-          <span id="cl-title">Danh sách Chương</span>
-          <div style="display:flex; gap: 8px;">
-            <button class="btn btn-outline" onclick="navTo('stories')">← Quay lại</button>
-            <button class="btn btn-outline" onclick="openBulkUpload()">📑 Dán Bulk</button>
-            <button class="btn btn-sky" onclick="openEditor('new')">+ Viết chương mới</button>
+      <section class="section" id="sec-chapter-list">
+        <h2 class="page-title"><span id="cl-title">Chương truyện</span>
+          <div style="display:flex; gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="navTo('stories')">← Quay lại</button>
+            <button class="btn btn-sky btn-sm" onclick="openEditor('new')">+ Chương mới</button>
           </div>
         </h2>
-        
-        <div class="toolbar-row">
-          <input type="text" class="search-box" id="chapSearch" placeholder="Lọc theo tên/số chương..." />
-          <button class="btn btn-outline" id="toggleReorderBtn">↕️ Bật Kéo thả Sắp xếp</button>
-          <button class="btn btn-red" id="bulkDeleteBtn" style="display:none;">🗑 Xóa các mục đã chọn</button>
+        <div class="card" style="padding: 10px; display:flex; gap:10px; align-items:center">
+          <input type="text" id="chapSearch" placeholder="Tìm chương..." style="flex:1; padding:8px; border:1px solid var(--sky-light); border-radius:5px" />
+          <button class="btn btn-outline btn-sm" id="btnReorder">↕️ Sắp xếp</button>
         </div>
-
-        <p id="reorderNotice" style="display:none; font-size:.8rem; color:var(--amber); font-weight:bold; background:#fef3c7; padding:8px; border-radius:4px;">
-          Kéo thả hàng để đổi thứ tự. Sau khi xếp xong, nhấn nút Lưu Thứ Tự xuất hiện bên dưới. 
-          <br/>(Lưu ý: Lưu thứ tự sẽ update từng file một qua GitHub API, có thể mất chút thời gian).
-        </p>
-
         <table class="data-table" id="chapTable">
-          <thead>
-            <tr>
-              <th style="width: 40px;"><input type="checkbox" id="checkAllChaps" /></th>
-              <th style="width: 60px;">#</th>
-              <th>Tiêu đề</th>
-              <th>Ngày</th>
-              <th>Trạng thái</th>
-              <th style="text-align: right;">Thao tác</th>
-            </tr>
-          </thead>
+          <thead><tr><th width="50">#</th><th>Tiêu đề</th><th>Ngày</th><th>Thao tác</th></tr></thead>
           <tbody id="chapTbody"></tbody>
         </table>
-        
-        <div id="saveReorderWrap" style="display:none; margin-top: 16px; text-align: right;">
-          <button class="btn btn-sky" id="saveReorderBtn">💾 Lưu Thứ Tự Mới</button>
-        </div>
-      </div>
+      </section>
 
-      <!-- EDITOR (Tích hợp mọi tính năng) -->
-      <div class="section" id="sec-editor">
-        <h2 class="page-title">
-          <span id="ed-title">Soạn thảo</span>
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-outline" onclick="navTo('chapter-list')">← Hủy</button>
-            <button class="btn btn-sky" id="ed-saveBtn">💾 Lưu & Publish</button>
-          </div>
+      <!-- EDITOR -->
+      <section class="section" id="sec-editor">
+        <h2 class="page-title">Biên tập chương
+          <button class="btn btn-sky" id="ed-saveBtn">💾 Lưu chương</button>
         </h2>
-        
-        <!-- Meta block -->
-        <div class="card" style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div class="field"><label>Tiêu đề *</label><input type="text" id="ed-tieude" placeholder="Chương X - Tên..." /></div>
-          <div class="field"><label>Số chương *</label><input type="number" id="ed-so" placeholder="Số nguyên" /></div>
-          <div class="field"><label>Trạng thái</label>
-            <select id="ed-draft"><option value="false">🟢 Công khai</option><option value="true">🟡 Nháp (Draft)</option></select>
-          </div>
-          <div class="field"><label>Tags (cách nhau dấu phẩy)</label><input type="text" id="ed-tags" placeholder="tag1, tag2" /></div>
-          <div class="field" style="grid-column: 1 / -1;"><label>SEO Description</label><input type="text" id="ed-desc" placeholder="Tóm tắt nội dung 1 câu..." /></div>
-          <div class="field" style="grid-column: 1 / -1;"><label>Lời Editor</label><textarea id="ed-note" rows="2" placeholder="Ghi chú, pass truyện..."></textarea></div>
-          <div class="field" style="grid-column: 1 / -1;"><label>Changelog (Message commit)</label><input type="text" id="ed-commit" placeholder="VD: Sửa lỗi chính tả đoạn 3..." /></div>
+        <div class="card" style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
+          <div class="field"><label>Tiêu đề</label><input type="text" id="ed-title" /></div>
+          <div class="field"><label>Số chương</label><input type="number" id="ed-num" /></div>
+          <div class="field"><label>Mô tả SEO</label><input type="text" id="ed-desc" /></div>
+          <div class="field"><label>Tags</label><input type="text" id="ed-tags" placeholder="đam mỹ, hiện đại..." /></div>
+          <div class="field" style="grid-column: 1/-1"><label>Lời Editor</label><textarea id="ed-note" rows="2"></textarea></div>
         </div>
-
-        <!-- Advanced Editor -->
+        
         <div class="editor-wrap">
           <div class="editor-toolbar">
-            <button class="editor-btn tool-fmt" data-cmd="bold" title="In đậm (Ctrl+B)"><b>B</b></button>
-            <button class="editor-btn tool-fmt" data-cmd="italic" title="In nghiêng (Ctrl+I)"><i>I</i></button>
-            <button class="editor-btn tool-fmt" data-cmd="underline" title="Gạch chân"><u>U</u></button>
-            <span style="color:var(--sky-light);">|</span>
-            <button class="editor-btn tool-fmt" data-cmd="h2">H2</button>
-            <button class="editor-btn tool-fmt" data-cmd="h3">H3</button>
-            <span style="color:var(--sky-light);">|</span>
-            <button class="editor-btn tool-fmt" data-cmd="quote">❝ Quote</button>
-            <button class="editor-btn tool-fmt" data-cmd="hr">── HR</button>
-            <button class="editor-btn tool-fmt" data-cmd="center">⇹ Căn giữa</button>
-            <span style="color:var(--sky-light);">|</span>
-            <!-- Color Picker for Text -->
-            <label style="font-size:.8rem; display:flex; align-items:center; gap:4px; font-weight:bold; cursor:pointer;">
-              Màu: <input type="color" id="ed-color" value="#ef4444" style="padding:0; width:24px; height:24px; border:none; cursor:pointer;" title="Chọn màu chữ" />
-            </label>
-            <button class="editor-btn tool-fmt" data-cmd="color" title="Áp dụng màu">Tô màu</button>
-            
+            <button class="editor-btn" onclick="fmt('bold')"><b>B</b></button>
+            <button class="editor-btn" onclick="fmt('italic')"><i>I</i></button>
+            <button class="editor-btn" onclick="fmt('quote')">Quote</button>
+            <button class="editor-btn" onclick="fmt('center')">Căn giữa</button>
+            <div style="display:flex; align-items:center; gap:5px; margin-left:10px; background:#fff; padding:2px 8px; border-radius:4px; border:1px solid var(--sky-light)">
+              <span style="font-size:.7rem; font-weight:bold">Màu:</span>
+              <input type="color" id="ed-color-picker" value="#ef4444" style="border:none; width:20px; height:20px; cursor:pointer" />
+              <button class="editor-btn" onclick="fmt('color')" style="border:none">Tô màu</button>
+            </div>
             <span style="flex:1"></span>
-            <button class="editor-btn" id="btnToggleSnr">🔍 Tìm & Thay thế</button>
-            <button class="editor-btn" id="btnPreview" style="border-color:var(--sky); color:var(--sky);">👁 Xem trước</button>
+            <button class="editor-btn" onclick="togglePreview()">👁 Xem trước</button>
           </div>
-          
-          <div class="snr-bar" id="snrBar">
-            <input type="text" class="snr-input" id="snrFind" placeholder="Tìm..." />
-            <input type="text" class="snr-input" id="snrReplace" placeholder="Thay bằng..." />
-            <button class="btn btn-sky btn-sm" id="btnReplaceAll">Thay thế All</button>
-            <button class="btn btn-outline btn-sm" onclick="document.getElementById('snrBar').classList.remove('open')">Đóng</button>
-          </div>
-
-          <textarea id="ed-content" class="editor-textarea" placeholder="Nhập nội dung Markdown vào đây..."></textarea>
-          <div id="ed-preview" class="editor-textarea" style="display:none; background:#f8fafc; overflow-y:auto; border-top:1px dashed var(--sky-light);"></div>
-          
-          <div class="editor-footer">
-            <span id="ed-words">0 từ</span>
-            <span id="ed-autosave-status"></span>
-          </div>
+          <textarea id="ed-content" class="editor-textarea"></textarea>
+          <div id="ed-preview" class="editor-textarea" style="display:none; background:#f1f5f9"></div>
+          <div style="padding:10px; font-size:.8rem; border-top:1px solid var(--sky-pale); color:var(--text-dim)" id="ed-word-count">0 từ</div>
         </div>
-      </div>
+      </section>
 
-      <!-- FIREBASE: COMMENTS -->
-      <div class="section" id="sec-fb-comments">
-        <h2 class="page-title">Bình luận từ Độc giả (Web)</h2>
-        <div class="card fb-list" id="fbCommentsList">
-          <div style="text-align:center; padding:20px; color:var(--text-dim);">Đang tải dữ liệu Firebase...</div>
-        </div>
-      </div>
-
-      <!-- FIREBASE: MESSAGES -->
-      <div class="section" id="sec-fb-messages">
-        <h2 class="page-title">Hộp thư Riêng (Inbox)</h2>
-        <div class="card fb-list" id="fbMessagesList">
-          <div style="text-align:center; padding:20px; color:var(--text-dim);">Đang tải dữ liệu Firebase...</div>
-        </div>
-      </div>
-
-      <!-- SETTINGS & SYSTEM -->
-      <div class="section" id="sec-settings">
-        <h2 class="page-title">Cấu hình Trang Web (settings.json)</h2>
-        <p style="font-size:.85rem; color:var(--text-mid); margin-bottom:16px;">Chỉnh sửa trực tiếp file settings. Cẩn thận định dạng JSON.</p>
+      <!-- SETTINGS -->
+      <section class="section" id="sec-settings">
+        <h2 class="page-title">Cấu hình Site</h2>
         <div class="card">
-          <textarea id="sys-json" style="width:100%; height:400px; font-family:monospace; padding:12px; border:1px solid var(--sky-light); border-radius:var(--r-md);"></textarea>
-          <div style="text-align:right; margin-top:12px;">
-            <button class="btn btn-sky" id="saveSysJsonBtn">💾 Lưu Cấu hình</button>
-          </div>
+          <textarea id="settings-json" style="width:100%; height:450px; font-family:monospace; font-size:.9rem; padding:15px"></textarea>
+          <div style="text-align:right; margin-top:10px"><button class="btn btn-sky" onclick="saveSettings()">Lưu thay đổi</button></div>
         </div>
-      </div>
+      </section>
 
-      <!-- BACKUP -->
-      <div class="section" id="sec-backup">
-        <h2 class="page-title">Backup Dữ liệu</h2>
-        <div class="card" style="text-align:center; padding: 40px 20px;">
-          <p style="margin-bottom: 24px; color:var(--text-mid);">Xuất toàn bộ file Markdown của các truyện đang có ra một file ZIP duy nhất để lưu trữ an toàn.</p>
-          <button class="btn btn-sky" id="btnRunBackup" style="font-size: 1.1rem; padding: 12px 24px; background:var(--purple); border-color:var(--purple);">📦 Bắt đầu Tạo ZIP Backup</button>
-          <div id="backupProgress" style="margin-top:20px; font-weight:bold; color:var(--sky-dark);"></div>
-        </div>
-      </div>
+      <!-- COMMENTS -->
+      <section class="section" id="sec-fb-comments">
+        <h2 class="page-title">Quản lý Bình luận</h2>
+        <div id="fb-comments-list" style="display:flex; flex-direction:column; gap:10px"></div>
+      </section>
 
+      <!-- MESSAGES -->
+      <section class="section" id="sec-fb-messages">
+        <h2 class="page-title">Hộp thư tin nhắn</h2>
+        <div id="fb-msgs-list" style="display:flex; flex-direction:column; gap:10px"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL THÊM TRUYỆN -->
+<div class="modal-overlay" id="storyModal">
+  <div class="modal-content">
+    <h3 style="margin-top:0">Thông tin bộ truyện</h3>
+    <div class="field"><label>Tên truyện</label><input type="text" id="st-title" /></div>
+    <div class="field"><label>ID (viết liền ko dấu)</label><input type="text" id="st-id" /></div>
+    <div class="field"><label>Phân loại</label>
+      <select id="st-cat">
+        <option value="ca-duoi-nuoc">Cá dưới nước (Đang làm)</option>
+        <option value="ca-tren-ban">Cá trên bàn (Xong)</option>
+      </select>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px">
+      <button class="btn btn-outline" onclick="closeModal('storyModal')">Đóng</button>
+      <button class="btn btn-sky" onclick="saveNewStory()">Tạo truyện</button>
     </div>
   </div>
 </div>
 
 <script is:inline>
-// ==========================================
-// CONFIGURATION
-// ==========================================
+// CONFIG
 const REPO = 'dynamicduooq/dynamic-duo-web';
-const BRANCH = 'main';
 const ADMIN_PASS = 'dynamicduo2026';
+let GH_TOKEN = '';
+let currentStory = null;
+let currentChap = null;
 
-// Mapping local stories structure (Có thể parse động từ thư mục, nhưng fix cứng nhanh hơn cho menu)
-const STORIES_DB = [
+const $ = id => document.getElementById(id);
+const showToast = (m) => { $('toast').textContent = m; $('toast').classList.add('show'); setTimeout(()=>$('toast').classList.remove('show'), 3000); };
+
+// AUTH
+$('loginBtn').onclick = async () => {
+  if($('adminPass').value !== ADMIN_PASS) return alert('Sai pass');
+  GH_TOKEN = $('ghToken').value;
+  try {
+    const res = await fetch('https://api.github.com/user', { headers: { Authorization: `token ${GH_TOKEN}` }});
+    if(!res.ok) throw new Error();
+    const user = await res.json();
+    $('ghUser').textContent = 'Admin: ' + user.login;
+    $('loginScreen').style.display = 'none';
+    $('app').style.display = 'block';
+    navTo('dashboard');
+    loadStats();
+  } catch(e) { alert('Token lỗi'); }
+};
+
+// NAVIGATION
+function navTo(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  $('sec-'+id).classList.add('active');
+  document.querySelector(`[data-nav="${id}"]`)?.classList.add('active');
+  
+  if(id === 'stories') renderStories();
+  if(id === 'settings') loadSettings();
+  if(id === 'fb-comments') loadFbComments();
+  if(id === 'fb-messages') loadFbMessages();
+}
+document.querySelectorAll('.sidebar-link').forEach(l => l.onclick = () => navTo(l.dataset.nav));
+
+// GITHUB HELPERS
+async function gh(path, method='GET', body=null) {
+  const opts = { method, headers: { Authorization: `token ${GH_TOKEN}`, 'Content-Type': 'application/json' } };
+  if(body) opts.body = JSON.stringify(body);
+  const res = await fetch(`https://api.github.com/repos/${REPO}${path}`, opts);
+  return res.json();
+}
+const b64e = str => btoa(unescape(encodeURIComponent(str)));
+const b64d = str => decodeURIComponent(escape(atob(str)));
+
+// STORIES MANAGEMENT
+let stories = [
   { id: 'qhbcp', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
   { id: 'hcdh', title: 'Hạ cháy đồng hoang', cat: 'ca-duoi-nuoc' },
   { id: 'ndntkm', title: 'Nếu đêm nay trời không mưa', cat: 'ca-tren-ban' },
@@ -449,675 +344,207 @@ const STORIES_DB = [
   { id: 'tdxt', title: 'Thiếu đế xuân tâm', cat: 'ca-tren-ban' }
 ];
 
-let GH_TOKEN = '';
-let currentStory = null; // { id, title, cat, path }
-let currentChap = null;  // { path, sha } - null if new
-let cachedFiles = {};
-
-// ==========================================
-// UTILS & UI HELPERS
-// ==========================================
-const $ = id => document.getElementById(id);
-const toast = (msg, type='info', time=3000) => {
-  const el = $('toast'); el.textContent = msg; el.className = `toast ${type} show`;
-  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), time);
-};
-const b64e = str => btoa(unescape(encodeURIComponent(str)));
-const b64d = str => decodeURIComponent(escape(atob(str)));
-const getISODate = () => new Date().toISOString().slice(0, 10);
-
-function navTo(sectionId) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-  $(`sec-${sectionId}`)?.classList.add('active');
-  const link = document.querySelector(`.sidebar-link[data-nav="${sectionId}"]`);
-  if(link) link.classList.add('active');
-
-  // Trigger load logic based on section
-  if(sectionId === 'stories') renderStories();
-  if(sectionId === 'dashboard') loadFirebaseDashboard();
-  if(sectionId === 'fb-comments') renderFirebaseComments();
-  if(sectionId === 'fb-messages') renderFirebaseMessages();
-  if(sectionId === 'settings') loadSettingsJson();
-}
-
-document.querySelectorAll('.sidebar-link').forEach(l => {
-  l.addEventListener('click', () => navTo(l.dataset.nav));
-});
-
-function openModal(id) { $(id).classList.add('open'); }
-function closeModal(id) { $(id).classList.remove('open'); }
-let confirmCb = null;
-function askConfirm(title, msg, cb) {
-  $('confirmTitle').textContent = title; $('confirmMsg').innerHTML = msg;
-  openModal('confirmModal'); confirmCb = cb;
-}
-$('confirmOkBtn').addEventListener('click', () => { closeModal('confirmModal'); if(confirmCb) confirmCb(); });
-
-// ==========================================
-// GITHUB API
-// ==========================================
-async function ghReq(endpoint, opts = {}) {
-  const res = await fetch(`https://api.github.com/repos/${REPO}${endpoint}`, {
-    ...opts,
-    headers: { Authorization: `token ${GH_TOKEN}`, 'Content-Type': 'application/json', ...(opts.headers||{}) }
-  });
-  if (!res.ok) throw new Error(`GH Error: ${res.status}`);
-  return res.json();
-}
-async function getFile(path) {
-  const data = await ghReq(`/contents/${path}?ref=${BRANCH}`);
-  return { ...data, decoded: b64d(data.content.replace(/\n/g, '')) };
-}
-async function putFile(path, content, message, sha=null) {
-  const body = { message, content: b64e(content), branch: BRANCH };
-  if(sha) body.sha = sha;
-  return ghReq(`/contents/${path}`, { method: 'PUT', body: JSON.stringify(body) });
-}
-async function delFile(path, sha, message) {
-  return ghReq(`/contents/${path}`, { method: 'DELETE', body: JSON.stringify({ message, sha, branch: BRANCH }) });
-}
-
-// ==========================================
-// AUTH
-// ==========================================
-$('loginBtn').addEventListener('click', async () => {
-  const token = $('ghToken').value.trim();
-  const pass = $('adminPass').value;
-  if (pass !== ADMIN_PASS) { $('loginError').textContent = 'Sai mật khẩu.'; $('loginError').style.display='block'; return; }
-  if (!token) { $('loginError').textContent = 'Nhập Token.'; $('loginError').style.display='block'; return; }
-  
-  $('loginBtn').textContent = 'Đang kiểm tra...';
-  try {
-    const res = await fetch('https://api.github.com/user', { headers: { Authorization: `token ${token}` }});
-    if(!res.ok) throw new Error();
-    GH_TOKEN = token;
-    $('loginScreen').style.display = 'none';
-    $('app').style.display = 'block';
-    navTo('dashboard');
-  } catch(e) {
-    $('loginError').textContent = 'Token vô hiệu hoặc lỗi mạng.'; $('loginError').style.display='block';
-  }
-  $('loginBtn').textContent = 'Đang nhập Hệ thống';
-});
-function logout() { GH_TOKEN=''; $('app').style.display='none'; $('loginScreen').style.display='flex'; }
-
-// ==========================================
-// SMART PARSER & MARKDOWN BUILDER
-// ==========================================
-function parseFM(md) {
-  const match = md.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return { body: md };
-  const fm = {};
-  const lines = match[1].split('\n');
-  let curArr = null;
-  for (const line of lines) {
-    const kv = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)/);
-    if (kv) {
-      curArr = null;
-      let [_, k, v] = kv; v = v.trim();
-      if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1,-1);
-      else if (v.startsWith("'") && v.endsWith("'")) v = v.slice(1,-1);
-      if (v === '') { fm[k] = []; curArr = fm[k]; }
-      else if (v === 'true') fm[k] = true;
-      else if (v === 'false') fm[k] = false;
-      else fm[k] = isNaN(v) ? v : Number(v);
-    } else if (line.match(/^\s+-\s+"?(.+?)"?\s*$/) && curArr !== null) {
-      curArr.push(line.match(/^\s+-\s+"?([^"]+)"?\s*$/)[1]);
-    }
-  }
-  return { fm, body: md.replace(/^---\n[\s\S]*?\n---\n*/, '') };
-}
-
-function buildMD(fm, body) {
-  let out = '---\n';
-  // Bắt buộc nhồi layout Astro
-  out += `layout: "../../../layouts/Layout.astro"\n`;
-  for(const [k,v] of Object.entries(fm)) {
-    if(k === 'layout') continue;
-    if(Array.isArray(v)) {
-      if(v.length > 0) out += `${k}:\n${v.map(i=>`  - "${i}"`).join('\n')}\n`;
-    }
-    else if(typeof v === 'boolean' || typeof v === 'number') out += `${k}: ${v}\n`;
-    else out += `${k}: "${String(v).replace(/"/g, '\\"')}"\n`;
-  }
-  out += '---\n\n' + body;
-  return out;
-}
-
-// ==========================================
-// STORY & CHAPTER MANAGEMENT
-// ==========================================
 function renderStories() {
-  const tbody = $('storyTbody');
-  tbody.innerHTML = STORIES_DB.map(s => `
+  $('storyTbody').innerHTML = stories.map(s => `
     <tr>
-      <td style="font-weight:bold; color:var(--sky-dark);">${s.title}</td>
-      <td><span class="badge ${s.cat==='ca-duoi-nuoc'?'badge-draft':'badge-live'}">${s.cat==='ca-duoi-nuoc'?'Đang tiến hành':'Hoàn thành'}</span></td>
-      <td style="color:var(--text-dim); font-family:monospace;">src/pages/${s.cat}/${s.id}</td>
+      <td><b>${s.title}</b></td>
+      <td><code>src/pages/${s.cat}/${s.id}</code></td>
+      <td><span style="color:var(--green)">Hoạt động</span></td>
       <td><button class="btn btn-sky btn-sm" onclick="openStory('${s.id}')">Quản lý Chương</button></td>
     </tr>
   `).join('');
 }
 
 async function openStory(id) {
-  currentStory = STORIES_DB.find(s => s.id === id);
-  currentStory.path = `src/pages/${currentStory.cat}/${currentStory.id}`;
-  $('cl-title').textContent = `Chương: ${currentStory.title}`;
+  currentStory = stories.find(s => s.id === id);
+  $('cl-title').textContent = currentStory.title;
   navTo('chapter-list');
-  await loadChapters();
+  loadChapters();
 }
 
-let cachedChapList = [];
 async function loadChapters() {
-  const tbody = $('chapTbody');
-  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Đang tải danh sách từ GitHub...</td></tr>`;
-  try {
-    const files = await ghReq(`/contents/${currentStory.path}?ref=${BRANCH}`);
-    cachedChapList = files.filter(f => f.name.endsWith('.md') && f.name !== 'index.md').sort((a,b)=>a.name.localeCompare(b.name));
-    renderChapterTable();
-  } catch(e) { tbody.innerHTML = `<tr><td colspan="6" style="color:red">Lỗi: ${e.message}</td></tr>`; }
-}
-
-function renderChapterTable(filterText = '') {
-  const tbody = $('chapTbody');
-  if(cachedChapList.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Chưa có chương nào.</td></tr>'; return; }
+  $('chapTbody').innerHTML = '<tr><td colspan="4">Đang tải...</td></tr>';
+  const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}`;
+  const files = await gh(path);
+  const chaps = files.filter(f => f.name.endsWith('.md') && f.name !== 'index.md').sort((a,b)=>a.name.localeCompare(b.name));
   
-  let html = '';
-  cachedChapList.forEach((f, i) => {
-    if(filterText && !f.name.includes(filterText)) return;
-    const numMatch = f.name.match(/chuong-(\d+)/);
-    const num = numMatch ? parseInt(numMatch[1]) : i+1;
-    // Bỏ qua parse frontmatter toàn bộ ở list view để tăng tốc độ, chỉ lấy từ tên file
-    html += `
-      <tr data-sha="${f.sha}" data-name="${f.name}" draggable="false">
-        <td><input type="checkbox" class="chap-check" value="${f.name}|${f.sha}" /></td>
-        <td class="chap-num-cell" style="font-weight:bold;">${num}</td>
-        <td><span class="drag-handle" style="display:none;">☰</span> ${f.name}</td>
-        <td style="font-size:.8rem; color:var(--text-dim);">--</td>
-        <td><span class="badge badge-live">Live</span></td>
-        <td style="text-align:right;">
-          <button class="btn btn-outline btn-sm" onclick="openEditor('edit', '${f.name}', '${f.sha}')">Sửa</button>
-          <button class="btn btn-red btn-sm" onclick="singleDelete('${f.name}', '${f.sha}')">Xóa</button>
-        </td>
-      </tr>
-    `;
-  });
-  tbody.innerHTML = html;
-  setupDragAndDrop();
+  $('chapTbody').innerHTML = chaps.map((f, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${f.name}</td>
+      <td>--</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="openEditor('edit', '${f.name}', '${f.sha}')">Sửa</button>
+        <button class="btn btn-red btn-sm" onclick="delChap('${f.name}', '${f.sha}')">Xóa</button>
+      </td>
+    </tr>
+  `).join('');
 }
 
-$('chapSearch').addEventListener('input', e => renderChapterTable(e.target.value.trim()));
-
-// ==========================================
-// BULK DELETE
-// ==========================================
-$('checkAllChaps').addEventListener('change', e => {
-  document.querySelectorAll('.chap-check').forEach(cb => cb.checked = e.target.checked);
-  toggleBulkDeleteBtn();
-});
-$('chapTbody').addEventListener('change', e => { if(e.target.classList.contains('chap-check')) toggleBulkDeleteBtn(); });
-
-function toggleBulkDeleteBtn() {
-  const checked = document.querySelectorAll('.chap-check:checked').length;
-  $('bulkDeleteBtn').style.display = checked > 0 ? 'inline-flex' : 'none';
-  $('bulkDeleteBtn').textContent = `🗑 Xóa ${checked} mục`;
-}
-
-$('bulkDeleteBtn').addEventListener('click', () => {
-  const cbs = document.querySelectorAll('.chap-check:checked');
-  askConfirm('Xóa hàng loạt', `Sắp xóa vĩnh viễn ${cbs.length} file. Tiếp tục?`, async () => {
-    $('bulkDeleteBtn').textContent = 'Đang xóa...'; $('bulkDeleteBtn').disabled = true;
-    for(const cb of cbs) {
-      const [name, sha] = cb.value.split('|');
-      try { await delFile(`${currentStory.path}/${name}`, sha, `Bulk delete ${name}`); } catch(e){}
-    }
-    toast('Đã xóa xong.', 'success');
-    $('bulkDeleteBtn').style.display = 'none'; $('bulkDeleteBtn').disabled = false;
-    $('checkAllChaps').checked = false;
-    loadChapters();
-  });
-});
-
-function singleDelete(name, sha) {
-  askConfirm('Xóa file', `Xóa ${name}?`, async () => {
-    try { await delFile(`${currentStory.path}/${name}`, sha, `Delete ${name}`); toast('Đã xóa', 'success'); loadChapters(); }
-    catch(e) { toast('Lỗi xóa', 'error'); }
-  });
-}
-
-// ==========================================
-// REORDER (DRAG & DROP) - KÉO THẢ
-// ==========================================
-let isReordering = false;
-$('toggleReorderBtn').addEventListener('click', () => {
-  isReordering = !isReordering;
-  $('toggleReorderBtn').textContent = isReordering ? '✅ Tắt Kéo thả' : '↕️ Bật Kéo thả Sắp xếp';
-  $('toggleReorderBtn').classList.toggle('btn-green', isReordering);
-  $('reorderNotice').style.display = isReordering ? 'block' : 'none';
-  $('saveReorderWrap').style.display = isReordering ? 'block' : 'none';
-  
-  document.querySelectorAll('#chapTbody tr').forEach(tr => {
-    tr.setAttribute('draggable', isReordering);
-    tr.querySelector('.drag-handle').style.display = isReordering ? 'inline' : 'none';
-  });
-});
-
-let draggedRow = null;
-function setupDragAndDrop() {
-  const tbody = $('chapTbody');
-  tbody.addEventListener('dragstart', e => { if(!isReordering) return; draggedRow = e.target.closest('tr'); e.target.closest('tr').classList.add('dragging'); });
-  tbody.addEventListener('dragend', e => { if(!isReordering) return; e.target.closest('tr').classList.remove('dragging'); });
-  tbody.addEventListener('dragover', e => {
-    if(!isReordering) return; e.preventDefault();
-    const afterEl = getDragAfterElement(tbody, e.clientY);
-    const row = e.target.closest('tr');
-    if(row && row !== draggedRow) {
-      if(afterEl == null) tbody.appendChild(draggedRow);
-      else tbody.insertBefore(draggedRow, afterEl);
-    }
-  });
-}
-function getDragAfterElement(container, y) {
-  const els = [...container.querySelectorAll('tr:not(.dragging)')];
-  return els.reduce((closest, child) => {
-    const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2;
-    if(offset < 0 && offset > closest.offset) return { offset: offset, element: child }; else return closest;
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-$('saveReorderBtn').addEventListener('click', async () => {
-  const rows = document.querySelectorAll('#chapTbody tr');
-  const updates = [];
-  rows.forEach((tr, idx) => {
-    const oldName = tr.dataset.name;
-    const sha = tr.dataset.sha;
-    const newNum = idx + 1;
-    const expectedName = `chuong-${String(newNum).padStart(2,'0')}.md`;
-    if(oldName !== expectedName) updates.push({ oldName, expectedName, sha });
-  });
-
-  if(updates.length === 0) { toast('Không có thay đổi nào cần lưu.', 'info'); return; }
-  
-  askConfirm('Lưu Thứ Tự', `Cần đổi tên ${updates.length} file thông qua API. Quá trình này sẽ mất thời gian.`, async () => {
-    const btn = $('saveReorderBtn'); btn.disabled = true; btn.textContent = 'Đang xử lý (0/' + updates.length + ')...';
-    // GitHub ko có rename trực tiếp qua REST API (trừ khi dùng Tree API phức tạp). 
-    // Cách đơn giản nhất trên client: get content -> put new file -> delete old file.
-    let done = 0;
-    for(const u of updates) {
-      try {
-        const file = await getFile(`${currentStory.path}/${u.oldName}`);
-        await putFile(`${currentStory.path}/${u.expectedName}`, file.decoded, `Rename to ${u.expectedName} (Reorder)`);
-        await delFile(`${currentStory.path}/${u.oldName}`, u.sha, `Remove old name (Reorder)`);
-        done++; btn.textContent = `Đang xử lý (${done}/${updates.length})...`;
-      } catch(e) { console.error('Lỗi đổi tên', u.oldName, e); }
-    }
-    toast('Đã cập nhật thứ tự xong!', 'success');
-    btn.disabled = false; btn.textContent = '💾 Lưu Thứ Tự Mới';
-    loadChapters();
-  });
-});
-
-// ==========================================
-// EDITOR CORE
-// ==========================================
-let autoSaveInterval;
-
-async function openEditor(mode, filename = null, sha = null) {
+// EDITOR LOGIC
+async function openEditor(mode, name, sha) {
   navTo('editor');
-  $('ed-title').textContent = mode === 'new' ? `Tạo Chương - ${currentStory.title}` : `Sửa - ${filename}`;
-  $('ed-saveBtn').textContent = '💾 Lưu & Publish';
-  $('ed-preview').style.display = 'none'; $('ed-content').style.display = 'block'; $('btnPreview').textContent = '👁 Xem trước';
-  $('snrBar').classList.remove('open');
-  $('ed-autosave-status').textContent = '';
-
-  const clearForm = () => {
-    ['ed-tieude','ed-so','ed-tags','ed-desc','ed-note','ed-commit','ed-content'].forEach(id => $(id).value = '');
-    $('ed-draft').value = 'false'; $('ed-words').textContent = '0 từ';
-  };
-
+  currentChap = (mode === 'edit') ? { name, sha } : null;
+  
   if(mode === 'new') {
-    currentChap = null; clearForm();
-    // Auto fill next chap num
-    $('ed-so').value = cachedChapList.length + 1;
-    $('ed-tieude').value = `Chương ${cachedChapList.length + 1} - `;
-  } else {
-    clearForm();
-    currentChap = { path: `${currentStory.path}/${filename}`, sha };
-    $('ed-saveBtn').textContent = '⏳ Đang tải...'; $('ed-saveBtn').disabled = true;
-    try {
-      const data = await getFile(currentChap.path);
-      const parsed = parseFM(data.decoded);
-      
-      $('ed-tieude').value = parsed.fm.title || '';
-      $('ed-so').value = parsed.fm.chuong || '';
-      $('ed-tags').value = parsed.fm.tags ? (Array.isArray(parsed.fm.tags) ? parsed.fm.tags.join(', ') : parsed.fm.tags) : '';
-      $('ed-desc').value = parsed.fm.description || '';
-      $('ed-note').value = parsed.fm.editor_note || '';
-      $('ed-draft').value = parsed.fm.draft ? 'true' : 'false';
-      $('ed-content').value = parsed.body.trim();
-      $('ed-words').textContent = `${wordCount(parsed.body)} từ`;
-    } catch(e) { toast('Lỗi tải file', 'error'); }
-    $('ed-saveBtn').textContent = '💾 Lưu & Publish'; $('ed-saveBtn').disabled = false;
+    $('ed-title').value = ''; $('ed-num').value = ''; $('ed-content').value = '';
+    return;
   }
-
-  // Bật Auto-save
-  clearInterval(autoSaveInterval);
-  autoSaveInterval = setInterval(() => {
-    const data = { title: $('ed-tieude').value, content: $('ed-content').value };
-    localStorage.setItem('dd_autosave', JSON.stringify(data));
-    const now = new Date();
-    $('ed-autosave-status').textContent = `Đã lưu nháp local lúc ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  }, 10000); // Lưu mỗi 10s
+  
+  const file = await gh(`/contents/src/pages/${currentStory.cat}/${currentStory.id}/${name}`);
+  const raw = b64d(file.content.replace(/\n/g,''));
+  const body = raw.split('---').slice(2).join('---').trim();
+  const fmRaw = raw.split('---')[1];
+  
+  $('ed-content').value = body;
+  // Parse sơ bộ frontmatter
+  const titleMatch = fmRaw.match(/title: "(.*)"/);
+  const numMatch = fmRaw.match(/chuong: (\d+)/);
+  if(titleMatch) $('ed-title').value = titleMatch[1];
+  if(numMatch) $('ed-num').value = numMatch[1];
+  updateWordCount();
 }
 
-// FORMAT TOOLBAR
-document.querySelectorAll('.tool-fmt').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cmd = btn.dataset.cmd; const ta = $('ed-content');
-    const s = ta.selectionStart; const e = ta.selectionEnd; const sel = ta.value.substring(s, e);
-    let pre = '', suf = '';
-    
-    if(cmd === 'bold') { pre = '**'; suf = '**'; }
-    if(cmd === 'italic') { pre = '*'; suf = '*'; }
-    if(cmd === 'underline') { pre = '<u>'; suf = '</u>'; }
-    if(cmd === 'h2') { pre = '\n## '; suf = '\n'; }
-    if(cmd === 'h3') { pre = '\n### '; suf = '\n'; }
-    if(cmd === 'quote') { pre = '\n> '; suf = '\n'; }
-    if(cmd === 'hr') { pre = '\n---\n'; suf = ''; }
-    if(cmd === 'center') { pre = '<div style="text-align:center">'; suf = '</div>'; }
-    if(cmd === 'color') { const c = $('ed-color').value; pre = `<span style="color:${c}">`; suf = '</span>'; }
+function updateWordCount() {
+  const text = $('ed-content').value.trim();
+  const count = text ? text.split(/\s+/).length : 0;
+  $('ed-word-count').textContent = count + ' từ';
+}
+$('ed-content').oninput = updateWordCount;
 
-    ta.value = ta.value.substring(0,s) + pre + sel + suf + ta.value.substring(e);
-    ta.focus(); ta.selectionStart = s + pre.length; ta.selectionEnd = s + pre.length + sel.length;
-    $('ed-words').textContent = `${wordCount(ta.value)} từ`;
-  });
-});
-
-// SEARCH & REPLACE
-$('btnToggleSnr').addEventListener('click', () => $('snrBar').classList.toggle('open'));
-$('btnReplaceAll').addEventListener('click', () => {
-  const f = $('snrFind').value; const r = $('snrReplace').value; const ta = $('ed-content');
-  if(!f) return;
-  ta.value = ta.value.split(f).join(r);
-  toast(`Đã thay thế toàn bộ "${f}"`, 'success');
-});
-
-// PREVIEW
-$('btnPreview').addEventListener('click', () => {
-  const ta = $('ed-content'); const pv = $('ed-preview');
-  if(ta.style.display !== 'none') {
-    ta.style.display = 'none'; pv.style.display = 'block'; $('btnPreview').textContent = '✏️ Chỉnh sửa';
-    let h = ta.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/^## (.*)$/gm, '<h2>$1</h2>').replace(/^### (.*)$/gm, '<h3>$1</h3>')
-      .replace(/^> (.*)$/gm, '<blockquote style="border-left:3px solid var(--sky-light); padding-left:10px; color:var(--text-mid)">$1</blockquote>')
-      .replace(/^---$/gm, '<hr>')
-      .replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
-    pv.innerHTML = `<p>${h}</p>`;
-  } else {
-    ta.style.display = 'block'; pv.style.display = 'none'; $('btnPreview').textContent = '👁 Xem trước';
+function fmt(cmd) {
+  const ta = $('ed-content');
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const sel = ta.value.substring(start, end);
+  let ins = '';
+  
+  if(cmd === 'bold') ins = `**${sel}**`;
+  if(cmd === 'italic') ins = `*${sel}*`;
+  if(cmd === 'quote') ins = `\n> ${sel}\n`;
+  if(cmd === 'center') ins = `<div style="text-align:center">\n${sel}\n</div>`;
+  if(cmd === 'color') {
+    const color = $('ed-color-picker').value;
+    ins = `<span style="color:${color}">${sel}</span>`;
   }
-});
-
-// SAVE CHAPTER
-$('ed-saveBtn').addEventListener('click', async () => {
-  const tieude = $('ed-tieude').value.trim(); const so = parseInt($('ed-so').value);
-  if(!tieude || isNaN(so)) { toast('Lỗi: Cần nhập tiêu đề và số chương!', 'error'); return; }
   
-  const fm = {
-    title: tieude, truyen_id: currentStory.id, chuong: so, date: getISODate(),
-    description: $('ed-desc').value.trim(), editor_note: $('ed-note').value.trim(),
-    draft: $('ed-draft').value === 'true', tags: $('ed-tags').value.split(',').map(x=>x.trim()).filter(Boolean)
-  };
-  const body = $('ed-content').value;
-  const content = buildMD(fm, body);
-  const commitMsg = $('ed-commit').value.trim() || (currentChap ? `Sửa: ${tieude}` : `Tạo: ${tieude}`);
-  const filename = `chuong-${String(so).padStart(2,'0')}.md`;
-  const path = `${currentStory.path}/${filename}`;
+  ta.value = ta.value.substring(0, start) + ins + ta.value.substring(end);
+  updateWordCount();
+}
 
-  const btn = $('ed-saveBtn'); btn.disabled = true; btn.textContent = 'Đang lưu...';
-  try {
-    await putFile(path, content, commitMsg, currentChap ? currentChap.sha : null);
-    toast('Lưu thành công!', 'success');
-    clearInterval(autoSaveInterval); localStorage.removeItem('dd_autosave');
-    navTo('chapter-list'); loadChapters();
-  } catch(e) { toast('Lỗi lưu file: ' + e.message, 'error'); }
-  btn.disabled = false; btn.textContent = '💾 Lưu & Publish';
-});
-
-// ==========================================
-// BULK UPLOAD
-// ==========================================
-function openBulkUpload() { openModal('bulkUploadModal'); }
-$('bulkProcessBtn').addEventListener('click', async () => {
-  const text = $('bulkText').value;
-  if(!text.trim()) return;
-  // Cắt bằng regex tìm chữ "Chương " hoặc "Chương X" ở đầu dòng
-  const rawChaps = text.split(/^(?=Chương\s+\d+)/m).filter(c => c.trim().length > 0);
-  if(rawChaps.length === 0) { toast('Không tìm thấy chương nào', 'error'); return; }
+$('ed-saveBtn').onclick = async () => {
+  const btn = $('ed-saveBtn');
+  btn.disabled = true; btn.textContent = 'Đang lưu...';
   
-  askConfirm('Xử lý Hàng loạt', `Phát hiện ${rawChaps.length} chương. Đẩy tất cả lên Github? (Sẽ mất thời gian)`, async () => {
-    closeModal('bulkUploadModal');
-    const btn = $('bulkUploadBtn'); if(btn) btn.disabled=true;
-    let done = 0;
-    
-    // Tìm max số chương hiện tại
-    let maxNum = cachedChapList.length;
-
-    for(const block of rawChaps) {
-      const lines = block.split('\n');
-      const titleLine = lines[0].trim();
-      const body = lines.slice(1).join('\n').trim();
-      maxNum++;
-      
-      const fm = { title: titleLine, truyen_id: currentStory.id, chuong: maxNum, date: getISODate(), draft: false };
-      const content = buildMD(fm, body);
-      const filename = `chuong-${String(maxNum).padStart(2,'0')}.md`;
-      try {
-        await putFile(`${currentStory.path}/${filename}`, content, `Bulk upload: ${titleLine}`);
-        done++; toast(`Đã upload ${done}/${rawChaps.length}`);
-      } catch(e) { console.error('Bulk Lỗi', e); }
-    }
-    toast(`Đã dán xong ${done} chương!`, 'success');
-    loadChapters();
+  const fm = `---
+layout: "../../../layouts/Layout.astro"
+title: "${$('ed-title').value}"
+truyen_id: "${currentStory.id}"
+chuong: ${$('ed-num').value}
+date: "${new Date().toISOString().split('T')[0]}"
+description: "${$('ed-desc').value}"
+---`;
+  
+  const content = fm + '\n\n' + $('ed-content').value;
+  const filename = `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;
+  const path = `/contents/src/pages/${currentStory.cat}/${currentStory.id}/${filename}`;
+  
+  const res = await gh(path, 'PUT', {
+    message: `Admin update: ${filename}`,
+    content: b64e(content),
+    sha: currentChap ? currentChap.sha : null
   });
-});
+  
+  if(res.content) {
+    showToast('Đã lưu thành công!');
+    openStory(currentStory.id);
+  } else {
+    alert('Lỗi khi lưu');
+  }
+  btn.disabled = false; btn.textContent = '💾 Lưu chương';
+};
 
-// ==========================================
-// FIREBASE MODULES (VIEWS, COMMENTS, MSGS)
-// ==========================================
-function loadFirebaseDashboard() {
+// FIREBASE ANALYTICS
+function loadStats() {
   window.addEventListener('firebase-ready', () => {
-    if(!window.__fbDb) return;
-    const { ref, get } = window;
-    
-    // Lấy tổng Views
-    window.__fbGet(window.__fbRef(window.__fbDb, 'page_views')).then(snap => {
-      const v = snap.val() || {};
-      let totalViews = 0;
-      const viewList = [];
-      for(const [k, obj] of Object.entries(v)) { totalViews += obj.views || 0; viewList.push({path: k, views: obj.views}); }
-      $('db-views').textContent = totalViews;
-      
-      // Render chart
-      viewList.sort((a,b)=>b.views - a.views);
-      const top5 = viewList.slice(0, 5);
-      const chart = $('viewChart');
-      if(top5.length > 0) {
-        const maxV = top5[0].views;
-        chart.innerHTML = top5.map(item => {
-          const h = (item.views / maxV) * 100;
-          return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;"><div class="chart-bar" style="height:${h}%; width:50%;"><div class="chart-val">${item.views}</div><div class="chart-label" style="text-overflow:ellipsis; overflow:hidden; width:100%; text-align:center;">${item.path.slice(0,10)}</div></div></div>`;
-        }).join('');
-      } else { chart.innerHTML = '<div style="color:var(--text-dim)">Chưa có view</div>'; }
-    });
-
-    // Lấy tổng Comments
-    window.__fbGet(window.__fbRef(window.__fbDb, 'comments')).then(snap => {
-      const v = snap.val() || {};
+    const db = window.__fbDb;
+    // Lấy view
+    window.__fbGet(window.__fbRef(db, 'page_views')).then(snap => {
       let total = 0;
-      for(const key of Object.keys(v)) { total += Object.keys(v[key]).length; }
-      $('db-comments').textContent = total;
+      snap.forEach(s => total += (s.val().views || 0));
+      $('stat-views').textContent = total.toLocaleString();
     });
-
-    $('db-stories').textContent = STORIES_DB.length;
+    // Lấy độc giả (Unique tokens)
+    window.__fbGet(window.__fbRef(db, 'private_messages')).then(snap => {
+       $('stat-users').textContent = snap.size;
+    });
+    $('stat-stories').textContent = stories.length;
   });
-  if(window.__fbDb) window.dispatchEvent(new Event('firebase-ready')); // Triger if already loaded
 }
 
-function renderFirebaseComments() {
-  const list = $('fbCommentsList');
-  if(!window.__fbDb) { list.innerHTML='Chưa kết nối DB.'; return; }
-  
+// COMMENTS & MESSAGES
+function loadFbComments() {
   window.__fbOnValue(window.__fbRef(window.__fbDb, 'comments'), snap => {
-    const data = snap.val() || {};
-    let allCmts = [];
-    Object.entries(data).forEach(([pageKey, cmtsObj]) => {
-      Object.entries(cmtsObj).forEach(([cId, cData]) => {
-        allCmts.push({ ...cData, pageKey, id: cId });
+    let html = '';
+    snap.forEach(page => {
+      page.forEach(cmt => {
+        const d = cmt.val();
+        html += `<div class="card">
+          <div style="display:flex; justify-content:space-between">
+            <b>${d.name}</b> <span style="font-size:.7rem">${new Date(d.ts).toLocaleString()}</span>
+          </div>
+          <div style="margin:10px 0; font-size:.9rem">${d.text}</div>
+          <button class="btn btn-red btn-sm" onclick="delFb('comments/${page.key}/${cmt.key}')">Xóa</button>
+        </div>`;
       });
     });
-    allCmts.sort((a,b) => b.ts - a.ts);
-    
-    if(allCmts.length === 0) { list.innerHTML='Chưa có bình luận nào.'; return; }
-    
-    list.innerHTML = allCmts.map(c => `
-      <div class="fb-item">
-        <div class="fb-item-hd">
-          <strong style="color:var(--sky-dark)">${c.name}</strong> 
-          <span style="color:var(--text-dim); font-size:.75rem;">Trên trang: ${c.pageKey} • ${new Date(c.ts).toLocaleString()}</span>
-        </div>
-        <div class="fb-item-body">${c.text}</div>
-        <div style="text-align:right">
-          <button class="btn btn-red btn-sm" onclick="delFbNode('comments/${c.pageKey}/${c.id}')">Xóa</button>
-        </div>
-      </div>
-    `).join('');
+    $('fb-comments-list').innerHTML = html || 'Chưa có bình luận';
   });
 }
 
-function renderFirebaseMessages() {
-  const list = $('fbMessagesList');
-  if(!window.__fbDb) return;
+function loadFbMessages() {
   window.__fbOnValue(window.__fbRef(window.__fbDb, 'private_messages'), snap => {
-    const data = snap.val() || {};
-    let allMsgs = [];
-    Object.entries(data).forEach(([tok, msgs]) => {
-      Object.entries(msgs).forEach(([mid, mData]) => { allMsgs.push({ ...mData, token: tok, id: mid }); });
+    let html = '';
+    snap.forEach(user => {
+      user.forEach(msg => {
+        const d = user.val();
+        html += `<div class="card" style="border-left: 4px solid var(--sky)">
+          <b>Khách: ${user.key.slice(0,8)}...</b>
+          <div style="margin:10px 0">${Object.values(user.val())[0].text}</div>
+          <div style="display:flex; gap:10px">
+            <input type="text" id="rep-${user.key}" placeholder="Trả lời khách..." style="flex:1; padding:5px" />
+            <button class="btn btn-sky btn-sm" onclick="replyUser('${user.key}')">Gửi</button>
+          </div>
+        </div>`;
+      });
     });
-    allMsgs.sort((a,b) => b.ts - a.ts);
-    
-    list.innerHTML = allMsgs.map(m => `
-      <div class="fb-item" style="border-left: 4px solid ${m.adminReply?'var(--green)':'var(--sky)'}">
-        <div class="fb-item-hd">
-          <strong style="color:var(--sky-dark)">${m.name}</strong>
-          <span style="color:var(--text-dim); font-size:.75rem;">${new Date(m.ts).toLocaleString()}</span>
-        </div>
-        <div class="fb-item-body">${m.text}</div>
-        ${m.adminReply ? `<div style="background:#dcfce7; padding:8px; border-radius:4px; font-size:.8rem; margin-bottom:8px;">↩ Đã rep: ${m.adminReply.text}</div>` : ''}
-        <div style="display:flex; gap:6px;">
-          <input type="text" id="rep-${m.token}-${m.id}" placeholder="Reply..." style="flex:1; padding:4px 8px; border:1px solid #ccc; border-radius:4px;" />
-          <button class="btn btn-sky btn-sm" onclick="replyMsg('${m.token}', '${m.id}')">Gửi</button>
-          <button class="btn btn-red btn-sm" onclick="delFbNode('private_messages/${m.token}/${m.id}')">Xóa</button>
-        </div>
-      </div>
-    `).join('');
+    $('fb-msgs-list').innerHTML = html || 'Hòm thư trống';
   });
 }
 
-window.delFbNode = function(path) {
-  askConfirm('Xóa Data Firebase', 'Xóa mục này vĩnh viễn khỏi DB?', () => {
-    window.__fbRemove(window.__fbRef(window.__fbDb, path)).then(()=>toast('Đã xóa','success'));
+window.delFb = (path) => { if(confirm('Xóa?')) window.__fbRemove(window.__fbRef(window.__fbDb, path)); };
+
+// SETTINGS
+async function loadSettings() {
+  const f = await gh('/contents/src/data/settings.json');
+  $('settings-json').value = b64d(f.content.replace(/\n/g,''));
+  $('settings-json').dataset.sha = f.sha;
+}
+
+window.saveSettings = async () => {
+  const content = $('settings-json').value;
+  const sha = $('settings-json').dataset.sha;
+  await gh('/contents/src/data/settings.json', 'PUT', {
+    message: 'Update settings',
+    content: b64e(content),
+    sha
   });
-}
-window.replyMsg = async function(tok, mid) {
-  const text = $(`rep-${tok}-${mid}`).value.trim();
-  if(!text) return;
-  try {
-    const { update } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
-    await update(window.__fbRef(window.__fbDb, `private_messages/${tok}/${mid}/adminReply`), { text, ts: Date.now() });
-    toast('Đã reply thành công', 'success');
-  } catch(e) { toast('Lỗi rep', 'error'); }
-}
+  showToast('Đã lưu cài đặt');
+};
 
-// ==========================================
-// SYSTEM SETTINGS (JSON)
-// ==========================================
-async function loadSettingsJson() {
-  const ta = $('sys-json');
-  ta.value = 'Đang tải src/data/settings.json...';
-  try {
-    const f = await getFile('src/data/settings.json');
-    ta.value = f.decoded;
-    ta.dataset.sha = f.sha;
-  } catch(e) { ta.value = '{\n  "site_name": "dynamic duo",\n  "tagline": "paired dreams, boundless gleam"\n}'; }
-}
-
-$('saveSysJsonBtn').addEventListener('click', async () => {
-  const text = $('sys-json').value;
-  try { JSON.parse(text); } catch(e) { toast('JSON không hợp lệ!', 'error'); return; }
-  
-  $('saveSysJsonBtn').textContent = 'Đang lưu...';
-  try {
-    await putFile('src/data/settings.json', text, '⚙️ Cập nhật settings.json', $('sys-json').dataset.sha);
-    toast('Lưu settings thành công!', 'success');
-    loadSettingsJson();
-  } catch(e) { toast('Lỗi lưu', 'error'); }
-  $('saveSysJsonBtn').textContent = '💾 Lưu Cấu hình';
-});
-
-// ==========================================
-// BACKUP (ZIP EXPORT)
-// ==========================================
-$('btnRunBackup').addEventListener('click', async () => {
-  if (typeof JSZip === 'undefined') { toast('Thư viện JSZip chưa load. Tải lại trang.', 'error'); return; }
-  const btn = $('btnRunBackup');
-  const prog = $('backupProgress');
-  btn.disabled = true;
-  prog.textContent = 'Đang quét toàn bộ file...';
-  
-  try {
-    const zip = new JSZip();
-    let totalFiles = 0;
-    
-    // Quét từng truyện
-    for(const story of STORIES_DB) {
-      prog.textContent = `Đang tải: ${story.title}...`;
-      try {
-        const files = await ghReq(`/contents/src/pages/${story.cat}/${story.id}?ref=${BRANCH}`);
-        const chaps = files.filter(f => f.name.endsWith('.md'));
-        const folder = zip.folder(story.id);
-        
-        for(let i=0; i<chaps.length; i++) {
-          const fileData = await getFile(chaps[i].path);
-          folder.file(chaps[i].name, fileData.decoded);
-          totalFiles++;
-          prog.textContent = `Đã nén ${totalFiles} file...`;
-        }
-      } catch(e) { console.error('Skip', story.id); }
-    }
-    
-    prog.textContent = 'Đang tạo file ZIP...';
-    const blob = await zip.generateAsync({type:"blob"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `dynamic-duo-backup-${getISODate()}.zip`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    prog.textContent = `Hoàn tất tải xuống ${totalFiles} file!`;
-    toast('Backup thành công!', 'success', 5000);
-  } catch(e) {
-    prog.textContent = 'Lỗi Backup: ' + e.message;
-  }
-  btn.disabled = false;
-});
-
-// Initial check local storage for autosave
-if(localStorage.getItem('dd_autosave')) {
-  setTimeout(()=>toast('Bạn có bản nháp chưa lưu. Mở Trình Soạn Thảo để tiếp tục.', 'info', 5000), 2000);
-}
+function openStoryModal() { openModal('storyModal'); }
+function openModal(id) { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); }
 </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ const currentTruyenId = frontmatter?.truyen_id; // Giữ nguyên để Firebase 
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
+let currentFolder = ""; // <--- BẮT BUỘC PHẢI CÓ DÒNG NÀY Ở ĐÂY
 
 if (isNovelPage) {
   const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
@@ -17,7 +18,7 @@ if (isNovelPage) {
   // Xử lý đường dẫn để lấy đúng thư mục mẹ (chứa toàn bộ truyện)
   const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
-  const currentFolder = cur.substring(0, cur.lastIndexOf('/'));
+  currentFolder = cur.substring(0, cur.lastIndexOf('/'));
 
   chapters = allPosts
     .filter((p: any) => {

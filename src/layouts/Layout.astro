@@ -1195,25 +1195,30 @@ document.addEventListener('DOMContentLoaded', () => {
   let utterance = null;
   let voices = [];
 
-  function populateVoices() {
-    // LỌC DUY NHẤT TIẾNG VIỆT
+  // 1. TẢI GIỌNG ĐỌC (Tối ưu để không bị trống danh sách trên Mobile)
+  function loadVoices() {
     voices = synth.getVoices().filter(v => v.lang.toLowerCase().includes('vi'));
-    
-    if (voices.length === 0) {
-      voiceSelect.innerHTML = '<option value="">Mặc định hệ thống</option>';
-    } else {
+    if (voices.length > 0) {
       voiceSelect.innerHTML = voices
         .map((v, i) => `<option value="${i}">${v.name}</option>`)
         .join('');
+    } else {
+      voiceSelect.innerHTML = '<option value="">Giọng mặc định</option>';
     }
   }
 
-  // Khởi tạo giọng đọc
-  populateVoices();
-  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = populateVoices;
+  loadVoices();
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
 
-  btnToggle?.addEventListener('click', () => settingsPanel.classList.toggle('open'));
-  rateRange?.addEventListener('input', () => rateValue.textContent = rateRange.value + 'x');
+  // 2. TOGGLE GIAO DIỆN
+  btnToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsPanel.classList.toggle('open');
+  });
+
+  rateRange?.addEventListener('input', () => {
+    rateValue.textContent = rateRange.value + 'x';
+  });
 
   function resetUI() {
     btnPlay.style.display = 'inline-block';
@@ -1222,36 +1227,42 @@ document.addEventListener('DOMContentLoaded', () => {
     btnStop.style.display = 'none';
   }
 
-  btnPlay.addEventListener('click', () => {
-    // Nếu đang pause thì tiếp tục
-    if (synth.paused && synth.speaking) {
+  // 3. LOGIC LẤY VĂN BẢN (Lấy trước để tránh trễ khi bấm nút)
+  function getCleanText() {
+    const clone = content.cloneNode(true);
+    // Loại bỏ các thành phần rác
+    const garbage = clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row');
+    garbage.forEach(el => el.remove());
+    return clone.innerText.trim();
+  }
+
+  // 4. NÚT ĐIỀU KHIỂN CHÍNH
+  btnPlay.addEventListener('click', function() {
+    if (synth.speaking && synth.paused) {
       synth.resume();
     } else {
-      // Bắt đầu đọc mới
-      synth.cancel(); // QUAN TRỌNG: Dừng mọi luồng cũ để tránh lỗi Mobile
+      // Dừng mọi luồng cũ ngay lập tức
+      synth.cancel();
 
-      const clone = content.cloneNode(true);
-      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player').forEach(el => el.remove());
-      
-      const textToRead = clone.innerText.trim();
-      if (!textToRead) return;
+      const text = getCleanText();
+      if (!text) return;
 
-      utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'vi-VN';
       utterance.rate = parseFloat(rateRange.value || 1);
-      
-      // Chọn giọng tiếng Việt
+
       if (voices[voiceSelect.value]) {
         utterance.voice = voices[voiceSelect.value];
       }
 
-      // Xử lý sự kiện khi kết thúc
+      // Xử lý sự kiện kết thúc
       utterance.onend = resetUI;
       utterance.onerror = (e) => {
-        console.error(e);
+        console.error("Audio Error:", e);
         resetUI();
       };
 
+      // THỦ THUẬT CHO MOBILE: Kích hoạt nói ngay trong sự kiện click
       synth.speak(utterance);
     }
 
@@ -1261,6 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnPause.addEventListener('click', () => {
+    // Một số dòng máy Android cần cancel thay vì pause nếu bị kẹt
     synth.pause();
     btnPlay.style.display = 'inline-block';
     btnPlay.textContent = '▶ Tiếp tục';

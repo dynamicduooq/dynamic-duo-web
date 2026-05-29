@@ -1,36 +1,37 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-// 1. Quét toàn bộ data truyện từ kho tổng (Lưu ý đường dẫn có 2 dấu chấm '../' vì đang đứng ở thư mục con)
-const allStoryPages = Object.values(import.meta.glob('../truyen/**/index.astro', { eager: true })) as any[];
+// 1. Quét toàn bộ file chương trong kho /truyen/
 const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
 
-// 2. Thuật toán kiểm tra tiến độ truyện
-const storiesData = allStoryPages.map((storyPage: any) => {
-  const pathParts = (storyPage.url || '').split('/').filter(Boolean);
-  const id = pathParts[pathParts.length - 1]; 
-  
-  const chapsOfStory = allChaps.filter((c: any) => 
-    c.url?.includes(`/truyen/${id}/`) && c.frontmatter?.chuong
-  );
-  
-  const isCompleted = storyPage.hoan_thanh === true || 
-                     (storyPage.tong_so_chuong && chapsOfStory.length >= storyPage.tong_so_chuong);
+// 2. Khai báo danh sách truyện (Copy y hệt bên trang chủ index.astro sang)
+const storiesList = [
+  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biaqhbcp.png', tags: ['niên hạ', 'đam mỹ', 'trai thẳng'], tong_so_chuong: 72, desc: 'Bạn cùng phòng của tôi hình như là gay...' },
+  { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', author: 'Hỉ Thượng Mi Sao', cover: '/dynamic-duo-web/images/biahcdh.png', tags: ['mất trí nhớ', 'chua xót', 'đồng quê'], tong_so_chuong: 109, desc: 'Mùa hè năm ấy, cánh đồng hoang cháy rực...' },
+  { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', author: 'Tam Đạo', cover: '/dynamic-duo-web/images/biandntkm.png', tags: ['HE', 'gương vỡ lại lành', 'drama motip cũ'], tong_so_chuong: 76, desc: '' },
+  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatnctsct.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74, desc: '' },
+  { id: 'vat-de-vo', title: 'Vật dễ vỡ', author: '??', cover: '', tags: ['đam mỹ'], tong_so_chuong: 0, desc: '' },
+  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', author: '??', cover: '', tags: ['đam mỹ', 'cổ đại'], tong_so_chuong: 0, desc: '' }
+];
 
-  return {
-    id,
-    url: storyPage.url,
-    title: storyPage.title || 'Đang cập nhật',
-    author: storyPage.author || 'Đang cập nhật',
-    chapCount: chapsOfStory.length,
-    isCompleted
-    // Bổ sung thêm các trường như bìa truyện, description nếu cần...
+// 3. Thuật toán tự động đếm chương và phân loại
+const storiesData = storiesList.map(story => {
+  const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
+  const chapCount = chaps.length;
+  const isCompleted = story.tong_so_chuong > 0 && chapCount >= story.tong_so_chuong;
+  
+  return { 
+    ...story, 
+    chapCount, 
+    isCompleted, 
+    url: `/dynamic-duo-web/truyen/${story.id}/` 
   };
 });
 
-// 3. Lọc lấy ĐÚNG mâm Cá Dưới Nước (Chưa hoàn thành)
-const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
+// 4. Lọc lấy ĐÚNG mâm Cá Dưới Nước (Chưa hoàn thành và đã có chương)
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.tong_so_chuong > 0);
 ---
+
 <Layout frontmatter={{ title: 'Cá dưới nước' }}>
   <style>
     .page-hero { text-align: center; padding: 10px 0 36px; }
@@ -38,7 +39,7 @@ const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
     .page-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 6px; }
     .page-sub { font-size: .85rem; color: var(--text-dim); font-style: italic; margin: 0; }
 
-    .story-list { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; }
+    .story-list { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; max-width: 900px; margin-left: auto; margin-right: auto;}
     .story-item {
       display: flex; gap: 20px;
       border: 1px solid rgba(186,230,253,.5);
@@ -47,6 +48,7 @@ const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
       background: #fff;
       transition: var(--t);
     }
+    [data-theme="dark"] .story-item { background: var(--bg-card); border-color: rgba(126,200,227,0.15); }
     .story-item:hover { box-shadow: var(--sh-card); transform: translateY(-2px); }
     .story-cover { width: 140px; min-height: 180px; object-fit: cover; flex-shrink: 0; background: var(--sky-pale); display: block; }
     .story-info { padding: 18px 20px 18px 0; flex: 1; display: flex; flex-direction: column; }
@@ -57,22 +59,29 @@ const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
       background: #fef9c3; color: #854d0e;
     }
     .story-title { font-family: 'Merriweather', serif; font-size: 1rem; color: var(--sky-dark); margin: 0 0 4px; }
+    [data-theme="dark"] .story-title { color: #a8daf0; }
     .story-author { font-size: .76rem; color: var(--text-dim); font-style: italic; margin: 0 0 8px; }
     .story-desc { font-size: .84rem; color: var(--text-mid); line-height: 1.65; margin: 0 0 10px; flex: 1; }
+    [data-theme="dark"] .story-desc { color: #b8d4e8; }
     .story-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
     .story-tag { font-size: .68rem; padding: 2px 8px; border: 1px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky); background: var(--sky-pale); }
+    [data-theme="dark"] .story-tag { background: rgba(20,55,90,.6); border-color: rgba(80,150,210,.4); color: #a8d4f0; }
     .story-progress { font-size: .72rem; color: var(--text-dim); margin-bottom: 12px; }
     .story-btns { display: flex; gap: 8px; }
     .btn-outline {
       padding: 7px 16px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill);
       color: var(--sky-dark); font-size: .8rem; font-family: 'Newsreader', serif; transition: var(--t);
     }
+    [data-theme="dark"] .btn-outline { color: #a8daf0; border-color: rgba(80,150,210,.4); }
     .btn-outline:hover { background: var(--sky-pale); color: var(--sky); }
+    [data-theme="dark"] .btn-outline:hover { background: rgba(20,55,90,.6); }
     .btn-fill {
       padding: 7px 16px; background: var(--sky); border: 1.5px solid var(--sky); border-radius: var(--r-pill);
       color: #fff; font-size: .8rem; font-family: 'Newsreader', serif; transition: var(--t);
     }
+    [data-theme="dark"] .btn-fill { background: #1e6fa0; border-color: #1e6fa0; color: #e0f2fe; }
     .btn-fill:hover { background: var(--sky2); }
+    [data-theme="dark"] .btn-fill:hover { background: #0ea5e9; }
     @media (max-width: 500px) {
       .story-item { flex-direction: column; }
       .story-cover { width: 100%; height: 180px; }
@@ -87,26 +96,32 @@ const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
   </div>
 
   <div class="story-list">
-    {stories.map(s => (
-      <div class="story-item">
-        <a href={s.href}>
-          <img src={s.cover} alt={s.title} class="story-cover" onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
-        </a>
-        <div class="story-info">
-          <span class="story-badge">🌊 Đang tiến hành</span>
-          <h2 class="story-title">{s.title}</h2>
-          <p class="story-author">Tác giả: {s.author}</p>
-          <p class="story-desc">{s.desc}</p>
-          <div class="story-tags">
-            {s.tags.map(t => <span class="story-tag"># {t}</span>)}
-          </div>
-          <p class="story-progress">📖 Tiến độ: {s.progress}</p>
-          <div class="story-btns">
-            <a href={s.href} class="btn-outline">Trang truyện</a>
-            <a href={s.firstChap} class="btn-fill">Đọc chương 1 →</a>
+    {caDuoiNuocList.length === 0 ? (
+      <div style="text-align: center; color: var(--text-dim); font-style: italic; padding: 40px 0;">
+        Hiện không có truyện nào đang tiến hành.
+      </div>
+    ) : (
+      caDuoiNuocList.map(s => (
+        <div class="story-item">
+          <a href={s.url}>
+            <img src={s.cover} alt={s.title} class="story-cover" onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
+          </a>
+          <div class="story-info">
+            <span class="story-badge">🌊 Đang tiến hành</span>
+            <h2 class="story-title">{s.title}</h2>
+            <p class="story-author">Tác giả: {s.author}</p>
+            {s.desc && <p class="story-desc">{s.desc}</p>}
+            <div class="story-tags">
+              {s.tags.map((t: string) => <span class="story-tag"># {t}</span>)}
+            </div>
+            <p class="story-progress">📖 Tiến độ: {s.chapCount}/{s.tong_so_chuong} chương</p>
+            <div class="story-btns">
+              <a href={s.url} class="btn-outline">Trang truyện</a>
+              <a href={`${s.url}chuong-01/`} class="btn-fill">Đọc chương 1 →</a>
+            </div>
           </div>
         </div>
-      </div>
-    ))}
+      ))
+    )}
   </div>
 </Layout>

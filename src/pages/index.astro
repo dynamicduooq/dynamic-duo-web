@@ -32,6 +32,20 @@ const storiesData = storiesList.map(story => {
 // 4. Lọc ra 2 mâm truyện
 const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
+// ... (các đoạn code bạn đang có) ...
+
+// 5. TỰ ĐỘNG HÓA MỤC "MỚI CẬP NHẬT"
+// Lọc các chương không phải bản nháp, có ngày tháng, và sắp xếp theo ngày giảm dần
+const recentChaps = allChaps
+  .filter((c: any) => c.frontmatter?.date && c.frontmatter?.draft !== true)
+  .sort((a: any, b: any) => {
+      // Ưu tiên 1: Ngày mới nhất xếp trên
+      const dateDiff = new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf();
+      if (dateDiff !== 0) return dateDiff;
+      // Ưu tiên 2: Cùng ngày thì số chương to hơn xếp trên
+      return (b.frontmatter.chuong || 0) - (a.frontmatter.chuong || 0);
+  })
+  .slice(0, 3); // Lấy 3 chương mới nhất (Bạn có thể đổi số 3 thành 5 nếu muốn)
 ---
 
 <Layout title="Trang chủ" isHome={true}>
@@ -571,7 +585,6 @@ const caTrenBanList = storiesData.filter(s => s.isCompleted);
     </div>
 
  <div class="stories-grid" id="storiesGrid">
-
       {caDuoiNuocList.map(story => (
         <div class="sc reveal" data-cat="duoi-nuoc" data-tags={story.tags.join(',')}>
           <div class="sc-cover-wrap">
@@ -658,30 +671,38 @@ const caTrenBanList = storiesData.filter(s => s.isCompleted);
       </div>
     </div>
 
-    <!-- MỚI CẬP NHẬT -->
+<!-- MỚI CẬP NHẬT (TỰ ĐỘNG HOÀN TOÀN) -->
     <div class="sec-hd reveal" style="margin-top:32px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
+    
     <div class="recent-list reveal">
-      <a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/chuong-74/" class="recent-item">
-        <span class="recent-icon">📖</span>
-        <div class="ri-body">
-          <div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div>
-          <div class="ri-title">Chương 74 (Kết) <span class="badge-new">MỚI</span></div>
-        </div>
-        <span class="recent-arrow">→</span>
-      </a>
-      <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/chuong-76/" class="recent-item">
-        <span class="recent-icon">📖</span>
-        <div class="ri-body">
-          <div class="ri-story">Nếu đêm nay trời không mưa</div>
-          <div class="ri-title">Ngoại truyện 3</div>
-        </div>
-        <span class="recent-arrow">→</span>
-      </a>
-    </div>
+      {recentChaps.map((chap: any, index: number) => {
+        // Trích xuất ID truyện từ đường dẫn (ví dụ: /truyen/toi-nghi-chung-toi.../chuong-74)
+        const pathParts = (chap.url || '').split('/').filter(Boolean);
+        const storyId = pathParts[pathParts.length - 2]; 
+        
+        // Tìm tên gốc của truyện dựa vào mảng storiesList đã khai báo
+        const storyObj = storiesList.find(s => s.id === storyId);
+        const storyName = storyObj ? storyObj.title : 'Truyện chưa rõ';
 
+        return (
+          <a href={chap.url} class="recent-item">
+            <span class="recent-icon">📖</span>
+            <div class="ri-body">
+              <div class="ri-story">{storyName}</div>
+              <div class="ri-title">
+                {chap.frontmatter?.title || `Chương ${chap.frontmatter?.chuong}`} 
+                {index === 0 && <span class="badge-new">MỚI</span>}
+              </div>
+            </div>
+            <span class="recent-arrow">→</span>
+          </a>
+        );
+      })}
+    </div>
+    
   </div><!-- /main-col -->
 
   <!-- ── SIDEBAR ── -->

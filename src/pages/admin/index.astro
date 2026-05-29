@@ -985,8 +985,18 @@ $('ed-saveBtn').onclick = async () => {
 
   let finalFm = "";
   const tagsRaw = $('ed-tags').value;
-  const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
+// logic mới: Nếu ô Tag ở chương trống, Admin sẽ tự tìm Tag của bộ truyện để điền vào
+let tagsRaw = $('ed-tags').value.trim();
 
+// Nếu cậu không nhập tag cho chương, nó sẽ lấy tag mặc định của truyện (cần lấy từ biến storiesList)
+if (!tagsRaw && currentStory) {
+    const storyInfo = storiesList.find(s => s.id === currentStory.id);
+    if (storyInfo && storyInfo.tags) {
+        tagsRaw = storyInfo.tags.join(', ');
+    }
+}
+
+const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
   // TRƯỜNG HỢP A: SỬA CHƯƠNG ĐÃ CÓ
   if (currentChap && window.__currentRawFm) {
       finalFm = window.__currentRawFm;

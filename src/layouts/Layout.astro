@@ -111,6 +111,23 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
+  /* ── AUTO AUDIO PLAYER ── */
+    .auto-audio-player {
+      max-width: 100%; margin: 0 auto 24px; padding: 14px 16px;
+      background: var(--sky-pale); border: 1px dashed var(--sky-light);
+      border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    [data-theme="dark"] .auto-audio-player { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.3); }
+    .aa-header { font-family: 'Merriweather', serif; font-size: 0.9rem; font-weight: bold; color: var(--sky-dark); display: flex; align-items: center; gap: 8px; }
+    [data-theme="dark"] .aa-header { color: #a8daf0; }
+    .aa-icon { font-size: 1.2rem; }
+    .aa-controls { display: flex; gap: 8px; }
+    .aa-btn { border: none; padding: 6px 14px; border-radius: 99px; font-size: 0.8rem; font-family: inherit; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .aa-btn.play { background: var(--sky); color: #fff; }
+    .aa-btn.play:hover { background: var(--sky2); }
+    .aa-btn.pause { background: #f59e0b; color: #fff; }
+    .aa-btn.stop { background: #ef4444; color: #fff; }
     /* ── VARIABLES ── */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
@@ -747,6 +764,22 @@ if (isNovelPage) {
 
   {isNovelPage ? (
     <div class="novel-layout-wrap" id="novelLayoutWrap">
+    <!-- TRÌNH PHÁT AUDIO TỰ ĐỘNG BẰNG TRÌNH DUYỆT -->
+      {isNovelPage && (
+        <div class="auto-audio-player">
+          <div class="aa-header">
+            <span class="aa-icon">🎧</span>
+            <span>Nghe tự động (Giọng máy)</span>
+          </div>
+          <div class="aa-controls">
+            <button id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
+            <button id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
+            <button id="btnStopTTS" class="aa-btn stop" style="display:none;">⏹ Tắt</button>
+          </div>
+        </div>
+      )}
+
+      <!-- Khung nội dung truyện gốc -->
       <div class="novel-content" id="novelContent"><slot /></div>
       
       <div class="chap-like-area">
@@ -1026,7 +1059,59 @@ window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('dat
 document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
 document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
 syncThemeBtns();
+// LOGIC ĐỌC TRUYỆN TỰ ĐỘNG
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnPlay = document.getElementById('btnPlayTTS');
+    const btnPause = document.getElementById('btnPauseTTS');
+    const btnStop = document.getElementById('btnStopTTS');
+    const content = document.getElementById('novelContent');
 
+    if(btnPlay && content && 'speechSynthesis' in window) {
+      let synth = window.speechSynthesis;
+      let utterance = new SpeechSynthesisUtterance();
+
+      btnPlay.addEventListener('click', () => {
+        if(synth.paused) {
+          synth.resume();
+        } else {
+          // Lấy toàn bộ text, xóa các khoảng trắng thừa
+          const textToRead = content.innerText; 
+          utterance.text = textToRead;
+          utterance.lang = 'vi-VN'; // Cài đặt tiếng Việt
+          utterance.rate = 0.95;    // Tốc độ đọc (1 là bình thường)
+          synth.speak(utterance);
+        }
+        btnPlay.style.display = 'none';
+        btnPause.style.display = 'block';
+        btnStop.style.display = 'block';
+      });
+
+      btnPause.addEventListener('click', () => {
+        synth.pause();
+        btnPlay.style.display = 'block';
+        btnPlay.textContent = '▶ Tiếp tục';
+        btnPause.style.display = 'none';
+      });
+
+      btnStop.addEventListener('click', () => {
+        synth.cancel();
+        btnPlay.style.display = 'block';
+        btnPlay.textContent = '▶ Nghe';
+        btnPause.style.display = 'none';
+        btnStop.style.display = 'none';
+      });
+
+      utterance.onend = () => {
+        btnPlay.style.display = 'block';
+        btnPlay.textContent = '▶ Nghe';
+        btnPause.style.display = 'none';
+        btnStop.style.display = 'none';
+      };
+    } else if(btnPlay) {
+      btnPlay.textContent = 'Trình duyệt không hỗ trợ';
+      btnPlay.disabled = true;
+    }
+  });
 /* ══ ADMIN AUTH & STATS BUTTON ══ */
 (function setupAdminBtn(){
   const btn = document.getElementById('footerAdmin');

@@ -1,32 +1,36 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-const stories = [
-  {
-    title: 'Quan hệ bạn cùng phòng',
-    author: 'Hạnh Lan',
-    desc: 'Anh ấy nghèo thì đã sao? Tôi có tiền là được rồi.',
-    cover: '/dynamic-duo-web/images/biaqhbcp.png',
-    href: '/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/',
-    status: 'ongoing',
-    tags: ['đam mỹ', 'hiện đại', 'niên hạ', 'trai thẳng', 'yêu thầm'],
-    progress: '1.3% (1/72)',
-    firstChap: '/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/',
-  },
-  {
-    title: 'Hạ cháy đồng hoang',
-    author: 'Hỉ Thượng Mi Sao',
-    desc: 'Tình yêu là bản năng ẩn sau miền hoang tàn của ký ức.',
-    cover: '/dynamic-duo-web/images/biatdxt.png',
-    href: '/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/',
-    status: 'ongoing',
-    tags: ['đam mỹ', 'hiện đại', 'chua xót', 'mất trí nhớ', 'đồng quê'],
-    progress: '5.5% (6/109)',
-    firstChap: '/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/',
-  },
-];
----
+// 1. Quét toàn bộ data truyện từ kho tổng (Lưu ý đường dẫn có 2 dấu chấm '../' vì đang đứng ở thư mục con)
+const allStoryPages = Object.values(import.meta.glob('../truyen/**/index.astro', { eager: true })) as any[];
+const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
 
+// 2. Thuật toán kiểm tra tiến độ truyện
+const storiesData = allStoryPages.map((storyPage: any) => {
+  const pathParts = (storyPage.url || '').split('/').filter(Boolean);
+  const id = pathParts[pathParts.length - 1]; 
+  
+  const chapsOfStory = allChaps.filter((c: any) => 
+    c.url?.includes(`/truyen/${id}/`) && c.frontmatter?.chuong
+  );
+  
+  const isCompleted = storyPage.hoan_thanh === true || 
+                     (storyPage.tong_so_chuong && chapsOfStory.length >= storyPage.tong_so_chuong);
+
+  return {
+    id,
+    url: storyPage.url,
+    title: storyPage.title || 'Đang cập nhật',
+    author: storyPage.author || 'Đang cập nhật',
+    chapCount: chapsOfStory.length,
+    isCompleted
+    // Bổ sung thêm các trường như bìa truyện, description nếu cần...
+  };
+});
+
+// 3. Lọc lấy ĐÚNG mâm Cá Dưới Nước (Chưa hoàn thành)
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
+---
 <Layout frontmatter={{ title: 'Cá dưới nước' }}>
   <style>
     .page-hero { text-align: center; padding: 10px 0 36px; }

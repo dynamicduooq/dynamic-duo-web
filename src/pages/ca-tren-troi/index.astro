@@ -1,22 +1,35 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-const upcoming = [
-  {
-    title: 'Vạn dặm vân',
-    author: 'Chưa xác nhận',
-    desc: 'Đang đặt gạch...',
-    tags: ['cổ đại', 'đam mỹ'],
-    cover: '/dynamic-duo-web/images/biavdv.png',
-  },
-  {
-    title: '??',
-    author: '??',
-    desc: 'Một câu chuyện đang trong giai đoạn ươm ý tưởng...',
-    tags: ['viễn tưởng'],
-    cover: '',
-  },
-];
+// 1. Quét toàn bộ data truyện từ kho tổng (Lưu ý đường dẫn có 2 dấu chấm '../' vì đang đứng ở thư mục con)
+const allStoryPages = Object.values(import.meta.glob('../truyen/**/index.astro', { eager: true })) as any[];
+const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
+
+// 2. Thuật toán kiểm tra tiến độ truyện
+const storiesData = allStoryPages.map((storyPage: any) => {
+  const pathParts = (storyPage.url || '').split('/').filter(Boolean);
+  const id = pathParts[pathParts.length - 1]; 
+  
+  const chapsOfStory = allChaps.filter((c: any) => 
+    c.url?.includes(`/truyen/${id}/`) && c.frontmatter?.chuong
+  );
+  
+  const isCompleted = storyPage.hoan_thanh === true || 
+                     (storyPage.tong_so_chuong && chapsOfStory.length >= storyPage.tong_so_chuong);
+
+  return {
+    id,
+    url: storyPage.url,
+    title: storyPage.title || 'Đang cập nhật',
+    author: storyPage.author || 'Đang cập nhật',
+    chapCount: chapsOfStory.length,
+    isCompleted
+    // Bổ sung thêm các trường như bìa truyện, description nếu cần...
+  };
+});
+
+// 3. Lọc lấy ĐÚNG mâm Cá Dưới Nước (Chưa hoàn thành)
+const caTrenTroiList = storiesData.filter(s => !s.isCompleted);
 ---
 
 <Layout frontmatter={{ title: 'Cá trên trời' }}>

@@ -1,16 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const ndntkmPosts  = Object.values(import.meta.glob('./ca-tren-ban/neu-dem-nay-troi-khong-mua/*.md',   { eager: true })) as any[];
-const tnctcstPosts = Object.values(import.meta.glob('./ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/*.md', { eager: true })) as any[];
-const qhbcpPosts   = Object.values(import.meta.glob('./ca-duoi-nuoc/quan-he-ban-cung-phong/*.md',   { eager: true })) as any[];
-const hcdhPosts    = Object.values(import.meta.glob('./ca-duoi-nuoc/ha-chay-dong-hoang/*.md',       { eager: true })) as any[];
-const countChaps   = (posts: any[]) => posts.filter((p: any) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0).length;
+// 1. Quét toàn bộ các file chương (.md) trong thư mục /truyen/
+const allChaps = Object.values(import.meta.glob('./truyen/**/*.md', { eager: true })) as any[];
 
-const ndntkmCount  = countChaps(ndntkmPosts);
-const tnctcstCount = countChaps(tnctcstPosts);
-const qhbcpCount   = countChaps(qhbcpPosts);
-const hcdhCount    = countChaps(hcdhPosts);
+// 2. Khai báo danh sách truyện (Bạn có thể thêm/sửa truyện mới vào đây sau này)
+const storiesList = [
+  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biaqhbcp.png', tags: ['niên hạ', 'đam mỹ', 'trai thẳng'], tong_so_chuong: 72 },
+  { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', author: 'Hỉ Thượng Mi Sao', cover: '/dynamic-duo-web/images/biahcdh.png', tags: ['mất trí nhớ', 'chua xót', 'đồng quê'], tong_so_chuong: 109 },
+  { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', author: 'Tam Đạo', cover: '/dynamic-duo-web/images/biandntkm.png', tags: ['HE', 'gương vỡ lại lành', 'drama motip cũ'], tong_so_chuong: 76 },
+  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatnctsct.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74 }
+];
+
+// 3. Thuật toán tự động đếm chương và phân loại
+const storiesData = storiesList.map(story => {
+  // Tìm tất cả file chương (.md) thuộc id truyện này
+  const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
+  const chapCount = chaps.length;
+  
+  // Kiểm tra hoàn thành: Nếu số chương đã đăng >= tổng số chương
+  const isCompleted = story.tong_so_chuong > 0 && chapCount >= story.tong_so_chuong;
+  
+  return {
+    ...story,
+    chapCount,
+    isCompleted,
+    url: `/dynamic-duo-web/truyen/${story.id}/`
+  };
+});
+
+// 4. Lọc ra 2 mâm truyện
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
+const caTrenBanList = storiesData.filter(s => s.isCompleted);
 ---
 
 <Layout title="Trang chủ" isHome={true}>
@@ -549,95 +570,59 @@ const hcdhCount    = countChaps(hcdhPosts);
       <span class="fl-count" id="flCount">6 truyện</span>
     </div>
 
-    <div class="stories-grid" id="storiesGrid">
+ <div class="stories-grid" id="storiesGrid">
 
-      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
-        <div class="sc-cover-wrap">
-          <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
-          <span class="sc-status status-ongoing">Đang đăng</span>
-        </div>
-        <div class="sc-body">
-          <div class="sc-shelf">🐠 Cá dưới nước</div>
-          <h3 class="sc-title">Quan hệ bạn cùng phòng</h3>
-          <div class="sc-meta">Hạnh Lan · Edit: Dynamic Duo</div>
-          <div class="sc-tags">
-            <span class="sc-tag"># niên hạ</span><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># trai thẳng</span>
+      {caDuoiNuocList.map(story => (
+        <div class="sc reveal" data-cat="duoi-nuoc" data-tags={story.tags.join(',')}>
+          <div class="sc-cover-wrap">
+            <img src={story.cover} alt={story.title} loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'; this.style.display='none'" />
+            <span class="sc-status status-ongoing">Đang đăng</span>
           </div>
-          <div class="sc-footer">
-            <span class="sc-chapters">📖 {qhbcpCount}/72 chương</span>
-            <div style="display:flex;gap:5px">
-              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="sc-link secondary">Giới thiệu</a>
-              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/" class="sc-link">Đọc →</a>
+          <div class="sc-body">
+            <div class="sc-shelf">🐠 Cá dưới nước</div>
+            <h3 class="sc-title">{story.title}</h3>
+            <div class="sc-meta">{story.author} · Edit: Dynamic Duo</div>
+            <div class="sc-tags">
+              {story.tags.map((tag: string) => (
+                <span class="sc-tag"># {tag}</span>
+              ))}
+            </div>
+            <div class="sc-footer">
+              <span class="sc-chapters">📖 {story.chapCount}/{story.tong_so_chuong > 0 ? `${story.tong_so_chuong} chương` : '?? chương'}</span>
+              <div style="display:flex;gap:5px">
+                <a href={story.url} class="sc-link secondary">Giới thiệu</a>
+                <a href={`${story.url}chuong-01/`} class="sc-link">Đọc →</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ))}
 
-      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
-        <div class="sc-cover-wrap">
-          <img src="/dynamic-duo-web/images/biahcdh.png" alt="Hạ cháy đồng hoang" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
-          <span class="sc-status status-ongoing">Đang đăng</span>
-        </div>
-        <div class="sc-body">
-          <div class="sc-shelf">🐠 Cá dưới nước</div>
-          <h3 class="sc-title">Hạ cháy đồng hoang</h3>
-          <div class="sc-meta">Hỉ Thượng Mi Sao · Edit: Dynamic Duo</div>
-          <div class="sc-tags">
-            <span class="sc-tag"># mất trí nhớ</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># đồng quê</span>
+      {caTrenBanList.map(story => (
+        <div class="sc reveal" data-cat="tren-ban" data-tags={story.tags.join(',')}>
+          <div class="sc-cover-wrap">
+            <img src={story.cover} alt={story.title} loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'; this.style.display='none'" />
+            <span class="sc-status status-complete">Hoàn thành</span>
           </div>
-          <div class="sc-footer">
-            <span class="sc-chapters">📖 {hcdhCount}/109 chương</span>
-            <div style="display:flex;gap:5px">
-              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="sc-link secondary">Giới thiệu</a>
-              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/" class="sc-link">Đọc →</a>
+          <div class="sc-body">
+            <div class="sc-shelf">🍽️ Cá trên bàn</div>
+            <h3 class="sc-title">{story.title}</h3>
+            <div class="sc-meta">{story.author} · Edit: Dynamic Duo</div>
+            <div class="sc-tags">
+              {story.tags.map((tag: string) => (
+                <span class="sc-tag"># {tag}</span>
+              ))}
+            </div>
+            <div class="sc-footer">
+              <span class="sc-chapters">📖 {story.chapCount} chương (full)</span>
+              <div style="display:flex;gap:5px">
+                <a href={story.url} class="sc-link secondary">Giới thiệu</a>
+                <a href={`${story.url}chuong-01/`} class="sc-link">Đọc →</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
-        <div class="sc-cover-wrap">
-          <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
-          <span class="sc-status status-complete">Hoàn thành</span>
-        </div>
-        <div class="sc-body">
-          <div class="sc-shelf">🍽️ Cá trên bàn</div>
-          <h3 class="sc-title">Nếu đêm nay trời không mưa</h3>
-          <div class="sc-meta">Tam Đạo · Edit: Dynamic Duo</div>
-          <div class="sc-tags">
-            <span class="sc-tag"># HE</span><span class="sc-tag"># gương vỡ lại lành</span><span class="sc-tag"># drama motip cũ</span>
-          </div>
-          <div class="sc-footer">
-            <span class="sc-chapters">📖 {ndntkmCount} chương (full)</span>
-            <div style="display:flex;gap:5px">
-              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="sc-link secondary">Giới thiệu</a>
-              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-01/" class="sc-link">Đọc →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
-        <div class="sc-cover-wrap">
-          <img src="/dynamic-duo-web/images/biatnctsct.png" alt="Tôi nghĩ chúng tôi sắp chia tay" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
-          <span class="sc-status status-complete">Hoàn thành</span>
-        </div>
-        <div class="sc-body">
-          <div class="sc-shelf">🍽️ Cá trên bàn</div>
-          <h3 class="sc-title">Tôi nghĩ chúng tôi sắp chia tay</h3>
-          <div class="sc-meta">Hạ Nhất Thiên · Edit: Dynamic Duo</div>
-          <div class="sc-tags">
-            <span class="sc-tag"># HE</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># 1v1</span>
-          </div>
-          <div class="sc-footer">
-            <span class="sc-chapters">📖 {tnctcstCount} chương (full)</span>
-            <div style="display:flex;gap:5px">
-              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="sc-link secondary">Giới thiệu</a>
-              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-01/" class="sc-link">Đọc →</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      ))}
 
       <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ">
         <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
@@ -648,7 +633,7 @@ const hcdhCount    = countChaps(hcdhPosts);
           <div class="sc-tags"><span class="sc-tag"># đam mỹ</span></div>
           <div class="sc-footer">
             <span class="sc-chapters">Sắp cập nhật</span>
-            <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="sc-link secondary">Xem →</a>
+            <a href="/dynamic-duo-web/truyen/vat-de-vo/" class="sc-link secondary">Xem →</a>
           </div>
         </div>
       </div>
@@ -662,12 +647,11 @@ const hcdhCount    = countChaps(hcdhPosts);
           <div class="sc-tags"><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># cổ đại</span></div>
           <div class="sc-footer">
             <span class="sc-chapters">Sắp cập nhật</span>
-            <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="sc-link secondary">Xem →</a>
+            <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/" class="sc-link secondary">Xem →</a>
           </div>
         </div>
       </div>
 
-      <!-- Cute Empty State -->
       <div class="no-results" id="noRes">
         <span class="fish-icon">𓆝</span>
         Cá bơi đi mất rồi. Không tìm thấy truyện phù hợp!
@@ -680,7 +664,7 @@ const hcdhCount    = countChaps(hcdhPosts);
       <div class="sec-line"></div>
     </div>
     <div class="recent-list reveal">
-      <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-74/" class="recent-item">
+      <a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/chuong-74/" class="recent-item">
         <span class="recent-icon">📖</span>
         <div class="ri-body">
           <div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div>
@@ -688,7 +672,7 @@ const hcdhCount    = countChaps(hcdhPosts);
         </div>
         <span class="recent-arrow">→</span>
       </a>
-      <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-76/" class="recent-item">
+      <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/chuong-76/" class="recent-item">
         <span class="recent-icon">📖</span>
         <div class="ri-body">
           <div class="ri-story">Nếu đêm nay trời không mưa</div>
@@ -724,8 +708,8 @@ const hcdhCount    = countChaps(hcdhPosts);
             <details open>
               <summary>🐠 Cá dưới nước</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng</a><span class="cat-count">{qhbcpCount}c</span></li>
-                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang</a><span class="cat-count">{hcdhCount}c</span></li>
+                <li><a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng</a><span class="cat-count">{qhbcpCount}c</span></li>
+                <li><a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/">Hạ cháy đồng hoang</a><span class="cat-count">{hcdhCount}c</span></li>
               </ul>
             </details>
           </li>
@@ -733,17 +717,17 @@ const hcdhCount    = countChaps(hcdhPosts);
             <details>
               <summary>🍽️ Cá trên bàn</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa</a><span class="cat-count">{ndntkmCount}c</span></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay</a><span class="cat-count">{tnctcstCount}c</span></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ</a><span class="cat-count">sắp</span></li>
-                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm</a><span class="cat-count">sắp</span></li>
+                <li><a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa</a><span class="cat-count">{ndntkmCount}c</span></li>
+                <li><a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay</a><span class="cat-count">{tnctcstCount}c</span></li>
+                <li><a href="/dynamic-duo-web/truyen/vat-de-vo/">Vật dễ vỡ</a><span class="cat-count">sắp</span></li>
+                <li><a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/">Thiếu đế xuân tâm</a><span class="cat-count">sắp</span></li>
               </ul>
             </details>
           </li>
           <li>
             <details>
               <summary>🌤️ Cá trên trời</summary>
-              <ul><li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách →</a></li></ul>
+              <ul><li><a href="/dynamic-duo-web/truyen/">Xem danh sách →</a></li></ul>
             </details>
           </li>
         </ul>

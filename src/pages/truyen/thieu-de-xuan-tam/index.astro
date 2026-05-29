@@ -1,214 +1,246 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+
+// Thông tin cơ bản của truyện
+const title = "Thiếu đế xuân tâm";
+const author = "Đang cập nhật";
+const description = "Nội dung văn án của Thiếu đế xuân tâm...";
+const tong_so_chuong = 0; // Khi nào xác định được tổng số chương thì bạn đổi ở đây
+const hoan_thanh = false;
+const tags = ["đam mỹ", "cổ đại"];
+
+// 1. Quét tự động lấy tất cả các file chương (.md) nằm chung thư mục với file này
+const chaps = Object.values(import.meta.glob('./*.md', { eager: true })) as any[];
+
+// 2. Lọc bỏ các chương đang lưu nháp (draft: true) và sắp xếp theo số chương từ nhỏ đến lớn
+const publishedChaps = chaps
+  .filter(c => c.frontmatter?.draft !== true && c.frontmatter?.chuong)
+  .sort((a, b) => a.frontmatter.chuong - b.frontmatter.chuong);
 ---
-<Layout frontmatter={{ title: 'Thiếu đế xuân tâm', description: 'Truyện sắp được đăng tải...' }}>
+
+<!-- Báo cho Layout biết đây là trang truyện (truyen_id = mã viết tắt để load Review) -->
+<Layout frontmatter={{ title, description, truyen_id: "tdxt", chuong: 0 }}>
   <style>
-    .coming-wrap { text-align: center; padding: 40px 20px; }
-    .coming-emoji { font-size: 3rem; display: block; margin-bottom: 16px; }
-    .coming-title { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--sky-dark); margin: 0 0 8px; }
-    .coming-note { font-size: .9rem; color: var(--text-mid); font-style: italic; }
-    .coming-cover { width: 160px; border-radius: 12px; box-shadow: var(--sh-card); margin: 0 auto 24px; display: block; }
-    .back-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 24px; padding: 9px 22px; background: var(--sky-pale); border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky-dark); font-size: .86rem; transition: var(--t); }
-    .back-btn:hover { background: var(--sky-light); }
+    /* CSS Định dạng trang bìa truyện */
+    .story-cover-section { display: flex; gap: 24px; margin-top: 40px; flex-wrap: wrap; }
+    .cover-img { width: 180px; height: 260px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 15px rgba(14,165,233,0.15); background: var(--sky-pale); display: flex; align-items: center; justify-content: center; font-size: 2rem;}
+    .story-info { flex: 1; min-width: 250px; }
+    .story-info h1 { margin: 0 0 12px; font-family: 'Merriweather', serif; color: var(--sky-dark); text-align: left; font-size: 1.8rem;}
+    [data-theme="dark"] .story-info h1 { color: #a8daf0; }
+    .info-line { font-size: 0.9rem; margin-bottom: 8px; color: var(--text-mid); }
+    .info-line strong { color: var(--sky-dark); }
+    [data-theme="dark"] .info-line strong { color: #a8daf0; }
+    .story-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .story-tag { background: var(--sky-pale); color: var(--sky); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; border: 1px solid var(--sky-light); }
+    [data-theme="dark"] .story-tag { background: rgba(20,55,90,.6); border-color: rgba(80,150,210,.4); color: #a8d4f0; }
+    
+    .story-desc-box { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid rgba(186,230,253,0.5); line-height: 1.6; font-size: 0.9rem; color: var(--text-main); margin-top: 10px; white-space: pre-wrap; }
+    [data-theme="dark"] .story-desc-box { background: rgba(15,35,54,0.4); border-color: rgba(126,200,227,0.15); }
+
+    /* CSS Mục lục */
+    .toc-section { margin-top: 40px; }
+    .toc-title { font-family: 'Merriweather', serif; font-size: 1.2rem; color: var(--sky-dark); border-bottom: 2px dashed var(--sky-light); padding-bottom: 10px; margin-bottom: 16px; }
+    [data-theme="dark"] .toc-title { color: #a8daf0; border-bottom-color: rgba(126,200,227,0.2); }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+    .toc-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border: 1px solid var(--sky-light); border-radius: 8px; color: var(--text-main); transition: all 0.2s; background: var(--bg-card); text-decoration: none;}
+    .toc-item:hover { background: var(--sky-pale); border-color: var(--sky); transform: translateX(3px); }
+    [data-theme="dark"] .toc-item { border-color: rgba(126,200,227,0.2); background: rgba(10,25,45,0.4); color: #b8d4e8; }
+    [data-theme="dark"] .toc-item:hover { background: rgba(20,55,90,.6); border-color: #a8daf0; color: #fff; }
+    .toc-chap-title { font-weight: 600; font-size: 0.9rem; }
+    .toc-chap-date { font-size: 0.7rem; color: var(--text-dim); }
   </style>
-  <div class="coming-wrap">
-    <img src="/dynamic-duo-web/images/biatdxt.png" alt="Thiếu đế xuân tâm" class="coming-cover" onerror="this.style.display='none'" />
-    <span class="coming-emoji">🌤️</span>
-    <h1 class="coming-title">Thiếu đế xuân tâm</h1>
-    <p class="coming-note">Chương sẽ được cập nhật sớm. Hãy quay lại sau nhé! ☁️</p>
-    <a href="/dynamic-duo-web/truyen/" class="back-btn">← Quay lại Cá trên bàn</a>
-  </div>
-<div class="story-review-section" data-truyen-id="tdxt">
-  <div class="sr-header">
-    <h3>⭐ Đánh giá truyện</h3>
-    <div class="sr-stats">
-      <span class="sr-avg" id="srAvg">0.0</span>
-      <span class="sr-stars-display" id="srStarsDisplay">☆☆☆☆☆</span>
-      <span class="sr-count" id="srCount">(0 đánh giá)</span>
-    </div>
-  </div>
 
-  <div class="sr-form">
-    <div class="sr-star-select" id="srStarSelect">
-      <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
-    </div>
-    <input class="sr-inp" id="srName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" />
-    <textarea class="sr-textarea" id="srText" placeholder="Nêu cảm nhận của bạn về bộ truyện này nhé..." rows="3"></textarea>
-    <div style="text-align:right">
-      <button class="sr-submit-btn" id="srSubmit">Gửi đánh giá</button>
-    </div>
-  </div>
-
-  <div class="sr-list" id="srList">
-    <div style="text-align:center; padding: 20px; color: var(--text-dim); font-style: italic;">Đang tải đánh giá...</div>
-  </div>
-</div>
-
-<style>
-  /* Giao diện khu vực Đánh giá */
-  .story-review-section {
-    margin-top: 40px; padding-top: 24px;
-    border-top: 2px dashed var(--sky-light);
-    font-family: var(--read-ff, 'Newsreader', serif);
-  }
-  [data-theme="dark"] .story-review-section { border-color: rgba(126,200,227,0.2); }
-  
-  .sr-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
-  .sr-header h3 { margin: 0; font-size: 1.2rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;}
-  [data-theme="dark"] .sr-header h3 { color: #a8daf0; }
-  .sr-stats { display: flex; align-items: center; gap: 8px; }
-  .sr-avg { font-weight: bold; font-size: 1.8rem; color: var(--sky-dark); line-height: 1;}
-  [data-theme="dark"] .sr-avg { color: #a8daf0; }
-  .sr-stars-display { color: #fbbf24; font-size: 1.2rem; letter-spacing: 2px; }
-  .sr-count { font-size: 0.85rem; color: var(--text-dim); font-style: italic;}
-  
-  /* Form gửi đánh giá */
-  .sr-form { background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.4); }
-  [data-theme="dark"] .sr-form { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
-  .sr-star-select { font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;}
-  .sr-star-select span { transition: color 0.2s; }
-  .sr-star-select span:hover, .sr-star-select span.active { color: #fbbf24; }
-  .sr-inp, .sr-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 10px; transition: all 0.2s;}
-  .sr-inp:focus, .sr-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
-  [data-theme="dark"] .sr-inp, [data-theme="dark"] .sr-textarea { background: #091620; border-color: #1e4a6a; color: #F3F9FF; }
-  .sr-submit-btn { padding: 8px 20px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s; }
-  .sr-submit-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
-  .sr-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
-
-  /* Danh sách đánh giá */
-  .sr-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .sr-item { background: var(--bg-card); border: 1px solid var(--sky-light); padding: 16px; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
-  .sr-item:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(2,132,199,0.08); }
-  [data-theme="dark"] .sr-item { border-color: rgba(126,200,227,0.15); background: rgba(10,25,45,0.4); }
-  .sr-item-hd { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .sr-item-name { font-weight: bold; font-size: .9rem; color: var(--sky-dark); display: block; margin-bottom: 2px;}
-  [data-theme="dark"] .sr-item-name { color: #a8daf0; }
-  .sr-item-stars { color: #fbbf24; font-size: .9rem; letter-spacing: 1px; display: block;}
-  .sr-item-text { font-size: .9rem; color: var(--text-main); margin: 0 0 10px 0; line-height: 1.6; word-break: break-word;}
-  [data-theme="dark"] .sr-item-text { color: #F3F9FF; }
-  .sr-item-time { font-size: .75rem; color: var(--text-dim); font-style: italic;}
-  .sr-del-btn { font-size: .75rem; color: #ef4444; background: none; border: none; cursor: pointer; display: none; padding: 0;}
-  .sr-del-btn.show { display: block; }
-  .sr-del-btn:hover { text-decoration: underline; }
-</style>
-
-<script is:inline>
-  (function initStoryReview() {
-    const section = document.querySelector('.story-review-section');
-    if(!section) return;
-    const truyenId = section.dataset.truyenId;
-    const listEl = document.getElementById('srList');
-    const submitBtn = document.getElementById('srSubmit');
-    const starSelect = document.getElementById('srStarSelect');
+  <div style="max-width: 900px; margin: 0 auto;">
     
-    let selectedStars = 5;
-    
-    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function timeAgo(ts){
-      if(!ts) return ''; const d=Date.now()-ts;
-      if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
-      if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
-    }
-    function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
-
-    const myToken = getMyToken();
-    const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
-    
-    // Khôi phục tên đã nhập
-    const savedName = localStorage.getItem('dd_commenter_name');
-    if(savedName) document.getElementById('srName').value = savedName;
-
-    // Click chọn sao
-    if(starSelect) {
-      const stars = starSelect.querySelectorAll('span');
-      stars.forEach(s => {
-        s.addEventListener('click', () => {
-          selectedStars = parseInt(s.dataset.val);
-          stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
-        });
-      });
-    }
-
-    function setupFirebaseLogic(fb) {
-      const reviewRef = fb.ref(fb.db, 'novel_reviews/' + truyenId);
+    <!-- THÔNG TIN BÌA TRUYỆN -->
+    <div class="story-cover-section">
+  <img src="/dynamic-duo-web/images/biatdxt.png" alt="Bìa truyện" class="story-cover"
+    onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
       
-      // Lắng nghe dữ liệu hiển thị
-      fb.onValue(reviewRef, snap => {
-        const data = snap.val() || {};
-        const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
+      <div class="story-info">
+        <h1>{title}</h1>
+        <div class="info-line"><strong>Tác giả:</strong> {author}</div>
+        <div class="info-line"><strong>Tiến độ:</strong> {publishedChaps.length}/{tong_so_chuong > 0 ? tong_so_chuong : '??'} chương</div>
+        <div class="story-tags">
+          {tags.map(t => <span class="story-tag"># {t}</span>)}
+        </div>
+        <div class="story-desc-box">{description}</div>
         
-        document.getElementById('srCount').textContent = `(${items.length} đánh giá)`;
+        <!-- Nút Đọc từ đầu -->
+        {publishedChaps.length > 0 && (
+           <a href={publishedChaps[0].url} style="display:inline-block; margin-top:16px; background:var(--sky); color:#fff; padding:10px 24px; border-radius:99px; font-weight:bold; font-family:sans-serif; text-decoration:none; transition:0.2s;" onmouseover="this.style.background='var(--sky2)'" onmouseout="this.style.background='var(--sky)'">📖 Đọc từ đầu</a>
+        )}
+      </div>
+    </div>
+
+    <!-- MỤC LỤC CHƯƠNG -->
+    <div class="toc-section">
+      <h2 class="toc-title">📚 Mục lục ({publishedChaps.length} chương)</h2>
+      
+      <div class="toc-list">
+        {publishedChaps.length === 0 ? (
+          <div style="grid-column: 1/-1; padding: 30px; text-align: center; color: var(--text-dim); font-style: italic; background: var(--sky-pale); border-radius: 8px;">
+            Truyện đang trong quá trình chuẩn bị, chương mới sẽ sớm được cập nhật! 𓆝
+          </div>
+        ) : (
+          publishedChaps.map(chap => (
+            <a href={chap.url} class="toc-item">
+              <span class="toc-chap-title">{chap.frontmatter.title || `Chương ${chap.frontmatter.chuong}`}</span>
+              <span class="toc-chap-date">{chap.frontmatter.date || ''}</span>
+            </a>
+          ))
+        )}
+      </div>
+    </div>
+
+    <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
+    <div class="public-reviews-widget" data-truyen-id="tdxt">
+      <div class="prw-header">
+        <h3 style="margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;">⭐ Đánh giá từ độc giả</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="prw-avg" style="font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;">0.0</span>
+          <span class="prw-stars" style="color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px;">☆☆☆☆☆</span>
+          <span class="prw-count" style="font-size: 0.8rem; color: var(--text-dim); font-style: italic;">(0 đánh giá)</span>
+        </div>
+      </div>
+
+      <div style="background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.5);">
+        <div class="prw-star-select" id="prwStarSelect" style="font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;">
+          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active" style="color: #fbbf24;">★</span>
+        </div>
+        <input id="prwName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); outline: none; margin-bottom: 10px; box-sizing:border-box;" />
+        <textarea id="prwText" placeholder="Bộ truyện này thế nào? Chia sẻ cảm nhận của bạn với mọi người nhé..." rows="3" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); outline: none; margin-bottom: 10px; box-sizing:border-box;"></textarea>
+        <div style="text-align:right">
+          <button id="prwSubmit" style="padding: 8px 24px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-weight: bold;">Gửi đánh giá</button>
+        </div>
+      </div>
+
+      <div id="prwList" style="display: flex; flex-direction: column; gap: 12px;">
+         <div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Đang tải đánh giá...</div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function loadPublicReviews() {
+        const widget = document.querySelector('.public-reviews-widget');
+        const listEl = document.getElementById('prwList');
+        if(!widget || !listEl) return;
+        const truyenId = widget.dataset.truyenId;
         
-        let avg = 0;
-        if(items.length > 0) {
-           const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
-           avg = (total / items.length).toFixed(1);
+        function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        function timeAgo(ts){
+          if(!ts) return ''; const d=Date.now()-ts;
+          if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
+          if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
         }
-        document.getElementById('srAvg').textContent = avg > 0 ? avg : '0.0';
+        function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
         
-        let starHtml = ''; const fullStars = Math.round(avg);
-        for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
-        document.getElementById('srStarsDisplay').textContent = starHtml;
+        const myToken = getMyToken();
+        const savedName = localStorage.getItem('dd_commenter_name');
+        if(savedName) document.getElementById('prwName').value = savedName;
 
-        if(items.length === 0) {
-           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Hãy là người đầu tiên bóc tem truyện nhé! ⭐</div>';
-        } else {
-           listEl.innerHTML = items.map(rv => {
-              const isMine = rv.token === myToken; const canDel = window.__ddIsAdmin || isMine;
-              const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
-              const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:.6rem; padding:2px 8px; border-radius:99px; margin-left:6px; vertical-align:middle; font-family:sans-serif">chủ nhà</span>' : '';
-              return `
-                <div class="sr-item">
-                   <div class="sr-item-hd">
-                      <div>
-                        <span class="sr-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
-                        <span class="sr-item-stars">${stars}</span>
-                      </div>
-                      ${canDel ? `<button class="sr-del-btn show" data-id="${esc(rv.id)}">Xóa</button>` : ''}
-                   </div>
-                   <p class="sr-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
-                   <div class="sr-item-time">${timeAgo(rv.ts)}</div>
-                </div>
-              `;
-           }).join('');
-
-           listEl.querySelectorAll('.sr-del-btn').forEach(b => {
-              b.addEventListener('click', async () => {
-                 if(!confirm('Xóa đánh giá này?')) return;
-                 await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
+        let selectedStars = 5;
+        const starSelect = document.getElementById('prwStarSelect');
+        if(starSelect && !starSelect.dataset.bound) {
+          const stars = starSelect.querySelectorAll('span');
+          stars.forEach(s => {
+            s.addEventListener('click', () => {
+              selectedStars = parseInt(s.dataset.val);
+              stars.forEach(st => { 
+                  st.style.color = parseInt(st.dataset.val) <= selectedStars ? '#fbbf24' : '#d1d5db'; 
               });
-           });
+            });
+          });
+          starSelect.dataset.bound = "true";
         }
-      });
 
-      // Gửi đánh giá
-      if(submitBtn && !submitBtn.dataset.bound) {
-        submitBtn.dataset.bound = "true";
-        submitBtn.addEventListener('click', async () => {
-          const text = document.getElementById('srText')?.value.trim();
-          let name = document.getElementById('srName')?.value.trim() || 'Khách';
-          if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
-          
-          if(window.__ddIsAdmin) name = ADMIN_DISPLAY_NAME;
-          else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
-          
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Đang gửi...';
-          try {
-            await fb.push(reviewRef, { name: name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
-            document.getElementById('srText').value = '';
-          } catch(e) { alert('Lỗi khi gửi: ' + e.message); }
-          
-          setTimeout(() => {
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'Gửi đánh giá';
-          }, 500);
-        });
-      }
-    }
+        function initFirebase(fb) {
+          fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
+            const data = snap.val() || {};
+            const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
+            
+            widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
+            
+            let avg = 0;
+            if(items.length > 0) {
+               const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
+               avg = (total / items.length).toFixed(1);
+            }
+            widget.querySelector('.prw-avg').textContent = avg > 0 ? avg : '0.0';
+            
+            let starHtml = ''; const fullStars = Math.round(avg);
+            for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
+            widget.querySelector('.prw-stars').textContent = starHtml;
 
-    if(window.__ddFirebase?.db) { setupFirebaseLogic(window.__ddFirebase); }
-    else { window.addEventListener('dd-firebase-ready', () => setupFirebaseLogic(window.__ddFirebase), {once:true}); }
-  })();
-</script>
+            if(items.length === 0) {
+               listEl.innerHTML = '<div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+            } else {
+               listEl.innerHTML = items.map(rv => {
+                  const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+                  const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:0.6rem; padding:2px 6px; border-radius:99px; margin-left:6px; text-transform:uppercase; font-family:sans-serif;">chủ nhà</span>' : '';
+                  const canDel = window.__ddIsAdmin || rv.token === myToken;
+
+                  return `
+                    <div style="background: #fff; border: 1px solid rgba(186,230,253,0.8); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(14,165,233,0.05);">
+                      <div style="display: flex; flex-direction: column; gap: 3px;">
+                        <span style="font-weight: 600; font-size: 0.9rem; color: var(--sky-dark); display: flex; align-items: center;">${esc(rv.name)||'Khách ẩn danh'} ${badge}</span>
+                        <span style="color: #fbbf24; font-size: 0.85rem; letter-spacing: 2px;">${stars}</span>
+                      </div>
+                      <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6; margin: 0; word-break: break-word;">${esc(rv.text).replace(/\n/g, '<br>')}</p>
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px dashed rgba(186,230,253,0.6); padding-top: 10px;">
+                        <span style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">${timeAgo(rv.ts)}</span>
+                        ${canDel ? `<button class="prw-del" data-id="${esc(rv.id)}" style="font-size: 0.7rem; color: #ef4444; background: rgba(239,68,68,0.1); border: none; cursor: pointer; padding: 4px 10px; border-radius: 6px; font-weight: bold;">Xóa</button>` : ''}
+                      </div>
+                    </div>
+                  `;
+               }).join('');
+
+               listEl.querySelectorAll('.prw-del').forEach(b => {
+                  b.addEventListener('click', async () => {
+                     if(!confirm('Bạn có chắc chắn muốn xóa đánh giá này?')) return;
+                     await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
+                  });
+               });
+            }
+          });
+
+          const submitBtn = document.getElementById('prwSubmit');
+          if(submitBtn && !submitBtn.dataset.boundSubmit) {
+            submitBtn.dataset.boundSubmit = "true";
+            submitBtn.addEventListener('click', async () => {
+              const text = document.getElementById('prwText')?.value.trim();
+              let name = document.getElementById('prwName')?.value.trim() || 'Khách';
+              if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+              
+              if(window.__ddIsAdmin) name = 'dynamic duo 𓆝';
+              else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
+              
+              submitBtn.disabled = true;
+              submitBtn.textContent = 'Đang gửi...';
+              
+              try {
+                await fb.push(fb.ref(fb.db, 'novel_reviews/' + truyenId), {
+                  name: name,
+                  text: text,
+                  rating: selectedStars,
+                  ts: Date.now(),
+                  token: myToken,
+                  isAdmin: !!window.__ddIsAdmin
+                });
+                document.getElementById('prwText').value = '';
+              } catch(e) { 
+                alert('Lỗi khi gửi: ' + e.message); 
+              } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Gửi đánh giá';
+              }
+            });
+          }
+        }
+
+        if(window.__ddFirebase?.db) { initFirebase(window.__ddFirebase); }
+        else { window.addEventListener('dd-firebase-ready', () => initFirebase(window.__ddFirebase), {once:true}); }
+      })();
+    </script>
+  </div>
 </Layout>

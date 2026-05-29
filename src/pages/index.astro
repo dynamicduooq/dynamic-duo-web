@@ -61,7 +61,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .hero-greeting { color: #a8daf0; }
 .hero-banner-wrap {
   position:relative; border-radius:18px; overflow:hidden;
-  max-width: 90%; max-height:220px; margin:0 auto;
+  width: 100%; min-height: 260px; margin:0 auto; /* Xóa max-width 90% và max-height để mở lại kích cỡ */
   display:flex; align-items:center; justify-content:center;
   border: 6px solid #fff; box-shadow: 0 8px 25px rgba(2,132,199,.15);
 }
@@ -195,8 +195,26 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* ─── NOTICE ─── */
 .notice-section { margin-top:22px; }
-.notice-img { width:100%; display:block; border-radius:10px; transition: transform 0.3s; }
-.notice-img:hover { transform: scale(1.01); box-shadow: 0 4px 15px rgba(2,132,199,.1); }
+.notice-img-wrap {
+  background: #fff;
+  padding: 16px; /* Tạo lề trắng */
+  border-radius: 12px;
+  border: 1px solid rgba(186,230,253,.5);
+  box-shadow: 0 4px 15px rgba(2,132,199,.05);
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+[data-theme="dark"] .notice-img-wrap { background: var(--bg-card); border-color: rgba(80,150,210,.25); }
+.notice-img { 
+  width: 60%; /* Thu nhỏ phần ảnh bên trong */
+  max-width: 400px;
+  display:block; 
+  border-radius:8px; 
+  transition: transform 0.3s; 
+}
+.notice-img:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(2,132,199,.1); }
+@media(max-width:768px){ .notice-img { width: 85%; } }
 
 /* ─── RECENT ─── */
 .recent-list { display:flex; flex-direction:column; gap:8px; }
@@ -379,7 +397,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 /* FLOATING MAIL BUBBLE - Dành riêng cho index.astro */
 .msg-bubble-btn {
   position:fixed;
-  bottom: 126px;
+  bottom: 190px; /* Tăng từ 126px lên 190px để tránh overlap với bubble dấu 3 chấm */
   right: 22px;
   z-index: 410;
   width: 44px; height: 44px; border-radius:50%; 
@@ -403,7 +421,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* Popup from bubble */
 .msg-popup {
-  position:fixed; bottom:132px; right:20px; z-index:420;
+  position:fixed; bottom:196px; right:80px; z-index:420; /* Điều chỉnh vị trí tương đối so với nút mail mới */
   width:min(360px,calc(100vw - 32px));
   background:rgba(255,255,255,0.98); 
   backdrop-filter: blur(16px);
@@ -412,6 +430,9 @@ const hcdhCount    = countChaps(hcdhPosts);
   padding:18px 16px 16px;
   opacity:0; pointer-events:none; transform:translateY(15px) scale(.95);
   transition:opacity .25s cubic-bezier(0.34, 1.56, 0.64, 1), transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@media(max-width:600px){
+  .msg-popup { right: 20px; bottom: 244px; } /* Trên mobile để ngay trên nút */
 }
 [data-theme="dark"] .msg-popup { 
   background:rgba(15,35,54,0.98);
@@ -461,7 +482,9 @@ const hcdhCount    = countChaps(hcdhPosts);
         <h2>📌 Lưu ý</h2>
         <div class="sec-line"></div>
       </div>
-      <img src="/dynamic-duo-web/images/frontpage.png" alt="Lưu ý từ Dynamic Duo" class="notice-img" onerror="this.style.display='none'" />
+      <div class="notice-img-wrap">
+        <img src="/dynamic-duo-web/images/frontpage.png" alt="Lưu ý từ Dynamic Duo" class="notice-img" onerror="this.style.display='none'" />
+      </div>
     </div>
 
     <!-- FILTER + STORIES -->

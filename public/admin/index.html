@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản trị Nội Dung (CMS) | Dynamic Duo</title>
+    
+    <!-- Tiện ích bắt buộc của Netlify Identity dùng để hiển thị khung Đăng nhập -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
+    <style>
+      /* Tùy chỉnh màu một chút lúc đang tải trang CMS để khớp với tông màu nhà cá */
+      body {
+        margin: 0;
+        background-color: #f0f9ff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      /* Ẩn bớt viền xanh mặc định của Netlify Identity nếu cần */
+      #nc-root {
+        box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Script khởi chạy giao diện Quản trị Decap CMS -->
+    <!-- Mình sử dụng phiên bản cố định ^3.1.2 để đảm bảo tính ổn định -->
+    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+    
+    <!-- Kịch bản tự động chuyển hướng -->
+    <!-- Nếu bạn đang ở trang chủ, đăng nhập bằng widget, nó sẽ tự đẩy bạn vào /admin/ -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

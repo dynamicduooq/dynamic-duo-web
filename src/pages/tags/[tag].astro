@@ -20,15 +20,23 @@ export async function getStaticPaths() {
         p.frontmatter?.chuong !== undefined &&
         p.frontmatter?.chuong !== 0
     );
+
     const grouped: Record<string, any[]> = {};
+    
     for (const p of filtered) {
-      const id = p.frontmatter?.truyen_id || 'other';
-      if (!grouped[id]) grouped[id] = [];
-      grouped[id].push(p);
+      // Logic gom nhóm tự động theo tên thư mục
+      const urlParts = p.url.split('/').filter(Boolean);
+      const truyenIdx = urlParts.indexOf('truyen');
+      const slug = truyenIdx !== -1 ? urlParts[truyenIdx + 1] : (p.frontmatter?.truyen_id || 'other');
+
+      if (!grouped[slug]) grouped[slug] = [];
+      grouped[slug].push(p);
     }
+
     for (const id in grouped) {
       grouped[id].sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
     }
+
     return { params: { tag }, props: { posts: filtered, grouped } };
   });
 }
@@ -36,99 +44,70 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts, grouped } = Astro.props as { posts: any[], grouped: Record<string, any[]> };
 
+// Dictionary mapping tên hiển thị của truyện
 const storyNames: Record<string, string> = {
-  ndntkm:  'Nếu đêm nay trời không mưa',
-  tnctsct: 'Tôi nghĩ chúng tôi sắp chia tay',
-  qhbcp:   'Quan hệ bạn cùng phòng',
-  hcdh:    'Hạ cháy đồng hoang',
-  vdv:     'Vật dễ vỡ',
-  tdxt:    'Thiếu đế xuân tâm',
+  'neu-dem-nay-troi-khong-mua': 'Nếu đêm nay trời không mưa',
+  'toi-nghi-chung-toi-sap-chia-tay': 'Tôi nghĩ chúng tôi sắp chia tay',
+  'quan-he-ban-cung-phong': 'Quan hệ bạn cùng phòng',
+  'ha-chay-dong-hoang': 'Hạ cháy đồng hoang',
+  'vat-de-vo': 'Vật dễ vỡ',
+  'thieu-de-xuan-tam': 'Thiếu đế xuân tâm',
+  
+  'ndntkm':  'Nếu đêm nay trời không mưa',
+  'tnctsct': 'Tôi nghĩ chúng tôi sắp chia tay',
+  'qhbcp':   'Quan hệ bạn cùng phòng',
+  'hcdh':    'Hạ cháy đồng hoang',
+  'vdv':     'Vật dễ vỡ',
+  'tdxt':    'Thiếu đế xuân tâm',
 };
 
-/* Tất cả tags xuất hiện trong truyện — để hiển thị "Tags khác" */
-const allPosts2 = Object.values(
-  import.meta.glob('../**/*.md', { eager: true })
-) as any[];
-const allTags = [
-  ...new Set(
-    allPosts2.flatMap((p: any) => p.frontmatter?.tags || []).filter(Boolean)
-  ),
-] as string[];
+const allPosts2 = Object.values(import.meta.glob('../**/*.md', { eager: true })) as any[];
+const allTags = [...new Set(allPosts2.flatMap((p: any) => p.frontmatter?.tags || []).filter(Boolean))] as string[];
 ---
 
 <Layout frontmatter={{ title: `#${tag}`, description: `Danh sách chương thuộc thể loại #${tag} — dynamic duo` }}>
   <style>
     .tag-page { max-width: 760px; margin: 0 auto; padding: 0 12px; }
-
-    .back-link {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: .8rem; color: var(--sky); margin-bottom: 20px;
-      transition: var(--t);
-    }
+    .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: .8rem; color: var(--sky); margin-bottom: 20px; transition: var(--t); }
     .back-link:hover { text-decoration: underline; }
-
+    
     .tag-hero { text-align: center; margin-bottom: 32px; }
-    .tag-hero-badge {
-      display: inline-block; padding: 8px 24px;
-      background: var(--sky-pale); border: 2px solid var(--sky-light);
-      border-radius: var(--r-pill); font-size: 1.1rem; color: var(--sky-dark);
-      font-family: 'Merriweather', serif; margin-bottom: 10px;
-    }
+    .tag-hero-badge { display: inline-block; padding: 8px 24px; background: var(--sky-pale); border: 2px solid var(--sky-light); border-radius: var(--r-pill); font-size: 1.1rem; color: var(--sky-dark); font-family: 'Merriweather', serif; margin-bottom: 10px; }
     .tag-count { font-size: .84rem; color: var(--text-dim); }
-
+    
     .group-block { margin-bottom: 28px; }
-    .group-hd {
-      font-family: 'Literata', serif; font-size: .9rem; font-weight: 600;
-      color: var(--sky-dark); padding: 9px 14px;
-      background: var(--sky-pale); border-radius: var(--r-sm);
-      margin-bottom: 4px; border-left: 3px solid var(--sky);
-    }
+    .group-hd { font-family: 'Literata', serif; font-size: .9rem; font-weight: 600; color: var(--sky-dark); padding: 9px 14px; background: var(--sky-pale); border-radius: var(--r-sm); margin-bottom: 4px; border-left: 3px solid var(--sky); text-transform: capitalize; }
     [data-theme="dark"] .group-hd { background: rgba(42,90,122,.25); color: #7dd3fc; border-left-color: #7dd3fc; }
-
+    
     .chap-list { border: 1px solid rgba(186,230,253,.4); border-radius: var(--r-md); overflow: hidden; }
     [data-theme="dark"] .chap-list { border-color: rgba(42,90,122,.4); }
-
-    .chap-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 16px; border-bottom: 1px dashed rgba(186,230,253,.35);
-      color: var(--text-main); transition: var(--t);
-    }
+    
+    .chap-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px dashed rgba(186,230,253,.35); color: var(--text-main); transition: var(--t); }
     [data-theme="dark"] .chap-row { border-bottom-color: rgba(42,90,122,.25); color: #b8d4e8; }
     .chap-row:last-child { border-bottom: none; }
     .chap-row:hover { background: var(--sky-pale); color: var(--sky); }
-    [data-theme="dark"] .chap-row:hover { background: rgba(42,90,122,.25); color: #7dd3fc; }
-
-    .chap-num {
-      font-size: .68rem; color: var(--text-dim); width: 34px;
-      flex-shrink: 0; font-family: monospace; text-align: right;
-    }
+    
+    .chap-num { font-size: .68rem; color: var(--text-dim); width: 34px; flex-shrink: 0; font-family: monospace; text-align: right; }
     .chap-name { font-size: .88rem; flex: 1; }
     .chap-arrow { font-size: .8rem; color: var(--sky); flex-shrink: 0; opacity: 0; transition: opacity .15s; }
     .chap-row:hover .chap-arrow { opacity: 1; }
-
+    
     .empty { text-align: center; padding: 48px 20px; color: var(--text-dim); font-style: italic; font-size: .9rem; }
-
-    /* Tags khác */
+    
     .other-tags-section { margin-top: 40px; padding-top: 24px; border-top: 1px dashed var(--sky-light); }
-    [data-theme="dark"] .other-tags-section { border-top-color: rgba(42,90,122,.4); }
     .other-tags-label { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
     .other-tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
-    .other-tag-link {
-      padding: 4px 13px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill);
-      font-size: .76rem; color: var(--sky); transition: var(--t);
-    }
-    .other-tag-link:hover { background: var(--sky-pale); }
+    .other-tag-link { padding: 4px 13px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); font-size: .76rem; color: var(--sky); transition: var(--t); }
     .other-tag-link.cur { background: var(--sky); color: #fff; border-color: var(--sky); }
-    [data-theme="dark"] .other-tag-link { border-color: rgba(42,90,122,.6); color: #7dd3fc; }
-    [data-theme="dark"] .other-tag-link:hover { background: rgba(42,90,122,.3); }
-    [data-theme="dark"] .other-tag-link.cur { background: #1e6fa0; color: #e0f2fe; border-color: #7dd3fc; }
+    [data-theme="dark"] .other-tag-link { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
+    [data-theme="dark"] .other-tag-link.cur { background:#1e4a6a; color:#F3F9FF; border-color:#1e4a6a; }
   </style>
 
   <div class="tag-page">
     <a href="/dynamic-duo-web/" class="back-link">← Trang chủ</a>
 
     <div class="tag-hero">
-      <div class="tag-hero-badge">🏷️ #{tag}</div>
+      <div class="tag-hero-badge">🏷️ {tag}</div>
       <div class="tag-count">{posts.length} chương thuộc thể loại này</div>
     </div>
 
@@ -139,7 +118,7 @@ const allTags = [
     {Object.entries(grouped).map(([id, chaps]) => (
       <div class="group-block">
         <div class="group-hd">
-          📖 {storyNames[id] || id} — {(chaps as any[]).length} chương
+          📖 {storyNames[id] || id.replace(/-/g, ' ')} — {(chaps as any[]).length} chương
         </div>
         <div class="chap-list">
           {(chaps as any[]).map((p: any) => (
@@ -157,12 +136,7 @@ const allTags = [
       <div class="other-tags-label">Tags khác</div>
       <div class="other-tags-row">
         {allTags.map((t: string) => (
-          <a
-            href={`/dynamic-duo-web/tags/${encodeURIComponent(t)}/`}
-            class={`other-tag-link${t === tag ? ' cur' : ''}`}
-          >
-            #{t}
-          </a>
+          <a href={`/dynamic-duo-web/tags/${encodeURIComponent(t)}/`} class={`other-tag-link${t === tag ? ' cur' : ''}`}>#{t}</a>
         ))}
       </div>
     </div>

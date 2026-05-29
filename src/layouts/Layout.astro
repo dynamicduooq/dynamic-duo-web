@@ -655,11 +655,16 @@ if (isNovelPage) {
 
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
-    <div class="tags-container">
-      {frontmatter.tags.map((tag: string) => (
-        <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag)}/`} class="tag-badge"># {tag}</a>
-      ))}
-    </div>
+<div class="tags-container">
+  {frontmatter.tags.map((tag: string) => (
+    <a 
+      href={`/dynamic-duo-web/tags/${encodeURIComponent(tag.trim().toLowerCase())}/`} 
+      class="tag-badge"
+    >
+      # {tag.trim()} 
+    </a>
+  ))}
+</div>
   )}
 
   {isNovelPage && (

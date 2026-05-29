@@ -6,12 +6,14 @@ export async function getStaticPaths() {
     import.meta.glob('../**/*.md', { eager: true })
   ) as any[];
 
-  const uniqueTags = [
+const uniqueTags = [
     ...new Set(
-      allPosts.flatMap((p: any) => p.frontmatter?.tags || []).filter(Boolean)
+      allPosts
+        .flatMap((p: any) => p.frontmatter?.tags || [])
+        .filter(Boolean)
+        .map(t => t.trim().toLowerCase()) // THÊM DÒNG NÀY: Xóa khoảng trắng và biến thành chữ thường hết
     ),
   ] as string[];
-
   return uniqueTags.map((tag) => {
     const filtered = allPosts.filter(
       (p: any) =>

@@ -975,10 +975,19 @@ $('ed-saveBtn').onclick = async () => {
   const btn = $('ed-saveBtn');
   btn.disabled = true; btn.textContent = 'Đang đẩy lên Git...';
   
+// 1. Chuẩn bị nội dung Editor Note (Tự động thêm dấu | và thụt lề)
+  const noteRaw = $('ed-note').value.trim();
+  let noteFinal = '""'; // Mặc định là chuỗi rỗng
+  if (noteRaw) {
+      // Biến nội dung thành dạng: | (xuống dòng) (cách 2 ô) Dòng 1...
+      noteFinal = "|\n  " + noteRaw.split('\n').join('\n  ');
+  }
+
   let finalFm = "";
   const tagsRaw = $('ed-tags').value;
   const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
 
+  // TRƯỜNG HỢP A: SỬA CHƯƠNG ĐÃ CÓ
   if (currentChap && window.__currentRawFm) {
       finalFm = window.__currentRawFm;
       
@@ -991,12 +1000,21 @@ $('ed-saveBtn').onclick = async () => {
               finalFm += `\n${key}: ${strVal}`;
           }
       };
+
       setKey('title', $('ed-title').value.replace(/"/g, '\\"'));
       setKey('chuong', parseInt($('ed-num').value), false);
       setKey('description', $('ed-desc').value.replace(/"/g, '\\"'));
       setKey('draft', $('ed-status').value === 'draft' ? 'true' : 'false', false);
-      if($('ed-note').value) setKey('editor_note', $('ed-note').value.replace(/"/g, '\\"'));
       
+      // Xử lý riêng cho editor_note vì nó dùng dấu | không bọc ngoặc kép
+      const noteRegex = /^editor_note:.*$/m;
+      if (noteRegex.test(finalFm)) {
+          finalFm = finalFm.replace(noteRegex, `editor_note: ${noteFinal}`);
+      } else {
+          finalFm += `\neditor_note: ${noteFinal}`;
+      }
+      
+      // (Phần xử lý tags giữ nguyên như cũ của cậu...)
       if (/^tags:\s*\[.*?\]/m.test(finalFm)) {
           finalFm = finalFm.replace(/^tags:\s*\[.*?\]/m, `tags: [${tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ')}]`);
       } else if (/^tags:\s*\n(?:  - .*\n?)+/m.test(finalFm)) {
@@ -1005,7 +1023,9 @@ $('ed-saveBtn').onclick = async () => {
           finalFm += `\ntags:${tagsFormatted}`;
       }
 
-  } else {
+  } 
+  // TRƯỜNG HỢP B: TẠO CHƯƠNG MỚI HOÀN TOÀN (Đây là phần ELSE cậu hỏi)
+  else {
       finalFm = `layout: "../../../layouts/Layout.astro"
 title: "${$('ed-title').value.replace(/"/g, '\\"')}"
 truyen_id: "${currentStory.shortId || currentStory.id}"
@@ -1014,9 +1034,8 @@ date: "${new Date().toISOString().split('T')[0]}"
 tags:${tagsFormatted}
 description: "${$('ed-desc').value.replace(/"/g, '\\"')}"
 draft: ${$('ed-status').value === 'draft' ? 'true' : 'false'}
-editor_note: "${$('ed-note').value.replace(/"/g, '\\"')}"`;
-  }
-  
+editor_note: ${noteFinal}`; // <-- noteFinal đã bao gồm dấu | và thụt lề
+  }  
   const content = `---\n${finalFm.trim()}\n---\n\n${$('ed-content').value}`;
   
   const filename = currentChap ? currentChap.name : `chuong-${String($('ed-num').value).padStart(2,'0')}.md`;

@@ -1185,7 +1185,6 @@ syncThemeBtns();
    LOGIC ĐỌC TRUYỆN TỰ ĐỘNG (TTS)
    ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Khai báo các phần tử UI
   const btnPlay = document.getElementById('btnPlayTTS');
   const btnPause = document.getElementById('btnPauseTTS');
   const btnStop = document.getElementById('btnStopTTS');
@@ -1196,107 +1195,89 @@ document.addEventListener('DOMContentLoaded', () => {
   const rateValue = document.getElementById('aaRateValue');
   const content = document.getElementById('novelContent');
 
-  // Kiểm tra sự tồn tại và hỗ trợ của trình duyệt
-  if (!btnPlay || !content || !('speechSynthesis' in window)) {
-    if (btnPlay) btnPlay.textContent = "Không hỗ trợ Audio";
-    return;
-  }
+  if (!btnPlay || !content || !('speechSynthesis' in window)) return;
 
-  // 2. Khởi tạo Speech Synthesis
   const synth = window.speechSynthesis;
-  let utterance = new SpeechSynthesisUtterance();
+  let utterance = null;
   let voices = [];
 
-  // Hàm tải danh sách giọng đọc
   function populateVoices() {
-    voices = synth.getVoices().filter(v => v.lang.includes('vi') || v.lang.includes('en'));
-    if (voices.length === 0) voices = synth.getVoices(); // Fallback nếu không lọc được
-
-    voiceSelect.innerHTML = voices
-      .map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`)
-      .join('');
+    // LỌC DUY NHẤT TIẾNG VIỆT
+    voices = synth.getVoices().filter(v => v.lang.toLowerCase().includes('vi'));
+    
+    if (voices.length === 0) {
+      voiceSelect.innerHTML = '<option value="">Mặc định hệ thống</option>';
+    } else {
+      voiceSelect.innerHTML = voices
+        .map((v, i) => `<option value="${i}">${v.name}</option>`)
+        .join('');
+    }
   }
 
+  // Khởi tạo giọng đọc
   populateVoices();
-  if (synth.onvoiceschanged !== undefined) {
-    synth.onvoiceschanged = populateVoices;
-  }
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = populateVoices;
 
-  // 3. Logic Toggle Settings
-  btnToggle?.addEventListener('click', () => {
-    settingsPanel.classList.toggle('open');
-  });
+  btnToggle?.addEventListener('click', () => settingsPanel.classList.toggle('open'));
+  rateRange?.addEventListener('input', () => rateValue.textContent = rateRange.value + 'x');
 
-  // Hiển thị tốc độ đọc
-  rateRange?.addEventListener('input', () => {
-    rateValue.textContent = rateRange.value + 'x';
-  });
-
-  // 4. Hàm Reset giao diện khi dừng/hết bài
   function resetUI() {
-    btnPlay.style.display = 'block';
+    btnPlay.style.display = 'inline-block';
     btnPlay.textContent = '▶ Nghe';
     btnPause.style.display = 'none';
     btnStop.style.display = 'none';
   }
 
-  // 5. Nút PLAY / RESUME
   btnPlay.addEventListener('click', () => {
-    if (synth.paused) {
-      synth.resume(); // Nếu đang tạm dừng thì tiếp tục
+    // Nếu đang pause thì tiếp tục
+    if (synth.paused && synth.speaking) {
+      synth.resume();
     } else {
-      synth.cancel(); // Xóa các lệnh cũ
+      // Bắt đầu đọc mới
+      synth.cancel(); // QUAN TRỌNG: Dừng mọi luồng cũ để tránh lỗi Mobile
 
-      // --- XỬ LÝ CHỐNG ĐỌC BONG BÓNG THOẠI & RÁC ---
       const clone = content.cloneNode(true);
-      // Loại bỏ tất cả bong bóng thoại, ghi chú editor, và các thẻ không cần thiết
-      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style').forEach(el => el.remove());
+      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player').forEach(el => el.remove());
       
       const textToRead = clone.innerText.trim();
-      if (!textToRead) return alert("Không tìm thấy nội dung để đọc!");
+      if (!textToRead) return;
 
-      utterance.text = textToRead;
+      utterance = new SpeechSynthesisUtterance(textToRead);
       utterance.lang = 'vi-VN';
+      utterance.rate = parseFloat(rateRange.value || 1);
       
-      // Gán giọng đọc đã chọn
+      // Chọn giọng tiếng Việt
       if (voices[voiceSelect.value]) {
         utterance.voice = voices[voiceSelect.value];
       }
-      
-      // Gán tốc độ đọc
-      utterance.rate = parseFloat(rateRange.value || 1);
+
+      // Xử lý sự kiện khi kết thúc
+      utterance.onend = resetUI;
+      utterance.onerror = (e) => {
+        console.error(e);
+        resetUI();
+      };
 
       synth.speak(utterance);
     }
 
-    // Cập nhật nút
     btnPlay.style.display = 'none';
-    btnPause.style.display = 'block';
-    btnStop.style.display = 'block';
+    btnPause.style.display = 'inline-block';
+    btnStop.style.display = 'inline-block';
   });
 
-  // 6. Nút PAUSE
   btnPause.addEventListener('click', () => {
     synth.pause();
-    btnPlay.style.display = 'block';
+    btnPlay.style.display = 'inline-block';
     btnPlay.textContent = '▶ Tiếp tục';
     btnPause.style.display = 'none';
   });
 
-  // 7. Nút STOP
   btnStop.addEventListener('click', () => {
     synth.cancel();
     resetUI();
   });
-
-  // Khi đọc hết bài
-  utterance.onend = resetUI;
-  utterance.onerror = (e) => {
-    console.error("TTS Error:", e);
-    resetUI();
-  };
 });
-
 
 /* ══════════════════════════════════════════
    ADMIN AUTH & STATS BUTTON (GIỮ NGUYÊN)

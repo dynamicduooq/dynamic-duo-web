@@ -67,10 +67,7 @@ Truyện được chọn và edit hoàn toàn dựa trên gu đọc của hai đ
 </p>
 </div>
 <div style="text-align: center; margin-top: 45px; padding: 20px 0;">
-<p style="font-size: .85rem; color: var(--text-dim); font-style: italic; margin-bottom: 12px; line-height: 1.6;">
-Tất cả truyện đăng ở đây đều là edit (dịch + chỉnh sửa). Bản quyền thuộc về tác giả gốc.
-</p>
 <p style="font-size: 0.95rem; font-family: 'Merriweather', serif; color: var(--text-main);">
-Một lưu ý nhỏ nữa: <span class="highlight-text">Vui lòng không re-up/chuyển ver, không spoil, gây war trong nhà chúng mình nhé!</span>
+Một lưu ý nhỏ nữa: <span class="highlight-text">Tất cả truyện đăng ở đây đều là edit (dịch + chỉnh sửa). Bản quyền thuộc về tác giả gốc. Vui lòng không re-up/chuyển ver, không spoil, gây war trong nhà chúng mình nhé!</span>
 </p>
 </div>

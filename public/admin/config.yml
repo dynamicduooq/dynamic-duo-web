@@ -1,21 +1,17 @@
 backend:
+  # ĐÃ SỬA: Bắt buộc dùng git-gateway khi kết nối với Netlify Identity
   name: git-gateway
-  repo: dynamicduooq/dynamic-duo-web
   branch: main
 
-# Chuyển giao diện trang Admin CMS sang Tiếng Việt cho dễ dùng
 locale: "vi"
 
 media_folder: "public/images/uploads"
 public_folder: "/dynamic-duo-web/images/uploads"
 
 collections:
-  # 1. QUẢN LÝ THÔNG TIN ĐẦU TRUYỆN (TÍNH NĂNG MỚI)
-  # Khai báo truyện 1 lần ở đây (Tên, Bìa, Tác giả, Văn án). 
-  # Sau đó ở mục đăng chương chỉ cần "Bấm Chọn", không cần gõ tay mã truyện nữa.
   - name: "stories"
     label: "📖 Quản lý Đầu truyện"
-    folder: "src/data/truyen" # Bạn cần tạo thêm thư mục này trong source code nhé
+    folder: "src/data/truyen"
     create: true
     slug: "{{id}}"
     fields:
@@ -27,12 +23,11 @@ collections:
       - { label: "Ảnh bìa", name: "cover", widget: "image", required: false }
       - { label: "Giới thiệu / Văn án", name: "description", widget: "markdown" }
 
-  # 2. CÁ DƯỚI NƯỚC (ĐANG LÀM)
   - name: "ongoing"
     label: "🐠 Cá dưới nước (Chương truyện)"
     folder: "src/pages/ca-duoi-nuoc"
     create: true
-    slug: "{{truyen_id}}-chuong-{{chuong}}" # Đổi cấu trúc link cho đẹp hơn
+    slug: "{{truyen_id}}-chuong-{{chuong}}"
     fields:
       - { label: "Trạng thái xuất bản", name: "draft", widget: "boolean", default: false, hint: "Bật nút này nếu bạn chỉ muốn lưu nháp (tích trữ bản thảo), chưa muốn đăng lên web" }
       - { label: "Thuộc truyện nào?", name: "truyen_id", widget: "relation", collection: "stories", search_fields: ["title", "id"], value_field: "id", display_fields: ["title"], hint: "Tìm và chọn truyện (Chỉ hiện khi bạn đã tạo truyện ở mục Đầu truyện)" }
@@ -44,7 +39,6 @@ collections:
       - { label: "Lời Editor lảm nhảm", name: "editor_note", widget: "markdown", required: false, hint: "Lưu ý/Ghi chú của editor ở đầu hoặc cuối chương (Không nên viết chung vào nội dung)" }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
-  # 3. CÁ TRÊN BÀN (HOÀN THÀNH)
   - name: "completed"
     label: "🍽️ Cá trên bàn (Chương truyện)"
     folder: "src/pages/ca-tren-ban"
@@ -61,7 +55,6 @@ collections:
       - { label: "Lời Editor lảm nhảm", name: "editor_note", widget: "markdown", required: false }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
-  # 4. CÁ TRÊN TRỜI (ĐẶT GẠCH)
   - name: "upcoming"
     label: "🌤️ Cá trên trời (Đang đặt gạch)"
     folder: "src/pages/ca-tren-troi"
@@ -76,7 +69,6 @@ collections:
       - { label: "Thể loại (Tags)", name: "tags", widget: "list" }
       - { label: "Nội dung chương truyện", name: "body", widget: "markdown" }
 
-  # 5. CÀI ĐẶT GIAO DIỆN
   - name: "settings"
     label: "⚙️ Cài đặt Giao diện"
     files:

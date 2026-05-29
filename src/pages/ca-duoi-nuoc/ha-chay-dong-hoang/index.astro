@@ -82,97 +82,132 @@ const pct = Math.round((chapters.length / total) * 100);
       ))}
     </div>
   </div>
-<div class="public-reviews-widget" data-truyen-id="hcdh">
+<div class="public-reviews-widget" data-truyen-id="NHẬP_MÃ_TRUYỆN_VÀO_ĐÂY">
   <div class="prw-header">
     <h3>⭐ Đánh giá từ độc giả</h3>
     <div class="prw-stats">
-      <span class="prw-avg">0.0</span>
-      <span class="prw-stars">☆☆☆☆☆</span>
-      <span class="prw-count">(0 đánh giá)</span>
+      <div class="prw-avg-box">
+        <span class="prw-avg">0.0</span>
+        <div class="prw-stars-wrap">
+          <span class="prw-stars">☆☆☆☆☆</span>
+          <span class="prw-count">(0 đánh giá)</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="prw-form-box">
+    <p style="text-align:center; font-size: 0.75rem; color: var(--sky); margin: 0 0 10px; text-transform: uppercase; letter-spacing: 1px;">Bạn thấy truyện này thế nào?</p>
     <div class="prw-star-select" id="prwStarSelect">
       <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
     </div>
-    <input class="prw-inp" id="prwName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" />
-    <textarea class="prw-textarea" id="prwText" placeholder="Bộ truyện này thế nào? Chia sẻ cảm nhận của bạn với mọi người nhé..." rows="3"></textarea>
+    <div class="prw-form-row">
+      <input class="prw-inp" id="prwName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" />
+    </div>
+    <textarea class="prw-textarea" id="prwText" placeholder="Chia sẻ cảm nhận của bạn về bộ truyện này nhé... 🌊" rows="3"></textarea>
     <div style="text-align:right">
-      <button class="prw-submit-btn" id="prwSubmit">Gửi đánh giá</button>
+      <button class="prw-submit-btn" id="prwSubmit">Gửi đánh giá ✦</button>
     </div>
   </div>
 
   <div class="prw-list" id="prwList">
-     <div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Đang tải đánh giá...</div>
+     <div style="grid-column: 1/-1; text-align:center; padding: 40px; font-style:italic; color:var(--text-dim);">Đang tải đánh giá...</div>
   </div>
 </div>
 
 <style>
-  /* KHUNG TỔNG THỂ */
+  /* TỔNG THỂ */
   .public-reviews-widget {
-    margin-top: 40px; padding-top: 24px;
-    border-top: 2px dashed var(--sky-light);
+    margin: 60px auto 40px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border-card);
     font-family: var(--read-ff, 'Newsreader', serif);
+    max-width: 900px;
   }
-  [data-theme="dark"] .public-reviews-widget { border-color: rgba(126,200,227,0.2); }
-  
-  /* PHẦN ĐẦU (TIÊU ĐỀ & ĐIỂM SỐ) */
-  .prw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
-  .prw-header h3 { margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;}
-  [data-theme="dark"] .prw-header h3 { color: #a8daf0; }
-  .prw-stats { display: flex; align-items: center; gap: 8px; }
-  .prw-avg { font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;}
-  [data-theme="dark"] .prw-avg { color: #a8daf0; }
-  .prw-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
-  .prw-count { font-size: 0.8rem; color: var(--text-dim); font-style: italic;}
-  
-  /* FORM ĐIỀN ĐÁNH GIÁ */
-  .prw-form-box { background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.5); }
-  [data-theme="dark"] .prw-form-box { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
-  .prw-star-select { font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;}
-  .prw-star-select span { transition: color 0.2s; }
-  .prw-star-select span:hover, .prw-star-select span.active { color: #fbbf24; }
-  .prw-inp, .prw-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 10px; transition: all 0.2s;}
-  .prw-inp:focus, .prw-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
-  [data-theme="dark"] .prw-inp, [data-theme="dark"] .prw-textarea { background: #091620; border-color: #1e4a6a; color: #F3F9FF; }
-  .prw-submit-btn { padding: 8px 24px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s; }
-  .prw-submit-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
-  .prw-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
 
-  /* DANH SÁCH REVIEW (DẠNG LƯỚI) */
-  .prw-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  /* HEADER & ĐIỂM SỐ */
+  .prw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+  .prw-header h3 { margin: 0; font-size: 1.1rem; color: var(--sky-dark); font-family: 'Merriweather', serif; text-transform: uppercase; letter-spacing: 1px; }
   
-  /* TỪNG THẺ REVIEW MỘT */
-  .prw-item {
-    background: var(--bg-card); border: 1px solid rgba(186,230,253,0.6);
-    padding: 16px; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s;
-    display: flex; flex-direction: column;
-    box-shadow: 0 2px 10px rgba(14,165,233,.03);
+  .prw-avg-box { display: flex; align-items: center; gap: 12px; background: var(--bg-card); padding: 8px 16px; border-radius: var(--r-md); border: 1px solid var(--border-card); box-shadow: var(--sh-soft); }
+  .prw-avg { font-weight: 700; font-size: 1.8rem; color: var(--sky-dark); line-height: 1; }
+  .prw-stars-wrap { display: flex; flex-direction: column; }
+  .prw-stars { color: #fbbf24; font-size: 0.9rem; letter-spacing: 2px; }
+  .prw-count { font-size: 0.65rem; color: var(--text-dim); font-style: italic; }
+
+  /* FORM NHẬP ĐÁNH GIÁ */
+  .prw-form-box { 
+    background: var(--bg-card2); 
+    padding: 24px; 
+    border-radius: var(--r-lg); 
+    margin-bottom: 40px; 
+    border: 1px solid var(--border-card);
+    box-shadow: var(--sh-card);
   }
-  .prw-item:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(14,165,233,0.1); }
-  [data-theme="dark"] .prw-item { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.15); box-shadow: none; }
-  [data-theme="dark"] .prw-item:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+  .prw-star-select { font-size: 2.2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 15px; }
+  .prw-star-select span { transition: all 0.2s; padding: 0 4px; display: inline-block; }
+  .prw-star-select span:hover { transform: scale(1.2); }
+  .prw-star-select span.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+
+  .prw-inp, .prw-textarea { 
+    width: 100%; padding: 12px 16px; 
+    border: 1.5px solid var(--sky-light); 
+    border-radius: 12px; font-size: .9rem; 
+    font-family: inherit; color: var(--text-main); 
+    background: var(--cream); outline: none; 
+    margin-bottom: 12px; transition: all 0.2s;
+    box-sizing: border-box;
+  }
+  .prw-inp:focus, .prw-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); background: #fff; }
   
-  /* THÔNG TIN NGƯỜI DÙNG */
-  .prw-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;}
-  .prw-item-user { display: flex; align-items: center; gap: 6px; flex-wrap: wrap;}
-  .prw-item-name { font-weight: 600; font-size: 0.85rem; color: var(--sky-dark); }
-  [data-theme="dark"] .prw-item-name { color: #a8daf0; }
-  .prw-item-stars { color: #fbbf24; font-size: 0.8rem; letter-spacing: 1px; }
+  .prw-submit-btn { 
+    padding: 10px 28px; background: var(--sky); color: #fff; 
+    border: none; border-radius: var(--r-pill); 
+    font-size: .85rem; cursor: pointer; font-family: inherit; 
+    font-weight: 600; transition: all 0.3s; 
+  }
+  .prw-submit-btn:hover { background: var(--sky2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(2,132,199,0.3); }
+
+  /* DANH SÁCH REVIEW */
+  .prw-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
   
-  /* NỘI DUNG CHỮ */
-  .prw-item-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.55; margin: 0 0 12px 0; flex-grow: 1; word-break: break-word;}
-  [data-theme="dark"] .prw-item-text { color: #F3F9FF; }
+  .prw-item {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    padding: 20px; border-radius: var(--r-md); transition: all 0.3s;
+    display: flex; flex-direction: column; position: relative;
+    box-shadow: var(--sh-soft);
+  }
+  .prw-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(2,132,199,0.12); border-color: var(--sky-light); }
   
-  /* PHẦN CHÂN THẺ (THỜI GIAN & NÚT XÓA) */
-  .prw-item-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px dashed rgba(186,230,253,0.4); padding-top: 8px;}
-  [data-theme="dark"] .prw-item-footer { border-top-color: rgba(126,200,227,0.2); }
-  .prw-item-time { font-size: 0.7rem; color: var(--text-dim); font-style: italic;}
+  .prw-item-user { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .prw-item-name { font-weight: 700; font-size: 0.85rem; color: var(--sky-dark); font-family: 'Merriweather', serif; }
+  .prw-item-stars { color: #fbbf24; font-size: 0.75rem; letter-spacing: 1px; }
   
-  /* NÚT XÓA (CHỈ CHỦ NHÂN MỚI THẤY NHỜ JS) */
-  .prw-del-btn { font-size: 0.7rem; color: #ef4444; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; font-family: sans-serif; font-weight: bold;}
-  .prw-del-btn:hover { background: rgba(239,68,68,0.1); }
+  .prw-item-text { 
+    font-size: 0.88rem; color: var(--text-main); line-height: 1.7; 
+    margin: 0 0 15px 0; flex-grow: 1; word-break: break-word;
+    font-style: italic;
+  }
+  
+  .prw-item-footer { 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-top: 1px solid rgba(186,230,253,0.3); padding-top: 10px;
+  }
+  .prw-item-time { font-size: 0.65rem; color: var(--text-dim); }
+  
+  .prw-del-btn { 
+    font-size: 0.65rem; color: var(--text-dim); background: rgba(239,68,68,0.05); 
+    border: 1px solid transparent; cursor: pointer; padding: 3px 8px; 
+    border-radius: 4px; transition: all 0.2s;
+  }
+  .prw-del-btn:hover { color: #ef4444; background: rgba(239,68,68,0.1); border-color: #fca5a5; }
+
+  /* DARK MODE OVERRIDES */
+  [data-theme="dark"] .prw-avg-box,
+  [data-theme="dark"] .prw-item { background: #0f2336; border-color: rgba(126,200,227,0.1); }
+  [data-theme="dark"] .prw-form-box { background: rgba(15,35,54,0.4); }
+  [data-theme="dark"] .prw-inp, [data-theme="dark"] .prw-textarea { background: #0a1929; border-color: #1e4a6a; color: #F3F9FF; }
+  [data-theme="dark"] .prw-avg, [data-theme="dark"] .prw-item-name { color: #a8daf0; }
 </style>
 
 <script is:inline>
@@ -191,12 +226,9 @@ const pct = Math.round((chapters.length / total) * 100);
     function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
     
     const myToken = getMyToken();
-
-    // Khôi phục tên đã nhập lần trước
     const savedName = localStorage.getItem('dd_commenter_name');
     if(savedName) document.getElementById('prwName').value = savedName;
 
-    // Logic chọn sao
     let selectedStars = 5;
     const starSelect = document.getElementById('prwStarSelect');
     if(starSelect) {
@@ -210,13 +242,11 @@ const pct = Math.round((chapters.length / total) * 100);
     }
 
     function initFirebase(fb) {
-      // 1. Tải danh sách Review
       fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
         const data = snap.val() || {};
         const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
         
         widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
-        
         let avg = 0;
         if(items.length > 0) {
            const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
@@ -229,49 +259,44 @@ const pct = Math.round((chapters.length / total) * 100);
         widget.querySelector('.prw-stars').textContent = starHtml;
 
         if(items.length === 0) {
-           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 20px; font-style:italic; color:var(--text-dim);">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+           listEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; font-style:italic; color:var(--text-dim); border: 1px dashed var(--border-card); border-radius: 12px;">Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ cảm nhận nhé! 🐚</div>';
         } else {
            listEl.innerHTML = items.map(rv => {
               const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
-              const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:.6rem; padding:2px 6px; border-radius:99px; font-family:sans-serif;">chủ nhà</span>' : '';
-              
+              const badge = rv.isAdmin ? '<span class="comment-admin-badge" style="margin-left:5px">chủ nhà</span>' : '';
               const canDel = window.__ddIsAdmin || rv.token === myToken;
 
               return `
                 <div class="prw-item">
-                  <div class="prw-item-header">
-                    <div class="prw-item-user">
-                      <span class="prw-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
-                      <span class="prw-item-stars">${stars}</span>
-                    </div>
+                  <div class="prw-item-user">
+                    <span class="prw-item-name">${esc(rv.name)||'Khách ẩn danh'}${badge}</span>
+                    <span class="prw-item-stars">${stars}</span>
                   </div>
-                  <p class="prw-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
+                  <p class="prw-item-text">“${esc(rv.text).replace(/\n/g, '<br>')}”</p>
                   <div class="prw-item-footer">
-                    <span class="prw-item-time">${timeAgo(rv.ts)}</span>
+                    <span class="prw-item-time">― ${timeAgo(rv.ts)}</span>
                     ${canDel ? `<button class="prw-del-btn" data-id="${esc(rv.id)}">Xóa</button>` : ''}
                   </div>
                 </div>
               `;
            }).join('');
 
-           // Gắn sự kiện Xóa
            listEl.querySelectorAll('.prw-del-btn').forEach(b => {
               b.addEventListener('click', async () => {
-                 if(!confirm('Bạn có chắc chắn muốn xóa đánh giá này?')) return;
+                 if(!confirm('Bạn muốn xóa đánh giá này?')) return;
                  await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
               });
            });
         }
       });
 
-      // 2. Logic Nút Gửi Review
       const submitBtn = document.getElementById('prwSubmit');
       if(submitBtn && !submitBtn.dataset.boundSubmit) {
         submitBtn.dataset.boundSubmit = "true";
         submitBtn.addEventListener('click', async () => {
           const text = document.getElementById('prwText')?.value.trim();
           let name = document.getElementById('prwName')?.value.trim() || 'Khách';
-          if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+          if(!text) return;
           
           if(window.__ddIsAdmin) name = 'dynamic duo 𓆝';
           else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
@@ -281,20 +306,12 @@ const pct = Math.round((chapters.length / total) * 100);
           
           try {
             await fb.push(fb.ref(fb.db, 'novel_reviews/' + truyenId), {
-              name: name,
-              text: text,
-              rating: selectedStars,
-              ts: Date.now(),
-              token: myToken,
-              isAdmin: !!window.__ddIsAdmin
+              name: name, text: text, rating: selectedStars, ts: Date.now(),
+              token: myToken, isAdmin: !!window.__ddIsAdmin
             });
             document.getElementById('prwText').value = '';
-          } catch(e) { 
-            alert('Lỗi khi gửi: ' + e.message); 
-          } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Gửi đánh giá';
-          }
+          } catch(e) { alert('Lỗi: ' + e.message); } 
+          finally { submitBtn.disabled = false; submitBtn.textContent = 'Gửi đánh giá ✦'; }
         });
       }
     }

@@ -702,7 +702,7 @@ const recentChaps = allChaps
         );
       })}
     </div>
-    
+
   </div><!-- /main-col -->
 
   <!-- ── SIDEBAR ── -->
@@ -721,7 +721,7 @@ const recentChaps = allChaps
       </div>
     </div>
 
-    <div class="widget reveal">
+<div class="widget reveal">
       <div class="widget-title">📂 Danh mục</div>
       <div class="cat-tree">
         <ul>
@@ -729,8 +729,12 @@ const recentChaps = allChaps
             <details open>
               <summary>🐠 Cá dưới nước</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng</a><span class="cat-count">{qhbcpCount}c</span></li>
-                <li><a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/">Hạ cháy đồng hoang</a><span class="cat-count">{hcdhCount}c</span></li>
+                {caDuoiNuocList.map(story => (
+                  <li>
+                    <a href={story.url}>{story.title}</a>
+                    <span class="cat-count">{story.chapCount}c</span>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
@@ -738,23 +742,27 @@ const recentChaps = allChaps
             <details>
               <summary>🍽️ Cá trên bàn</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa</a><span class="cat-count">{ndntkmCount}c</span></li>
-                <li><a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay</a><span class="cat-count">{tnctcstCount}c</span></li>
-                <li><a href="/dynamic-duo-web/truyen/vat-de-vo/">Vật dễ vỡ</a><span class="cat-count">sắp</span></li>
-                <li><a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/">Thiếu đế xuân tâm</a><span class="cat-count">sắp</span></li>
+                {caTrenBanList.map(story => (
+                  <li>
+                    <a href={story.url}>{story.title}</a>
+                    <span class="cat-count">{story.tong_so_chuong}c</span>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
           <li>
             <details>
               <summary>🌤️ Cá trên trời</summary>
-              <ul><li><a href="/dynamic-duo-web/truyen/">Xem danh sách →</a></li></ul>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách →</a></li>
+              </ul>
             </details>
           </li>
         </ul>
       </div>
     </div>
-
+    
     <!-- Quote of the day -->
     <div class="widget reveal">
       <div class="widget-title">✨ Quote of the day</div>

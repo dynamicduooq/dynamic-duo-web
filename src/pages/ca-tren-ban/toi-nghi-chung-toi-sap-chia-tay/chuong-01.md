@@ -13,8 +13,8 @@ editor_note: ""
 
 
 <div style="text-align:center">
-***[Không Uống Thuốc]
-***</div>
+[Không Uống Thuốc]
+</div>
 
 Năm nay là năm thứ tám chúng tôi bên nhau, và tôi nghĩ, có lẽ chúng tôi sắp chia tay rồi.
 

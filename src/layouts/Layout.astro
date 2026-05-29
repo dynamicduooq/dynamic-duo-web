@@ -980,7 +980,7 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-  // 2. AUDIO LOGIC (SENTENCE BY SENTENCE) - FIXED ALL ISSUES
+// 3. AUDIO LOGIC (SENTENCE BY SENTENCE - CHUẨN 100%)
   const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
   const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
   const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
@@ -995,7 +995,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadVoices() {
       voices = synth.getVoices().filter(v => v.lang.toLowerCase().includes('vi'));
-      voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name}</option>`).join('') || '<option value="">Mặc định</option>';
+      voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name}</option>`).join('') || '<option value="">Giọng mặc định</option>';
     }
     loadVoices();
     if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
@@ -1004,13 +1004,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if(rateRange) rateRange.oninput = () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; };
 
     function resetAudioUI() {
+      synth.cancel();
       btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Nghe';
       btnPause.style.display = 'none'; btnStop.style.display = 'none';
-      isPaused = false; currentIdx = 0; synth.cancel();
+      isPaused = false; currentIdx = 0;
+    }
+
+    // Hàm lấy văn bản và tách câu
+    function initSentences() {
+      const clone = content.cloneNode(true);
+      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row').forEach(el => el.remove());
+      sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 1);
     }
 
     function speakSentence() {
-      synth.cancel();
+      synth.cancel(); // Dọn dẹp để Mobile không bị kẹt
+      if (currentIdx < 0) currentIdx = 0;
       if (currentIdx >= sentences.length) { resetAudioUI(); return; }
       if (isPaused) return;
 
@@ -1025,51 +1034,57 @@ document.addEventListener('DOMContentLoaded', () => {
           speakSentence();
         }
       };
-      utter.onerror = () => { if(!isPaused) resetAudioUI(); };
+      
+      utter.onerror = (e) => {
+        if (e.error !== 'interrupted') resetAudioUI();
+      };
+
       synth.speak(utter);
     }
 
     btnPlay.addEventListener('click', () => {
       if (isPaused) {
         isPaused = false;
-        speakSentence();
       } else {
-        const clone = content.cloneNode(true);
-        clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row').forEach(el => el.remove());
-        // Tách câu và loại bỏ phần tử rỗng
-        sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 1);
-        if (sentences.length === 0) return alert("Không tìm thấy nội dung truyện");
-        currentIdx = 0; isPaused = false;
-        speakSentence();
+        initSentences();
+        if (sentences.length === 0) return alert("Không tìm thấy nội dung");
+        currentIdx = 0;
       }
+      speakSentence();
       btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
     });
 
     btnPause.addEventListener('click', () => {
       isPaused = true;
-      synth.cancel(); // Dùng cancel để ổn định trạng thái trên Mobile
-      btnPlay.style.display = 'inline-block';
-      btnPlay.textContent = '▶ Tiếp tục';
-      btnPause.style.display = 'none';
+      synth.cancel();
+      btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Tiếp tục'; btnPause.style.display = 'none';
     });
 
     btnStop.addEventListener('click', resetAudioUI);
 
+    // FIX NÚT TUA:
     btnNext?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences(); // Lấy dữ liệu nếu chưa có
       if (sentences.length > 0) {
+        isPaused = false; // Luôn đảm bảo không ở trạng thái dừng
         currentIdx = Math.min(sentences.length - 1, currentIdx + 1);
         speakSentence();
+        // Cập nhật nút
+        btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
       }
     });
 
     btnPrev?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences();
       if (sentences.length > 0) {
+        isPaused = false;
         currentIdx = Math.max(0, currentIdx - 1);
         speakSentence();
+        btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
       }
     });
   }
-
+  
   // 3. DROPDOWNS
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);

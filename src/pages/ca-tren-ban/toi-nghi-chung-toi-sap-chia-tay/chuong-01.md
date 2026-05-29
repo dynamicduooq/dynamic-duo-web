@@ -1,19 +1,21 @@
 ---
-layout: ../../../layouts/Layout.astro
+layout: "../../../layouts/Layout.astro"
 title: "Chương 1"
-truyen_id: "tnctsct"
+truyen_id: "toi-nghi-chung-toi-sap-chia-tay"
 chuong: 1
-date: "2026-05-18"
-tags:
-  - "tôi nghĩ chúng tôi sắp chia tay"
-  - "đam mỹ"
-  - "hiện đại"
-  - "chua xót"
+date: "2026-05-29"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## Chương 1: Những lời hứa hóa thành gông cùm, nhưng cả hai chúng tôi đều không nói ra
 
+
+<div style="text-align:center">
 ***[Không Uống Thuốc]***
+
+</div>
 
 Năm nay là năm thứ tám chúng tôi bên nhau, và tôi nghĩ, có lẽ chúng tôi sắp chia tay rồi.
 

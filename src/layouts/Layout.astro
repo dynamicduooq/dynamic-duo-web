@@ -291,6 +291,43 @@ if (currentTruyenId && isNovelPage) {
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
+    /* ── INLINE COMMENT TRIGGER (Bong bóng Icon mới, mượt & không nền) ── */
+    .ic-trigger {
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-left: 8px; padding: 4px;
+      background: transparent; /* Bỏ nền */
+      border: none; /* Bỏ viền */
+      cursor: pointer;
+      font-size: 1rem; /* Kích thước vừa phải */
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      vertical-align: middle;
+      color: var(--sky);
+      transform: translateY(2px) scale(0.9);
+      filter: grayscale(100%) opacity(0.5); /* Trông mờ nhạt khi chưa hover đoạn văn */
+    }
+    .novel-content p:hover .ic-trigger {
+      opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1);
+    }
+    .ic-trigger:hover {
+      opacity: 1 !important; transform: translateY(-2px) scale(1.15) !important;
+      color: var(--sky2); filter: grayscale(0%) opacity(1) !important;
+    }
+    .ic-trigger.has-comments {
+      opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1);
+    }
+    .novel-content p.ic-active .ic-trigger {
+      opacity: 1; transform: scale(1.1); filter: grayscale(0%) opacity(1);
+    }
+    /* Số đếm bình luận bên cạnh icon */
+    .ic-trigger span {
+      font-size: 0.6rem; font-weight: bold; background: var(--sky-pale);
+      color: var(--sky-dark); border-radius: 10px; padding: 1px 5px;
+      margin-left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+    }
+    [data-theme="dark"] .ic-trigger span { background: rgba(126,200,227,.2); color: #a8daf0; }
+
     /* ── INLINE COMMENT SIDEBAR ── */
     .ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:#fff; border-left:1px solid rgba(186,230,253,.5); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:460; overflow:hidden; }
     .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
@@ -420,9 +457,10 @@ if (currentTruyenId && isNovelPage) {
     .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
     .scroll-btn.show { opacity:1; pointer-events:auto; }
     .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
+    
     /* ── READING SETTINGS POPUP ── */
     .rs-popup {
-      position:fixed; bottom:80px; right:74px; z-index:420; width:220px;
+      position:fixed; bottom:80px; right:74px; z-index:420; width:260px;
       background:var(--bg-card); border:1px solid rgba(186,230,253,.6);
       border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15);
       padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95);
@@ -431,17 +469,19 @@ if (currentTruyenId && isNovelPage) {
     }
     [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); }
     .rs-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
-    .rs-title { font-family:'Merriweather',serif; font-size:.75rem; color:var(--sky-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; text-align:center; }
+    .rs-title { font-family:'Merriweather',serif; font-size:.75rem; color:var(--sky-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; text-align:center; font-weight:bold;}
     [data-theme="dark"] .rs-title { color:#a8daf0; }
-    .rs-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-    .rs-label { font-size:.7rem; color:var(--text-dim); }
+    .rs-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .rs-label { font-size:.75rem; color:var(--text-dim); }
     [data-theme="dark"] .rs-label { color:#8fbcd4; }
-    .rs-btn-group { display:flex; gap:4px; background:var(--sky-pale); border-radius:var(--r-pill); padding:2px; border:1px solid rgba(186,230,253,.5); }
+    
+    .rs-btn-group { display:flex; gap:6px; background:var(--sky-pale); border-radius:var(--r-pill); padding:4px; border:1px solid rgba(186,230,253,.5); }
     [data-theme="dark"] .rs-btn-group { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.15); }
-    .rs-btn { background:none; border:none; border-radius:var(--r-pill); font-size:.75rem; padding:4px 10px; cursor:pointer; color:var(--text-mid); transition:var(--t); font-family:inherit; }
+    .rs-btn { background:none; border:none; border-radius:var(--r-pill); font-size:.8rem; padding:4px 12px; cursor:pointer; color:var(--text-mid); transition:var(--t); font-family:inherit; }
     .rs-btn.active, .rs-btn:hover { background:var(--sky); color:#fff; }
     [data-theme="dark"] .rs-btn { color:#8fbcd4; }
     [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
+    
     /* Tags */
     .tag-badge { display:inline-block; margin:2px 3px; padding:3px 10px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.72rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); }
     .tag-badge:hover { background:var(--sky-light); }
@@ -668,7 +708,7 @@ if (currentTruyenId && isNovelPage) {
 
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
-    <div class="rs-title">Hiển thị</div>
+    <div class="rs-title">Thiết lập đọc</div>
     <div class="rs-row">
       <span class="rs-label">Cỡ chữ</span>
       <div class="rs-btn-group">
@@ -677,15 +717,17 @@ if (currentTruyenId && isNovelPage) {
       </div>
     </div>
     <div class="rs-row">
-      <span class="rs-label">Font</span>
-      <div class="rs-btn-group" style="flex-wrap:wrap;justify-content:center">
-        <button class="rs-btn active" data-font="'Newsreader', serif" style="font-family:'Newsreader', serif">A</button>
-        <button class="rs-btn" data-font="'Literata', serif" style="font-family:'Literata', serif">A</button>
-        <button class="rs-btn" data-font="'Merriweather', serif" style="font-family:'Merriweather', serif">A</button>
-        <button class="rs-btn" data-font="sans-serif" style="font-family:sans-serif">A</button>
-      </div>
+      <span class="rs-label">Font chữ</span>
     </div>
-    <p style="font-size:.6rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">Gợi ý: Dùng phím ⬅ ➡️ để chuyển chương</p>
+    <div class="rs-btn-group" style="flex-wrap:wrap; justify-content:center; gap:8px; padding:8px; border-radius:12px; margin-bottom: 6px;">
+        <button class="rs-btn active" data-font="'Newsreader', serif" title="Newsreader" style="font-family:'Newsreader', serif; padding:4px 8px;">N</button>
+        <button class="rs-btn" data-font="'Literata', serif" title="Literata" style="font-family:'Literata', serif; padding:4px 8px;">L</button>
+        <button class="rs-btn" data-font="'Merriweather', serif" title="Merriweather" style="font-family:'Merriweather', serif; padding:4px 8px;">M</button>
+        <button class="rs-btn" data-font="'Palatino Linotype', serif" title="Palatino" style="font-family:'Palatino Linotype', serif; padding:4px 8px;">P</button>
+        <button class="rs-btn" data-font="Arial, sans-serif" title="Arial" style="font-family:Arial, sans-serif; padding:4px 8px;">A</button>
+        <button class="rs-btn" data-font="'Segoe UI', sans-serif" title="Segoe UI" style="font-family:'Segoe UI', sans-serif; padding:4px 8px;">S</button>
+    </div>
+    <p style="font-size:.65rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">💡 Bấm ⬅️ ➡️ trên bàn phím để sang trang</p>
   </div>
 )}
 
@@ -719,58 +761,6 @@ function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked'
 /* Lưu/lấy tên người dùng */
 function getSavedName(){ return localStorage.getItem('dd_commenter_name') || ''; }
 function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commenter_name', name.trim()); }
-
-/* CÀI ĐẶT ĐỌC TRUYỆN, PHÍM TẮT VÀ LỊCH SỬ */
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.documentElement;
-  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
-  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
-  
-  // Lưu lịch sử đọc nếu đang ở trang truyện
-  const novelContent = document.querySelector('.novel-content');
-  if(novelContent) {
-     localStorage.setItem('dd_last_read_url', window.location.pathname);
-     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
-  }
-  
-  // Setup Cài đặt hiển thị
-  const btn = document.getElementById('readSettingsBtn');
-  const pop = document.getElementById('rsPopup');
-  
-  if(btn && pop) {
-    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
-    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
-
-    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-
-    const fontBtns = pop.querySelectorAll('[data-font]');
-    fontBtns.forEach(fb => {
-      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-      fb.addEventListener('click', () => {
-        ff = fb.dataset.font;
-        root.style.setProperty('--read-ff', ff);
-        localStorage.setItem('dd_ff', ff);
-        fontBtns.forEach(b=>b.classList.remove('active'));
-        fb.classList.add('active');
-      });
-    });
-  }
-
-  // Keyboard shortcuts (Next/Prev chapter)
-  document.addEventListener('keydown', e => {
-    if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-    
-    if(e.key === 'ArrowLeft') { 
-      const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); 
-      if(p && p.tagName === 'A' && !p.classList.contains('disabled')) window.location.href = p.href; 
-    }
-    if(e.key === 'ArrowRight') { 
-      const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); 
-      if(n && n.tagName === 'A' && !n.classList.contains('disabled')) window.location.href = n.href; 
-    }
-  });
-});
 
 /* Admin name constant */
 const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
@@ -819,7 +809,7 @@ function setupDD(btnId,listId){
 setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
 document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
 
-/* ══ THEME TOGGLE — đồng bộ tất cả buttons ══ */
+/* ══ THEME TOGGLE ══ */
 function applyTheme(dark){
   document.documentElement.setAttribute('data-theme',dark?'dark':'');
   localStorage.setItem('dd-theme',dark?'dark':'light');
@@ -1122,21 +1112,24 @@ syncThemeBtns();
     if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
   });
 
+  // Khởi tạo các nút Trigger cho Inline Comment
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
     btn.className = 'ic-trigger';
     btn.title     = 'Bình luận đoạn ' + (idx + 1);
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
-    btn.innerHTML = '💬';
+    // Dùng emoji sạch, không viền, không nền
+    btn.innerHTML = '💬'; 
     p.appendChild(btn);
 
     waitFirebase(({db, ref, onValue}) => {
       const key = 'inline_' + pageKey() + '_p' + idx;
       onValue(ref(db, 'comments/' + key), snap => {
         const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
+        // Bọc badge vào thẻ span để style trong suốt
         btn.innerHTML = cnt > 0
-          ? `💬<span style="font-size:.56rem;margin-left:1px;font-style:normal">${cnt}</span>`
+          ? `💬<span>${cnt}</span>`
           : '💬';
         btn.classList.toggle('has-comments', cnt > 0);
       });
@@ -1154,7 +1147,7 @@ syncThemeBtns();
 })();
 
 /* ══════════════════════════════════════════
-   B. CHAPTER-END COMMENT
+   C. CHAPTER-END COMMENT
 ══════════════════════════════════════════ */
 (function setupChapComments(){
   const section   = document.getElementById('chapCommentSection');
@@ -1384,6 +1377,58 @@ syncThemeBtns();
     });
   });
 })();
+
+// Dịch vụ nhận diện phím tắt chuyển chương và các script DOM
+document.addEventListener('DOMContentLoaded', () => {
+  // Script xử lý bánh răng đọc truyện
+  const root = document.documentElement;
+  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
+  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
+
+  const btn = document.getElementById('readSettingsBtn');
+  const pop = document.getElementById('rsPopup');
+  
+  if(btn && pop) {
+    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); });
+    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+
+    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
+
+    const fontBtns = pop.querySelectorAll('[data-font]');
+    fontBtns.forEach(fb => {
+      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
+      fb.addEventListener('click', () => {
+        ff = fb.dataset.font;
+        root.style.setProperty('--read-ff', ff);
+        localStorage.setItem('dd_ff', ff);
+        fontBtns.forEach(b=>b.classList.remove('active'));
+        fb.classList.add('active');
+      });
+    });
+  }
+
+  // Chuyển trang qua bàn phím
+  document.addEventListener('keydown', e => {
+    if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+    
+    if(e.key === 'ArrowLeft') { 
+      const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
+      if(p && !p.classList.contains('disabled')) window.location.href = p.href; 
+    }
+    if(e.key === 'ArrowRight') { 
+      const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); 
+      if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
+    }
+  });
+
+  // Lưu lịch sử đọc
+  const novelContent = document.querySelector('.novel-content');
+  if(novelContent) {
+     localStorage.setItem('dd_last_read_url', window.location.pathname);
+     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
+  }
+});
 </script>
 </body>
 </html>

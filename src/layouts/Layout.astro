@@ -21,7 +21,8 @@ if (currentTruyenId && isNovelPage) {
     )
     .sort((a: any, b: any) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
 
-  const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
+  // Sử dụng RegExp thay cho chuỗi thuần để tránh lỗi parse Markdown
+  const normPath = (u: string) => u.replace(new RegExp('/$'), '').replace(new RegExp('/index$'), '');
   const cur = normPath(currentPath);
   const idx = chapters.findIndex((c: any) => {
     const u = normPath(c.url || '');
@@ -39,6 +40,7 @@ if (currentTruyenId && isNovelPage) {
   <title>{frontmatter?.title || 'Trang chủ'} | {settings.site_name}</title>
   <meta name="description" content={frontmatter?.description || settings.tagline} />
   
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/dynamic-duo-web/favicon.png" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -118,6 +120,7 @@ if (currentTruyenId && isNovelPage) {
       --border-card:rgba(186,230,253,.5);
     }
 
+    /* ── DARK THEME ── */
     [data-theme="dark"] {
       --sky:#7ec8e3; --sky2:#a8daf0; --sky-dark:#c5e8f5;
       --sky-light:#1e4a6a; --sky-pale:#0d2035;
@@ -144,16 +147,10 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .dd-section-title { color:#3d6a82; }
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
 
-    /* Novel content & wrappers */
     [data-theme="dark"] .novel-content,
-    [data-theme="dark"] .page-content-wrap {
-      background:#0f2336 !important;
-      border-color:rgba(126,200,227,.14);
-      color:#d8eeff;
-    }
+    [data-theme="dark"] .page-content-wrap { background:#0f2336 !important; border-color:rgba(126,200,227,.14); color:#d8eeff; }
     [data-theme="dark"] .novel-content p { color:#d8eeff; }
-    [data-theme="dark"] h1,[data-theme="dark"] h2,
-    [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#a8daf0; }
+    [data-theme="dark"] h1,[data-theme="dark"] h2, [data-theme="dark"] h3,[data-theme="dark"] h4 { color:#a8daf0; }
     [data-theme="dark"] blockquote    { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
     [data-theme="dark"] .chap-pn      { border-color:#1e4a6a; color:#8fbcd4; background:#0d2035; }
     [data-theme="dark"] .chap-pn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; border-color:#7ec8e3; }
@@ -171,8 +168,6 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .social-ic    { background:rgba(15,35,54,.8); border-color:#1e4a6a; }
     [data-theme="dark"] .tag-badge    { color:#a8daf0; border-color:#1e4a6a; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(126,200,227,.1); }
-    [data-theme="dark"] .scroll-btn   { background:#163552; }
-    [data-theme="dark"] .scroll-btn:hover { background:#1e4a6a; }
     .contact-email { color:#475569; }
     [data-theme="dark"] .contact-email { color:#8fbcd4; }
 
@@ -263,11 +258,9 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list a.cur-chap { background:rgba(14,165,233,.1); color:var(--sky-dark); font-weight:700; }
 
     /* ── NOVEL LAYOUT VÀ CHỐNG COPY ── */
-    /* ĐÃ NỚI RỘNG max-width VÀ padding ĐỂ ĐỌC TRUYỆN THOẢI MÁI HƠN */
     .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
     .novel-content { width:100%; margin:24px auto 60px; padding:48px 60px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); position:relative; }
     
-    /* CHỐNG RE-UP (Vô hiệu hóa bôi đen văn bản trong chương truyện) */
     .novel-content {
       user-select: none;
       -webkit-user-select: none;
@@ -282,36 +275,26 @@ if (currentTruyenId && isNovelPage) {
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* ── BONG BÓNG INLINE COMMENT (Tối giản, đẹp hơn) ── */
+    /* Tags Container */
+    .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:20px; }
+    .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
+    .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
+    [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
+    [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
+
+    /* ── BONG BÓNG INLINE COMMENT ── */
     .ic-trigger {
       display: inline-flex; align-items: center; justify-content: center;
-      margin-left: 8px; padding: 4px;
-      background: transparent; border: none; cursor: pointer;
-      font-size: 1.1rem; opacity: 0;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      vertical-align: middle; color: var(--sky);
-      transform: translateY(2px) scale(0.9);
+      margin-left: 8px; padding: 4px; background: transparent; border: none; cursor: pointer;
+      font-size: 1.1rem; opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      vertical-align: middle; color: var(--sky); transform: translateY(2px) scale(0.9);
       filter: grayscale(100%) opacity(0.5);
     }
-    .novel-content p:hover .ic-trigger {
-      opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1);
-    }
-    .ic-trigger:hover {
-      opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important;
-      color: var(--sky2); filter: grayscale(0%) opacity(1) !important;
-    }
-    .ic-trigger.has-comments {
-      opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1);
-    }
-    .novel-content p.ic-active .ic-trigger {
-      opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1);
-    }
-    .ic-trigger span {
-      font-size: 0.6rem; font-weight: bold; background: var(--sky-pale);
-      color: var(--sky-dark); border-radius: 10px; padding: 1px 6px;
-      margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      font-family: sans-serif;
-    }
+    .novel-content p:hover .ic-trigger { opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1); }
+    .ic-trigger:hover { opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important; color: var(--sky2); filter: grayscale(0%) opacity(1) !important; }
+    .ic-trigger.has-comments { opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1); }
+    .novel-content p.ic-active .ic-trigger { opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1); }
+    .ic-trigger span { font-size: 0.6rem; font-weight: bold; background: var(--sky-pale); color: var(--sky-dark); border-radius: 10px; padding: 1px 6px; margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-family: sans-serif; }
     [data-theme="dark"] .ic-trigger span { background: rgba(126,200,227,.2); color: #a8daf0; }
 
     /* ── INLINE COMMENT SIDEBAR ── */
@@ -370,7 +353,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-del-btn { margin-left:auto; font-size:.62rem; color:var(--text-dim); background:none; border:none; cursor:pointer; padding:2px 5px; border-radius:4px; display:none; transition:color .15s; }
     .ic-del-btn.show { display:inline-flex; align-items:center; gap:2px; }
     .ic-del-btn:hover { color:#ef4444; }
-    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding-top:7px; border-top:1px solid rgba(186,230,253,.3); }
+    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px; border-top:1px solid rgba(186,230,253,.3); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-color:rgba(126,200,227,.1); }
     .ic-reply-item { display:flex; gap:6px; align-items:flex-start; background:rgba(255,255,255,.7); border-radius:7px; padding:6px 8px; position:relative; }
@@ -396,7 +379,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-reply-form { display:none; flex-direction:column; gap:5px; margin-top:5px; }
     .ic-reply-form.open { display:flex; }
     .ic-reply-form input, .ic-reply-form textarea { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
-    .ic-reply-form input { border-radius:var(--r-pill); }
+    .ic-reply-form input { border-radius:var(--r-pill); font-size:.75rem; }
     .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
     .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-reply-form input, [data-theme="dark"] .ic-reply-form textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
@@ -489,21 +472,6 @@ if (currentTruyenId && isNovelPage) {
     .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
-    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
-    [data-theme="dark"] .reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
-    .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
-    [data-theme="dark"] .reply-quoting { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
-    .reply-quoting-label { flex:1; font-size:.68rem; color:var(--sky); font-style:italic; }
-    [data-theme="dark"] .reply-quoting-label { color:#a8daf0; }
-    .reply-quoting-cancel { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 2px; border-radius:3px; transition:color .15s; }
-    .reply-quoting-cancel:hover { color:#ef4444; }
-    .reply-quote-btn { display:inline-block; margin-top:4px; background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--sky); padding:0; font-family:'Newsreader',serif; transition:color .15s; }
-    .reply-quote-btn:hover { color:var(--sky2); text-decoration:underline; }
-    [data-theme="dark"] .reply-quote-btn { color:#a8daf0; }
-    .reply-items-wrap { display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
-    .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
-    .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
-    [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#3d6a82; }
 
     /* ── FOOTER ── */
     footer { background:#fff; border-top:1px solid rgba(186,230,253,.4); padding:44px 20px 26px; margin-top:auto; }
@@ -520,56 +488,112 @@ if (currentTruyenId && isNovelPage) {
     .social-ic:hover { background:var(--sky-light); transform:translateY(-2px); }
     .ft-bottom { max-width:1100px; margin:26px auto 0; padding-top:16px; border-top:1px solid rgba(186,230,253,.3); text-align:center; font-size:.7rem; color:var(--text-dim); letter-spacing:1px; }
 
-    /* ── SCROLL BUTTONS ── */
-    .scroll-btns { position:fixed; bottom:24px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
-    .scroll-btn { width:40px; height:40px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:1.1rem; box-shadow:0 4px 14px rgba(2,132,199,.35); transition:opacity .25s ease,transform .25s ease,background .2s ease; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; line-height:1; }
-    .scroll-btn.show { opacity:1; pointer-events:auto; }
-    .scroll-btn:hover { transform:translateY(-3px); background:var(--sky2); }
+    /* ── FLOATING TOOLS (FAB TỐI GIẢN CHO ĐIỆN THOẠI & WEB) ── */
+    .tool-fab-wrap {
+      position: fixed; bottom: 24px; right: 22px; z-index: 400;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+    }
+    .tool-fab-menu {
+      display: flex; flex-direction: column; gap: 8px;
+      opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.9);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: bottom right;
+    }
+    .tool-fab-wrap.open .tool-fab-menu { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+    .fab-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      background: var(--sky); color: #fff; box-shadow: 0 4px 12px rgba(2,132,199,0.3);
+      transition: all 0.2s ease;
+    }
+    .fab-btn:hover { transform: translateY(-2px); background: var(--sky2); }
     
-    /* ── READING SETTINGS POPUP ── */
+    .tool-fab-toggle {
+      width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(186,230,253,0.5);
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+      color: var(--sky-dark); font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.6; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .tool-fab-toggle:hover { opacity: 1; transform: scale(1.05); }
+    [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
+    .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
+    
+    /* ── POPUP CHUNG ── */
     .rs-popup {
       position:fixed; bottom:80px; right:74px; z-index:420; width:260px;
       background:var(--bg-card); border:1px solid rgba(186,230,253,.6);
       border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15);
       padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95);
-      transition:opacity .2s ease, transform .2s ease;
-      transform-origin: bottom right;
+      transition:opacity .2s ease, transform .2s ease; transform-origin: bottom right;
     }
-    [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); }
+    [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
     .rs-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
     .rs-title { font-family:'Merriweather',serif; font-size:.75rem; color:var(--sky-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; text-align:center; font-weight:bold;}
     [data-theme="dark"] .rs-title { color:#a8daf0; }
     .rs-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .rs-label { font-size:.75rem; color:var(--text-dim); }
     [data-theme="dark"] .rs-label { color:#8fbcd4; }
-    
     .rs-btn-group { display:flex; gap:6px; background:var(--sky-pale); border-radius:var(--r-pill); padding:4px; border:1px solid rgba(186,230,253,.5); }
     [data-theme="dark"] .rs-btn-group { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.15); }
     .rs-btn { background:none; border:none; border-radius:var(--r-pill); font-size:.8rem; padding:4px 12px; cursor:pointer; color:var(--text-mid); transition:var(--t); font-family:inherit; }
     .rs-btn.active, .rs-btn:hover { background:var(--sky); color:#fff; }
     [data-theme="dark"] .rs-btn { color:#8fbcd4; }
     [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
-    
-    /* Tags Container */
-    .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:20px; }
-    .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
-    .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
-    [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
-    [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
 
-    /* Admin floating button & Stats Button */
-    #adminFloatingBtn, #adminStatsBtn {
-      opacity:0.15; position:fixed; z-index:410;
-      width:18px; height:18px; border-radius:50%;
-      border:none; cursor:pointer; color:#fff; font-size:.5rem;
-      box-shadow:none; display:none; align-items:center; justify-content:center;
-      transition:transform .2s,box-shadow .2s;
+    /* ── NÚT TIM & ĐÁNH GIÁ ── */
+    .chap-like-area { text-align:center; margin: 30px 0 40px; }
+    .chap-like-btn {
+      background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark);
+      padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08);
     }
-    #adminFloatingBtn { bottom:8px; right:8px; background:linear-gradient(135deg,#1565a0,#0e3d6e); }
-    #adminStatsBtn { bottom:8px; right:32px; background:linear-gradient(135deg,#10b981,#059669); }
-    #adminFloatingBtn:hover, #adminStatsBtn:hover { opacity:1; transform:none; box-shadow:none; }
-    #adminFloatingBtn.visible { display:flex; opacity:1; width:40px; height:40px; bottom:172px; right:22px; font-size:.88rem; }
-    #adminStatsBtn.visible { display:flex; opacity:1; width:40px; height:40px; bottom:172px; right:74px; font-size:.88rem; }
+    .chap-like-btn .heart { transition: transform 0.3s; display: inline-block; margin-right: 6px; font-size: 1.1rem; }
+    .chap-like-btn:hover { transform: translateY(-3px); border-color: var(--sky); box-shadow: 0 6px 16px rgba(2,132,199,.15); }
+    .chap-like-btn:hover .heart { transform: scale(1.2); }
+    .chap-like-btn.liked { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.05); }
+    [data-theme="dark"] .chap-like-btn { border-color: rgba(126,200,227,.3); color: #a8daf0; background: rgba(15,35,54,.6); box-shadow: 0 4px 12px rgba(0,0,0,.3);}
+    [data-theme="dark"] .chap-like-btn.liked { border-color: #f87171; color: #fca5a5; background: rgba(239,68,68,0.1); }
+
+    .rv-modal { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .rv-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); opacity: 0; transition: opacity 0.3s; }
+    .rv-content { background: var(--bg-card); width: 90%; max-width: 500px; border-radius: var(--r-lg); padding: 24px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 85vh; display: flex; flex-direction: column; }
+    [data-theme="dark"] .rv-content { border: 1px solid rgba(126,200,227,.2); box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+    .rv-modal.show { pointer-events: auto; }
+    .rv-modal.show .rv-overlay { opacity: 1; }
+    .rv-modal.show .rv-content { opacity: 1; transform: translateY(0); }
+    .rv-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed var(--sky-light); padding-bottom: 12px; }
+    [data-theme="dark"] .rv-header { border-color: rgba(126,200,227,.2); }
+    .rv-title { font-family: 'Merriweather', serif; font-size: 1.1rem; color: var(--sky-dark); margin: 0; }
+    [data-theme="dark"] .rv-title { color: #a8daf0; }
+    .rv-close { background: none; border: none; font-size: 1.2rem; color: var(--text-dim); cursor: pointer; transition: color 0.2s; }
+    .rv-close:hover { color: #ef4444; }
+    
+    .rv-stats { text-align: center; margin-bottom: 20px; }
+    .rv-avg { font-size: 2.5rem; font-weight: bold; color: var(--sky-dark); line-height: 1; }
+    [data-theme="dark"] .rv-avg { color: #a8daf0; }
+    .rv-stars-display { color: #fbbf24; font-size: 1.2rem; margin: 4px 0; letter-spacing: 2px;}
+    
+    .rv-form { background: var(--sky-pale); padding: 16px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(186,230,253,.4); }
+    [data-theme="dark"] .rv-form { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
+    .rv-star-select { font-size: 1.8rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 10px; }
+    .rv-star-select span { transition: color 0.2s; }
+    .rv-star-select span:hover, .rv-star-select span.active { color: #fbbf24; }
+    
+    .rv-list { flex: 1; overflow-y: auto; padding-right: 8px; display: flex; flex-direction: column; gap: 12px; }
+    .rv-list::-webkit-scrollbar { width: 4px; }
+    .rv-list::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 4px; }
+    .rv-item { background: var(--bg-card); border: 1px solid var(--sky-light); border-radius: 10px; padding: 12px; }
+    [data-theme="dark"] .rv-item { border-color: rgba(126,200,227,.15); background: rgba(10,25,45,.4); }
+    .rv-item-hd { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .rv-item-name { font-weight: bold; font-size: .85rem; color: var(--sky-dark); }
+    [data-theme="dark"] .rv-item-name { color: #a8daf0; }
+    .rv-item-stars { color: #fbbf24; font-size: .8rem; letter-spacing: 1px; }
+    .rv-item-text { font-size: .85rem; color: var(--text-main); margin: 0 0 6px 0; line-height: 1.5; }
+    [data-theme="dark"] .rv-item-text { color: #F3F9FF; }
+    .rv-item-time { font-size: .7rem; color: var(--text-dim); }
+    .rv-del-btn { font-size: .7rem; color: #ef4444; background: none; border: none; cursor: pointer; display: none; }
   </style>
 </head>
 <body>
@@ -635,8 +659,8 @@ if (currentTruyenId && isNovelPage) {
 
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
-<div class="page-wrapper">
-  <!-- SỬA CÁCH HIỂN THỊ TAGS: THÊM flex gap ĐỂ CÁC TAGS KHÔNG DÍNH NHAU -->
+<!-- Gắn data-truyen-id để JS nhận diện -->
+<div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
     <div class="tags-container">
       {frontmatter.tags.map((tag: string) => (
@@ -671,6 +695,14 @@ if (currentTruyenId && isNovelPage) {
   {isNovelPage ? (
     <div class="novel-layout-wrap" id="novelLayoutWrap">
       <div class="novel-content" id="novelContent"><slot /></div>
+      
+      <!-- NÚT TIM CHƯƠNG -->
+      <div class="chap-like-area">
+        <button class="chap-like-btn" id="btnLikeChapter">
+          <span class="heart">🤍</span> Yêu thích chương này <span class="count" id="chapLikeCount" style="font-weight:bold;margin-left:4px">0</span>
+        </button>
+      </div>
+
       <aside class="ic-sidebar" id="icSidebar">
         <div class="ic-sidebar-inner">
           <div class="ic-sidebar-header">
@@ -765,19 +797,23 @@ if (currentTruyenId && isNovelPage) {
       </div>
     </div>
   </div>
-  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026
-  {isNovelPage && <span id="footerAdminHint" style="opacity:.3;font-size:.6rem;margin-left:8px;cursor:pointer" onclick="document.getElementById('adminFloatingBtn')?.click()">·</span>}
-  </div>
+  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
 </footer>
 
-<div class="scroll-btns" id="scrollBtns">
-  {isNovelPage && (
-    <button class="scroll-btn show" id="readSettingsBtn" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>
-  )}
-  <button class="scroll-btn" id="scrollTop" title="Lên đầu">↑</button>
-  <button class="scroll-btn" id="scrollBot" title="Xuống cuối">↓</button>
+<!-- TẤT CẢ NÚT ĐƯỢC GỘP VÀO 1 FAB (Nút nổi) -->
+<div class="tool-fab-wrap" id="toolFabWrap">
+  <div class="tool-fab-menu" id="toolFabMenu">
+    {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
+    {isNovelPage && <button class="fab-btn" id="btnOpenReview" title="Đánh giá truyện" style="background:#f59e0b">⭐</button>}
+    {isNovelPage && <button class="fab-btn" id="fabStats" title="Thống kê" style="background:#10b981; display:none;">📊</button>}
+    {isNovelPage && <button class="fab-btn" id="fabAdmin" title="Quản trị viên" style="background:#1e4a6a; display:none;">🔑</button>}
+    <button class="fab-btn" id="fabUp" title="Lên đầu">↑</button>
+    <button class="fab-btn" id="fabDown" title="Xuống cuối">↓</button>
+  </div>
+  <button class="tool-fab-toggle" id="toolFabToggle">⋮</button>
 </div>
 
+<!-- POPUP CÀI ĐẶT -->
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
     <div class="rs-title">Thiết lập đọc</div>
@@ -803,8 +839,9 @@ if (currentTruyenId && isNovelPage) {
   </div>
 )}
 
+<!-- POPUP THỐNG KÊ ADMIN -->
 {isNovelPage && (
-  <div class="rs-popup" id="statsPopup" style="bottom: 130px;">
+  <div class="rs-popup" id="statsPopup">
     <div class="rs-title" style="color: #10b981;">📊 Thống kê Chương</div>
     <div style="font-size: .8rem; color: var(--text-main); display: flex; flex-direction: column; gap: 10px;">
        <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>👁 Lượt xem:</span> <strong id="statViews" style="color:var(--sky)">0</strong></div>
@@ -815,12 +852,37 @@ if (currentTruyenId && isNovelPage) {
   </div>
 )}
 
+<!-- BẢNG ĐÁNH GIÁ TRUYỆN -->
 {isNovelPage && (
-  <button id="adminStatsBtn" title="Thống kê">📊</button>
+  <div class="rv-modal" id="rvModal">
+    <div class="rv-overlay" id="rvOverlay"></div>
+    <div class="rv-content">
+      <div class="rv-header">
+        <h3 class="rv-title">⭐ Đánh giá tổng truyện</h3>
+        <button class="rv-close" id="rvClose">✕</button>
+      </div>
+      <div class="rv-stats">
+        <div class="rv-avg" id="rvAvg">0.0</div>
+        <div class="rv-stars-display" id="rvStarsDisplay">☆☆☆☆☆</div>
+        <div style="font-size:.7rem; color:var(--text-dim)" id="rvCount">0 đánh giá</div>
+      </div>
+      <div class="rv-form">
+        <div class="rv-star-select" id="rvStarSelect">
+          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
+        </div>
+        <input class="comment-inp" id="rvName" placeholder="Tên của bạn (Tùy chọn)" style="width:100%; margin-bottom:8px;" autocomplete="off" />
+        <textarea class="comment-textarea" id="rvText" placeholder="Nêu cảm nhận của bạn về bộ truyện này nhé..." rows="3" style="margin-bottom:8px;"></textarea>
+        <div style="text-align:right">
+          <button class="comment-submit-btn" id="rvSubmit" style="padding: 6px 16px; font-size: .8rem; background: #f59e0b;">Gửi đánh giá</button>
+        </div>
+      </div>
+      <div class="rv-list" id="rvList">
+        <div class="ic-loading">Đang tải đánh giá...</div>
+      </div>
+    </div>
+  </div>
 )}
-{isNovelPage && (
-  <button id="adminFloatingBtn" title="Quản trị viên" aria-label="Admin login">🔑</button>
-)}
+
 
 <script is:inline>
 /* ══ HELPERS ══ */
@@ -833,46 +895,149 @@ function timeAgo(ts){
   if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
   return Math.floor(d/86400000)+' ngày trước';
 }
-function pageKey(){
-  return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120);
-}
+function pageKey(){ return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120); }
 function avatarLetter(name){ return (name||'K').trim().charAt(0).toUpperCase(); }
-function getMyToken(){
-  let t = localStorage.getItem('dd_token');
-  if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); }
-  return t;
-}
+function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
 function getLiked(id){ try{ return JSON.parse(localStorage.getItem('dd_liked')||'{}')[id]||false; }catch(e){ return false; } }
 function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked')||'{}'); o[id]=v; localStorage.setItem('dd_liked',JSON.stringify(o)); }catch(e){} }
-
-/* Lưu/lấy tên người dùng */
 function getSavedName(){ return localStorage.getItem('dd_commenter_name') || ''; }
 function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commenter_name', name.trim()); }
 
-/* CÀI ĐẶT ĐỌC TRUYỆN, PHÍM TẮT, LỊCH SỬ & CHỐNG COPY */
+const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
+
+function waitFirebase(cb){
+  if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
+  window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
+  let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
+}
+
+/* ══ SETUP FAB & SCROLL ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  const _rp = document.getElementById('read-progress');
+  const fabWrap = document.getElementById('toolFabWrap');
+  const fabToggle = document.getElementById('toolFabToggle');
+  
+  if(fabToggle && fabWrap) {
+    fabToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fabWrap.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if(!fabWrap.contains(e.target)) fabWrap.classList.remove('open');
+    });
+  }
+
+  document.getElementById('fabUp')?.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
+  document.getElementById('fabDown')?.addEventListener('click', () => { window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
+
+  function updScroll(){
+    const y = window.scrollY;
+    const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+    const p = y / max;
+    if(_rp) _rp.style.width = (p*100)+'%';
+  }
+  window.addEventListener('scroll', updScroll, {passive:true});
+  requestAnimationFrame(() => setTimeout(updScroll, 200));
+});
+
+/* ══ HAMBURGER ══ */
+document.getElementById('hamburger')?.addEventListener('click',()=>document.getElementById('mobileMenu')?.classList.toggle('open'));
+document.addEventListener('click',e=>{
+  const mm=document.getElementById('mobileMenu'),hb=document.getElementById('hamburger');
+  if(mm?.classList.contains('open')&&!mm.contains(e.target)&&!hb?.contains(e.target)) mm.classList.remove('open');
+});
+
+/* ══ CHAPTER DROPDOWNS ══ */
+function setupDD(btnId,listId){
+  const btn=document.getElementById(btnId),list=document.getElementById(listId);
+  if(!btn||!list) return;
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const was=list.classList.contains('open');
+    document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
+    if(!was){ list.classList.add('open'); const cur=list.querySelector('.cur-chap'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}),30); }
+  });
+}
+setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
+document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
+
+/* ══ THEME TOGGLE ══ */
+function applyTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'');
+  localStorage.setItem('dd-theme',dark?'dark':'light');
+  syncThemeBtns();
+}
+function syncThemeBtns(){
+  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  const icon = isDark ? '☀️' : '🌙';
+  const label = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+  document.querySelectorAll('.nav-theme-btn, .mobile-theme-row').forEach(el=>{
+    if(el.tagName === 'BUTTON') { el.title = label; if(el.classList.contains('nav-theme-btn')) el.textContent = icon; }
+  });
+  document.querySelectorAll('.mobile-theme-row').forEach(el=>{ el.innerHTML = icon + ' ' + label; });
+}
+window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
+document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
+document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
+syncThemeBtns();
+
+/* ══ ADMIN AUTH & STATS BUTTON ══ */
+(function setupAdminBtn(){
+  const btn = document.getElementById('fabAdmin');
+  const statsBtn = document.getElementById('fabStats');
+  let isAdmin = !!window.__ddIsAdmin;
+  
+  function syncBtn(){
+    if(btn) {
+       btn.style.display = 'flex';
+       btn.textContent = isAdmin ? '🔓' : '🔑';
+       btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
+    }
+    if(statsBtn) {
+       statsBtn.style.display = isAdmin ? 'flex' : 'none';
+    }
+  }
+  syncBtn();
+  window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; syncBtn(); });
+  
+  btn?.addEventListener('click', () => {
+    const fb = window.__ddFirebase; if(!fb) return;
+    if(isAdmin){
+      if(confirm('Đăng xuất tài khoản admin?')) fb.signOut(fb.auth);
+    } else {
+      const p = new fb.GoogleAuthProvider();
+      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message));
+    }
+    document.getElementById('toolFabWrap')?.classList.remove('open');
+  });
+})();
+
+/* ══════════════════════════════════════════
+   A. CÀI ĐẶT ĐỌC TRUYỆN & CHỐNG COPY
+══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
   let fz = parseInt(localStorage.getItem('dd_fz') || '18');
   let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
   
-  // Lưu lịch sử đọc nếu đang ở trang truyện
   const novelContent = document.querySelector('.novel-content');
   if(novelContent) {
      localStorage.setItem('dd_last_read_url', window.location.pathname);
      localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
   }
   
-  // Setup Cài đặt hiển thị
-  const btn = document.getElementById('readSettingsBtn');
+  const btn = document.getElementById('fabSettings');
   const pop = document.getElementById('rsPopup');
-  const statsBtn = document.getElementById('adminStatsBtn');
+  const statsBtn = document.getElementById('fabStats');
   const statsPop = document.getElementById('statsPopup');
+  const fabWrap = document.getElementById('toolFabWrap');
   
   if(btn && pop) {
     btn.addEventListener('click', e => { 
         e.stopPropagation(); 
         pop.classList.toggle('open'); 
         if(statsPop) statsPop.classList.remove('open'); 
+        if(fabWrap) fabWrap.classList.remove('open');
     });
     document.addEventListener('click', e => { 
         if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); 
@@ -894,27 +1059,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bật Tắt Bảng Thống kê
   if(statsBtn && statsPop) {
       statsBtn.addEventListener('click', e => {
           e.stopPropagation();
           statsPop.classList.toggle('open');
           if(pop) pop.classList.remove('open');
+          if(fabWrap) fabWrap.classList.remove('open');
       });
       document.addEventListener('click', e => { 
         if(!statsPop.contains(e.target) && e.target !== statsBtn) statsPop.classList.remove('open'); 
       });
   }
 
-  // Keyboard shortcuts (Next/Prev chapter) & Chống Copy Re-up
   if(novelContent) {
-    // Chống copy chuột phải và bôi đen
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
-
-    // Bắt sự kiện bàn phím
     document.addEventListener('keydown', e => {
-      // Bỏ qua phím tắt chuyển trang nếu đang gõ text
       if(!document.activeElement || !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
         if(e.key === 'ArrowLeft') { 
           const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
@@ -925,164 +1085,13 @@ document.addEventListener('DOMContentLoaded', () => {
           if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
         }
       }
-      // Chặn các phím tắt tải trang/lưu trang
-      if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) {
-        e.preventDefault();
-      }
+      if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) { e.preventDefault(); }
     });
   }
 });
 
-/* Admin name constant */
-const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
-
-function waitFirebase(cb){
-  if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-  window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
-  let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
-}
-
-/* ══ THỐNG KÊ LƯỢT XEM VÀ BÌNH LUẬN DÀNH CHO ADMIN ══ */
-waitFirebase(({db, ref, get, update, onValue}) => {
-  const isNovel = document.querySelector('.novel-content') !== null;
-  if(!isNovel) return;
-  const key = pageKey();
-
-  // 1. Logic Tăng Lượt Xem
-  const viewRef = ref(db, 'page_views/' + key);
-  get(viewRef).then(snap => {
-     let views = (snap.val() && snap.val().views) || 0;
-     if(!window.__ddIsAdmin) { // Khách đọc thì mới tăng view
-       update(ref(db, 'page_views'), { [key + '/views']: views + 1 }).catch(() => console.log("Cần cấp quyền ghi page_views trong Firebase Rules"));
-     }
-  });
-
-  // 2. Nút Thống Kê (chỉ hiện khi đăng nhập Admin)
-  window.addEventListener('dd-auth-change', e => {
-    const btn = document.getElementById('adminStatsBtn');
-    if(btn) {
-      btn.style.display = e.detail.isAdmin ? 'flex' : 'none';
-      if(e.detail.isAdmin) btn.classList.add('visible');
-    }
-  });
-
-  // 3. Cập nhật dữ liệu Realtime lên Bảng Thống Kê
-  onValue(viewRef, snap => {
-      const vEl = document.getElementById('statViews');
-      if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
-  });
-
-  onValue(ref(db, 'comments/chap_' + key), snap => {
-      const data = snap.val() || {};
-      let cmtCount = Object.keys(data).length;
-      let likeCount = 0;
-      Object.values(data).forEach(c => {
-        if(c.likes) likeCount += Object.keys(c.likes).length;
-        if(c.replies) cmtCount += Object.keys(c.replies).length;
-      });
-      const cEl = document.getElementById('statCmts');
-      const lEl = document.getElementById('statLikes');
-      if(cEl) cEl.textContent = cmtCount;
-      if(lEl) lEl.textContent = likeCount;
-  });
-});
-
-/* ══ SCROLL + PROGRESS ══ */
-const _st=document.getElementById('scrollTop'),_sb=document.getElementById('scrollBot'),_rp=document.getElementById('read-progress');
-if(_st) _st.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-if(_sb) _sb.addEventListener('click',()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}));
-function updScroll(){
-  const y=window.scrollY, max=Math.max(1,document.body.scrollHeight-window.innerHeight), p=y/max;
-  if(_st) _st.classList.toggle('show',y>300);
-  if(_sb) _sb.classList.toggle('show',p<.97&&max>100);
-  if(_rp) _rp.style.width=(p*100)+'%';
-}
-window.addEventListener('scroll',updScroll,{passive:true});
-requestAnimationFrame(()=>setTimeout(updScroll,200));
-
-/* ══ HAMBURGER ══ */
-document.getElementById('hamburger')?.addEventListener('click',()=>document.getElementById('mobileMenu')?.classList.toggle('open'));
-document.addEventListener('click',e=>{
-  const mm=document.getElementById('mobileMenu'),hb=document.getElementById('hamburger');
-  if(mm?.classList.contains('open')&&!mm.contains(e.target)&&!hb?.contains(e.target)) mm.classList.remove('open');
-});
-
-/* ══ CHAPTER DROPDOWNS ══ */
-function setupDD(btnId,listId){
-  const btn=document.getElementById(btnId),list=document.getElementById(listId);
-  if(!btn||!list) return;
-  btn.addEventListener('click',e=>{
-    e.stopPropagation();
-    const was=list.classList.contains('open');
-    document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
-    if(!was){
-      list.classList.add('open');
-      const cur=list.querySelector('.cur-chap');
-      if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}),30);
-    }
-  });
-}
-setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
-document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
-
-/* ══ THEME TOGGLE ══ */
-function applyTheme(dark){
-  document.documentElement.setAttribute('data-theme',dark?'dark':'');
-  localStorage.setItem('dd-theme',dark?'dark':'light');
-  syncThemeBtns();
-}
-function syncThemeBtns(){
-  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
-  const icon = isDark ? '☀️' : '🌙';
-  const label = isDark ? 'Chế độ sáng' : 'Chế độ tối';
-  document.querySelectorAll('.nav-theme-btn, .mobile-theme-row').forEach(el=>{
-    if(el.tagName === 'BUTTON') {
-      el.title = label;
-      if(el.classList.contains('nav-theme-btn')) el.textContent = icon;
-    }
-  });
-  document.querySelectorAll('.mobile-theme-row').forEach(el=>{
-    el.innerHTML = icon + ' ' + label;
-  });
-}
-window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
-
-document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
-document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
-
-syncThemeBtns();
-
-(function(){
-  const style = document.createElement('style');
-  style.textContent = '@media(min-width:701px){ #navThemeBtnMobile { display:none !important; } }';
-  document.head.appendChild(style);
-})();
-
-/* ══ ADMIN FLOATING BUTTON ══ */
-(function setupAdminBtn(){
-  const btn = document.getElementById('adminFloatingBtn');
-  if(!btn) return;
-  let isAdmin = !!window.__ddIsAdmin;
-  function syncBtn(){
-    btn.classList.toggle('visible', isAdmin);
-    btn.textContent = isAdmin ? '🔓' : '🔑';
-    btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
-  }
-  syncBtn();
-  window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; syncBtn(); });
-  btn.addEventListener('click', () => {
-    const fb = window.__ddFirebase; if(!fb) return;
-    if(isAdmin){
-      if(confirm('Đăng xuất tài khoản admin?')) fb.signOut(fb.auth);
-    } else {
-      const p = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message));
-    }
-  });
-})();
-
 /* ══════════════════════════════════════════
-   A. INLINE COMMENT SIDEBAR
+   B. INLINE COMMENT SIDEBAR
 ══════════════════════════════════════════ */
 (function setupInlineSidebar(){
   const novelWrap  = document.getElementById('novelLayoutWrap');
@@ -1124,13 +1133,8 @@ syncThemeBtns();
 
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
-    if(isAdmin && formName) {
-      formName.value = ADMIN_DISPLAY_NAME;
-      formName.style.display = 'none';
-    } else if(formName) {
-      formName.style.display = '';
-      if(!formName.value) formName.value = getSavedName();
-    }
+    if(isAdmin && formName) { formName.value = ADMIN_DISPLAY_NAME; formName.style.display = 'none'; } 
+    else if(formName) { formName.style.display = ''; if(!formName.value) formName.value = getSavedName(); }
   });
 
   function adminBadgeHtml(){ return '<span class="ic-item-admin-badge">chủ nhà</span>'; }
@@ -1179,26 +1183,14 @@ syncThemeBtns();
 
   function renderInlineComments(data, key, idx){
     if(!sideList) return;
-    if(!data){
-      sideList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊<br><small>Hãy là người đầu tiên!</small></div>';
-      return;
-    }
-    const items = Object.entries(data)
-      .map(([id,v]) => ({id,...v}))
-      .sort((a,b) => (a.ts||0) - (b.ts||0));
+    if(!data){ sideList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊<br><small>Hãy là người đầu tiên!</small></div>'; return; }
+    const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => (a.ts||0) - (b.ts||0));
 
     sideList.innerHTML = items.map(c => {
-      const isMine = c.token === myToken;
-      const canDel = isAdmin || isMine;
-      const cIsAdmin = c.isAdmin === true;
-      const replies = c.replies
-        ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
-        : [];
-
+      const isMine = c.token === myToken; const canDel = isAdmin || isMine; const cIsAdmin = c.isAdmin === true;
+      const replies = c.replies ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0)) : [];
       const repliesHtml = replies.map(r => {
-        const rMine  = r.token === myToken;
-        const rCanDel= isAdmin || rMine;
-        const rIsAdmin = r.isAdmin === true;
+        const rMine  = r.token === myToken; const rCanDel= isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
         const atTag  = r.replyTo ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>` : '';
         return `<div class="ic-reply-item" id="icri-${esc(r.id)}">
           <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
@@ -1236,7 +1228,6 @@ syncThemeBtns();
         </div>
       </div>`;
     }).join('');
-
     sideList.scrollTop = sideList.scrollHeight;
   }
 
@@ -1260,35 +1251,23 @@ syncThemeBtns();
       const replies = document.getElementById('icreplies-' + cid);
       const form    = document.getElementById('icrf-' + cid);
       if(replies) replies.classList.add('open');
-      if(form){
-        form.classList.toggle('open');
-        if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus();
-      }
+      if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
       clearQuoting();
       return;
     }
     if(action === 'rr-reply'){
-      const cid   = btn.dataset.cid;
-      const rid   = btn.dataset.rid;
-      const rname = btn.dataset.rname;
-      const form  = document.getElementById('icrf-' + cid);
-      const replies = document.getElementById('icreplies-' + cid);
+      const cid   = btn.dataset.cid; const rid   = btn.dataset.rid; const rname = btn.dataset.rname;
+      const form  = document.getElementById('icrf-' + cid); const replies = document.getElementById('icreplies-' + cid);
       if(replies) replies.classList.add('open');
       if(form){ form.classList.add('open'); form.querySelector('[data-role="rtext"]')?.focus(); }
-      setQuoting(rid, rname);
-      setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
+      setQuoting(rid, rname); setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
       return;
     }
-    if(action === 'cancel-reply'){
-      document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open');
-      clearQuoting();
-      return;
-    }
+    if(action === 'cancel-reply'){ document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open'); clearQuoting(); return; }
     if(action === 'send-reply'){
       const form = document.getElementById('icrf-' + btn.dataset.cid);
       const text = (form?.querySelector('[data-role="rtext"]')?.value || '').trim();
-      if(!text) return;
-      btn.disabled = true;
+      if(!text) return; btn.disabled = true;
       const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (form?.querySelector('[data-role="rname"]')?.value || '').trim() || 'Khách vô danh';
       if(!isAdmin) saveName(nameVal);
       const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false };
@@ -1296,9 +1275,7 @@ syncThemeBtns();
       waitFirebase(async ({db, ref, push}) => {
         try{
           await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), payload);
-          form.querySelector('[data-role="rtext"]').value = '';
-          form.classList.remove('open');
-          clearQuoting();
+          form.querySelector('[data-role="rtext"]').value = ''; form.classList.remove('open'); clearQuoting();
         } catch(e){ alert('Lỗi: ' + e.message); }
         btn.disabled = false;
       });
@@ -1315,24 +1292,18 @@ syncThemeBtns();
     waitFirebase(async ({db, ref, push}) => {
       const key = 'inline_' + pageKey() + '_p' + currentIdx;
       try{
-        await push(ref(db, 'comments/' + key), {
-          name : nameVal,
-          text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false
-        });
+        await push(ref(db, 'comments/' + key), { name : nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false });
         if(formText) formText.value = '';
       } catch(e){ alert('Lỗi: ' + e.message); }
       formSend.disabled = false;
     });
   });
-  formText?.addEventListener('keydown', e => {
-    if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click();
-  });
+  formText?.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click(); });
 
   const paragraphs = content.querySelectorAll('p');
   paragraphs.forEach((p, idx) => {
     const btn = document.createElement('button');
-    btn.className = 'ic-trigger';
-    btn.title     = 'Bình luận đoạn ' + (idx + 1);
+    btn.className = 'ic-trigger'; btn.title = 'Bình luận đoạn ' + (idx + 1);
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
     btn.innerHTML = '💬'; 
     p.appendChild(btn);
@@ -1341,26 +1312,194 @@ syncThemeBtns();
       const key = 'inline_' + pageKey() + '_p' + idx;
       onValue(ref(db, 'comments/' + key), snap => {
         const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
-        btn.innerHTML = cnt > 0
-          ? `💬<span>${cnt}</span>`
-          : '💬';
+        btn.innerHTML = cnt > 0 ? `💬<span>${cnt}</span>` : '💬';
         btn.classList.toggle('has-comments', cnt > 0);
       });
     });
 
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){
-        closeSidebar();
-      } else {
-        openSidebar(idx);
-      }
+      if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){ closeSidebar(); } else { openSidebar(idx); }
     });
   });
 })();
 
 /* ══════════════════════════════════════════
-   C. CHAPTER-END COMMENT
+   C. CHAPTER LIKE SYSTEM
+══════════════════════════════════════════ */
+(function setupChapterLike(){
+  const btn = document.getElementById('btnLikeChapter');
+  const countEl = document.getElementById('chapLikeCount');
+  if(!btn || !countEl) return;
+
+  const key = 'chap_' + pageKey();
+  const myToken = getMyToken();
+  const storageKey = 'dd_liked_' + key;
+
+  if(localStorage.getItem(storageKey) === 'true') {
+    btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️';
+  }
+
+  waitFirebase(({db, ref, onValue, update, remove}) => {
+    const likeRef = ref(db, 'chapter_likes/' + key);
+    
+    onValue(likeRef, snap => {
+      const data = snap.val() || {};
+      countEl.textContent = Object.keys(data).length;
+      if(data[myToken]) { btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true'); }
+    });
+
+    btn.addEventListener('click', async () => {
+      const isLiked = btn.classList.contains('liked');
+      btn.disabled = true;
+      try {
+        if(isLiked) {
+          await remove(ref(db, `chapter_likes/${key}/${myToken}`));
+          btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; localStorage.removeItem(storageKey);
+        } else {
+          await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
+          btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true');
+        }
+      } catch(e) { console.error('Lỗi like:', e); }
+      btn.disabled = false;
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════
+   D. NOVEL REVIEW SYSTEM
+══════════════════════════════════════════ */
+(function setupNovelReview(){
+  const truyenId = document.querySelector('.page-wrapper')?.dataset.truyenId;
+  const btnOpen = document.getElementById('btnOpenReview');
+  const modal = document.getElementById('rvModal');
+  const overlay = document.getElementById('rvOverlay');
+  if(!truyenId || !btnOpen || !modal) return;
+
+  const closeBtn = document.getElementById('rvClose');
+  const submitBtn = document.getElementById('rvSubmit');
+  const starSelect = document.getElementById('rvStarSelect');
+  const listEl = document.getElementById('rvList');
+  const myToken = getMyToken();
+  let selectedStars = 5;
+
+  const openModal = () => { overlay.classList.add('show'); modal.classList.add('show'); document.getElementById('toolFabWrap')?.classList.remove('open'); };
+  const closeModal = () => { overlay.classList.remove('show'); modal.classList.remove('show'); };
+  btnOpen.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  if(starSelect) {
+    const stars = starSelect.querySelectorAll('span');
+    stars.forEach(s => {
+      s.addEventListener('click', () => {
+        selectedStars = parseInt(s.dataset.val);
+        stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
+      });
+    });
+  }
+
+  waitFirebase(({db, ref, onValue, push, remove}) => {
+    const reviewRef = ref(db, 'novel_reviews/' + truyenId);
+    
+    onValue(reviewRef, snap => {
+      const data = snap.val() || {};
+      const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
+      
+      document.getElementById('rvCount').textContent = `${items.length} đánh giá`;
+      let avg = 0;
+      if(items.length > 0) {
+         const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
+         avg = (total / items.length).toFixed(1);
+      }
+      document.getElementById('rvAvg').textContent = avg > 0 ? avg : '0.0';
+      
+      const displayStars = document.getElementById('rvStarsDisplay');
+      if(displayStars) {
+         let starHtml = ''; const fullStars = Math.round(avg);
+         for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
+         displayStars.textContent = starHtml;
+      }
+
+      if(items.length === 0) {
+         listEl.innerHTML = '<div class="ic-empty">Chưa có đánh giá nào. Hãy là người đầu tiên!</div>';
+      } else {
+         listEl.innerHTML = items.map(rv => {
+            const isMine = rv.token === myToken; const canDel = window.__ddIsAdmin || isMine;
+            const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+            const badge = rv.isAdmin ? '<span class="ic-item-admin-badge" style="margin-left:5px">chủ nhà</span>' : '';
+            return `
+              <div class="rv-item">
+                 <div class="rv-item-hd">
+                    <div>
+                      <span class="rv-item-name">${esc(rv.name)||'Khách vô danh'}</span>${badge}
+                      <div class="rv-item-stars">${stars}</div>
+                    </div>
+                    ${canDel ? `<button class="rv-del-btn show" data-id="${esc(rv.id)}">Xóa</button>` : ''}
+                 </div>
+                 <p class="rv-item-text">${esc(rv.text).replace(/\n/g, '<br>')}</p>
+                 <div class="rv-item-time">${timeAgo(rv.ts)}</div>
+              </div>
+            `;
+         }).join('');
+
+         listEl.querySelectorAll('.rv-del-btn').forEach(b => {
+            b.addEventListener('click', async () => {
+               if(!confirm('Xóa đánh giá này?')) return;
+               await remove(ref(db, `novel_reviews/${truyenId}/${b.dataset.id}`));
+            });
+         });
+      }
+    });
+
+    submitBtn?.addEventListener('click', async () => {
+      const text = document.getElementById('rvText')?.value.trim();
+      const name = document.getElementById('rvName')?.value.trim() || 'Khách';
+      if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+      
+      submitBtn.disabled = true;
+      try {
+        await push(reviewRef, { name: window.__ddIsAdmin ? ADMIN_DISPLAY_NAME : name, text: text, rating: selectedStars, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin });
+        document.getElementById('rvText').value = ''; saveName(name);
+      } catch(e) { alert('Lỗi: ' + e.message); }
+      submitBtn.disabled = false;
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════
+   E. THỐNG KÊ LƯỢT XEM (ADMIN)
+══════════════════════════════════════════ */
+waitFirebase(({db, ref, get, update, onValue}) => {
+  const isNovel = document.querySelector('.novel-content') !== null;
+  if(!isNovel) return;
+  const key = pageKey();
+
+  const viewRef = ref(db, 'page_views/' + key);
+  get(viewRef).then(snap => {
+     let views = (snap.val() && snap.val().views) || 0;
+     if(!window.__ddIsAdmin) { update(ref(db, 'page_views'), { [key + '/views']: views + 1 }).catch(()=>{}); }
+  });
+
+  onValue(viewRef, snap => {
+      const vEl = document.getElementById('statViews');
+      if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
+  });
+
+  onValue(ref(db, 'comments/chap_' + key), snap => {
+      const data = snap.val() || {};
+      let cmtCount = Object.keys(data).length; let likeCount = 0;
+      Object.values(data).forEach(c => {
+        if(c.likes) likeCount += Object.keys(c.likes).length;
+        if(c.replies) cmtCount += Object.keys(c.replies).length;
+      });
+      const cEl = document.getElementById('statCmts'); const lEl = document.getElementById('statLikes');
+      if(cEl) cEl.textContent = cmtCount; if(lEl) lEl.textContent = likeCount;
+  });
+});
+
+/* ══════════════════════════════════════════
+   F. CHAPTER-END COMMENT
 ══════════════════════════════════════════ */
 (function setupChapComments(){
   const section   = document.getElementById('chapCommentSection');
@@ -1372,7 +1511,6 @@ syncThemeBtns();
   const cmtSubmit = document.getElementById('cmtSubmit');
   if(!cmtList) return;
 
-  // Restore saved name
   if(cmtName && getSavedName()) cmtName.value = getSavedName();
 
   const myToken     = getMyToken();
@@ -1390,11 +1528,8 @@ syncThemeBtns();
 
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
-    if(isAdmin){
-      if(cmtName){ cmtName.value = ADMIN_DISPLAY_NAME; cmtName.style.display = 'none'; }
-    } else {
-      if(cmtName){ cmtName.style.display = ''; if(!cmtName.value || cmtName.value === ADMIN_DISPLAY_NAME) cmtName.value = getSavedName(); }
-    }
+    if(isAdmin){ if(cmtName){ cmtName.value = ADMIN_DISPLAY_NAME; cmtName.style.display = 'none'; } } 
+    else { if(cmtName){ cmtName.style.display = ''; if(!cmtName.value || cmtName.value === ADMIN_DISPLAY_NAME) cmtName.value = getSavedName(); } }
     if(lastData !== null) rebuildComments(lastData);
   });
 
@@ -1403,29 +1538,17 @@ syncThemeBtns();
 
   function rebuildComments(data){
     if(!cmtList) return;
-    if(!data){
-      cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>';
-      return;
-    }
-    const items = Object.entries(data)
-      .map(([id,v]) => ({id,...v}))
-      .sort((a,b) => (a.ts||0) - (b.ts||0));
+    if(!data){ cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>'; return; }
+    const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => (a.ts||0) - (b.ts||0));
 
     cmtList.innerHTML = items.map(c => {
-      const isMine    = c.token === myToken;
-      const canDel    = isAdmin || isMine;
-      const cIsAdmin  = c.isAdmin === true;
-      const likeCount = c.likes ? Object.keys(c.likes).length : 0;
-      const liked     = getLiked(c.id);
-      const replies   = c.replies
-        ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0))
-        : [];
+      const isMine = c.token === myToken; const canDel = isAdmin || isMine; const cIsAdmin = c.isAdmin === true;
+      const likeCount = c.likes ? Object.keys(c.likes).length : 0; const liked = getLiked(c.id);
+      const replies = c.replies ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0)) : [];
 
       const repliesHtml = replies.map(r => {
-        const rMine   = r.token === myToken;
-        const rCanDel = isAdmin || rMine;
-        const rIsAdmin = r.isAdmin === true;
-        const atTag   = r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
+        const rMine = r.token === myToken; const rCanDel = isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
+        const atTag = r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
         return `<div class="reply-item" id="ri-${esc(r.id)}">
           <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="reply-body">
@@ -1479,115 +1602,60 @@ syncThemeBtns();
     const fb = window.__ddFirebase; if(!fb) return;
     cmtList.querySelectorAll('.cmt-like-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        if(getLiked(id)) return;
-        setLiked(id, true);
+        const id = btn.dataset.id; if(getLiked(id)) return; setLiked(id, true);
         try { await fb.push(fb.ref(fb.db, `comments/${key}/${id}/likes`), {ts:Date.now()}); } catch(e){}
       });
     });
-    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => {
-      btn.addEventListener('click', () => openReplyForm(btn.dataset.id, null, null));
-    });
-    cmtList.querySelectorAll('.reply-quote-btn').forEach(btn => {
-      btn.addEventListener('click', () => openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname));
-    });
-    cmtList.querySelectorAll('.reply-quoting-cancel').forEach(btn => {
-      btn.addEventListener('click', () => clearQuoting(btn.dataset.cid));
-    });
-    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open');
-        clearQuoting(btn.dataset.cid);
-      });
-    });
+    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => { btn.addEventListener('click', () => openReplyForm(btn.dataset.id, null, null)); });
+    cmtList.querySelectorAll('.reply-quote-btn').forEach(btn => { btn.addEventListener('click', () => openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname)); });
+    cmtList.querySelectorAll('.reply-quoting-cancel').forEach(btn => { btn.addEventListener('click', () => clearQuoting(btn.dataset.cid)); });
+    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => { btn.addEventListener('click', () => { document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open'); clearQuoting(btn.dataset.cid); }); });
+    
     cmtList.querySelectorAll('.reply-send-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const cid  = btn.dataset.cid;
-        const form = document.getElementById('rf-'+cid);
-        const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
-        if(!text) return;
-        btn.disabled = true;
-        const nameInput = form?.querySelector('[data-role="rname"]');
-        const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (nameInput?.value||'').trim() || 'Khách vô danh';
+        const cid  = btn.dataset.cid; const form = document.getElementById('rf-'+cid); const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
+        if(!text) return; btn.disabled = true;
+        const nameInput = form?.querySelector('[data-role="rname"]'); const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (nameInput?.value||'').trim() || 'Khách vô danh';
         if(!isAdmin) saveName(nameVal);
-        const quotBox = document.getElementById('rq-'+cid);
-        const replyTo = quotBox?.dataset.replyToId ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' } : null;
-        const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false };
-        if(replyTo) payload.replyTo = replyTo;
+        const quotBox = document.getElementById('rq-'+cid); const replyTo = quotBox?.dataset.replyToId ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' } : null;
+        const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false }; if(replyTo) payload.replyTo = replyTo;
         try {
           await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/replies`), payload);
-          form.querySelector('[data-role="rtext"]').value = '';
-          form.classList.remove('open');
-          clearQuoting(cid);
+          form.querySelector('[data-role="rtext"]').value = ''; form.classList.remove('open'); clearQuoting(cid);
           setTimeout(() => { const wrap = document.getElementById('riwrap-'+cid); if(wrap) wrap.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 300);
         } catch(e){ alert('Lỗi: '+e.message); }
         btn.disabled = false;
       });
     });
-    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if(!confirm('Xóa bình luận này?')) return;
-        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`));
-      });
-    });
-    cmtList.querySelectorAll('.reply-del.show').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        if(!confirm('Xóa reply này?')) return;
-        await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`));
-      });
-    });
+    
+    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn => { btn.addEventListener('click', async () => { if(!confirm('Xóa bình luận này?')) return; await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`)); }); });
+    cmtList.querySelectorAll('.reply-del.show').forEach(btn => { btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`)); }); });
   }
 
   function openReplyForm(cid, rid, rname){
-    const thread = document.getElementById('thread-'+cid);
-    const form   = document.getElementById('rf-'+cid);
+    const thread = document.getElementById('thread-'+cid); const form = document.getElementById('rf-'+cid);
     if(thread) thread.classList.add('open');
-    if(form){
-      form.classList.add('open');
-      if(rid){ setQuoting(cid, rid, rname); }
-      else { clearQuoting(cid); }
-      form.querySelector('[data-role="rtext"]')?.focus();
-    }
+    if(form){ form.classList.add('open'); if(rid){ setQuoting(cid, rid, rname); } else { clearQuoting(cid); } form.querySelector('[data-role="rtext"]')?.focus(); }
   }
   function setQuoting(cid, rid, rname){
-    const box = document.getElementById('rq-'+cid);
-    if(!box) return;
-    box.style.display    = 'flex';
-    box.dataset.replyToId   = rid;
-    box.dataset.replyToName = rname;
-    const label = box.querySelector('.reply-quoting-label');
-    if(label) label.textContent = '↩ Reply cho ' + (rname||'Khách vô danh');
+    const box = document.getElementById('rq-'+cid); if(!box) return;
+    box.style.display = 'flex'; box.dataset.replyToId = rid; box.dataset.replyToName = rname;
+    const label = box.querySelector('.reply-quoting-label'); if(label) label.textContent = '↩ Reply cho ' + (rname||'Khách vô danh');
   }
   function clearQuoting(cid){
-    const box = document.getElementById('rq-'+cid);
-    if(!box) return;
-    box.style.display       = 'none';
-    box.dataset.replyToId   = '';
-    box.dataset.replyToName = '';
+    const box = document.getElementById('rq-'+cid); if(!box) return; box.style.display = 'none'; box.dataset.replyToId = ''; box.dataset.replyToName = '';
   }
 
   waitFirebase(({db, ref, push, onValue}) => {
     onValue(ref(db, 'comments/'+key), snap => scheduleRebuild(snap.val()));
-    if(listenerBound) return;
-    listenerBound = true;
+    if(listenerBound) return; listenerBound = true;
     cmtSubmit?.addEventListener('click', async () => {
-      const text = (cmtText?.value||'').trim();
-      if(!text) return;
-      cmtSubmit.disabled = true;
-      const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (cmtName?.value||'').trim() || 'Khách vô danh';
-      if(!isAdmin) saveName(nameVal);
-      try {
-        await push(ref(db, 'comments/'+key), {
-          name  : nameVal,
-          text, ts : Date.now(), token : myToken, isAdmin : isAdmin ? true : false
-        });
-        if(cmtText) cmtText.value = '';
-      } catch(e){ alert('Lỗi: '+e.message); }
+      const text = (cmtText?.value||'').trim(); if(!text) return; cmtSubmit.disabled = true;
+      const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (cmtName?.value||'').trim() || 'Khách vô danh'; if(!isAdmin) saveName(nameVal);
+      try { await push(ref(db, 'comments/'+key), { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false }); if(cmtText) cmtText.value = ''; } catch(e){ alert('Lỗi: '+e.message); }
       cmtSubmit.disabled = false;
     });
-    cmtText?.addEventListener('keydown', e => {
-      if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click();
-    });
+    cmtText?.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click(); });
   });
 })();
 </script>

@@ -14,10 +14,24 @@ const storiesList = [
   { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', author: 'Đang cập nhật', cover: '', tags: ['đam mỹ', 'cổ đại'], tong_so_chuong: 0, desc: 'Dự án sắp ra mắt...' }
 ];
 
-// 3. Phân loại lấy mâm Cá Trên Trời (Có tong_so_chuong = 0)
-const caTrenTroiList = storiesList
-  .filter(s => s.tong_so_chuong === 0)
-  .map(story => ({ ...story, url: `/dynamic-duo-web/truyen/${story.id}/` }));
+// 3. Thuật toán tự động đếm chương và phân loại
+const storiesData = storiesList.map(story => {
+  const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
+  const chapCount = chaps.length;
+  const isCompleted = story.tong_so_chuong > 0 && chapCount >= story.tong_so_chuong;
+  
+  return { 
+    ...story, 
+    chapCount, 
+    isCompleted, 
+    url: `/dynamic-duo-web/truyen/${story.id}/` 
+  };
+});
+
+// 4. Các mâm truyện tự động lọc dựa vào SỐ CHƯƠNG THỰC TẾ
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
+const caTrenBanList = storiesData.filter(s => s.isCompleted);
+const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 ---
 
 <Layout frontmatter={{ title: 'Cá trên trời' }}>

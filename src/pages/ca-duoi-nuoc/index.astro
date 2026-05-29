@@ -1,19 +1,4 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-
-// 1. Quét toàn bộ file chương trong kho /truyen/
-const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
-
-// 2. Khai báo danh sách truyện (Copy y hệt bên trang chủ index.astro sang)
-const storiesList = [
-  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biaqhbcp.png', tags: ['niên hạ', 'đam mỹ', 'trai thẳng'], tong_so_chuong: 72, desc: 'Bạn cùng phòng của tôi hình như là gay...' },
-  { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', author: 'Hỉ Thượng Mi Sao', cover: '/dynamic-duo-web/images/biahcdh.png', tags: ['mất trí nhớ', 'chua xót', 'đồng quê'], tong_so_chuong: 109, desc: 'Mùa hè năm ấy, cánh đồng hoang cháy rực...' },
-  { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', author: 'Tam Đạo', cover: '/dynamic-duo-web/images/biandntkm.png', tags: ['HE', 'gương vỡ lại lành', 'drama motip cũ'], tong_so_chuong: 76, desc: '' },
-  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatnctsct.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74, desc: '' },
-  { id: 'vat-de-vo', title: 'Vật dễ vỡ', author: '??', cover: '', tags: ['đam mỹ'], tong_so_chuong: 0, desc: '' },
-  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', author: '??', cover: '', tags: ['đam mỹ', 'cổ đại'], tong_so_chuong: 0, desc: '' }
-];
-
 // 3. Thuật toán tự động đếm chương và phân loại
 const storiesData = storiesList.map(story => {
   const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
@@ -28,8 +13,10 @@ const storiesData = storiesList.map(story => {
   };
 });
 
-// 4. Lọc lấy ĐÚNG mâm Cá Dưới Nước (Chưa hoàn thành và đã có chương)
-const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.tong_so_chuong > 0);
+// 4. Các mâm truyện tự động lọc dựa vào SỐ CHƯƠNG THỰC TẾ
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
+const caTrenBanList = storiesData.filter(s => s.isCompleted);
+const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 ---
 
 <Layout frontmatter={{ title: 'Cá dưới nước' }}>

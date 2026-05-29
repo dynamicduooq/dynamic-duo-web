@@ -14,25 +14,22 @@ const storiesList = [
 
 // 3. Thuật toán tự động đếm chương và phân loại
 const storiesData = storiesList.map(story => {
-  // Tìm tất cả file chương (.md) thuộc id truyện này
   const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
   const chapCount = chaps.length;
-  
-  // Kiểm tra hoàn thành: Nếu số chương đã đăng >= tổng số chương
   const isCompleted = story.tong_so_chuong > 0 && chapCount >= story.tong_so_chuong;
   
-  return {
-    ...story,
-    chapCount,
-    isCompleted,
-    url: `/dynamic-duo-web/truyen/${story.id}/`
+  return { 
+    ...story, 
+    chapCount, 
+    isCompleted, 
+    url: `/dynamic-duo-web/truyen/${story.id}/` 
   };
 });
 
-// 4. Lọc ra 2 mâm truyện
-const caDuoiNuocList = storiesData.filter(s => !s.isCompleted);
+// 4. Các mâm truyện tự động lọc dựa vào SỐ CHƯƠNG THỰC TẾ
+const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
-// ... (các đoạn code bạn đang có) ...
+const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 
 // 5. TỰ ĐỘNG HÓA MỤC "MỚI CẬP NHẬT"
 // Lọc các chương không phải bản nháp, có ngày tháng, và sắp xếp theo ngày giảm dần
@@ -762,7 +759,7 @@ const recentChaps = allChaps
         </ul>
       </div>
     </div>
-    
+
     <!-- Quote of the day -->
     <div class="widget reveal">
       <div class="widget-title">✨ Quote of the day</div>

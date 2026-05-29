@@ -658,18 +658,18 @@ if (isNovelPage) {
       <button class="nav-btn">Cá dưới nước ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/truyen/" class="dd-item">🐠 Tất cả truyện</a>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
         <div class="dd-divider"></div>
         <div class="dd-section-title">Truyện</div>
         <a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
         <a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
-              </div>
+      </div>
     </div>
     <div class="nav-item">
       <button class="nav-btn">Cá trên bàn ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/truyen/" class="dd-item">🍽️ Tất cả truyện</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
         <div class="dd-divider"></div>
         <div class="dd-section-title">Truyện</div>
         <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
@@ -678,12 +678,12 @@ if (isNovelPage) {
         <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
       </div>
     </div>
-    <div class="nav-item"><a href="/dynamic-duo-web/truyen/">Cá trên trời</a></div>
+    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
+    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
-        <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
+    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -693,17 +693,17 @@ if (isNovelPage) {
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
   <div class="mobile-section-title">Cá dưới nước</div>
-  <a href="/dynamic-duo-web/truyen/">🐠 Tất cả</a>
+  <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
   <a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/">✦ Quan hệ bạn cùng phòng</a>
   <a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/">✦ Hạ cháy đồng hoang</a>
   <div class="mobile-section-title">Cá trên bàn</div>
-  <a href="/dynamic-duo-web/truyen/">🍽️ Tất cả</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
   <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/">✦ Nếu đêm nay trời không mưa</a>
   <a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
   <a href="/dynamic-duo-web/truyen/vat-de-vo/">✦ Vật dễ vỡ</a>
   <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/">✦ Thiếu đế xuân tâm</a>
   <div class="mobile-section-title">Khác</div>
-  <a href="/dynamic-duo-web/truyen/">🌤️ Cá trên trời</a>
+  <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
   <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
@@ -719,10 +719,14 @@ if (isNovelPage) {
   )}
 
   {isNovelPage && (
-    <div class="chap-nav-row">
+<div class="chap-nav-row">
       {prevChap
         ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
         : <span class="chap-pn disabled">← Chương trước</span>}
+        
+      <!-- NÚT MỤC LỤC TRUYỆN MỚI THÊM -->
+      <a href={`/dynamic-duo-web/truyen/${currentTruyenId}/`} class="chap-pn" style="font-weight:600; color:var(--sky-dark)" title="Quay lại mục lục">📖 Mục lục</a>
+      
       {chapters.length > 1 && (
         <div class="chap-dd-wrap" id="ddTop">
           <button class="chap-dd-btn" id="ddBtnTop">⚓ Chọn chương ▾</button>
@@ -735,11 +739,11 @@ if (isNovelPage) {
           </div>
         </div>
       )}
+      
       {nextChap
         ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
         : <span class="chap-pn disabled">Chương sau →</span>}
-    </div>
-  )}
+    </div>  )}
 
   {isNovelPage ? (
     <div class="novel-layout-wrap" id="novelLayoutWrap">

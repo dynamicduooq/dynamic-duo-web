@@ -1,141 +1,117 @@
 ---
-layout: ../../../layouts/Layout.astro
+layout: "../../../layouts/Layout.astro"
 title: "Chương 74"
 truyen_id: "tnctsct"
 chuong: 74
-date: "2026-05-18"
+date: "2026-05-29"
 tags:
   - "tôi nghĩ chúng tôi sắp chia tay"
   - "đam mỹ"
   - "hiện đại"
   - "chua xót"
+description: ""
+draft: false
+editor_note: ""
 ---
 
-## Chương 1: Những lời hứa hóa thành gông cùm, nhưng cả hai chúng tôi đều không nói ra
+## Chương 74: Một số lời cảm ơn
 
- 
- 
- ⚓ Chọn chương ▾
- 
- 
- 
- 
-Chương 01
- Chương 02
- Chương 03
- Chương 04
- Chương 05
- Chương 06
- Chương 07
- Chương 08
- Chương 09
- Chương 10
- 
- Chương 11
- Chương 12
- Chương 13
- Chương 14
- Chương 15
- Chương 16
- Chương 17
- Chương 18
- Chương 19
- Chương 20
- 
- Chương 21
- Chương 22
- Chương 23
- Chương 24
- Chương 25
- Chương 26
- Chương 27
- Chương 28
- <a href="https://dynamicduoq.wordpress.com/2026/05/18/tnctsct-chuong-29/" style="display: block;padding: 12px 10px;background: transparent;border: none;border-bottom: 1px dashed #e0f2fe;border-radius: 0;text 
- 
+Hôm qua, khi dọn dẹp phòng sách, tôi bất ngờ tìm thấy một cuốn sổ dày cộm ở góc kệ sách. Mở ra xem, bên trong toàn là ảnh của tôi, nhiều tấm tôi chưa từng thấy bao giờ. Tôi mang ra hỏi vợ đây là gì, em quay đầu liếc một cái, thốt lên một tiếng rồi lao tới, tuyệt vọng hỏi: “Anh mở ra xem rồi à?”
 
-***[Không Uống Thuốc]***
+Tôi nói: “Xem rồi, toàn ảnh của anh, em chụp à?”
 
-Năm nay là năm thứ tám chúng tôi bên nhau, và tôi nghĩ, có lẽ chúng tôi sắp chia tay rồi.
+Em thở dài thườn thượt, ném cuốn sổ cho tôi, bảo: “Thôi, năm nay anh không có quà sinh nhật nữa.”
 
-Cảm giác này không phải mới xuất hiện hôm nay, cũng không phải mới có trong năm nay. Có lẽ đã bắt đầu từ rất lâu rồi, nhưng tôi không thể xác định chính xác là từ khi nào.
+Tôi bật cười, chợt hiểu ra tại sao cuốn sổ này lại được giấu kín trong tủ sách nhà tôi.
 
-Điều khiến tôi bất an nhất là, dường như tôi không còn yêu em nữa.
+Tôi nói: “Sinh nhật anh còn mấy tháng nữa mà.
 
-Ý nghĩ này đã thoáng hiện ra trong đầu tôi rất nhiều lần, nhưng mỗi khi nó vừa nhen nhóm, tôi đều cố gắng dập tắt nó ngay lập tức. Vì tôi không dám đối diện với suy nghĩ ấy.
+Em bảo: “Phải đấy, anh vội vàng thế làm gì?”
 
-Nhưng thường thì càng cố phủ nhận điều gì, trong lòng sẽ càng hiểu rõ đáp án cho điều ấy. Hồi tôi yêu em cũng vậy.
+Tôi nói: “Anh vội vàng gì chứ, chẳng phải tại em không giấu kỹ à.”
 
-Tan làm về nhà đã hơn sáu giờ tối, vợ tôi vẫn đang ngủ, khoảnh khắc đặt đồ ăn lên bàn, tôi đột nhiên cảm thấy vô cùng mệt mỏi.
+Tôi nói: “Thế anh xem nhé.”
 
-Ngay khi ý nghĩ ấy lóe lên, tôi vội bước vào bếp, rửa đồ và bắt đầu nấu cơm.
+Vợ cắn táo, ghé lại xem cùng tôi, rầu rĩ nói: “Xem đi xem đi, dù sao bất ngờ cũng chẳng còn...”
 
-Lát nữa em sẽ dậy, ăn xong rồi lại đi làm.
+Cuốn album này rất đậm phong cách của vợ tôi, ảnh được sắp xếp theo thứ tự thời gian, mỗi tấm đều ghi ngày tháng, không nhớ rõ thì đánh dấu “khoảng năm 20XX”, bên dưới còn có bình luận cá nhân của em.
 
-Thời gian làm việc của hai đứa chúng tôi không giống nhau. Khi tôi đi làm, em nghỉ ngơi; khi tôi về nhà, em lại chuẩn bị ra ngoài. Tôi không chắc liệu đây có phải là lý do khiến tình cảm của chúng tôi rạn nứt hay không, nhưng có lẽ không phải. Vì hồi đó, khi tôi theo đuổi em, tôi đã thật lòng nghĩ rằng chỉ cần được nhìn thấy em mỗi ngày, được chăm sóc em, tôi đã mãn nguyện lắm rồi, dù chẳng cần em yêu lại tôi.
+Một số ảnh tôi còn nhớ mang máng, nhưng mấy tấm hồi cấp ba thì tôi không có chút ấn tượng nào. Độ phân giải tệ hại, rõ ràng là chụp lén bằng Nokia.
 
-Giờ đây, tôi vẫn được nhìn thấy em mỗi ngày, vẫn chăm sóc em, và tôi thực sự đã làm như thế. Nhưng tôi không còn cảm thấy niềm vui như trước kia.
+Vợ tiếc rẻ nói thật ra lúc đó em chụp tôi rất nhiều ảnh, nhưng sau đó vì buồn mà format cả điện thoại. Mấy tấm còn sót lại là lần trước về nhà, tình cờ tìm thấy trong cái máy tính to đùng vài năm trước của gia đình.
 
-Tôi không yêu người khác, giữa chúng tôi cũng không có người thứ ba. Tôi không muốn thừa nhận, nhưng tôi biết, có lẽ tôi thực sự không còn yêu em nữa. Tôi đã cố gắng che giấu điều này, nhưng có lẽ em cũng đã nhận ra đôi chút.
+Em chỉ vào một tấm ảnh tôi mặt vô cảm uống coca, thuận miệng nói: “Lúc đó trông anh chẳng vui chút nào.”
 
-Có đôi khi, em sẽ bất chợt ngẩng đầu lên từ bát cơm, hỏi tôi: “Anh còn nhớ những lời anh nói khi theo đuổi em không?”
+Tấm ảnh đó hình như chụp trong buổi liên hoan năm mới, mọi người ngồi thành vòng tròn, trên bàn đầy hạt dưa, cam quýt.
 
-Mỗi lần như thế, tôi đều vội vàng gắp thêm đồ ăn cho em, đáp: “Tất nhiên rồi, nhớ chứ.”
+Tôi nói có lẽ tôi chỉ đang ngẩn người thôi.
 
-Tôi nhớ, nên tôi chưa từng đề nghị chia tay với em.
+Em lắc đầu, quả quyết: “Lúc đó anh chính là kiểu tính tình thế đó.”
 
-Cơm nước xong xuôi, tôi đẩy cửa phòng ngủ để gọi vợ dậy.
+Cuốn album dày cộm, tôi xem từng tấm một, vợ ở bên cạnh giải thích từng tấm chụp khi nào, lúc đó xảy ra chuyện gì, tôi nói gì... Thật ra, dù em không nói, bên dưới cũng ghi rất rõ bằng bút mực. Tôi biết em hơi ngượng.
 
-Khi tôi không ở nhà, em ngủ thường cuộn tròn người lại, ôm hết chăn vào lòng, còn người thì nằm bên ngoài. Mùa đông thì không sao, có lò sưởi không sợ lạnh, nhưng mùa hè em thích bật điều hòa, thường bị lạnh bụng, rồi đau bụng đi ngoài. Nói mãi em không nghe, không cho bật điều hòa thì em giận, thế nên nhà lúc nào cũng phải có sẵn thuốc tiêu hóa, hoặc trước khi ra ngoài tôi lén đặt giờ tắt điều hòa. Tóm lại, lúc nào cũng lo lắng không xuể.
+Tôi thực sự rất ngạc nhiên, dù lúc đó không thể nói gì với em ngay, nhưng đã cảm động đến hơi bối rối không biết phải làm sao. Tôi hỏi em: “Chuyện bao nhiêu năm trước rồi, em còn nhớ à.”
 
-Khi tôi đẩy cửa bước vào, em vẫn chưa tỉnh, nửa khuôn mặt vùi trong chăn, trông ngoan ngoãn và trắng trẻo lạ thường. Chỉ khi ngủ, em mới có chút dáng vẻ của “người thường”.
+Em làm như không có gì, nói: “Tại trí nhớ em tốt chứ sao.”
 
-Tôi quỳ một chân lên giường, ôm cả người lẫn chăn, hôn nhẹ lên trán em, thì thầm: “Cục cưng, dậy ăn cơm nào.”
+Sau đó, buổi tối lúc hai đứa thân mật, em mới ôm cổ tôi khẽ nói: “Chuyện về anh, em đều nhớ.”
 
-Em hay cáu gắt khi bị đánh thức, và đây là cách gọi mà tôi đã thử nghiệm nhiều lần, biết em sẽ dễ chấp nhận nhất.
+Cuốn sổ dán ảnh đó, thật ra ảnh chỉ chiếm một nửa, phần còn lại là những lời em viết. Có đoạn rất dài, có đoạn chắc là lén viết vào ban đêm, lờ mờ thấy dấu nước khô trên giấy.
 
-Em nhắm nghiền hai mắt, càu nhàu không vui: “Lại ăn cơm...” rồi bực bội đá tung chăn, vô tình trúng ngay xương sườn tôi.
+Ban đêm em luôn cảm tính khác thường.
 
-Thật ra cũng không đau lắm, nhưng khoảnh khắc đó, tôi bỗng cảm thấy mình gần như không chịu nổi nữa.
+Về bao năm nay của chúng tôi, về những điều em nghe thấy, cảm nhận trong những ngày bình dị này, về nỗi buồn và những suy nghĩ chưa từng nói với tôi mỗi khi cãi nhau, và cả những ngày mai có thể đến, cùng một số lời dặn dò hơi nặng nề một chút.
 
-Trước đây, trong mắt tôi, những lần em cáu gắt khi bị đánh thức đều đáng yêu vô cùng. Tôi sẵn lòng ôm em, dỗ dành hết lần này đến lần khác để em chịu xuống ăn cơm. Dù có bị “cước vô ảnh” đá gãy cả xương sườn, tôi vẫn thấy đó là yêu, là thương.
+Khi tôi xem những dòng chữ đó, em sẽ lảng tránh, giả vờ khát nước vào bếp tìm nước uống, hoặc một mình ở phòng khách ăn hoa quả.
 
-Nhưng sau tám năm dỗ dành, tôi không biết liệu mình có đang chán ngán hay không.
+Xem xong, lòng tôi cũng hơi khó chịu, hỏi em ấy viết mấy thứ không đâu này làm gì.
 
-“Vậy ngủ thêm chút nữa đi.” Hôm nay, tôi không dỗ em nữa, chỉ giúp em đắp lại chăn cho ngay ngắn rồi đứng dậy rời đi.
+Lúc đó em lại không ngượng nữa, hùng hồn nói em không thể có chỗ dựa mà không lo, em phải phòng xa.
 
-Tôi vừa ngồi xuống bàn ăn, em đã lật đật chạy ra, tóc vẫn còn rối bù.
+Em đúng là phòng xa rồi, mấy hôm trước em luôn cắn móng tay, trầm ngâm xem tin tức, nói: “Em không nhịn được nghĩ, nếu bây giờ người nằm trong phòng bệnh ấy là anh, em biết phải làm sao...”
 
-Em tỉnh táo hẳn, đôi mắt còn đỏ vì chưa ngủ đủ, có lẽ vừa dụi mắt liên tục, ngoan ngoãn nói: “Em vừa ngủ mơ màng chút thôi.”
+Lần trước nói về chuyện sinh tử, em còn nghiến răng nói nếu tôi dám tìm người khác, em sẽ quấy rối tôi không cho tôi yên, nhưng khi viết trên giấy, lại là những lời hoàn toàn ngược lại.
 
-Khác hẳn với lúc nãy.
+Tôi hỏi em gần đây có thấy không khỏe ở đâu không?
 
-Tôi nhận ra em hơi căng thẳng và bất an. Trước đây, em chưa bao giờ lo lắng chỉ vì trót cáu gắt với tôi khi bị gọi dậy.
+Em bày ra vẻ mặt vô cảm nhìn tôi, nói: “Biết ngay anh sẽ nghĩ thế, nếu không mai anh đưa em đi khám tổng quát đi, đừng để anh lo lắng đến sinh bệnh.”
 
-Tôi đẩy bát cơm của mình sang cho em: “Em ăn trước đi.”
+Tôi nói: “Vậy em viết mấy thứ này dọa anh làm gì?”
 
-Em xua tay: “Anh ăn đi, em tự đi lấy.”
+Em bực bội giật lại cuốn sổ, nói: “Thôi thôi đừng xem nữa, chỉ là em tự dưng nông nổi viết chơi thôi. Đừng nghĩ lung tung, em thật sự không nhiễm bệnh gì hết, ít nhất thì giờ này cũng chưa chết được đâu, đi rửa dâu tây cho em đi.”
 
-Thật ra, dạo này em đã chín chắn hơn nhiều, nên tôi càng chắc chắn rằng em cũng cảm nhận được điều gì đó.
+Tôi nói em đúng là rỗi hơi, rảnh quá còn tự hành mình chơi.
 
-“Ôi, canh này ngon thật đấy!” Em uống một ngụm canh, cười với tôi, nhưng vẻ mặt cẩn thận từng li từng tí ấy khiến tôi càng thêm khó chịu.
+Thật ra tôi biết những lo lắng của em không phải hoàn toàn là lo xa, chỉ là buồn vì những chuyện này thì quá ngốc. Dù sao, ai có thể cướp người từ tay ông trời chứ. Có lẽ mấy ngày nay xem quá nhiều cảnh sinh ly tử biệt, làm em khó chịu.
 
-Trước đây, vợ tôi không bao giờ như vậy. Món nào ngon, em chỉ lặng lẽ ăn thêm vài miếng, chưa từng khen ngợi.
+Tối, sau khi vận động trên giường xong, tôi và vợ tâm sự câu được câu chăng, em nói: “Em cảm thấy hai đứa mình đi đến hôm nay thật sự không dễ dàng.”
 
-Chính tôi đã nuông chiều em thành một bạn nhỏ vô tư, kiêu ngạo vì được yêu thương, nhưng giờ lại khiến em phải dè dặt, nhìn sắc mặt tôi mà sống.
+Tôi vỗ lưng em, nói: “Đừng nghĩ lung tung.”
 
-Tôi đúng là một tên khốn.
+Em nói: “Em biết nhiều lúc em hành anh ghê lắm.”
 
- 
- 
- Hồi đó, chính tôi đã bám riết không buông, khóc lóc van xin em cho tôi một cơ hội, nói rằng tôi muốn trở thành người yêu em nhất trên đời, muốn chăm sóc em cả đời, để em trở thành người hạnh phúc nhất thế gian.
- 
+Tôi nói: “Chuyện khác thì không sao, em biết anh ghét nhất ở em điều gì không?”
 
- 
- 💬
- 
+Em nói: “Biết, bị bệnh chứ gì.”
 
-Hình như tôi đã thất hứa rồi.
+Tôi cảm thấy vợ tôi ngày càng tự biết mình rồi.
 
-Lúc ấy, tôi không nghĩ rằng “cả đời” lại dài đến vậy.
+Có lẽ hai người ở bên nhau lâu, thật sự sẽ ngày càng giống nhau, không phải về tính cách, mà là thái độ và suy nghĩ.
 
-Những lời hứa chân thành ngày nào giờ đã hóa thành gông cùm. Cả hai chúng tôi đều nhận ra, chỉ là tôi không nói, và em cũng chẳng cất lời.
+Tôi cũng từng thử dùng chữ viết hay DV ghi lại tất cả mọi thứ về em, hoặc nếu một ngày tôi ra đi, có thể để lại cho em chút an ủi. Tôi cũng từng nghĩ nếu ngày đó đến sớm, em có thể quên tôi, bắt đầu lại được thì tốt nhất, nhưng nếu không quên được, tôi cũng không muốn em cô đơn không nơi nương tựa. Hồi ức mà không có chỗ gửi gắm thì thật quá mong manh.
+
+Đôi khi chúng ta không được giáo dục đủ nhiều về cái chết, đến nỗi coi nó là thứ gì đó quá nặng nề. Về chuyện này, tôi nghĩ tôi nên trò chuyện lại với em, cùng học đối mặt với chuyện bình thường này theo cách bình thản nhất.
+
+Thật ra gần đây tôi luôn cảm thấy mình sẽ không viết gì nữa, lời sến súa đã nói quá nhiều, người muốn chia sẻ mọi điều vui buồn cũng đã ở bên cạnh, giờ chúng tôi đang học cách thành thật với nhau.
+
+Về những ngày bình thường vụn vặt của tôi và vợ, có lẽ đây là bài cuối, có lẽ một ngày nào đó hứng khởi hoặc bị em chọc tức đến chết, tôi sẽ lại đến lải nhải xả giận.
+
+Cảm ơn mọi người đã đồng hành trong sáu tháng qua, nếu câu chuyện của chúng tôi có thể làm bạn hy vọng nhiều hơn về tình yêu và cuộc sống, thì đó là vinh hạnh lớn nhất. Cho dù bạn nghĩ đây có phải là thật hay không, dù sao, ở một góc nào đó của thành phố này, cũng đang có hai người bình thường yêu nhau, sống bình dị, không ngừng cãi nhau, song vẫn luôn ở bên nhau.
+
+Lúc viết những dòng này, vợ ngồi bên cạnh xem, tôi hỏi em có gì muốn nói không, em rất tùy hứng vẫy tay nói chúc mọi người bình an thuận lợi, hạnh phúc khỏe mạnh.
+
+Thôi, vậy chúc các bạn bình an thuận lợi, hạnh phúc khỏe mạnh nhé.
+
+Chiến Dữ Đình và vợ Lưu Tử Kỳ kính chúc
+
+2020.03.07

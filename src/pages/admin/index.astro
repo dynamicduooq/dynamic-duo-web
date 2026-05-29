@@ -1380,39 +1380,7 @@ async function saveSettingsJSON() {
   btn.textContent = 'Lưu Cấu hình'; btn.disabled = false;
 }
 
-async function performBackup() {
-    const btn = $('btn-backup'); const log = $('backup-log');
-    btn.disabled = true; log.innerHTML = 'Đang khởi tạo JSZip...<br>';
-    
-    try {
-        const zip = new JSZip(); const rootFolder = zip.folder("dynamic-duo-backup");
-        for(const s of storiesList) {
-            log.innerHTML += `Đang tải: ${s.title}...<br>`;
-            const path = `/contents/src/pages/${s.cat}/${s.id}?ref=${BRANCH}`;
-            try {
-                const files = await ghAPI(path);
-                const storyFolder = rootFolder.folder(s.id);
-                for(const f of files) {
-                    if(f.name.endsWith('.md') || f.name.endsWith('.astro')) {
-                        const fileData = await ghAPI(f.path);
-                        const content = b64Decode(fileData.content.replace(/\n/g, ''));
-                        storyFolder.file(f.name, content);
-                    }
-                }
-            } catch(e) { log.innerHTML += `<span style="color:red">Lỗi tải ${s.title}: ${e.message}</span><br>`; }
-        }
-        
-        log.innerHTML += 'Đang nén file ZIP... Vui lòng chờ.<br>';
-        const content = await zip.generateAsync({type:"blob"});
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = `Backup-Dynamic-Duo-${new Date().toISOString().split('T')[0]}.zip`;
-        a.click();
-        log.innerHTML += '✅ Hoàn tất tải xuống ZIP!';
-    } catch(e) { log.innerHTML += `<span style="color:red">Lỗi hệ thống: ${e.message}</span>`; } 
-    finally { btn.disabled = false; }
-}
-
+async function performBackup()
 function openStoryModal() { openModal('storyModal'); }
 function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); }

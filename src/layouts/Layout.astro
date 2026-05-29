@@ -21,8 +21,7 @@ if (currentTruyenId && isNovelPage) {
     )
     .sort((a: any, b: any) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
 
-  // Sử dụng RegExp thay cho chuỗi thuần để tránh lỗi parse Markdown
-  const normPath = (u: string) => u.replace(new RegExp('/$'), '').replace(new RegExp('/index$'), '');
+  const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
   const idx = chapters.findIndex((c: any) => {
     const u = normPath(c.url || '');
@@ -40,7 +39,6 @@ if (currentTruyenId && isNovelPage) {
   <title>{frontmatter?.title || 'Trang chủ'} | {settings.site_name}</title>
   <meta name="description" content={frontmatter?.description || settings.tagline} />
   
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/dynamic-duo-web/favicon.png" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -120,7 +118,6 @@ if (currentTruyenId && isNovelPage) {
       --border-card:rgba(186,230,253,.5);
     }
 
-    /* ── DARK THEME ── */
     [data-theme="dark"] {
       --sky:#7ec8e3; --sky2:#a8daf0; --sky-dark:#c5e8f5;
       --sky-light:#1e4a6a; --sky-pale:#0d2035;
@@ -285,16 +282,33 @@ if (currentTruyenId && isNovelPage) {
     /* ── BONG BÓNG INLINE COMMENT ── */
     .ic-trigger {
       display: inline-flex; align-items: center; justify-content: center;
-      margin-left: 8px; padding: 4px; background: transparent; border: none; cursor: pointer;
-      font-size: 1.1rem; opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      vertical-align: middle; color: var(--sky); transform: translateY(2px) scale(0.9);
+      margin-left: 8px; padding: 4px;
+      background: transparent; border: none; cursor: pointer;
+      font-size: 1.1rem; opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      vertical-align: middle; color: var(--sky);
+      transform: translateY(2px) scale(0.9);
       filter: grayscale(100%) opacity(0.5);
     }
-    .novel-content p:hover .ic-trigger { opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1); }
-    .ic-trigger:hover { opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important; color: var(--sky2); filter: grayscale(0%) opacity(1) !important; }
-    .ic-trigger.has-comments { opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1); }
-    .novel-content p.ic-active .ic-trigger { opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1); }
-    .ic-trigger span { font-size: 0.6rem; font-weight: bold; background: var(--sky-pale); color: var(--sky-dark); border-radius: 10px; padding: 1px 6px; margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-family: sans-serif; }
+    .novel-content p:hover .ic-trigger {
+      opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1);
+    }
+    .ic-trigger:hover {
+      opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important;
+      color: var(--sky2); filter: grayscale(0%) opacity(1) !important;
+    }
+    .ic-trigger.has-comments {
+      opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1);
+    }
+    .novel-content p.ic-active .ic-trigger {
+      opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1);
+    }
+    .ic-trigger span {
+      font-size: 0.6rem; font-weight: bold; background: var(--sky-pale);
+      color: var(--sky-dark); border-radius: 10px; padding: 1px 6px;
+      margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+    }
     [data-theme="dark"] .ic-trigger span { background: rgba(126,200,227,.2); color: #a8daf0; }
 
     /* ── INLINE COMMENT SIDEBAR ── */
@@ -379,7 +393,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-reply-form { display:none; flex-direction:column; gap:5px; margin-top:5px; }
     .ic-reply-form.open { display:flex; }
     .ic-reply-form input, .ic-reply-form textarea { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
-    .ic-reply-form input { border-radius:var(--r-pill); font-size:.75rem; }
+    .ic-reply-form input { border-radius:var(--r-pill); }
     .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
     .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-reply-form input, [data-theme="dark"] .ic-reply-form textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
@@ -391,7 +405,7 @@ if (currentTruyenId && isNovelPage) {
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* ── CHAPTER-END COMMENT (Đã khôi phục CSS) ── */
+    /* ── CHAPTER-END COMMENT ── */
     .chap-comment-section { max-width:800px; margin:0 auto; padding:0 12px 60px; }
     .chap-comment-title { font-family:'Merriweather',serif; font-size:.95rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
     .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
@@ -472,6 +486,21 @@ if (currentTruyenId && isNovelPage) {
     .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
+    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
+    [data-theme="dark"] .reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
+    .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
+    [data-theme="dark"] .reply-quoting { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
+    .reply-quoting-label { flex:1; font-size:.68rem; color:var(--sky); font-style:italic; }
+    [data-theme="dark"] .reply-quoting-label { color:#a8daf0; }
+    .reply-quoting-cancel { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 2px; border-radius:3px; transition:color .15s; }
+    .reply-quoting-cancel:hover { color:#ef4444; }
+    .reply-quote-btn { display:inline-block; margin-top:4px; background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--sky); padding:0; font-family:'Newsreader',serif; transition:color .15s; }
+    .reply-quote-btn:hover { color:var(--sky2); text-decoration:underline; }
+    [data-theme="dark"] .reply-quote-btn { color:#a8daf0; }
+    .reply-items-wrap { display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
+    .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
+    .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
+    [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#3d6a82; }
 
     /* ── FOOTER ── */
     footer { background:#fff; border-top:1px solid rgba(186,230,253,.4); padding:44px 20px 26px; margin-top:auto; }
@@ -659,7 +688,7 @@ if (currentTruyenId && isNovelPage) {
 
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
-<!-- Gắn data-truyen-id để JS nhận diện -->
+<!-- Gắn data-truyen-id để tính năng Rating lấy ID truyện -->
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
     <div class="tags-container">
@@ -800,7 +829,7 @@ if (currentTruyenId && isNovelPage) {
   <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
 </footer>
 
-<!-- TẤT CẢ NÚT ĐƯỢC GỘP VÀO 1 FAB (Nút nổi) -->
+<!-- ── FLOATING TOOLS MỚI (TỐI GIẢN) ── -->
 <div class="tool-fab-wrap" id="toolFabWrap">
   <div class="tool-fab-menu" id="toolFabMenu">
     {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
@@ -813,7 +842,7 @@ if (currentTruyenId && isNovelPage) {
   <button class="tool-fab-toggle" id="toolFabToggle">⋮</button>
 </div>
 
-<!-- POPUP CÀI ĐẶT -->
+<!-- CÁC POPUP CỦA FLOATING TOOLS -->
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
     <div class="rs-title">Thiết lập đọc</div>
@@ -839,7 +868,6 @@ if (currentTruyenId && isNovelPage) {
   </div>
 )}
 
-<!-- POPUP THỐNG KÊ ADMIN -->
 {isNovelPage && (
   <div class="rs-popup" id="statsPopup">
     <div class="rs-title" style="color: #10b981;">📊 Thống kê Chương</div>
@@ -852,7 +880,6 @@ if (currentTruyenId && isNovelPage) {
   </div>
 )}
 
-<!-- BẢNG ĐÁNH GIÁ TRUYỆN -->
 {isNovelPage && (
   <div class="rv-modal" id="rvModal">
     <div class="rv-overlay" id="rvOverlay"></div>
@@ -883,17 +910,13 @@ if (currentTruyenId && isNovelPage) {
   </div>
 )}
 
-
 <script is:inline>
 /* ══ HELPERS ══ */
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function timeAgo(ts){
-  if(!ts) return '';
-  const d=Date.now()-ts;
-  if(d<60000) return 'vừa xong';
-  if(d<3600000) return Math.floor(d/60000)+' phút trước';
-  if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
-  return Math.floor(d/86400000)+' ngày trước';
+  if(!ts) return ''; const d=Date.now()-ts;
+  if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
+  if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
 }
 function pageKey(){ return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120); }
 function avatarLetter(name){ return (name||'K').trim().charAt(0).toUpperCase(); }

@@ -375,693 +375,781 @@ const hcdhCount    = countChaps(hcdhPosts);
 [data-theme="dark"] .contact-email:hover { background: rgba(126,200,227,0.1); color: #e8f4ff; }
 .copy-tooltip { position: absolute; background: #333; color: #fff; font-size: 0.65rem; padding: 4px 8px; border-radius: 4px; pointer-events: none; opacity: 0; transform: translateY(-5px); transition: all 0.2s; white-space: nowrap; z-index: 1000; }
 .copy-tooltip.show { opacity: 1; transform: translateY(-30px); }
-  </style>
-</head>
-<body>
 
-<div id="read-progress"></div>
+/* FLOATING MAIL BUBBLE - Dành riêng cho index.astro */
+.msg-bubble-btn {
+  position:fixed;
+  bottom: 126px;
+  right: 22px;
+  z-index: 410;
+  width: 44px; height: 44px; border-radius:50%; 
+  background:linear-gradient(135deg, rgba(14,165,233,0.9), rgba(2,132,199,0.9));
+  backdrop-filter: blur(8px);
+  border:1px solid rgba(255,255,255,0.2);
+  cursor:pointer; color:#fff; font-size:1.1rem;
+  box-shadow:0 6px 16px rgba(2,132,199,.4);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s ease;
+}
+.msg-bubble-btn:hover {
+  transform:scale(1.15) translateY(-3px);
+  box-shadow:0 10px 25px rgba(2,132,199,.55);
+}
+[data-theme="dark"] .msg-bubble-btn { 
+  background:linear-gradient(135deg,rgba(26,90,144,0.9),rgba(14,61,110,0.9)); 
+  border-color:rgba(126,200,227,0.2);
+}
+@media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
 
-<nav id="navbar">
-  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
-  <div class="nav-links" id="navLinks">
-    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá dưới nước ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
-      </div>
-    </div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá trên bàn ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
-      </div>
-    </div>
-    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
-    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
+/* Popup from bubble */
+.msg-popup {
+  position:fixed; bottom:132px; right:20px; z-index:420;
+  width:min(360px,calc(100vw - 32px));
+  background:rgba(255,255,255,0.98); 
+  backdrop-filter: blur(16px);
+  border:1px solid rgba(186,230,253,.6);
+  border-radius:18px; box-shadow:0 16px 50px rgba(2,132,199,.2);
+  padding:18px 16px 16px;
+  opacity:0; pointer-events:none; transform:translateY(15px) scale(.95);
+  transition:opacity .25s cubic-bezier(0.34, 1.56, 0.64, 1), transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-theme="dark"] .msg-popup { 
+  background:rgba(15,35,54,0.98);
+  border-color:rgba(80,150,210,.3); 
+  box-shadow:0 16px 50px rgba(0,0,0,.5);
+}
+.msg-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+.msg-popup-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.msg-popup-title { font-family:'Merriweather',serif; font-size:.8rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; font-weight: bold; }
+[data-theme="dark"] .msg-popup-title { color:#5aacdf; }
+.msg-popup-close { width:24px; height:24px; border-radius:12%; border:1px solid rgba(186,230,253,.6); background:var(--bg-card); cursor:pointer; font-size:.7rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; transition:var(--t); }
+.msg-popup-close:hover { background:rgba(239,68,68,0.1); color:#ef4444; border-color:#fca5a5; transform: rotate(90deg); }
+[data-theme="dark"] .msg-popup-close { border-color:rgba(80,150,210,.3); color:#5a7a9a; }
+[data-theme="dark"] .msg-popup-close:hover { background:rgba(239,68,68,0.15); border-color:#ef4444;}
+</style>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
+    <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
+    <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
+    <span class="ticker-item">Nhà mới xây còn đang trong quá trình hoàn thiện, có thể còn nhiều bug, các cậu có thể gửi mail đề cử truyện edit và góp ý thêm cho chúng mình nhé!</span>
+    <span class="ticker-item">Chúc các cậu đọc truyện vui vẻ ⸜(｡˃ ᵕ ˂ )⸝♡ 05.26</span>
   </div>
-  <div style="display:flex;align-items:center;gap:6px">
-    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<div class="mobile-menu" id="mobileMenu">
-  <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
-  <div class="mobile-section-title">Cá dưới nước</div>
-  <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
-  <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">✦ Quan hệ bạn cùng phòng</a>
-  <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">✦ Hạ cháy đồng hoang</a>
-  <div class="mobile-section-title">Cá trên bàn</div>
-  <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
-  <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">✦ Nếu đêm nay trời không mưa</a>
-  <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-  <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">✦ Vật dễ vỡ</a>
-  <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">✦ Thiếu đế xuân tâm</a>
-  <div class="mobile-section-title">Khác</div>
-  <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
-  <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
-{isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
+<div class="home-shell">
+  <!-- ── MAIN COLUMN ── -->
+  <div class="main-col">
 
-<!-- Gắn data-truyen-id để tính năng Rating lấy ID truyện -->
-<div class="page-wrapper" data-truyen-id={currentTruyenId}>
-  {frontmatter?.tags && frontmatter.tags.length > 0 && (
-    <div class="tags-container">
-      {frontmatter.tags.map((tag: string) => (
-        <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag)}/`} class="tag-badge"># {tag}</a>
-      ))}
-    </div>
-  )}
-
-  {isNovelPage && (
-    <div class="chap-nav-row">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
-      {chapters.length > 1 && (
-        <div class="chap-dd-wrap" id="ddTop">
-          <button class="chap-dd-btn" id="ddBtnTop">⚓ Chọn chương ▾</button>
-          <div class="chap-dd-list" id="ddListTop">
-            {chapters.map((c: any) => (
-              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
-                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
-    </div>
-  )}
-
-  {isNovelPage ? (
-    <div class="novel-layout-wrap" id="novelLayoutWrap">
-      <div class="novel-content" id="novelContent"><slot /></div>
-      
-      <!-- NÚT TIM CHƯƠNG -->
-      <div class="chap-like-area">
-        <button class="chap-like-btn" id="btnLikeChapter">
-          <span class="heart">🤍</span> Yêu thích chương này <span class="count" id="chapLikeCount" style="font-weight:bold;margin-left:4px">0</span>
-        </button>
+    <!-- HERO -->
+    <div class="hero">
+      <div id="dynamicGreeting" class="hero-greeting">Chào bạn!</div>
+      <div class="hero-banner-wrap reveal">
+        <img class="hero-banner-bg" src="/dynamic-duo-web/images/banner.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
+        <div class="hero-banner-overlay"></div>
+        <img class="hero-name-img" src="/dynamic-duo-web/images/namexoanen.png" alt="dynamic duo" onerror="this.style.display='none'" />
       </div>
+      <p class="hero-tagline reveal">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
+    </div>
 
-      <aside class="ic-sidebar" id="icSidebar">
-        <div class="ic-sidebar-inner">
-          <div class="ic-sidebar-header">
-            <div class="ic-para-preview" id="icParaPreview"></div>
-            <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
+    <!-- LƯU Ý -->
+    <div class="notice-section reveal">
+      <div class="sec-hd">
+        <h2>📌 Lưu ý</h2>
+        <div class="sec-line"></div>
+      </div>
+      <img src="/dynamic-duo-web/images/frontpage.png" alt="Lưu ý từ Dynamic Duo" class="notice-img" onerror="this.style.display='none'" />
+    </div>
+
+    <!-- FILTER + STORIES -->
+    <div class="sec-hd reveal">
+      <h2>📚 Tủ truyện</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <a href="#" id="continueReading" class="cr-banner hidden reveal">
+      <div class="cr-icon">📖</div>
+      <div style="flex:1">
+        <span class="cr-label">Tiếp tục đọc</span>
+        <div class="cr-title" id="crLink">Tên truyện</div>
+      </div>
+      <div class="cr-arrow">→</div>
+    </a>
+
+    <div class="filter-bar reveal">
+      <span class="fl-label">Lọc</span>
+      <div class="fl-chips" id="filterChips">
+        <button class="chip active" data-tag="all">Tất cả</button>
+        <button class="chip" data-cat="duoi-nuoc">🐠 Đang làm</button>
+        <button class="chip" data-cat="tren-ban">🍽️ Xong</button>
+        <button class="chip" data-cat="upcoming">🌤️ Sắp đào</button>
+        <button class="chip" data-tag="đam mỹ"># đam mỹ</button>
+        <button class="chip" data-tag="HE"># HE</button>
+        <button class="chip" data-tag="chua xót"># chua xót</button>
+        <button class="chip" data-tag="niên hạ"># niên hạ</button>
+        <button class="chip" data-tag="mất trí nhớ"># mất trí nhớ</button>
+        <button class="chip" data-tag="gương vỡ lại lành"># gương vỡ lại lành</button>
+        <button class="chip chip-clear" id="chipClear" style="display:none">✕ Xóa lọc</button>
+      </div>
+      <span class="fl-count" id="flCount">6 truyện</span>
+    </div>
+
+    <div class="stories-grid" id="storiesGrid">
+
+      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,niên hạ,trai thẳng,yêu thầm">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biaqhbcp.png" alt="Quan hệ bạn cùng phòng" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-ongoing">Đang đăng</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🐠 Cá dưới nước</div>
+          <h3 class="sc-title">Quan hệ bạn cùng phòng</h3>
+          <div class="sc-meta">Hạnh Lan · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># niên hạ</span><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># trai thẳng</span>
           </div>
-          <div class="ic-sidebar-form">
-            <div class="ic-quoting-bar" id="icQuotingBar">
-              <span class="ic-quoting-label" id="icQuotingLabel"></span>
-              <button class="ic-quoting-cancel" id="icQuotingCancel">✕</button>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {qhbcpCount}/72 chương</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/chuong-01/" class="sc-link">Đọc →</a>
             </div>
-            <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
-            <div class="ic-form-body">
-              <textarea class="ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="2"></textarea>
-              <button class="ic-form-send" id="icFormSend">↑</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc reveal" data-cat="duoi-nuoc" data-tags="đam mỹ,hiện đại,chua xót,mất trí nhớ,đồng quê">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biahcdh.png" alt="Hạ cháy đồng hoang" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-ongoing">Đang đăng</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🐠 Cá dưới nước</div>
+          <h3 class="sc-title">Hạ cháy đồng hoang</h3>
+          <div class="sc-meta">Hỉ Thượng Mi Sao · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># mất trí nhớ</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># đồng quê</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {hcdhCount}/109 chương</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/chuong-01/" class="sc-link">Đọc →</a>
             </div>
           </div>
-          <div class="ic-sidebar-list" id="icSidebarList">
-            <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
+        </div>
+      </div>
+
+      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,gương vỡ lại lành,drama motip cũ">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biandntkm.png" alt="Nếu đêm nay trời không mưa" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-complete">Hoàn thành</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🍽️ Cá trên bàn</div>
+          <h3 class="sc-title">Nếu đêm nay trời không mưa</h3>
+          <div class="sc-meta">Tam Đạo · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># HE</span><span class="sc-tag"># gương vỡ lại lành</span><span class="sc-tag"># drama motip cũ</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {ndntkmCount} chương (full)</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
           </div>
         </div>
-      </aside>
-    </div>
-  ) : isHome ? (
-    <slot />
-  ) : (
-    <div class="page-content-wrap"><slot /></div>
-  )}
+      </div>
 
-  {isNovelPage && (
-    <div class="chap-nav-row" style="margin-top:36px;">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
-      {chapters.length > 1 && (
-        <div class="chap-dd-wrap" id="ddBot">
-          <button class="chap-dd-btn" id="ddBtnBot">⚓ Chọn chương ▾</button>
-          <div class="chap-dd-list up" id="ddListBot">
-            {chapters.map((c: any) => (
-              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
-                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
-              </a>
-            ))}
+      <div class="sc reveal" data-cat="tren-ban" data-tags="đam mỹ,hiện đại,HE,chua xót,1v1">
+        <div class="sc-cover-wrap">
+          <img src="/dynamic-duo-web/images/biatnctsct.png" alt="Tôi nghĩ chúng tôi sắp chia tay" loading="lazy" onerror="this.parentElement.style.background='var(--sky-pale)'" />
+          <span class="sc-status status-complete">Hoàn thành</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-shelf">🍽️ Cá trên bàn</div>
+          <h3 class="sc-title">Tôi nghĩ chúng tôi sắp chia tay</h3>
+          <div class="sc-meta">Hạ Nhất Thiên · Edit: Dynamic Duo</div>
+          <div class="sc-tags">
+            <span class="sc-tag"># HE</span><span class="sc-tag"># chua xót</span><span class="sc-tag"># 1v1</span>
+          </div>
+          <div class="sc-footer">
+            <span class="sc-chapters">📖 {tnctcstCount} chương (full)</span>
+            <div style="display:flex;gap:5px">
+              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="sc-link secondary">Giới thiệu</a>
+              <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-01/" class="sc-link">Đọc →</a>
+            </div>
           </div>
         </div>
-      )}
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
-    </div>
-  )}
+      </div>
 
-  {isNovelPage && (
-    <div class="chap-comment-section" id="chapCommentSection">
-      <div class="chap-comment-title">💬 Bình luận chương</div>
-      <div class="admin-bar" id="adminBar" style="display:none">
-        <span id="adminStatus"></span>
-        <button class="admin-login-btn" id="adminLoginBtn">Đăng nhập Google</button>
-      </div>
-      <div class="comment-form">
-        <div class="comment-form-row">
-          <input class="comment-inp" id="cmtName" placeholder="Tên của bạn (tùy chọn)" style="max-width:220px" autocomplete="off" />
+      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
+        <div class="sc-body">
+          <div class="sc-shelf">🌤️ Sắp đào</div>
+          <h3 class="sc-title">Vật dễ vỡ</h3>
+          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
+          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span></div>
+          <div class="sc-footer">
+            <span class="sc-chapters">Sắp cập nhật</span>
+            <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="sc-link secondary">Xem →</a>
+          </div>
         </div>
-        <textarea class="comment-textarea" id="cmtText" placeholder="Chia sẻ cảm nhận về chương này... 🌊"></textarea>
-        <button class="comment-submit-btn" id="cmtSubmit">Gửi bình luận ✦</button>
       </div>
-      <div id="cmtList" class="comment-list">
-        <div class="comment-loading">Đang tải bình luận...</div>
+
+      <div class="sc reveal" data-cat="upcoming" data-tags="đam mỹ,cổ đại">
+        <div class="sc-cover-wrap" style="display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--sky-light);width:105px">☁️</div>
+        <div class="sc-body">
+          <div class="sc-shelf">🌤️ Sắp đào</div>
+          <h3 class="sc-title">Thiếu đế xuân tâm</h3>
+          <div class="sc-meta">?? · Edit: Dynamic Duo</div>
+          <div class="sc-tags"><span class="sc-tag"># đam mỹ</span><span class="sc-tag"># cổ đại</span></div>
+          <div class="sc-footer">
+            <span class="sc-chapters">Sắp cập nhật</span>
+            <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="sc-link secondary">Xem →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cute Empty State -->
+      <div class="no-results" id="noRes">
+        <span class="fish-icon">𓆝</span>
+        Cá bơi đi mất rồi. Không tìm thấy truyện phù hợp!
       </div>
     </div>
-  )}
+
+    <!-- MỚI CẬP NHẬT -->
+    <div class="sec-hd reveal" style="margin-top:32px">
+      <h2>🕊 Mới cập nhật</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="recent-list reveal">
+      <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/chuong-74/" class="recent-item">
+        <span class="recent-icon">📖</span>
+        <div class="ri-body">
+          <div class="ri-story">Tôi nghĩ chúng tôi sắp chia tay</div>
+          <div class="ri-title">Chương 74 (Kết) <span class="badge-new">MỚI</span></div>
+        </div>
+        <span class="recent-arrow">→</span>
+      </a>
+      <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/chuong-76/" class="recent-item">
+        <span class="recent-icon">📖</span>
+        <div class="ri-body">
+          <div class="ri-story">Nếu đêm nay trời không mưa</div>
+          <div class="ri-title">Ngoại truyện 3</div>
+        </div>
+        <span class="recent-arrow">→</span>
+      </a>
+    </div>
+
+  </div><!-- /main-col -->
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar-col">
+
+    <div class="widget reveal">
+      <div class="widget-title">✦ Về nhà cá</div>
+      <div class="profile-avatar">
+        <img src="/dynamic-duo-web/images/logo1.png" alt="logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentElement.textContent='🐋'" />
+      </div>
+      <div class="profile-name">dynamic duo</div>
+      <p class="profile-tagline">paired dreams,<br/>boundless gleam ⋆.˚</p>
+      <div class="profile-deco">𓆝.°•</div>
+      <div style="margin-top:14px;text-align:center">
+        <a href="/dynamic-duo-web/about/" style="font-size:.7rem;color:var(--sky);border:1px solid var(--sky-light);padding:5px 14px;border-radius:var(--r-pill);transition:var(--t); font-weight: 600;" onmouseover="this.style.background='var(--sky-pale)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background=''; this.style.transform='translateY(0)';">About us →</a>
+      </div>
+    </div>
+
+    <div class="widget reveal">
+      <div class="widget-title">📂 Danh mục</div>
+      <div class="cat-tree">
+        <ul>
+          <li>
+            <details open>
+              <summary>🐠 Cá dưới nước</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/">Quan hệ bạn cùng phòng</a><span class="cat-count">{qhbcpCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/">Hạ cháy đồng hoang</a><span class="cat-count">{hcdhCount}c</span></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🍽️ Cá trên bàn</summary>
+              <ul>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/">Nếu đêm nay trời không mưa</a><span class="cat-count">{ndntkmCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/">Tôi nghĩ chúng tôi sắp chia tay</a><span class="cat-count">{tnctcstCount}c</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/">Vật dễ vỡ</a><span class="cat-count">sắp</span></li>
+                <li><a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/">Thiếu đế xuân tâm</a><span class="cat-count">sắp</span></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>🌤️ Cá trên trời</summary>
+              <ul><li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách →</a></li></ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quote of the day -->
+    <div class="widget reveal">
+      <div class="widget-title">✨ Quote of the day</div>
+      <div class="quote-widget-inner">
+        <blockquote class="quote-body">"There is no fear in love. But perfect love drives out fear, because fear has to do with punishment. The one who fears is not made perfect in love."</blockquote>
+        <div class="quote-src">— 1 John 4:18</div>
+      </div>
+    </div>
+
+    <!-- Lời nhắn widget -->
+    <div class="widget reveal" id="msgSidebarWidget">
+      <div class="widget-title">✉ Lời nhắn</div>
+      <div class="msg-widget-tabs">
+        <button class="msg-tab active" data-panel="private" id="msgTabPrivate">🔒 Riêng tư <span class="online-pulse"></span></button>
+        <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Nhắn chung</button>
+      </div>
+
+      <!-- Panel: Riêng tư -->
+      <div class="msg-panel active" id="msgPanelPrivate">
+        <div id="msgPrivateUserNote">
+          <p>Nhắn riêng cho chủ nhà 🐋 — chỉ admin đọc được.</p>
+          <input  class="msg-inp"      id="msgPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+          <textarea class="msg-textarea" id="msgPrivateText" placeholder="Lời nhắn của bạn..." rows="3"></textarea>
+          <button class="msg-send-btn" id="msgPrivateSend">Gửi riêng 🔒</button>
+          <div class="msg-sent-notice" id="msgPrivateDone">✓ Đã gửi! Cảm ơn bạn 🌊</div>
+          <div id="msgPrivateUserReply" style="margin-top:10px"></div>
+        </div>
+        <div id="msgPrivateAdminPanel" style="display:none">
+          <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic; border-bottom: 1px solid rgba(186,230,253,.4); padding-bottom: 5px;">📬 Hộp thư Admin:</p>
+          <div id="msgPrivateAdminList" style="max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin"></div>
+        </div>
+      </div>
+
+      <!-- Panel: Public -->
+      <div class="msg-panel" id="msgPanelPublic">
+        <div class="msg-public-feed" id="msgPublicFeed">
+          <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
+        </div>
+        <input  class="msg-inp"      id="msgPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+        <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn cho mọi người..." rows="2"></textarea>
+        <button class="msg-send-btn" id="msgPublicSend">Gửi lên tường 🌊</button>
+        <div class="msg-sent-notice" id="msgPublicDone">✓ Đã gửi! 🌊</div>
+      </div>
+    </div>
+
+    <!-- Contact widget with Copy Feature -->
+    <div class="widget reveal" style="text-align:center; position: relative;">
+      <div class="widget-title">✉ Liên hệ</div>
+      <p class="contact-email" id="sidebarEmailCopy" title="Nhấn để copy" style="cursor: pointer; position: relative;">dynamicduoo.q@gmail.com 📋</p>
+      <div id="emailTooltip" class="copy-tooltip">Đã copy! ✔️</div>
+      <div>
+        <a href="https://dynamicduoq.wordpress.com" target="_blank" style="font-size:.7rem;color:var(--sky); font-weight: 600;">🌐 WordPress cũ</a>
+      </div>
+    </div>
+
+  </aside>
+</div><!-- /home-shell -->
+
+<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
+  <span>✉</span>
+</button>
+
+<!-- Popup from bubble -->
+<div class="msg-popup" id="msgPopup">
+  <div class="msg-popup-header">
+    <span class="msg-popup-title">✉ Hòm thư nhà cá</span>
+    <button class="msg-popup-close" id="msgPopupClose">✕</button>
+  </div>
+  <div class="msg-widget-tabs" style="margin-bottom:12px">
+    <button class="msg-tab active" data-popup-panel="private" id="msgPopupTabPrivate">🔒 Riêng tư <span class="online-pulse"></span></button>
+    <button class="msg-tab"        data-popup-panel="public"  id="msgPopupTabPublic">🌊 Nhắn chung</button>
+  </div>
+  <div class="msg-panel active" id="msgPopupPanelPrivate">
+    <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5">Tin nhắn gửi ở đây chỉ có Admin đọc được thui nhé 🐋</p>
+    <input  class="msg-inp"      id="msgPopupPrivateName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn gửi chủ nhà..." rows="3"></textarea>
+    <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
+    <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi thành công! 🌊</div>
+    <div id="msgPopupPrivateUserReply" style="margin-top:10px"></div>
+  </div>
+  <div class="msg-panel" id="msgPopupPanelPublic">
+    <div class="msg-public-feed" id="msgPopupPublicFeed">
+      <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
+    </div>
+    <input  class="msg-inp"      id="msgPopupPublicName" placeholder="Tên (tùy chọn)" autocomplete="off" />
+    <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Cùng thả cá vào đây nào..." rows="2"></textarea>
+    <button class="msg-send-btn" id="msgPopupPublicSend">Gửi lên tường 🌊</button>
+    <div class="msg-sent-notice" id="msgPopupPublicDone">✓ Đã gửi thành công! 🌊</div>
+  </div>
 </div>
-
-<footer>
-  <div class="footer-inner">
-    <div class="ft-brand">
-      <span class="ft-logo">dynamic duo 𓆝.°•</span>
-      <p>paired dreams, boundless gleam.</p>
-      <p style="margin-top:5px;font-size:.74rem">✉ dynamicduoo.q@gmail.com</p>
-    </div>
-    <div class="ft-links">
-      <a href="/dynamic-duo-web/">Trang chủ</a>
-      <a href="/dynamic-duo-web/ca-duoi-nuoc/">Cá dưới nước</a>
-      <a href="/dynamic-duo-web/ca-tren-ban/">Cá trên bàn</a>
-      <a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a>
-      <a href="/dynamic-duo-web/about/">About</a>
-    </div>
-    <div class="ft-social">
-      <p style="font-size:.68rem;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Ghé thăm</p>
-      <div class="ft-social-row">
-        <a href="https://dynamicduoq.wordpress.com" target="_blank" class="social-ic" title="WordPress">🌐</a>
-      </div>
-    </div>
-  </div>
-  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
-</footer>
-
-<!-- ── FLOATING TOOLS MỚI (TỐI GIẢN) ── -->
-<div class="tool-fab-wrap" id="toolFabWrap">
-  <div class="tool-fab-menu" id="toolFabMenu">
-    {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
-    {isNovelPage && <button class="fab-btn" id="btnOpenReview" title="Đánh giá truyện" style="background:#f59e0b">⭐</button>}
-    {isNovelPage && <button class="fab-btn" id="fabStats" title="Thống kê" style="background:#10b981; display:none;">📊</button>}
-    {isNovelPage && <button class="fab-btn" id="fabAdmin" title="Quản trị viên" style="background:#1e4a6a; display:none;">🔑</button>}
-    <button class="fab-btn" id="fabUp" title="Lên đầu">↑</button>
-    <button class="fab-btn" id="fabDown" title="Xuống cuối">↓</button>
-  </div>
-  <button class="tool-fab-toggle" id="toolFabToggle">⋮</button>
-</div>
-
-<!-- CÁC POPUP CỦA FLOATING TOOLS -->
-{isNovelPage && (
-  <div class="rs-popup" id="rsPopup">
-    <div class="rs-title">Thiết lập đọc</div>
-    <div class="rs-row">
-      <span class="rs-label">Cỡ chữ</span>
-      <div class="rs-btn-group">
-        <button class="rs-btn" id="rsDec">-</button>
-        <button class="rs-btn" id="rsInc">+</button>
-      </div>
-    </div>
-    <div class="rs-row">
-      <span class="rs-label">Font chữ</span>
-    </div>
-    <div class="rs-btn-group" style="flex-wrap:wrap; justify-content:center; gap:8px; padding:8px; border-radius:12px; margin-bottom: 6px;">
-        <button class="rs-btn active" data-font="'Newsreader', serif" title="Newsreader" style="font-family:'Newsreader', serif; padding:4px 8px;">N</button>
-        <button class="rs-btn" data-font="'Literata', serif" title="Literata" style="font-family:'Literata', serif; padding:4px 8px;">L</button>
-        <button class="rs-btn" data-font="'Merriweather', serif" title="Merriweather" style="font-family:'Merriweather', serif; padding:4px 8px;">M</button>
-        <button class="rs-btn" data-font="'Palatino Linotype', serif" title="Palatino" style="font-family:'Palatino Linotype', serif; padding:4px 8px;">P</button>
-        <button class="rs-btn" data-font="Arial, sans-serif" title="Arial" style="font-family:Arial, sans-serif; padding:4px 8px;">A</button>
-        <button class="rs-btn" data-font="'Segoe UI', sans-serif" title="Segoe UI" style="font-family:'Segoe UI', sans-serif; padding:4px 8px;">S</button>
-    </div>
-    <p style="font-size:.65rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">💡 Bấm ⬅️ ➡️ trên bàn phím để sang trang</p>
-  </div>
-)}
-
-{isNovelPage && (
-  <div class="rs-popup" id="statsPopup">
-    <div class="rs-title" style="color: #10b981;">📊 Thống kê Chương</div>
-    <div style="font-size: .8rem; color: var(--text-main); display: flex; flex-direction: column; gap: 10px;">
-       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>👁 Lượt xem:</span> <strong id="statViews" style="color:var(--sky)">0</strong></div>
-       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>💬 Bình luận:</span> <strong id="statCmts" style="color:var(--sky)">0</strong></div>
-       <div style="display:flex; justify-content:space-between;"><span>❤️ Lượt thích:</span> <strong id="statLikes" style="color:var(--sky)">0</strong></div>
-    </div>
-    <p style="font-size:.6rem;color:var(--text-dim);text-align:center;margin:12px 0 0;font-style:italic">Cập nhật theo thời gian thực</p>
-  </div>
-)}
-
-{isNovelPage && (
-  <div class="rv-modal" id="rvModal">
-    <div class="rv-overlay" id="rvOverlay"></div>
-    <div class="rv-content">
-      <div class="rv-header">
-        <h3 class="rv-title">⭐ Đánh giá tổng truyện</h3>
-        <button class="rv-close" id="rvClose">✕</button>
-      </div>
-      <div class="rv-stats">
-        <div class="rv-avg" id="rvAvg">0.0</div>
-        <div class="rv-stars-display" id="rvStarsDisplay">☆☆☆☆☆</div>
-        <div style="font-size:.7rem; color:var(--text-dim)" id="rvCount">0 đánh giá</div>
-      </div>
-      <div class="rv-form">
-        <div class="rv-star-select" id="rvStarSelect">
-          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
-        </div>
-        <input class="comment-inp" id="rvName" placeholder="Tên của bạn (Tùy chọn)" style="width:100%; margin-bottom:8px;" autocomplete="off" />
-        <textarea class="comment-textarea" id="rvText" placeholder="Nêu cảm nhận của bạn về bộ truyện này nhé..." rows="3" style="margin-bottom:8px;"></textarea>
-        <div style="text-align:right">
-          <button class="comment-submit-btn" id="rvSubmit" style="padding: 6px 16px; font-size: .8rem; background: #f59e0b;">Gửi đánh giá</button>
-        </div>
-      </div>
-      <div class="rv-list" id="rvList">
-        <div class="ic-loading">Đang tải đánh giá...</div>
-      </div>
-    </div>
-  </div>
-)}
 
 <script is:inline>
-/* ══ HELPERS ══ */
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function timeAgo(ts){
-  if(!ts) return ''; const d=Date.now()-ts;
-  if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
-  if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
-}
-function pageKey(){ return location.pathname.replace(/[^a-zA-Z0-9]/g,'_').replace(/^_+|_+$/g,'').substring(0,120); }
-function avatarLetter(name){ return (name||'K').trim().charAt(0).toUpperCase(); }
-function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
-function getLiked(id){ try{ return JSON.parse(localStorage.getItem('dd_liked')||'{}')[id]||false; }catch(e){ return false; } }
-function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked')||'{}'); o[id]=v; localStorage.setItem('dd_liked',JSON.stringify(o)); }catch(e){} }
-function getSavedName(){ return localStorage.getItem('dd_commenter_name') || ''; }
-function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commenter_name', name.trim()); }
-
-const ADMIN_DISPLAY_NAME = 'dynamic duo 𓆝';
-
-function waitFirebase(cb){
-  if(window.__ddFirebase?.db){ cb(window.__ddFirebase); return; }
-  window.addEventListener('dd-firebase-ready',()=>{ if(window.__ddFirebase?.db) cb(window.__ddFirebase); },{once:true});
-  let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
-}
-
-/* ══ SETUP FAB & SCROLL ══ */
-document.addEventListener('DOMContentLoaded', () => {
-  const _rp = document.getElementById('read-progress');
-  const fabWrap = document.getElementById('toolFabWrap');
-  const fabToggle = document.getElementById('toolFabToggle');
+/* ══════════════════════════════════════
+   DYNAMIC GREETING & CONTINUE READING
+══════════════════════════════════════ */
+(function setupDynamicFeatures() {
+  const hour = new Date().getHours();
+  let greeting = 'Chào buổi tối';
+  if (hour >= 5 && hour < 11) greeting = 'Chào buổi sáng';
+  else if (hour >= 11 && hour < 14) greeting = 'Chào buổi trưa';
+  else if (hour >= 14 && hour < 18) greeting = 'Chào buổi chiều';
   
-  if(fabToggle && fabWrap) {
-    fabToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      fabWrap.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-      if(!fabWrap.contains(e.target)) fabWrap.classList.remove('open');
-    });
-  }
+  const grEl = document.getElementById('dynamicGreeting');
+  if(grEl) grEl.textContent = greeting + ', cá là cậu thèm cá ';
 
-  document.getElementById('fabUp')?.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
-  document.getElementById('fabDown')?.addEventListener('click', () => { window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
-
-  function updScroll(){
-    const y = window.scrollY;
-    const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
-    const p = y / max;
-    if(_rp) _rp.style.width = (p*100)+'%';
+  const lastReadUrl = localStorage.getItem('dd_last_read_url');
+  const lastReadTitle = localStorage.getItem('dd_last_read_title');
+  const crBanner = document.getElementById('continueReading');
+  const crLink = document.getElementById('crLink');
+  
+  if (lastReadUrl && lastReadTitle && crBanner && crLink) {
+    crLink.textContent = lastReadTitle;
+    crBanner.href = lastReadUrl;
+    crBanner.classList.remove('hidden');
   }
-  window.addEventListener('scroll', updScroll, {passive:true});
-  requestAnimationFrame(() => setTimeout(updScroll, 200));
+})();
+
+/* ══════════════════════════════════════
+   FILTER
+══════════════════════════════════════ */
+const allCards  = document.querySelectorAll('.sc');
+const chips     = document.querySelectorAll('#filterChips .chip');
+const flCount   = document.getElementById('flCount');
+const chipClear = document.getElementById('chipClear');
+let activeTags = new Set();
+let activeCat  = null;
+
+function updateClearBtn(){ if(chipClear) chipClear.style.display=(activeTags.size>0||activeCat!==null)?'inline-flex':'none'; }
+function applyFilter(){
+  let vis=0;
+  allCards.forEach(card=>{
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.style.animation = '';
+
+    const cCat  = card.dataset.cat||'';
+    const cTags = (card.dataset.tags||'').split(',').map(t=>t.trim().toLowerCase());
+    const catOk = activeCat===null||cCat===activeCat;
+    const tagOk = activeTags.size===0||[...activeTags].every(t=>cTags.includes(t.toLowerCase()));
+    const show  = catOk&&tagOk;
+    card.classList.toggle('hidden',!show);
+    if(show) vis++;
+  });
+  if(flCount) flCount.textContent=vis+' truyện';
+  document.getElementById('noRes')?.classList.toggle('show',vis===0);
+  updateClearBtn();
+}
+chips.forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    if(chip.id==='chipClear'){ activeTags.clear(); activeCat=null; chips.forEach(c=>c.classList.remove('active')); document.querySelector('[data-tag="all"]')?.classList.add('active'); applyFilter(); return; }
+    if(chip.dataset.tag){
+      const tag=chip.dataset.tag;
+      if(tag==='all'){ activeTags.clear(); chips.forEach(c=>c.dataset.tag&&c.classList.remove('active')); chip.classList.add('active'); }
+      else{ document.querySelector('[data-tag="all"]')?.classList.remove('active'); if(activeTags.has(tag)){activeTags.delete(tag);chip.classList.remove('active');}else{activeTags.add(tag);chip.classList.add('active');} if(activeTags.size===0) document.querySelector('[data-tag="all"]')?.classList.add('active'); }
+    } else if(chip.dataset.cat){
+      const cat=chip.dataset.cat; chips.forEach(c=>c.dataset.cat&&c.classList.remove('active')); activeCat=(activeCat===cat)?null:cat; if(activeCat) chip.classList.add('active');
+    }
+    applyFilter();
+  });
 });
 
-/* ══ HAMBURGER ══ */
-document.getElementById('hamburger')?.addEventListener('click',()=>document.getElementById('mobileMenu')?.classList.toggle('open'));
-document.addEventListener('click',e=>{
-  const mm=document.getElementById('mobileMenu'),hb=document.getElementById('hamburger');
-  if(mm?.classList.contains('open')&&!mm.contains(e.target)&&!hb?.contains(e.target)) mm.classList.remove('open');
-});
+/* Toggle shadow cho Sticky Filter khi cuộn */
+window.addEventListener('scroll', () => {
+  const fb = document.querySelector('.filter-bar');
+  if(fb) fb.classList.toggle('is-stuck', window.scrollY > 300);
+}, {passive: true});
 
-/* ══ CHAPTER DROPDOWNS ══ */
-function setupDD(btnId,listId){
-  const btn=document.getElementById(btnId),list=document.getElementById(listId);
-  if(!btn||!list) return;
-  btn.addEventListener('click',e=>{
-    e.stopPropagation();
-    const was=list.classList.contains('open');
-    document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
-    if(!was){ list.classList.add('open'); const cur=list.querySelector('.cur-chap'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}),30); }
-  });
-}
-setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
-document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
+/* ══════════════════════════════════════
+   REVEAL ON SCROLL
+══════════════════════════════════════ */
+const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* ══ THEME TOGGLE ══ */
-function applyTheme(dark){
-  document.documentElement.setAttribute('data-theme',dark?'dark':'');
-  localStorage.setItem('dd-theme',dark?'dark':'light');
-  syncThemeBtns();
-}
-function syncThemeBtns(){
-  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
-  const icon = isDark ? '☀️' : '🌙';
-  const label = isDark ? 'Chế độ sáng' : 'Chế độ tối';
-  document.querySelectorAll('.nav-theme-btn, .mobile-theme-row').forEach(el=>{
-    if(el.tagName === 'BUTTON') { el.title = label; if(el.classList.contains('nav-theme-btn')) el.textContent = icon; }
-  });
-  document.querySelectorAll('.mobile-theme-row').forEach(el=>{ el.innerHTML = icon + ' ' + label; });
-}
-window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
-document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
-document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
-syncThemeBtns();
+/* ══════════════════════════════════════
+   CLICK TO COPY EMAIL
+══════════════════════════════════════ */
+(function setupCopyEmail(){
+  const copyBtn = document.getElementById('sidebarEmailCopy');
+  const tooltip = document.getElementById('emailTooltip');
+  if(!copyBtn || !tooltip) return;
 
-/* ══ ADMIN AUTH & STATS BUTTON ══ */
-(function setupAdminBtn(){
-  const btn = document.getElementById('fabAdmin');
-  const statsBtn = document.getElementById('fabStats');
-  let isAdmin = !!window.__ddIsAdmin;
-  
-  function syncBtn(){
-    if(btn) {
-       btn.style.display = 'flex';
-       btn.textContent = isAdmin ? '🔓' : '🔑';
-       btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
-    }
-    if(statsBtn) {
-       statsBtn.style.display = isAdmin ? 'flex' : 'none';
-    }
-  }
-  syncBtn();
-  window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; syncBtn(); });
-  
-  btn?.addEventListener('click', () => {
-    const fb = window.__ddFirebase; if(!fb) return;
-    if(isAdmin){
-      if(confirm('Đăng xuất tài khoản admin?')) fb.signOut(fb.auth);
-    } else {
-      const p = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message));
-    }
-    document.getElementById('toolFabWrap')?.classList.remove('open');
+  copyBtn.addEventListener('click', (e) => {
+    navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
+      const rect = copyBtn.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left - 20) + 'px';
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.remove('show'), 2000);
+    });
   });
 })();
 
-/* ══════════════════════════════════════════
-   A. CÀI ĐẶT ĐỌC TRUYỆN & CHỐNG COPY
-══════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.documentElement;
-  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
-  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
-  
-  const novelContent = document.querySelector('.novel-content');
-  if(novelContent) {
-     localStorage.setItem('dd_last_read_url', window.location.pathname);
-     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
-  }
-  
-  const btn = document.getElementById('fabSettings');
-  const pop = document.getElementById('rsPopup');
-  const statsBtn = document.getElementById('fabStats');
-  const statsPop = document.getElementById('statsPopup');
-  const fabWrap = document.getElementById('toolFabWrap');
-  
-  if(btn && pop) {
-    btn.addEventListener('click', e => { 
-        e.stopPropagation(); 
-        pop.classList.toggle('open'); 
-        if(statsPop) statsPop.classList.remove('open'); 
-        if(fabWrap) fabWrap.classList.remove('open');
+/* ══════════════════════════════════════
+   MAIL BUBBLE
+══════════════════════════════════════ */
+(function setupBubble(){
+  const btn   = document.getElementById('msgBubbleBtn');
+  const popup = document.getElementById('msgPopup');
+  const close = document.getElementById('msgPopupClose');
+  if(!btn||!popup) return;
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    popup.classList.toggle('open');
+  });
+  close?.addEventListener('click', () => popup.classList.remove('open'));
+  document.addEventListener('click', e => {
+    if(popup.classList.contains('open') && !popup.contains(e.target) && !btn.contains(e.target))
+      popup.classList.remove('open');
+  });
+
+  popup.querySelectorAll('[data-popup-panel]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panel = tab.dataset.popupPanel;
+      popup.querySelectorAll('[data-popup-panel]').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      popup.querySelectorAll('.msg-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('msgPopupPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
     });
-    document.addEventListener('click', e => { 
-        if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); 
+  });
+})();
+
+/* ══════════════════════════════════════
+   MESSAGE WIDGET
+══════════════════════════════════════ */
+(function setupMessageWidget(){
+  function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function msgTime(ts){
+    if(!ts) return '';
+    const d=Date.now()-ts;
+    if(d<60000)    return 'vừa xong';
+    if(d<3600000)  return Math.floor(d/60000)+' phút trước';
+    if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
+    return Math.floor(d/86400000)+' ngày trước';
+  }
+  function getMsgToken(){ let t=localStorage.getItem('dd_token'); if(!t){t=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('dd_token',t);} return t; }
+  const myToken     = getMsgToken();
+  const ADMIN_NAME  = 'dynamic duo 𓆝';
+  let isAdmin=false, lastPublicData=null, lastPrivateData=null, pubDebounce=null, privDebounce=null;
+  let privUnsub = null, pubUnsub = null;
+
+  function updateAdminUI(){
+    const nameEl     = document.getElementById('msgPublicName');
+    const adminPanel = document.getElementById('msgPrivateAdminPanel');
+    const userNote   = document.getElementById('msgPrivateUserNote');
+    const popupNameEl = document.getElementById('msgPopupPublicName');
+    const popupPrivNameEl = document.getElementById('msgPopupPrivateName');
+
+    if(nameEl)     { nameEl.style.display = isAdmin ? 'none' : ''; }
+    if(popupNameEl) { popupNameEl.style.display = isAdmin ? 'none' : ''; }
+    if(popupPrivNameEl) { popupPrivNameEl.style.display = isAdmin ? 'none' : ''; }
+    if(adminPanel) { adminPanel.style.display = isAdmin ? 'block' : 'none'; }
+    if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
+  }
+
+  function startListeners() {
+    const fb = window.__ddFirebase;
+    if(!fb) return;
+
+    if(!pubUnsub) {
+       pubUnsub = fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
+           clearTimeout(pubDebounce); pubDebounce = setTimeout(()=>renderPublicMessages(snap.val()),60);
+       });
+    }
+
+    if(privUnsub) { privUnsub(); privUnsub = null; }
+    const privPath = isAdmin ? 'private_messages' : `private_messages/${myToken}`;
+    privUnsub = fb.onValue(fb.ref(fb.db, privPath), snap => {
+         clearTimeout(privDebounce); privDebounce = setTimeout(()=>renderPrivateMessages(snap.val()),60);
     });
-
-    document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-    document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-
-    const fontBtns = pop.querySelectorAll('[data-font]');
-    fontBtns.forEach(fb => {
-      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-      fb.addEventListener('click', () => {
-        ff = fb.dataset.font;
-        root.style.setProperty('--read-ff', ff);
-        localStorage.setItem('dd_ff', ff);
-        fontBtns.forEach(b=>b.classList.remove('active'));
-        fb.classList.add('active');
-      });
-    });
-  }
-
-  if(statsBtn && statsPop) {
-      statsBtn.addEventListener('click', e => {
-          e.stopPropagation();
-          statsPop.classList.toggle('open');
-          if(pop) pop.classList.remove('open');
-          if(fabWrap) fabWrap.classList.remove('open');
-      });
-      document.addEventListener('click', e => { 
-        if(!statsPop.contains(e.target) && e.target !== statsBtn) statsPop.classList.remove('open'); 
-      });
-  }
-
-  if(novelContent) {
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('copy', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if(!document.activeElement || !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-        if(e.key === 'ArrowLeft') { 
-          const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
-          if(p && !p.classList.contains('disabled')) window.location.href = p.href; 
-        }
-        if(e.key === 'ArrowRight') { 
-          const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); 
-          if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
-        }
-      }
-      if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) { e.preventDefault(); }
-    });
-  }
-});
-
-/* ══════════════════════════════════════════
-   B. INLINE COMMENT SIDEBAR
-══════════════════════════════════════════ */
-(function setupInlineSidebar(){
-  const novelWrap  = document.getElementById('novelLayoutWrap');
-  const content    = document.getElementById('novelContent');
-  const sidebar    = document.getElementById('icSidebar');
-  const sideList   = document.getElementById('icSidebarList');
-  const closeBtn   = document.getElementById('icSidebarClose');
-  const formName   = document.getElementById('icFormName');
-  const formText   = document.getElementById('icFormText');
-  const formSend   = document.getElementById('icFormSend');
-  const overlay    = document.getElementById('icOverlay');
-  const quotingBar = document.getElementById('icQuotingBar');
-  const quotingLabel = document.getElementById('icQuotingLabel');
-  if(!content || !sidebar || !novelWrap) return;
-
-  if(formName && getSavedName()) formName.value = getSavedName();
-
-  let currentIdx   = null;
-  let currentUnsub = null;
-  let isAdmin      = !!window.__ddIsAdmin;
-  const myToken    = getMyToken();
-  let quotingReplyId   = null;
-  let quotingReplyName = null;
-
-  document.getElementById('icQuotingCancel')?.addEventListener('click', clearQuoting);
-
-  function setQuoting(rid, rname){
-    quotingReplyId   = rid;
-    quotingReplyName = rname;
-    if(quotingBar)   quotingBar.classList.add('show');
-    if(quotingLabel) quotingLabel.textContent = '↩ Reply cho ' + (rname || 'Khách vô danh');
-    formText?.focus();
-  }
-  function clearQuoting(){
-    quotingReplyId   = null;
-    quotingReplyName = null;
-    if(quotingBar) quotingBar.classList.remove('show');
   }
 
   window.addEventListener('dd-auth-change', e => {
     isAdmin = e.detail.isAdmin;
-    if(isAdmin && formName) { formName.value = ADMIN_DISPLAY_NAME; formName.style.display = 'none'; } 
-    else if(formName) { formName.style.display = ''; if(!formName.value) formName.value = getSavedName(); }
+    updateAdminUI();
+    startListeners();
   });
 
-  function adminBadgeHtml(){ return '<span class="ic-item-admin-badge">chủ nhà</span>'; }
-  function replyAdminBadgeHtml(){ return '<span class="ic-reply-admin-badge">chủ nhà</span>'; }
-
-  function openSidebar(idx){
-    content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
-    currentIdx = idx;
-    clearQuoting();
-    const paras   = content.querySelectorAll('p');
-    const preview = document.getElementById('icParaPreview');
-    if(preview){
-      const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
-      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b => b.remove()); preview.textContent = clone.textContent.trim().substring(0,120)+(clone.textContent.trim().length>120?'…':''); }
-    }
-    if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
-    if(paras[idx]) paras[idx].classList.add('ic-active');
-    novelWrap.classList.add('sidebar-open');
-    if(overlay) overlay.classList.add('show');
-    loadInlineComments(idx);
-    setTimeout(() => formText?.focus(), 200);
-  }
-
-  function closeSidebar(){
-    novelWrap.classList.remove('sidebar-open');
-    if(overlay) overlay.classList.remove('show');
-    content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
-    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
-    currentIdx = null;
-    clearQuoting();
-  }
-
-  closeBtn?.addEventListener('click', closeSidebar);
-  overlay?.addEventListener('click', closeSidebar);
-
-  function loadInlineComments(idx){
-    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
-    waitFirebase(({db, ref, onValue}) => {
-      const key = 'inline_' + pageKey() + '_p' + idx;
-      currentUnsub = onValue(ref(db, 'comments/' + key), snap => {
-        if(currentIdx !== idx) return;
-        renderInlineComments(snap.val(), key, idx);
-      });
+  document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panel = tab.dataset.panel;
+      document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('#msgSidebarWidget .msg-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('msgPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
     });
+  });
+
+  function renderPrivateMessages(data){
+    lastPrivateData = data;
+    const adminList = document.getElementById('msgPrivateAdminList');
+    const userView  = document.getElementById('msgPrivateUserReply');
+    const popupUserView = document.getElementById('msgPopupPrivateUserReply');
+
+    let flattenedItems = [];
+    if (data) {
+        if (isAdmin) {
+            Object.entries(data).forEach(([tok, msgs]) => {
+                Object.entries(msgs).forEach(([mid, msgData]) => {
+                    flattenedItems.push({ id: mid, token: tok, ...msgData });
+                });
+            });
+        } else {
+            Object.entries(data).forEach(([mid, msgData]) => {
+                flattenedItems.push({ id: mid, token: myToken, ...msgData });
+            });
+        }
+    }
+    flattenedItems.sort((a,b)=>(b.ts||0)-(a.ts||0));
+
+    if(adminList){
+        if(!isAdmin){ adminList.innerHTML=''; }
+        else if(flattenedItems.length===0){ adminList.innerHTML='<div class="msg-public-empty">Chưa có tin nhắn riêng tư nào 🌊</div>'; }
+        else {
+            adminList.innerHTML = flattenedItems.map(m => {
+                const replied = m.adminReply;
+                return `<div class="msg-priv-card ${replied?'replied':'unread'}" id="mpc-${msgEsc(m.id)}">
+                  <div class="msg-priv-card-header">
+                    <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
+                    <span class="msg-priv-time">${msgTime(m.ts)}</span>
+                    <button class="msg-priv-del" title="Xóa tin nhắn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">✕</button>
+                  </div>
+                  <div class="msg-priv-text">${msgEsc(m.text)}</div>
+                  ${replied
+                    ? `<div class="msg-priv-replied-wrap">
+                        <span class="msg-priv-replied-label">↩ Đã trả lời:</span>
+                        <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
+                        <div style="text-align:right">
+                          <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Thử lại / Xóa</button>
+                        </div>
+                       </div>`
+                    : `<div>
+                        <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
+                        <div style="display:flex;justify-content:flex-end;margin-top:3px">
+                          <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Gửi reply ↩</button>
+                        </div>
+                       </div>`
+                  }
+                </div>`;
+            }).join('');
+            adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const mid=btn.dataset.mid, tok=btn.dataset.token, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
+                    if(!text) return; btn.disabled=true;
+                    if(window.__ddFirebase){ const {db,ref,update}=window.__ddFirebase; try{ await update(ref(db,`private_messages/${tok}/${mid}/adminReply`),{text,ts:Date.now()}); if(ta) ta.value=''; }catch(e){alert('Lỗi: '+e.message);} }
+                    btn.disabled=false;
+                });
+            });
+            adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
+                btn.addEventListener('click', async () => { if(!confirm('Xóa tin nhắn này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}`));} });
+            });
+            adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
+                btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}/adminReply`));} });
+            });
+        }
+    }
+
+    if(!isAdmin){
+      if(flattenedItems.length===0){ 
+        if(userView) userView.innerHTML=''; 
+        if(popupUserView) popupUserView.innerHTML='';
+      } else {
+        const myMsgs = flattenedItems.filter(m=>m.adminReply);
+        if(myMsgs.length===0){ 
+          if(userView) userView.innerHTML=''; 
+          if(popupUserView) popupUserView.innerHTML='';
+        } else {
+          const htmlContent = `<div class="msg-admin-reply-section">
+            <div class="msg-admin-reply-title">💬 Chủ nhà đã trả lời bạn:</div>
+            ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
+              <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
+              <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
+              <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
+            </div>`).join('')}
+          </div>`;
+          if(userView) userView.innerHTML = htmlContent;
+          if(popupUserView) popupUserView.innerHTML = htmlContent;
+        }
+      }
+    }
   }
 
-  function renderInlineComments(data, key, idx){
-    if(!sideList) return;
-    if(!data){ sideList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊<br><small>Hãy là người đầu tiên!</small></div>'; return; }
-    const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => (a.ts||0) - (b.ts||0));
+  function bindPrivateSend(nameId,textId,sendId,doneId){
+    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
+    if(!sendEl) return;
+    function doSend(){
+      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
+      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
+      wfl(async({db,ref,push})=>{ 
+        try{ 
+           await push(ref(db,`private_messages/${myToken}`),{name:(nameEl?.value||'').trim()||'Ẩn danh',text,ts:Date.now(),token:myToken,read:false}); 
+           if(textEl)textEl.value=''; 
+           if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3500);} 
+        }catch(e){alert('Lỗi: '+e.message);} 
+        sendEl.disabled=false; 
+      });
+    }
+    sendEl.addEventListener('click',doSend);
+    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
+  }
+  bindPrivateSend('msgPrivateName','msgPrivateText','msgPrivateSend','msgPrivateDone');
+  bindPrivateSend('msgPopupPrivateName','msgPopupPrivateText','msgPopupPrivateSend','msgPopupPrivateDone');
 
-    sideList.innerHTML = items.map(c => {
-      const isMine = c.token === myToken; const canDel = isAdmin || isMine; const cIsAdmin = c.isAdmin === true;
-      const replies = c.replies ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0)) : [];
-      const repliesHtml = replies.map(r => {
-        const rMine  = r.token === myToken; const rCanDel= isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
-        const atTag  = r.replyTo ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>` : '';
-        return `<div class="ic-reply-item" id="icri-${esc(r.id)}">
-          <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
-          <div class="ic-reply-body">
-            <span class="ic-reply-name">${esc(r.name)||'Khách vô danh'}${rIsAdmin ? replyAdminBadgeHtml() : ''}</span>
-            <div class="ic-reply-text">${atTag}${esc(r.text)}</div>
-            <button class="ic-rr-btn" data-action="rr-reply" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
+  function renderPublicMessages(data){
+    lastPublicData = data;
+    function renderFeed(feedEl){
+      if(!feedEl) return;
+      const empty='<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
+      if(!data){ feedEl.innerHTML=empty; return; }
+      const items=Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+      feedEl.innerHTML=items.map(m=>{
+        const isMine=m.token===myToken, canDel=isAdmin||isMine, isOwner=m.isAdmin===true;
+        return `<div class="msg-pub-item ${isOwner?'msg-pub-admin':''}">
+          <div class="msg-pub-item-header">
+            <span class="msg-pub-name ${isOwner?'msg-pub-admin-name':''}">${isOwner?'🐋 '+msgEsc(m.name):msgEsc(m.name)||'Khách vô danh'}</span>
+            ${isOwner?'<span class="msg-pub-owner-badge">chủ nhà</span>':''}
+            <span class="msg-pub-time">${msgTime(m.ts)}</span>
+            <button class="msg-pub-del ${canDel?'show':''}" title="Xóa" data-mid="${msgEsc(m.id)}">✕</button>
           </div>
-          ${rCanDel ? `<button class="ic-reply-del show" data-action="del-reply" data-key="${esc(key)}" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}">✕</button>` : ''}
+          <div class="msg-pub-text">${msgEsc(m.text)}</div>
         </div>`;
       }).join('');
-
-      return `<div class="ic-item" id="icitem-${esc(c.id)}">
-        <div class="ic-item-header">
-          <span class="ic-item-name">${esc(c.name)||'Khách vô danh'}${cIsAdmin ? adminBadgeHtml() : ''}</span>
-          <span class="ic-item-time">${timeAgo(c.ts)}</span>
-        </div>
-        <div class="ic-item-text">${esc(c.text)}</div>
-        <div class="ic-item-actions">
-          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">
-            ↩ Reply ${replies.length > 0 ? '('+replies.length+')' : ''}
-          </button>
-          ${canDel ? `<button class="ic-del-btn show" data-action="del-comment" data-key="${esc(key)}" data-id="${esc(c.id)}">✕ Xóa</button>` : ''}
-        </div>
-        <div class="ic-replies ${replies.length > 0 ? 'open' : ''}" id="icreplies-${esc(c.id)}">
-          ${repliesHtml}
-          <div class="ic-reply-form" id="icrf-${esc(c.id)}">
-            <input placeholder="Tên (tùy chọn)" data-role="rname" value="${isAdmin ? esc(ADMIN_DISPLAY_NAME) : esc(getSavedName())}" ${isAdmin ? 'readonly style="display:none"' : ''} />
-            <textarea placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
-            <div class="ic-reply-form-row">
-              <button class="ic-rf-cancel" data-action="cancel-reply" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="ic-rf-send"   data-action="send-reply"   data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-    sideList.scrollTop = sideList.scrollHeight;
+      feedEl.scrollTop=feedEl.scrollHeight;
+      feedEl.querySelectorAll('.msg-pub-del.show').forEach(btn=>{
+        btn.addEventListener('click',async()=>{ if(!confirm('Xóa lời nhắn này?'))return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'public_messages/'+btn.dataset.mid));} });
+      });
+    }
+    renderFeed(document.getElementById('msgPublicFeed'));
+    renderFeed(document.getElementById('msgPopupPublicFeed'));
   }
 
-  sideList?.addEventListener('click', async e => {
-    const btn = e.target.closest('[data-action]');
-    if(!btn) return;
-    const action = btn.dataset.action;
+  function bindPublicSend(nameId,textId,sendId,doneId){
+    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
+    if(!sendEl) return;
+    function doSend(){
+      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
+      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
+      wfl(async({db,ref,push})=>{ try{ const name=isAdmin?ADMIN_NAME:(nameEl?.value||'').trim()||'Khách vô danh'; await push(ref(db,'public_messages'),{name,text,ts:Date.now(),token:myToken,isAdmin:isAdmin?true:false}); if(textEl)textEl.value=''; if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3000);} }catch(e){alert('Lỗi: '+e.message);} sendEl.disabled=false; });
+    }
+    sendEl.addEventListener('click',doSend);
+    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
+  }
+  bindPublicSend('msgPublicName','msgPublicText','msgPublicSend','msgPublicDone');
+  bindPublicSend('msgPopupPublicName','msgPopupPublicText','msgPopupPublicSend','msgPopupPublicDone');
 
-    if(action === 'del-comment'){
-      if(!confirm('Xóa bình luận này?')) return;
-      waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id)));
-      return;
-    }
-    if(action === 'del-reply'){
-      if(!confirm('Xóa reply này?')) return;
-      waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies/' + btn.dataset.rid)));
-      return;
-    }
-    if(action === 'toggle-reply'){
-      const cid     = btn.dataset.cid;
-      const replies = document.getElementById('icreplies-' + cid);
-      const form    = document.getElementById('icrf-' + cid);
-      if(replies) replies.classList.add('open');
-      if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
-      clearQuoting();
-      return;
-    }
-    if(action === 'rr-reply'){
-      const cid   = btn.dataset.cid; const rid   = btn.dataset.rid; const rname = btn.dataset.rname;
-      const form  = document.getElementById('icrf-' + cid); const replies = document.getElementById('icreplies-' + cid);
-      if(replies) replies.classList.add('open');
-      if(form){ form.classList.add('open'); form.querySelector('[data-role="rtext"]')?.focus(); }
-      setQuoting(rid, rname); setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
-      return;
-    }
-    if(action === 'cancel-reply'){ document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open'); clearQuoting(); return; }
-    if(action === 'send-reply'){
-      const form = document.getElementById('icrf-' + btn.dataset.cid);
-      const text = (form?.querySelector('[data-role="rtext"]')?.value || '').trim();
-      if(!text) return; btn.disabled = true;
-      const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (form?.querySelector('[data-role="rname"]')?.value || '').trim() || 'Khách vô danh';
-      if(!isAdmin) saveName(nameVal);
-      const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false };
-      if(quotingReplyId){ payload.replyTo = { id: quotingReplyId, name: quotingReplyName || '' }; }
-      waitFirebase(async ({db, ref, push}) => {
-        try{
-          await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), payload);
-          form.querySelector('[data-role="rtext"]').value = ''; form.classList.remove('open'); clearQuoting();
-        } catch(e){ alert('Lỗi: ' + e.message); }
-        btn.disabled = false;
-      });
-      return;
-    }
+  function wfl(cb){
+    if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}
+    window.addEventListener('dd-firebase-ready',()=>{if(window.__ddFirebase?.db)cb(window.__ddFirebase);},{once:true});
+    let n=0; const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}if(++n>60)clearInterval(t);},200);
+  }
+  wfl((fb)=>{
+    startListeners();
   });
-
-  formSend?.addEventListener('click', async () => {
-    const text = (formText?.value || '').trim();
-    if(!text || currentIdx === null) return;
-    formSend.disabled = true;
-    const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (formName?.value || '').trim() || 'Khách vô danh';
-    if(!isAdmin) saveName(nameVal);
-    waitFirebase
+})();
+</script>
+</Layout>

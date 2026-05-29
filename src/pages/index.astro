@@ -962,6 +962,7 @@ const hcdhCount    = countChaps(hcdhPosts);
     <textarea class="msg-textarea" id="msgPopupPrivateText" placeholder="Lời nhắn gửi chủ nhà..." rows="3"></textarea>
     <button class="msg-send-btn" id="msgPopupPrivateSend">Gửi riêng 🔒</button>
     <div class="msg-sent-notice" id="msgPopupPrivateDone">✓ Đã gửi thành công! 🌊</div>
+    <div id="msgPopupPrivateUserReply" style="margin-top:10px"></div>
   </div>
   <div class="msg-panel" id="msgPopupPanelPublic">
     <div class="msg-public-feed" id="msgPopupPublicFeed">
@@ -987,7 +988,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   else if (hour >= 14 && hour < 18) greeting = 'Chào buổi chiều';
   
   const grEl = document.getElementById('dynamicGreeting');
-  if(grEl) grEl.textContent = greeting + ', cá là cậu thèm cá 𓆜⋆˚࿔';
+  if(grEl) grEl.textContent = greeting + ', cá là cậu thèm cá ';
 
   // Nhắc đọc tiếp
   const lastReadUrl = localStorage.getItem('dd_last_read_url');
@@ -1125,22 +1126,44 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   const myToken     = getMsgToken();
   const ADMIN_NAME  = 'dynamic duo 𓆝';
   let isAdmin=false, lastPublicData=null, lastPrivateData=null, pubDebounce=null, privDebounce=null;
-
-  window.addEventListener('dd-auth-change', e => {
-    isAdmin = e.detail.isAdmin;
-    updateAdminUI();
-    renderPublicMessages(lastPublicData);
-    renderPrivateMessages(lastPrivateData);
-  });
+  let privUnsub = null, pubUnsub = null;
 
   function updateAdminUI(){
     const nameEl     = document.getElementById('msgPublicName');
     const adminPanel = document.getElementById('msgPrivateAdminPanel');
     const userNote   = document.getElementById('msgPrivateUserNote');
+    const popupNameEl = document.getElementById('msgPopupPublicName');
+    const popupPrivNameEl = document.getElementById('msgPopupPrivateName');
+
     if(nameEl)     { nameEl.style.display = isAdmin ? 'none' : ''; }
+    if(popupNameEl) { popupNameEl.style.display = isAdmin ? 'none' : ''; }
+    if(popupPrivNameEl) { popupPrivNameEl.style.display = isAdmin ? 'none' : ''; }
     if(adminPanel) { adminPanel.style.display = isAdmin ? 'block' : 'none'; }
     if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
   }
+
+  function startListeners() {
+    const fb = window.__ddFirebase;
+    if(!fb) return;
+
+    if(!pubUnsub) {
+       pubUnsub = fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
+           clearTimeout(pubDebounce); pubDebounce = setTimeout(()=>renderPublicMessages(snap.val()),60);
+       });
+    }
+
+    if(privUnsub) { privUnsub(); privUnsub = null; }
+    const privPath = isAdmin ? 'private_messages' : `private_messages/${myToken}`;
+    privUnsub = fb.onValue(fb.ref(fb.db, privPath), snap => {
+         clearTimeout(privDebounce); privDebounce = setTimeout(()=>renderPrivateMessages(snap.val()),60);
+    });
+  }
+
+  window.addEventListener('dd-auth-change', e => {
+    isAdmin = e.detail.isAdmin;
+    updateAdminUI();
+    startListeners();
+  });
 
   document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1156,65 +1179,93 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     lastPrivateData = data;
     const adminList = document.getElementById('msgPrivateAdminList');
     const userView  = document.getElementById('msgPrivateUserReply');
+    const popupUserView = document.getElementById('msgPopupPrivateUserReply');
+
+    let flattenedItems = [];
+    if (data) {
+        if (isAdmin) {
+            Object.entries(data).forEach(([tok, msgs]) => {
+                Object.entries(msgs).forEach(([mid, msgData]) => {
+                    flattenedItems.push({ id: mid, token: tok, ...msgData });
+                });
+            });
+        } else {
+            Object.entries(data).forEach(([mid, msgData]) => {
+                flattenedItems.push({ id: mid, token: myToken, ...msgData });
+            });
+        }
+    }
+    flattenedItems.sort((a,b)=>(b.ts||0)-(a.ts||0));
 
     if(adminList){
-      if(!isAdmin){ adminList.innerHTML=''; return; }
-      if(!data){ adminList.innerHTML='<div class="msg-public-empty">Chưa có tin nhắn riêng tư nào 🌊</div>'; return; }
-      const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(b.ts||0)-(a.ts||0));
-      adminList.innerHTML = items.map(m => {
-        const replied = m.adminReply;
-        return `<div class="msg-priv-card ${replied?'replied':'unread'}" id="mpc-${msgEsc(m.id)}">
-          <div class="msg-priv-card-header">
-            <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
-            <span class="msg-priv-time">${msgTime(m.ts)}</span>
-            <button class="msg-priv-del" title="Xóa tin nhắn" data-mid="${msgEsc(m.id)}">✕</button>
-          </div>
-          <div class="msg-priv-text">${msgEsc(m.text)}</div>
-          ${replied
-            ? `<div class="msg-priv-replied-wrap">
-                <span class="msg-priv-replied-label">↩ Chủ nhà trả lời:</span>
-                <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
-                <div style="text-align:right">
-                  <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}">Thử lại / Xóa</button>
-                </div>
-               </div>`
-            : `<div>
-                <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời cho ${msgEsc(m.name)||'bạn này'}..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
-                <div style="display:flex;justify-content:flex-end;margin-top:3px">
-                  <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}">Gửi reply ↩</button>
-                </div>
-               </div>`
-          }
-        </div>`;
-      }).join('');
-      adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const mid=btn.dataset.mid, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
-          if(!text) return; btn.disabled=true;
-          if(window.__ddFirebase){ const {db,ref,update}=window.__ddFirebase; try{ await update(ref(db,'private_messages/'+mid+'/adminReply'),{text,ts:Date.now()}); if(ta) ta.value=''; }catch(e){alert('Lỗi: '+e.message);} }
-          btn.disabled=false;
-        });
-      });
-      adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
-        btn.addEventListener('click', async () => { if(!confirm('Xóa tin nhắn này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'private_messages/'+btn.dataset.mid));} });
-      });
-      adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
-        btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'private_messages/'+btn.dataset.mid+'/adminReply'));} });
-      });
+        if(!isAdmin){ adminList.innerHTML=''; }
+        else if(flattenedItems.length===0){ adminList.innerHTML='<div class="msg-public-empty">Chưa có tin nhắn riêng tư nào 🌊</div>'; }
+        else {
+            adminList.innerHTML = flattenedItems.map(m => {
+                const replied = m.adminReply;
+                return `<div class="msg-priv-card ${replied?'replied':'unread'}" id="mpc-${msgEsc(m.id)}">
+                  <div class="msg-priv-card-header">
+                    <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
+                    <span class="msg-priv-time">${msgTime(m.ts)}</span>
+                    <button class="msg-priv-del" title="Xóa tin nhắn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">✕</button>
+                  </div>
+                  <div class="msg-priv-text">${msgEsc(m.text)}</div>
+                  ${replied
+                    ? `<div class="msg-priv-replied-wrap">
+                        <span class="msg-priv-replied-label">↩ Chủ nhà trả lời:</span>
+                        <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
+                        <div style="text-align:right">
+                          <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Thử lại / Xóa</button>
+                        </div>
+                       </div>`
+                    : `<div>
+                        <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời cho ${msgEsc(m.name)||'bạn này'}..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
+                        <div style="display:flex;justify-content:flex-end;margin-top:3px">
+                          <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Gửi reply ↩</button>
+                        </div>
+                       </div>`
+                  }
+                </div>`;
+            }).join('');
+            adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const mid=btn.dataset.mid, tok=btn.dataset.token, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
+                    if(!text) return; btn.disabled=true;
+                    if(window.__ddFirebase){ const {db,ref,update}=window.__ddFirebase; try{ await update(ref(db,`private_messages/${tok}/${mid}/adminReply`),{text,ts:Date.now()}); if(ta) ta.value=''; }catch(e){alert('Lỗi: '+e.message);} }
+                    btn.disabled=false;
+                });
+            });
+            adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
+                btn.addEventListener('click', async () => { if(!confirm('Xóa tin nhắn này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}`));} });
+            });
+            adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
+                btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}/adminReply`));} });
+            });
+        }
     }
 
-    if(userView && !isAdmin){
-      if(!data){ userView.innerHTML=''; return; }
-      const myMsgs = Object.entries(data).map(([id,v])=>({id,...v})).filter(m=>m.token===myToken&&m.adminReply).sort((a,b)=>(b.ts||0)-(a.ts||0));
-      if(myMsgs.length===0){ userView.innerHTML=''; return; }
-      userView.innerHTML = `<div class="msg-admin-reply-section">
-        <div class="msg-admin-reply-title">💬 Có tin nhắn mới từ chủ nhà:</div>
-        ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
-          <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
-          <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
-          <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
-        </div>`).join('')}
-      </div>`;
+    if(!isAdmin){
+      if(flattenedItems.length===0){ 
+        if(userView) userView.innerHTML=''; 
+        if(popupUserView) popupUserView.innerHTML='';
+      } else {
+        const myMsgs = flattenedItems.filter(m=>m.adminReply);
+        if(myMsgs.length===0){ 
+          if(userView) userView.innerHTML=''; 
+          if(popupUserView) popupUserView.innerHTML='';
+        } else {
+          const htmlContent = `<div class="msg-admin-reply-section">
+            <div class="msg-admin-reply-title">💬 Có tin nhắn mới từ chủ nhà:</div>
+            ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
+              <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
+              <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
+              <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
+            </div>`).join('')}
+          </div>`;
+          if(userView) userView.innerHTML = htmlContent;
+          if(popupUserView) popupUserView.innerHTML = htmlContent;
+        }
+      }
     }
   }
 
@@ -1224,7 +1275,14 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     function doSend(){
       const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
       function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
-      wfl(async({db,ref,push})=>{ try{ await push(ref(db,'private_messages'),{name:(nameEl?.value||'').trim()||'Ẩn danh',text,ts:Date.now(),token:myToken,read:false}); if(textEl)textEl.value=''; if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3500);} }catch(e){alert('Lỗi: '+e.message);} sendEl.disabled=false; });
+      wfl(async({db,ref,push})=>{ 
+        try{ 
+           await push(ref(db,`private_messages/${myToken}`),{name:(nameEl?.value||'').trim()||'Ẩn danh',text,ts:Date.now(),token:myToken,read:false}); 
+           if(textEl)textEl.value=''; 
+           if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3500);} 
+        }catch(e){alert('Lỗi: '+e.message);} 
+        sendEl.disabled=false; 
+      });
     }
     sendEl.addEventListener('click',doSend);
     textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
@@ -1279,10 +1337,10 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     window.addEventListener('dd-firebase-ready',()=>{if(window.__ddFirebase?.db)cb(window.__ddFirebase);},{once:true});
     let n=0; const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}if(++n>60)clearInterval(t);},200);
   }
-  wfl(({db,ref,onValue})=>{
-    onValue(ref(db,'public_messages'),  snap=>{clearTimeout(pubDebounce);  pubDebounce =setTimeout(()=>renderPublicMessages(snap.val()),60);});
-    onValue(ref(db,'private_messages'), snap=>{clearTimeout(privDebounce); privDebounce=setTimeout(()=>renderPrivateMessages(snap.val()),60);});
+  wfl((fb)=>{
+    startListeners();
   });
 })();
 </script>
 </Layout>
+```

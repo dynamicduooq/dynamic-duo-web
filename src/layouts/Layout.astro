@@ -5,28 +5,39 @@ import settings from '../data/settings.json';
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
-const currentTruyenId = frontmatter?.truyen_id;
+const currentTruyenId = frontmatter?.truyen_id; // Giữ nguyên để Firebase Review cũ vẫn hoạt động
 
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
 
-if (currentTruyenId && isNovelPage) {
+if (isNovelPage) {
   const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
-  chapters = allPosts
-    .filter((p: any) =>
-      p.frontmatter?.truyen_id === currentTruyenId &&
-      p.frontmatter?.chuong !== undefined &&
-      p.frontmatter?.chuong !== 0
-    )
-    .sort((a: any, b: any) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
-
+  
+  // Xử lý đường dẫn để lấy đúng thư mục mẹ (chứa toàn bộ truyện)
   const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
+  const currentFolder = cur.substring(0, cur.lastIndexOf('/'));
+
+  chapters = allPosts
+    .filter((p: any) => {
+      if (p.frontmatter?.chuong === undefined || p.frontmatter?.chuong === 0) return false;
+      
+      const pUrl = normPath(p.url || '');
+      const pFolder = pUrl.substring(0, pUrl.lastIndexOf('/'));
+      
+      // FIX LỖI MẤT MENU CHƯƠNG:
+      // Các file cùng nằm trong một thư mục (VD: ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay) 
+      // sẽ tự động được nhận diện là cùng một truyện, không quan tâm `truyen_id` bên trong là gì.
+      return pFolder === currentFolder;
+    })
+    .sort((a: any, b: any) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
+
   const idx = chapters.findIndex((c: any) => {
     const u = normPath(c.url || '');
     return u === cur || cur.endsWith(u);
   });
+  
   if (idx > 0) prevChap = chapters[idx - 1];
   if (idx >= 0 && idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
@@ -45,7 +56,6 @@ if (currentTruyenId && isNovelPage) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp }
       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
@@ -633,43 +643,43 @@ if (currentTruyenId && isNovelPage) {
 <div id="read-progress"></div>
 
 <nav id="navbar">
-  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
-  <div class="nav-links" id="navLinks">
-    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá dưới nước ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
-              </div>
-    </div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá trên bàn ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
-      </div>
-    </div>
-    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
-    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px">
-        <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
+  <div class="nav-links" id="navLinks">
+    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá dưới nước ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
+              </div>
+    </div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá trên bàn ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
+      </div>
+    </div>
+    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
+    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
+        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+        <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
@@ -691,7 +701,6 @@ if (currentTruyenId && isNovelPage) {
 
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
-<!-- Gắn data-truyen-id để tính năng Rating lấy ID truyện -->
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
     <div class="tags-container">
@@ -728,7 +737,6 @@ if (currentTruyenId && isNovelPage) {
     <div class="novel-layout-wrap" id="novelLayoutWrap">
       <div class="novel-content" id="novelContent"><slot /></div>
       
-      <!-- NÚT TIM CHƯƠNG -->
       <div class="chap-like-area">
         <button class="chap-like-btn" id="btnLikeChapter">
           <span class="heart">🤍</span> Yêu thích chương này <span class="count" id="chapLikeCount" style="font-weight:bold;margin-left:4px">0</span>
@@ -829,14 +837,12 @@ if (currentTruyenId && isNovelPage) {
       </div>
     </div>
   </div>
-  <!-- Dòng bottom duy nhất chứa phím Admin -->
   <div class="ft-bottom">
     dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026 
     <a href="#" id="footerAdmin" style="opacity:0.3; margin-left:10px; font-size:0.6rem" title="Admin Login">🔑</a>
   </div>
 </footer>
 
-<!-- ── FLOATING TOOLS MỚI (TỐI GIẢN) ── -->
 <div class="tool-fab-wrap" id="toolFabWrap">
   <div class="tool-fab-menu" id="toolFabMenu">
     {isHome && <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>}
@@ -849,7 +855,6 @@ if (currentTruyenId && isNovelPage) {
   <button class="tool-fab-toggle" id="toolFabToggle">⋮</button>
 </div>
 
-<!-- CÁC POPUP CỦA FLOATING TOOLS -->
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
     <div class="rs-title">Thiết lập đọc</div>
@@ -1349,7 +1354,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 /* ══════════════════════════════════════════
-   C. CHAPTER LIKE SYSTEM
+   C. CHAPTER LIKE SYSTEM (ĐÃ VÁ LỖI)
 ══════════════════════════════════════════ */
 (function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter');
@@ -1360,6 +1365,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const myToken = getMyToken();
   const storageKey = 'dd_liked_' + key;
 
+  // Lấy trạng thái lưu ở máy lúc load trang
   if(localStorage.getItem(storageKey) === 'true') {
     btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️';
   }
@@ -1367,25 +1373,39 @@ document.addEventListener('DOMContentLoaded', () => {
   waitFirebase(({db, ref, onValue, update, remove}) => {
     const likeRef = ref(db, 'chapter_likes/' + key);
     
+    // Lắng nghe dữ liệu realtime
     onValue(likeRef, snap => {
       const data = snap.val() || {};
       countEl.textContent = Object.keys(data).length;
-      if(data[myToken]) { btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true'); }
+      
+      // FIX LỖI GIAO DIỆN: Bổ sung logic tháo tim nếu data không còn
+      if(data[myToken]) { 
+          btn.classList.add('liked'); 
+          btn.querySelector('.heart').textContent = '❤️'; 
+          localStorage.setItem(storageKey, 'true'); 
+      } else {
+          btn.classList.remove('liked'); 
+          btn.querySelector('.heart').textContent = '🤍'; 
+          localStorage.removeItem(storageKey);
+      }
     });
 
     btn.addEventListener('click', async () => {
       const isLiked = btn.classList.contains('liked');
-      btn.disabled = true;
+      btn.disabled = true; // Khóa nút chống spam click
+      
       try {
         if(isLiked) {
           await remove(ref(db, `chapter_likes/${key}/${myToken}`));
-          btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; localStorage.removeItem(storageKey);
         } else {
           await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
-          btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true');
         }
-      } catch(e) { console.error('Lỗi like:', e); }
-      btn.disabled = false;
+      } catch(e) { 
+          console.error('Lỗi like:', e); 
+          alert('Không thể thả tim! Có thể do Firebase Rules chặn. (Lỗi: ' + e.message + ')');
+      }
+      
+      btn.disabled = false; // Mở lại nút
     });
   });
 })();
@@ -1572,7 +1592,7 @@ waitFirebase(({db, ref, get, update, onValue}) => {
 
       const repliesHtml = replies.map(r => {
         const rMine = r.token === myToken; const rCanDel = isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
-        const atTag = r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
+        const atTag =r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
         return `<div class="reply-item" id="ri-${esc(r.id)}">
           <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
           <div class="reply-body">
@@ -1608,11 +1628,11 @@ waitFirebase(({db, ref, get, update, onValue}) => {
               <span class="reply-quoting-label"></span>
               <button class="reply-quoting-cancel" data-cid="${esc(c.id)}">✕</button>
             </div>
-            <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" value="${isAdmin ? esc(ADMIN_DISPLAY_NAME) : esc(getSavedName())}" ${isAdmin ? 'style="display:none"' : ''} />
+            <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" value="${isAdmin ? esc(ADMIN_DISPLAY_NAME) : esc(getSavedName())}" ${isAdmin ? 'readonly style="display:none"' : ''} />
             <textarea class="reply-inp-text" placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
             <div class="reply-form-btns">
               <button class="reply-cancel-btn" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="reply-send-btn"   data-cid="${esc(c.id)}">Gửi ✦</button>
+              <button class="reply-send-btn"   data-action="send-reply"   data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
             </div>
           </div>
         </div>

@@ -509,12 +509,12 @@ const b64Decode = str => decodeURIComponent(escape(atob(str)));
    ========================================================================== */
 // (FIX): Đã nạp đầy đủ danh sách các truyện bạn đang có
 let storiesList = [
-  { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', cat: 'ca-duoi-nuoc' },
-  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
-  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', cat: 'ca-tren-ban' },
-  { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', cat: 'ca-tren-ban' },
-  { id: 'vat-de-vo', title: 'Vật dễ vỡ', cat: 'ca-tren-ban' },
-  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', cat: 'ca-tren-ban' }
+  { id: 'ha-chay-dong-hoang', shortId: 'hcdh', title: 'Hạ cháy đồng hoang', cat: 'ca-duoi-nuoc' },
+  { id: 'quan-he-ban-cung-phong', shortId: 'qhbcp', title: 'Quan hệ bạn cùng phòng', cat: 'ca-duoi-nuoc' },
+  { id: 'toi-nghi-chung-toi-sap-chia-tay', shortId: 'tnctsct', title: 'Tôi nghĩ chúng tôi sắp chia tay', cat: 'ca-tren-ban' },
+  { id: 'neu-dem-nay-troi-khong-mua', shortId: 'ndntkm', title: 'Nếu đêm nay trời không mưa', cat: 'ca-tren-ban' },
+  { id: 'vat-de-vo', shortId: 'vdv', title: 'Vật dễ vỡ', cat: 'ca-tren-ban' },
+  { id: 'thieu-de-xuan-tam', shortId: 'tdxt', title: 'Thiếu đế xuân tâm', cat: 'ca-tren-ban' }
 ];
 
 function loadStoriesFromLocalOrAPI() {
@@ -537,8 +537,7 @@ function renderStoriesTable() {
 
 function populateBulkUploadSelect() {
     const sel = $('bulk-story-select');
-    sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}">${s.title}</option>`).join('');
-}
+sel.innerHTML = storiesList.map(s => `<option value="${s.cat}|${s.id}|${s.shortId || s.id}">${s.title}</option>`).join('');}
 
 /* ==========================================================================
    (FIX LỖI) SỬA THÔNG TIN TRUYỆN (FILE INDEX.ASTRO)
@@ -865,7 +864,7 @@ $('ed-saveBtn').onclick = async () => {
       // Trường hợp tạo mới hoàn toàn
       finalFm = `layout: "../../../layouts/Layout.astro"
 title: "${$('ed-title').value.replace(/"/g, '\\"')}"
-truyen_id: "${currentStory.id}"
+truyen_id: "${currentStory.shortId || currentStory.id}"
 chuong: ${parseInt($('ed-num').value)}
 date: "${new Date().toISOString().split('T')[0]}"
 description: "${$('ed-desc').value.replace(/"/g, '\\"')}"
@@ -925,7 +924,7 @@ async function processBulkUpload() {
     const target = $('bulk-story-select').value;
     if(!rawText || !target) return showToast('Vui lòng nhập nội dung và chọn truyện', 'error');
     
-    const [cat, id] = target.split('|');
+    const [cat, id, shortId] = target.split('|');
     const log = $('bulk-log');
     log.innerHTML = 'Bắt đầu xử lý...\n';
     
@@ -945,7 +944,7 @@ async function processBulkUpload() {
         const fm = `---
 layout: "../../../layouts/Layout.astro"
 title: "${titleMatch.replace(/"/g, '')}"
-truyen_id: "${id}"
+truyen_id: "${shortId}"
 chuong: ${num}
 date: "${new Date().toISOString().split('T')[0]}"
 ---`;

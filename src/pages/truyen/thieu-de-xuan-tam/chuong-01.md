@@ -1,13 +1,15 @@
 ---
 layout: "../../../layouts/Layout.astro"
-title: "Chương 1: Tiền căn"
+title: "Chương 1"
 truyen_id: "tdxt"
 chuong: 1
 date: "2026-05-29"
 description: ""
 draft: false
-tags: []
+tags: [""]
 ---
+
+## Chương 1: Tiền căn
 
 Ngày hai mươi ba tháng hai.
 Tuy đã qua tiết Kinh Trập, nhưng phủ Thuận Thiên vẫn lạnh lẽo tựa như đang giữa mùa đông khắc nghiệt.
@@ -131,6 +133,7 @@ Nhưng Phó Nguyên Thanh không khóc.
 Y nén những giọt nước mắt bi thương sắp trào ra, nén đến mức xương cốt đau nhức.
 Y nói với Thiếu đế: "Thần sẽ ở cùng người."
 --
-Chú thích:
+**Chú thích:
+***chữ in nghiêng*
 [1] Các Hoàng đế (đặc biệt là triều Minh) thường dùng từ "Đại bạn" (大伴) để gọi những thái giám thân tín, người đã hầu hạ họ từ khi còn nhỏ hoặc có mối quan hệ cực kỳ gần gũi. 
 [2] Nguyên văn là "Tích thạch như ngọc, liệt tùng như thúy, lang diễm độc tuyệt, thế vô kỳ nhị", trích bài thơ "Bạch Thạch Lang Khúc".

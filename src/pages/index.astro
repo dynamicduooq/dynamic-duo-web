@@ -421,7 +421,7 @@ const hcdhCount    = countChaps(hcdhPosts);
 
 /* Popup from bubble */
 .msg-popup {
-  position:fixed; bottom:196px; right:80px; z-index:420; /* Điều chỉnh vị trí tương đối so với nút mail mới */
+  position:fixed; bottom:80px; right:75px; z-index:420; /* Điều chỉnh vị trí tương đối so với nút mail mới */
   width:min(360px,calc(100vw - 32px));
   background:rgba(255,255,255,0.98); 
   backdrop-filter: blur(16px);
@@ -779,10 +779,6 @@ const hcdhCount    = countChaps(hcdhPosts);
   </aside>
 </div><!-- /home-shell -->
 
-<button class="msg-bubble-btn" id="msgBubbleBtn" title="Nhắn lời cho chủ nhà" aria-label="Mở hộp lời nhắn">
-  <span>✉</span>
-</button>
-
 <!-- Popup from bubble -->
 <div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
@@ -813,10 +809,11 @@ const hcdhCount    = countChaps(hcdhPosts);
 </div>
 
 <script is:inline>
-/* ══════════════════════════════════════
-   DYNAMIC GREETING & CONTINUE READING
-══════════════════════════════════════ */
-(function setupDynamicFeatures() {
+/* ══════════════════════════════════════════
+   1. HELPERS & DYNAMIC UI
+   ══════════════════════════════════════════ */
+(function setupGeneralUI() {
+  // Greeting theo thời gian
   const hour = new Date().getHours();
   let greeting = 'Chào buổi tối';
   if (hour >= 5 && hour < 11) greeting = 'Chào buổi sáng';
@@ -826,6 +823,7 @@ const hcdhCount    = countChaps(hcdhPosts);
   const grEl = document.getElementById('dynamicGreeting');
   if(grEl) grEl.textContent = greeting + ', cá là cậu thèm cá ';
 
+  // Continue Reading (Lấy từ localStorage)
   const lastReadUrl = localStorage.getItem('dd_last_read_url');
   const lastReadTitle = localStorage.getItem('dd_last_read_title');
   const crBanner = document.getElementById('continueReading');
@@ -836,343 +834,262 @@ const hcdhCount    = countChaps(hcdhPosts);
     crBanner.href = lastReadUrl;
     crBanner.classList.remove('hidden');
   }
-})();
 
-/* ══════════════════════════════════════
-   FILTER
-══════════════════════════════════════ */
-const allCards  = document.querySelectorAll('.sc');
-const chips     = document.querySelectorAll('#filterChips .chip');
-const flCount   = document.getElementById('flCount');
-const chipClear = document.getElementById('chipClear');
-let activeTags = new Set();
-let activeCat  = null;
+  // Reveal on Scroll
+  const obs = new IntersectionObserver(es => es.forEach(e => { 
+    if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } 
+  }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-function updateClearBtn(){ if(chipClear) chipClear.style.display=(activeTags.size>0||activeCat!==null)?'inline-flex':'none'; }
-function applyFilter(){
-  let vis=0;
-  allCards.forEach(card=>{
-    card.style.animation = 'none';
-    card.offsetHeight;
-    card.style.animation = '';
-
-    const cCat  = card.dataset.cat||'';
-    const cTags = (card.dataset.tags||'').split(',').map(t=>t.trim().toLowerCase());
-    const catOk = activeCat===null||cCat===activeCat;
-    const tagOk = activeTags.size===0||[...activeTags].every(t=>cTags.includes(t.toLowerCase()));
-    const show  = catOk&&tagOk;
-    card.classList.toggle('hidden',!show);
-    if(show) vis++;
-  });
-  if(flCount) flCount.textContent=vis+' truyện';
-  document.getElementById('noRes')?.classList.toggle('show',vis===0);
-  updateClearBtn();
-}
-chips.forEach(chip=>{
-  chip.addEventListener('click',()=>{
-    if(chip.id==='chipClear'){ activeTags.clear(); activeCat=null; chips.forEach(c=>c.classList.remove('active')); document.querySelector('[data-tag="all"]')?.classList.add('active'); applyFilter(); return; }
-    if(chip.dataset.tag){
-      const tag=chip.dataset.tag;
-      if(tag==='all'){ activeTags.clear(); chips.forEach(c=>c.dataset.tag&&c.classList.remove('active')); chip.classList.add('active'); }
-      else{ document.querySelector('[data-tag="all"]')?.classList.remove('active'); if(activeTags.has(tag)){activeTags.delete(tag);chip.classList.remove('active');}else{activeTags.add(tag);chip.classList.add('active');} if(activeTags.size===0) document.querySelector('[data-tag="all"]')?.classList.add('active'); }
-    } else if(chip.dataset.cat){
-      const cat=chip.dataset.cat; chips.forEach(c=>c.dataset.cat&&c.classList.remove('active')); activeCat=(activeCat===cat)?null:cat; if(activeCat) chip.classList.add('active');
-    }
-    applyFilter();
-  });
-});
-
-/* Toggle shadow cho Sticky Filter khi cuộn */
-window.addEventListener('scroll', () => {
-  const fb = document.querySelector('.filter-bar');
-  if(fb) fb.classList.toggle('is-stuck', window.scrollY > 300);
-}, {passive: true});
-
-/* ══════════════════════════════════════
-   REVEAL ON SCROLL
-══════════════════════════════════════ */
-const obs=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-/* ══════════════════════════════════════
-   CLICK TO COPY EMAIL
-══════════════════════════════════════ */
-(function setupCopyEmail(){
+  // Copy Email
   const copyBtn = document.getElementById('sidebarEmailCopy');
   const tooltip = document.getElementById('emailTooltip');
-  if(!copyBtn || !tooltip) return;
-
-  copyBtn.addEventListener('click', (e) => {
-    navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
-      const rect = copyBtn.getBoundingClientRect();
-      tooltip.style.left = (e.clientX - rect.left - 20) + 'px';
-      tooltip.classList.add('show');
-      setTimeout(() => tooltip.classList.remove('show'), 2000);
+  if(copyBtn && tooltip) {
+    copyBtn.addEventListener('click', (e) => {
+      navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
+        tooltip.classList.add('show');
+        setTimeout(() => tooltip.classList.remove('show'), 2000);
+      });
     });
-  });
+  }
 })();
 
-/* ══════════════════════════════════════
-   MAIL BUBBLE
-══════════════════════════════════════ */
-(function setupBubble(){
-  const btn   = document.getElementById('msgBubbleBtn');
-  const popup = document.getElementById('msgPopup');
-  const close = document.getElementById('msgPopupClose');
-  if(!btn||!popup) return;
+/* ══════════════════════════════════════════
+   2. TRUYỆN FILTER LOGIC
+   ══════════════════════════════════════════ */
+(function setupStoryFilter() {
+  const allCards  = document.querySelectorAll('.sc');
+  const chips     = document.querySelectorAll('#filterChips .chip');
+  const flCount   = document.getElementById('flCount');
+  const chipClear = document.getElementById('chipClear');
+  let activeTags = new Set();
+  let activeCat  = null;
 
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    popup.classList.toggle('open');
-  });
-  close?.addEventListener('click', () => popup.classList.remove('open'));
-  document.addEventListener('click', e => {
-    if(popup.classList.contains('open') && !popup.contains(e.target) && !btn.contains(e.target))
-      popup.classList.remove('open');
-  });
+  function applyFilter() {
+    let visibleCount = 0;
+    allCards.forEach(card => {
+      const cCat = card.dataset.cat || '';
+      const cTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase());
+      
+      const catMatch = activeCat === null || cCat === activeCat;
+      const tagMatch = activeTags.size === 0 || [...activeTags].every(t => cTags.includes(t.toLowerCase()));
+      
+      const isVisible = catMatch && tagMatch;
+      card.classList.toggle('hidden', !isVisible);
+      if(isVisible) visibleCount++;
+    });
 
-  popup.querySelectorAll('[data-popup-panel]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const panel = tab.dataset.popupPanel;
-      popup.querySelectorAll('[data-popup-panel]').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      popup.querySelectorAll('.msg-panel').forEach(p=>p.classList.remove('active'));
-      document.getElementById('msgPopupPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
+    if(flCount) flCount.textContent = visibleCount + ' truyện';
+    document.getElementById('noRes')?.classList.toggle('show', visibleCount === 0);
+    if(chipClear) chipClear.style.display = (activeTags.size > 0 || activeCat !== null) ? 'inline-flex' : 'none';
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      if(chip.id === 'chipClear') {
+        activeTags.clear(); activeCat = null;
+        chips.forEach(c => c.classList.remove('active'));
+        document.querySelector('[data-tag="all"]')?.classList.add('active');
+      } else if(chip.dataset.tag) {
+        const tag = chip.dataset.tag;
+        if(tag === 'all') {
+          activeTags.clear();
+          chips.forEach(c => c.dataset.tag && c.classList.remove('active'));
+          chip.classList.add('active');
+        } else {
+          document.querySelector('[data-tag="all"]')?.classList.remove('active');
+          if(activeTags.has(tag)) { activeTags.delete(tag); chip.classList.remove('active'); }
+          else { activeTags.add(tag); chip.classList.add('active'); }
+          if(activeTags.size === 0) document.querySelector('[data-tag="all"]')?.classList.add('active');
+        }
+      } else if(chip.dataset.cat) {
+        const cat = chip.dataset.cat;
+        chips.forEach(c => c.dataset.cat && c.classList.remove('active'));
+        activeCat = (activeCat === cat) ? null : cat;
+        if(activeCat) chip.classList.add('active');
+      }
+      applyFilter();
     });
   });
+
+  window.addEventListener('scroll', () => {
+    const fb = document.querySelector('.filter-bar');
+    if(fb) fb.classList.toggle('is-stuck', window.scrollY > 300);
+  }, { passive: true });
 })();
 
-/* ══════════════════════════════════════
-   MESSAGE WIDGET
-══════════════════════════════════════ */
-(function setupMessageWidget(){
-  function msgEsc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function msgTime(ts){
-    if(!ts) return '';
-    const d=Date.now()-ts;
-    if(d<60000)    return 'vừa xong';
-    if(d<3600000)  return Math.floor(d/60000)+' phút trước';
-    if(d<86400000) return Math.floor(d/3600000)+' giờ trước';
+/* ══════════════════════════════════════════
+   3. MAIL POPUP & MESSAGING SYSTEM
+   ══════════════════════════════════════════ */
+(function setupMessagingSystem() {
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function timeAgo(ts){
+    if(!ts) return ''; const d = Date.now() - ts;
+    if(d < 60000) return 'vừa xong';
+    if(d < 3600000) return Math.floor(d/60000)+' phút trước';
+    if(d < 86400000) return Math.floor(d/3600000)+' giờ trước';
     return Math.floor(d/86400000)+' ngày trước';
   }
-  function getMsgToken(){ let t=localStorage.getItem('dd_token'); if(!t){t=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('dd_token',t);} return t; }
-  const myToken     = getMsgToken();
-  const ADMIN_NAME  = 'dynamic duo 𓆝';
-  let isAdmin=false, lastPublicData=null, lastPrivateData=null, pubDebounce=null, privDebounce=null;
-  let privUnsub = null, pubUnsub = null;
-
-  function updateAdminUI(){
-    const nameEl     = document.getElementById('msgPublicName');
-    const adminPanel = document.getElementById('msgPrivateAdminPanel');
-    const userNote   = document.getElementById('msgPrivateUserNote');
-    const popupNameEl = document.getElementById('msgPopupPublicName');
-    const popupPrivNameEl = document.getElementById('msgPopupPrivateName');
-
-    if(nameEl)     { nameEl.style.display = isAdmin ? 'none' : ''; }
-    if(popupNameEl) { popupNameEl.style.display = isAdmin ? 'none' : ''; }
-    if(popupPrivNameEl) { popupPrivNameEl.style.display = isAdmin ? 'none' : ''; }
-    if(adminPanel) { adminPanel.style.display = isAdmin ? 'block' : 'none'; }
-    if(userNote)   { userNote.style.display   = isAdmin ? 'none'  : 'block'; }
+  function getMsgToken(){
+    let t = localStorage.getItem('dd_token');
+    if(!t){ t = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('dd_token', t); }
+    return t;
   }
 
-  function startListeners() {
-    const fb = window.__ddFirebase;
-    if(!fb) return;
+  const myToken = getMsgToken();
+  const ADMIN_NAME = 'dynamic duo 𓆝';
+  const popup = document.getElementById('msgPopup');
+  const fabMailBtn = document.getElementById('fabMail'); // Nút trong FAB ở Layout
 
-    if(!pubUnsub) {
-       pubUnsub = fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
-           clearTimeout(pubDebounce); pubDebounce = setTimeout(()=>renderPublicMessages(snap.val()),60);
-       });
-    }
-
-    if(privUnsub) { privUnsub(); privUnsub = null; }
-    const privPath = isAdmin ? 'private_messages' : `private_messages/${myToken}`;
-    privUnsub = fb.onValue(fb.ref(fb.db, privPath), snap => {
-         clearTimeout(privDebounce); privDebounce = setTimeout(()=>renderPrivateMessages(snap.val()),60);
+  // ── POPUP CONTROL ──
+  if(fabMailBtn && popup) {
+    fabMailBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popup.classList.toggle('open');
+      document.getElementById('toolFabWrap')?.classList.remove('open');
+    });
+    document.getElementById('msgPopupClose')?.addEventListener('click', () => popup.classList.remove('open'));
+    document.addEventListener('click', (e) => {
+      if(popup.classList.contains('open') && !popup.contains(e.target) && !fabMailBtn.contains(e.target)) popup.classList.remove('open');
     });
   }
 
-  window.addEventListener('dd-auth-change', e => {
-    isAdmin = e.detail.isAdmin;
-    updateAdminUI();
-    startListeners();
-  });
-
-  document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const panel = tab.dataset.panel;
-      document.querySelectorAll('#msgSidebarWidget [data-panel]').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelectorAll('#msgSidebarWidget .msg-panel').forEach(p=>p.classList.remove('active'));
-      document.getElementById('msgPanel'+(panel.charAt(0).toUpperCase()+panel.slice(1)))?.classList.add('active');
+  // Tabs cho Widget và Popup
+  function setupTabs(containerId, dataAttr) {
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    container.querySelectorAll(`[${dataAttr}]`).forEach(tab => {
+      tab.addEventListener('click', () => {
+        const panelKey = tab.getAttribute(dataAttr);
+        container.querySelectorAll(`[${dataAttr}]`).forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        // Tìm và switch panel tương ứng
+        const isPopup = containerId.includes('Popup');
+        const prefix = isPopup ? 'msgPopupPanel' : 'msgPanel';
+        const panels = isPopup ? popup.querySelectorAll('.msg-panel') : container.querySelectorAll('.msg-panel');
+        panels.forEach(p => p.classList.remove('active'));
+        const target = document.getElementById(prefix + panelKey.charAt(0).toUpperCase() + panelKey.slice(1));
+        if(target) target.classList.add('active');
+      });
     });
-  });
+  }
+  setupTabs('msgSidebarWidget', 'data-panel');
+  setupTabs('msgPopup', 'data-popup-panel');
 
-  function renderPrivateMessages(data){
-    lastPrivateData = data;
-    const adminList = document.getElementById('msgPrivateAdminList');
-    const userView  = document.getElementById('msgPrivateUserReply');
-    const popupUserView = document.getElementById('msgPopupPrivateUserReply');
+  // ── FIREBASE MESSAGING ──
+  function initFirebaseLogic() {
+    const fb = window.__ddFirebase; if(!fb || !fb.db) return;
 
-    let flattenedItems = [];
-    if (data) {
-        if (isAdmin) {
-            Object.entries(data).forEach(([tok, msgs]) => {
-                Object.entries(msgs).forEach(([mid, msgData]) => {
-                    flattenedItems.push({ id: mid, token: tok, ...msgData });
-                });
-            });
-        } else {
-            Object.entries(data).forEach(([mid, msgData]) => {
-                flattenedItems.push({ id: mid, token: myToken, ...msgData });
-            });
-        }
-    }
-    flattenedItems.sort((a,b)=>(b.ts||0)-(a.ts||0));
+    // Update UI theo quyền Admin
+    const syncAdminUI = () => {
+      const isAdmin = !!window.__ddIsAdmin;
+      const adminElements = ['msgPrivateAdminPanel'];
+      const userElements  = ['msgPrivateUserNote', 'msgPublicName', 'msgPopupPublicName', 'msgPopupPrivateName'];
+      
+      adminElements.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = isAdmin ? 'block' : 'none'; });
+      userElements.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = isAdmin ? 'none' : 'block'; });
+    };
 
-    if(adminList){
-        if(!isAdmin){ adminList.innerHTML=''; }
-        else if(flattenedItems.length===0){ adminList.innerHTML='<div class="msg-public-empty">Chưa có tin nhắn riêng tư nào 🌊</div>'; }
-        else {
-            adminList.innerHTML = flattenedItems.map(m => {
-                const replied = m.adminReply;
-                return `<div class="msg-priv-card ${replied?'replied':'unread'}" id="mpc-${msgEsc(m.id)}">
-                  <div class="msg-priv-card-header">
-                    <span class="msg-priv-sender">${msgEsc(m.name)||'Ẩn danh'}</span>
-                    <span class="msg-priv-time">${msgTime(m.ts)}</span>
-                    <button class="msg-priv-del" title="Xóa tin nhắn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">✕</button>
-                  </div>
-                  <div class="msg-priv-text">${msgEsc(m.text)}</div>
-                  ${replied
-                    ? `<div class="msg-priv-replied-wrap">
-                        <span class="msg-priv-replied-label">↩ Đã trả lời:</span>
-                        <div class="msg-priv-replied-text">${msgEsc(replied.text)}</div>
-                        <div style="text-align:right">
-                          <button class="msg-priv-del-reply" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Thử lại / Xóa</button>
-                        </div>
-                       </div>`
-                    : `<div>
-                        <textarea class="msg-priv-reply-inp" placeholder="Nhập nội dung trả lời..." rows="2" id="mprft-${msgEsc(m.id)}"></textarea>
-                        <div style="display:flex;justify-content:flex-end;margin-top:3px">
-                          <button class="msg-priv-send-btn" data-mid="${msgEsc(m.id)}" data-token="${msgEsc(m.token)}">Gửi reply ↩</button>
-                        </div>
-                       </div>`
-                  }
-                </div>`;
-            }).join('');
-            adminList.querySelectorAll('.msg-priv-send-btn').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const mid=btn.dataset.mid, tok=btn.dataset.token, ta=document.getElementById('mprft-'+mid), text=(ta?.value||'').trim();
-                    if(!text) return; btn.disabled=true;
-                    if(window.__ddFirebase){ const {db,ref,update}=window.__ddFirebase; try{ await update(ref(db,`private_messages/${tok}/${mid}/adminReply`),{text,ts:Date.now()}); if(ta) ta.value=''; }catch(e){alert('Lỗi: '+e.message);} }
-                    btn.disabled=false;
-                });
-            });
-            adminList.querySelectorAll('.msg-priv-del').forEach(btn => {
-                btn.addEventListener('click', async () => { if(!confirm('Xóa tin nhắn này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}`));} });
-            });
-            adminList.querySelectorAll('.msg-priv-del-reply').forEach(btn => {
-                btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,`private_messages/${btn.dataset.token}/${btn.dataset.mid}/adminReply`));} });
-            });
-        }
-    }
-
-    if(!isAdmin){
-      if(flattenedItems.length===0){ 
-        if(userView) userView.innerHTML=''; 
-        if(popupUserView) popupUserView.innerHTML='';
-      } else {
-        const myMsgs = flattenedItems.filter(m=>m.adminReply);
-        if(myMsgs.length===0){ 
-          if(userView) userView.innerHTML=''; 
-          if(popupUserView) popupUserView.innerHTML='';
-        } else {
-          const htmlContent = `<div class="msg-admin-reply-section">
-            <div class="msg-admin-reply-title">💬 Chủ nhà đã trả lời bạn:</div>
-            ${myMsgs.map(m=>`<div class="msg-admin-reply-card">
-              <div class="msg-admin-reply-orig">Tin của bạn: <em>${msgEsc(m.text.substring(0,60))}${m.text.length>60?'...':''}</em></div>
-              <div class="msg-admin-reply-body"><span class="msg-admin-badge">dynamic duo 𓆝</span>${msgEsc(m.adminReply.text)}</div>
-              <div class="msg-admin-reply-time">${msgTime(m.adminReply.ts)}</div>
-            </div>`).join('')}
+    // Public Feed
+    fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
+      const data = snap.val();
+      const render = (containerId) => {
+        const el = document.getElementById(containerId);
+        if(!el) return;
+        if(!data) { el.innerHTML = '<div class="msg-public-empty">Chưa có tin nhắn 𓆝</div>'; return; }
+        const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>a.ts-b.ts);
+        el.innerHTML = items.map(m => {
+          const isMine = m.token === myToken;
+          const canDel = window.__ddIsAdmin || isMine;
+          return `<div class="msg-pub-item ${m.isAdmin?'msg-pub-admin':''}">
+            <div class="msg-pub-item-header">
+              <span class="msg-pub-name">${m.isAdmin?'🐋 ':''}${esc(m.name)}</span>
+              <span class="msg-pub-time">${timeAgo(m.ts)}</span>
+              ${canDel?`<button class="msg-pub-del show" data-id="${m.id}">✕</button>`:''}
+            </div>
+            <div class="msg-pub-text">${esc(m.text)}</div>
           </div>`;
-          if(userView) userView.innerHTML = htmlContent;
-          if(popupUserView) popupUserView.innerHTML = htmlContent;
-        }
+        }).join('');
+        el.scrollTop = el.scrollHeight;
+        el.querySelectorAll('.msg-pub-del').forEach(b => b.addEventListener('click', () => {
+          if(confirm('Xóa tin nhắn này?')) fb.remove(fb.ref(fb.db, 'public_messages/' + b.dataset.id));
+        }));
+      };
+      render('msgPublicFeed'); render('msgPopupPublicFeed');
+    });
+
+    // Private Messaging (Admin see all, User see theirs)
+    const privPath = window.__ddIsAdmin ? 'private_messages' : `private_messages/${myToken}`;
+    fb.onValue(fb.ref(fb.db, privPath), snap => {
+      const data = snap.val();
+      const isAdmin = window.__ddIsAdmin;
+      
+      // Render cho Admin
+      if(isAdmin) {
+        const adminList = document.getElementById('msgPrivateAdminList');
+        if(!adminList) return;
+        let items = [];
+        if(data) Object.entries(data).forEach(([tok, msgs]) => Object.entries(msgs).forEach(([id, m]) => items.push({id, token: tok, ...m})));
+        items.sort((a,b) => b.ts - a.ts);
+        adminList.innerHTML = items.map(m => `
+          <div class="msg-priv-card ${m.adminReply?'replied':'unread'}">
+            <div class="msg-priv-card-header">
+              <span class="msg-priv-sender">${esc(m.name)}</span>
+              <span class="msg-priv-time">${timeAgo(m.ts)}</span>
+              <button class="msg-priv-del" data-id="${m.id}" data-token="${m.token}">✕</button>
+            </div>
+            <div class="msg-priv-text">${esc(m.text)}</div>
+            ${m.adminReply ? `<div class="msg-priv-replied-wrap"><span class="msg-priv-replied-label">↩ Đã trả lời:</span><div class="msg-priv-replied-text">${esc(m.adminReply.text)}</div></div>` : 
+            `<textarea class="msg-priv-reply-inp" placeholder="Trả lời..." id="re-${m.id}"></textarea><button class="msg-priv-send-btn" data-id="${m.id}" data-token="${m.token}">Gửi</button>`}
+          </div>`).join('');
+        
+        // Admin actions
+        adminList.querySelectorAll('.msg-priv-del').forEach(b => b.addEventListener('click', () => fb.remove(fb.ref(fb.db, `private_messages/${b.dataset.token}/${b.dataset.id}`))));
+        adminList.querySelectorAll('.msg-priv-send-btn').forEach(b => b.addEventListener('click', () => {
+          const text = document.getElementById('re-'+b.dataset.id).value.trim();
+          if(text) fb.update(fb.ref(fb.db, `private_messages/${b.dataset.token}/${b.dataset.id}/adminReply`), {text, ts: Date.now()});
+        }));
+      } else {
+        // Render reply cho User
+        const replies = data ? Object.values(data).filter(m => m.adminReply) : [];
+        const html = replies.length ? `<div class="msg-admin-reply-section"><div class="msg-admin-reply-title">💬 Chủ nhà trả lời:</div>` + 
+          replies.map(m => `<div class="msg-admin-reply-card"><div class="msg-admin-reply-body">${esc(m.adminReply.text)}</div></div>`).join('') + `</div>` : '';
+        ['msgPrivateUserReply', 'msgPopupPrivateUserReply'].forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = html; });
       }
-    }
-  }
+    });
 
-  function bindPrivateSend(nameId,textId,sendId,doneId){
-    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
-    if(!sendEl) return;
-    function doSend(){
-      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
-      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
-      wfl(async({db,ref,push})=>{ 
-        try{ 
-           await push(ref(db,`private_messages/${myToken}`),{name:(nameEl?.value||'').trim()||'Ẩn danh',text,ts:Date.now(),token:myToken,read:false}); 
-           if(textEl)textEl.value=''; 
-           if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3500);} 
-        }catch(e){alert('Lỗi: '+e.message);} 
-        sendEl.disabled=false; 
+    // ── SEND LOGIC ──
+    const setupSend = (btnId, nameId, textId, path, isPrivate = false) => {
+      const btn = document.getElementById(btnId);
+      if(!btn) return;
+      btn.addEventListener('click', async () => {
+        const text = document.getElementById(textId).value.trim();
+        if(!text) return;
+        btn.disabled = true;
+        const name = window.__ddIsAdmin ? ADMIN_NAME : (document.getElementById(nameId)?.value.trim() || 'Ẩn danh');
+        const payload = { name, text, ts: Date.now(), token: myToken, isAdmin: !!window.__ddIsAdmin };
+        try {
+          const targetPath = isPrivate ? `private_messages/${myToken}` : 'public_messages';
+          await fb.push(fb.ref(fb.db, targetPath), payload);
+          document.getElementById(textId).value = '';
+          const notice = btn.nextElementSibling; if(notice) { notice.style.display = 'block'; setTimeout(() => notice.style.display = 'none', 3000); }
+        } catch(e) { alert(e.message); }
+        btn.disabled = false;
       });
-    }
-    sendEl.addEventListener('click',doSend);
-    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
-  }
-  bindPrivateSend('msgPrivateName','msgPrivateText','msgPrivateSend','msgPrivateDone');
-  bindPrivateSend('msgPopupPrivateName','msgPopupPrivateText','msgPopupPrivateSend','msgPopupPrivateDone');
+    };
 
-  function renderPublicMessages(data){
-    lastPublicData = data;
-    function renderFeed(feedEl){
-      if(!feedEl) return;
-      const empty='<div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>';
-      if(!data){ feedEl.innerHTML=empty; return; }
-      const items=Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
-      feedEl.innerHTML=items.map(m=>{
-        const isMine=m.token===myToken, canDel=isAdmin||isMine, isOwner=m.isAdmin===true;
-        return `<div class="msg-pub-item ${isOwner?'msg-pub-admin':''}">
-          <div class="msg-pub-item-header">
-            <span class="msg-pub-name ${isOwner?'msg-pub-admin-name':''}">${isOwner?'🐋 '+msgEsc(m.name):msgEsc(m.name)||'Khách vô danh'}</span>
-            ${isOwner?'<span class="msg-pub-owner-badge">chủ nhà</span>':''}
-            <span class="msg-pub-time">${msgTime(m.ts)}</span>
-            <button class="msg-pub-del ${canDel?'show':''}" title="Xóa" data-mid="${msgEsc(m.id)}">✕</button>
-          </div>
-          <div class="msg-pub-text">${msgEsc(m.text)}</div>
-        </div>`;
-      }).join('');
-      feedEl.scrollTop=feedEl.scrollHeight;
-      feedEl.querySelectorAll('.msg-pub-del.show').forEach(btn=>{
-        btn.addEventListener('click',async()=>{ if(!confirm('Xóa lời nhắn này?'))return; if(window.__ddFirebase){const {db,ref,remove}=window.__ddFirebase; await remove(ref(db,'public_messages/'+btn.dataset.mid));} });
-      });
-    }
-    renderFeed(document.getElementById('msgPublicFeed'));
-    renderFeed(document.getElementById('msgPopupPublicFeed'));
+    setupSend('msgPublicSend', 'msgPublicName', 'msgPublicText', 'public_messages');
+    setupSend('msgPopupPublicSend', 'msgPopupPublicName', 'msgPopupPublicText', 'public_messages');
+    setupSend('msgPrivateSend', 'msgPrivateName', 'msgPrivateText', '', true);
+    setupSend('msgPopupPrivateSend', 'msgPopupPrivateName', 'msgPopupPrivateText', '', true);
+
+    window.addEventListener('dd-auth-change', syncAdminUI);
+    syncAdminUI();
   }
 
-  function bindPublicSend(nameId,textId,sendId,doneId){
-    const nameEl=document.getElementById(nameId), textEl=document.getElementById(textId), sendEl=document.getElementById(sendId), doneEl=document.getElementById(doneId);
-    if(!sendEl) return;
-    function doSend(){
-      const text=(textEl?.value||'').trim(); if(!text) return; sendEl.disabled=true;
-      function wfl(cb){if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}},200);}
-      wfl(async({db,ref,push})=>{ try{ const name=isAdmin?ADMIN_NAME:(nameEl?.value||'').trim()||'Khách vô danh'; await push(ref(db,'public_messages'),{name,text,ts:Date.now(),token:myToken,isAdmin:isAdmin?true:false}); if(textEl)textEl.value=''; if(doneEl){doneEl.style.display='block';setTimeout(()=>{if(doneEl)doneEl.style.display='none';},3000);} }catch(e){alert('Lỗi: '+e.message);} sendEl.disabled=false; });
-    }
-    sendEl.addEventListener('click',doSend);
-    textEl?.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))doSend();});
-  }
-  bindPublicSend('msgPublicName','msgPublicText','msgPublicSend','msgPublicDone');
-  bindPublicSend('msgPopupPublicName','msgPopupPublicText','msgPopupPublicSend','msgPopupPublicDone');
-
-  function wfl(cb){
-    if(window.__ddFirebase?.db){cb(window.__ddFirebase);return;}
-    window.addEventListener('dd-firebase-ready',()=>{if(window.__ddFirebase?.db)cb(window.__ddFirebase);},{once:true});
-    let n=0; const t=setInterval(()=>{if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);}if(++n>60)clearInterval(t);},200);
-  }
-  wfl((fb)=>{
-    startListeners();
-  });
+  // Khởi chạy khi Firebase đã sẵn sàng
+  if(window.__ddFirebase?.db) initFirebaseLogic();
+  else window.addEventListener('dd-firebase-ready', initFirebaseLogic);
 })();
 </script>
 </Layout>

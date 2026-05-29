@@ -662,7 +662,6 @@ if (currentTruyenId && isNovelPage) {
     <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
   </div>
   <div style="display:flex;align-items:center;gap:6px">
-    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -826,16 +825,20 @@ if (currentTruyenId && isNovelPage) {
       </div>
     </div>
   </div>
-  <div class="ft-bottom">dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026</div>
+  <!-- Dòng bottom duy nhất chứa phím Admin -->
+  <div class="ft-bottom">
+    dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026 
+    <a href="#" id="footerAdmin" style="opacity:0.3; margin-left:10px; font-size:0.6rem" title="Admin Login">🔑</a>
+  </div>
 </footer>
 
 <!-- ── FLOATING TOOLS MỚI (TỐI GIẢN) ── -->
 <div class="tool-fab-wrap" id="toolFabWrap">
   <div class="tool-fab-menu" id="toolFabMenu">
+    {isHome && <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>}
     {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
     {isNovelPage && <button class="fab-btn" id="btnOpenReview" title="Đánh giá truyện" style="background:#f59e0b">⭐</button>}
     {isNovelPage && <button class="fab-btn" id="fabStats" title="Thống kê" style="background:#10b981; display:none;">📊</button>}
-    {isNovelPage && <button class="fab-btn" id="fabAdmin" title="Quản trị viên" style="background:#1e4a6a; display:none;">🔑</button>}
     <button class="fab-btn" id="fabUp" title="Lên đầu">↑</button>
     <button class="fab-btn" id="fabDown" title="Xuống cuối">↓</button>
   </div>
@@ -1006,32 +1009,26 @@ syncThemeBtns();
 
 /* ══ ADMIN AUTH & STATS BUTTON ══ */
 (function setupAdminBtn(){
-  const btn = document.getElementById('fabAdmin');
+  const btn = document.getElementById('footerAdmin');
   const statsBtn = document.getElementById('fabStats');
   let isAdmin = !!window.__ddIsAdmin;
   
   function syncBtn(){
-    if(btn) {
-       btn.style.display = 'flex';
-       btn.textContent = isAdmin ? '🔓' : '🔑';
-       btn.title = isAdmin ? 'Đăng xuất Admin' : 'Đăng nhập Admin';
-    }
-    if(statsBtn) {
-       statsBtn.style.display = isAdmin ? 'flex' : 'none';
-    }
+    if(statsBtn) statsBtn.style.display = isAdmin ? 'flex' : 'none';
+    if(btn) btn.style.opacity = isAdmin ? "1" : "0.3";
   }
   syncBtn();
   window.addEventListener('dd-auth-change', e => { isAdmin = e.detail.isAdmin; syncBtn(); });
   
-  btn?.addEventListener('click', () => {
+  btn?.addEventListener('click', (e) => {
+    e.preventDefault();
     const fb = window.__ddFirebase; if(!fb) return;
     if(isAdmin){
-      if(confirm('Đăng xuất tài khoản admin?')) fb.signOut(fb.auth);
+      if(confirm('Đăng xuất Admin?')) fb.signOut(fb.auth);
     } else {
       const p = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi đăng nhập: '+e.message));
+      fb.signInWithPopup(fb.auth, p).catch(e => alert('Lỗi: '+e.message));
     }
-    document.getElementById('toolFabWrap')?.classList.remove('open');
   });
 })();
 

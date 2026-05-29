@@ -227,7 +227,9 @@ if (currentTruyenId && isNovelPage) {
     .mobile-theme-row:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .mobile-theme-row { color:#8fbcd4; }
     [data-theme="dark"] .mobile-theme-row:hover { background:rgba(126,200,227,.1); color:#a8daf0; }
+    #navThemeBtnMobile { display: none; }
     @media(max-width:700px){ .nav-links{display:none;}  #navThemeBtnMobile { display: flex; } /* Hiện nút theme cạnh hamburger */
+    .nav-hamburger { display: flex; } /* THÊM DÒNG NÀY ĐỂ HIỆN HAMBURGER */
 }
 
     /* ── LAYOUT ── */
@@ -631,44 +633,43 @@ if (currentTruyenId && isNovelPage) {
 <div id="read-progress"></div>
 
 <nav id="navbar">
-  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
-  <div class="nav-links" id="navLinks">
-    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá dưới nước ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
-        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
-      </div>
-    </div>
-    <div class="nav-item">
-      <button class="nav-btn">Cá trên bàn ▾</button>
-      <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
-        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
-      </div>
-    </div>
-    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
-    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện" style="display: flex;">🌙</button>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
+  <div class="nav-links" id="navLinks">
+    <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá dưới nước ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
+              </div>
+    </div>
+    <div class="nav-item">
+      <button class="nav-btn">Cá trên bàn ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Truyện</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
+        <a href="/dynamic-duo-web/ca-tren-ban/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
+      </div>
+    </div>
+    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
+    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
+        <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+        <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">

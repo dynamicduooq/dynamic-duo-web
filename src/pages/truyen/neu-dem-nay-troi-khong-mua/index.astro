@@ -8,7 +8,7 @@ const allPosts = Object.values(
 const chapters = allPosts
   .filter((p) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0)
   .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
-  const tong_so_chuong = 72; // Điền tổng số chương của truyện này (nếu chưa rõ thì để 9999)
+  const tong_so_chuong = 74; // Điền tổng số chương của truyện này (nếu chưa rõ thì để 9999)
 const hoan_thanh = true;   // Nếu đã dịch xong 100%, đổi thành true
 ---
 

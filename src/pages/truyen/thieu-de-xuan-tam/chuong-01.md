@@ -4,6 +4,9 @@ title: "Chương 1: Tiền căn"
 truyen_id: "tdxt"
 chuong: 1
 date: "2026-05-29"
+description: ""
+draft: false
+tags: []
 ---
 
 Ngày hai mươi ba tháng hai.

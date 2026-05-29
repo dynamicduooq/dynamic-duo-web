@@ -943,70 +943,44 @@ function waitFirebase(cb){
 }
 
 /* ══════════════════════════════════════════
-   CHƯƠNG TRÌNH ĐIỀU KHIỂN CHÍNH (DOM LOADED)
+   CHƯƠNG TRÌNH ĐIỀU KHIỂN TỔNG HỢP
    ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-  // 1. SETUP UI & INTERACTIVITY (Progress, Menu, FAB, Theme, Dropdowns)
+  // 1. GIAO DIỆN CHUNG (Hamburger, FAB, Progress, Theme)
+  const mm = document.getElementById('mobileMenu'), hb = document.getElementById('hamburger');
+  hb?.addEventListener('click', () => mm?.classList.toggle('open'));
+  document.addEventListener('click', e => { if(mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target)) mm.classList.remove('open'); });
+
+  const fabWrap = document.getElementById('toolFabWrap'), fabToggle = document.getElementById('toolFabToggle');
+  fabToggle?.addEventListener('click', (e) => { e.stopPropagation(); fabWrap.classList.toggle('open'); });
+  document.addEventListener('click', (e) => { if(!fabWrap.contains(e.target)) fabWrap.classList.remove('open'); });
+
   const _rp = document.getElementById('read-progress');
-  function updScroll(){
-    const y = window.scrollY;
+  window.addEventListener('scroll', () => {
     const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
-    const p = y / max;
-    if(_rp) _rp.style.width = (p*100)+'%';
-  }
-  window.addEventListener('scroll', updScroll, {passive:true});
-  requestAnimationFrame(() => setTimeout(updScroll, 200));
+    if(_rp) _rp.style.width = (window.scrollY / max * 100) + '%';
+  }, {passive:true});
 
-  const mm=document.getElementById('mobileMenu'), hb=document.getElementById('hamburger');
-  hb?.addEventListener('click',()=>mm?.classList.toggle('open'));
-  document.addEventListener('click',e=>{
-    if(mm?.classList.contains('open')&&!mm.contains(e.target)&&!hb?.contains(e.target)) mm.classList.remove('open');
-  });
+  const themeBtn = document.getElementById('navThemeBtn'), themeBtnMob = document.getElementById('navThemeBtnMobile');
+  const toggleTheme = () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', isDark ? '' : 'dark');
+    localStorage.setItem('dd-theme', isDark ? 'light' : 'dark');
+  };
+  themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
 
-  const fabWrap = document.getElementById('toolFabWrap');
-  const fabToggle = document.getElementById('toolFabToggle');
-  if(fabToggle && fabWrap) {
-    fabToggle.addEventListener('click', (e) => { e.stopPropagation(); fabWrap.classList.toggle('open'); });
-    document.addEventListener('click', (e) => { if(!fabWrap.contains(e.target)) fabWrap.classList.remove('open'); });
-  }
-  document.getElementById('fabUp')?.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
-  document.getElementById('fabDown')?.addEventListener('click', () => { window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
-
-  function applyTheme(dark){
-    document.documentElement.setAttribute('data-theme',dark?'dark':'');
-    localStorage.setItem('dd-theme',dark?'dark':'light');
-    syncThemeBtns();
-  }
-  function syncThemeBtns(){
-    const isDark = document.documentElement.getAttribute('data-theme')==='dark';
-    const icon = isDark ? '☀️' : '🌙';
-    const label = isDark ? 'Chế độ sáng' : 'Chế độ tối';
-    document.querySelectorAll('.nav-theme-btn, .mobile-theme-row').forEach(el=>{
-      if(el.tagName === 'BUTTON') { el.title = label; if(el.classList.contains('nav-theme-btn')) el.textContent = icon; }
-    });
-    document.querySelectorAll('.mobile-theme-row').forEach(el=>{ el.innerHTML = icon + ' ' + label; });
-  }
-  window.__ddToggleTheme=()=>applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
-  document.getElementById('navThemeBtn')?.addEventListener('click', window.__ddToggleTheme);
-  document.getElementById('navThemeBtnMobile')?.addEventListener('click', window.__ddToggleTheme);
-  syncThemeBtns();
-
-  function setupDD(btnId,listId){
-    const btn=document.getElementById(btnId),list=document.getElementById(listId);
-    if(!btn||!list) return;
-    btn.addEventListener('click',e=>{
-      e.stopPropagation();
-      const was=list.classList.contains('open');
-      document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open'));
-      if(!was){ list.classList.add('open'); const cur=list.querySelector('.cur-chap'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}),30); }
-    });
+  // 2. DROPDOWNS CHƯƠNG
+  function setupDD(btnId, listId){
+    const btn=document.getElementById(btnId), list=document.getElementById(listId);
+    if(!btn || !list) return;
+    btn.onclick = (e) => { e.stopPropagation(); list.classList.toggle('open'); };
   }
   setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
-  document.addEventListener('click',()=>document.querySelectorAll('.chap-dd-list.open').forEach(el=>el.classList.remove('open')));
+  document.addEventListener('click', () => document.querySelectorAll('.chap-dd-list').forEach(el=>el.classList.remove('open')));
 
-  // 2. LOGIC AUDIO (TTS) - BẢN FIX MỚI NHẤT
+  // 3. AUDIO LOGIC (SENTENCE BY SENTENCE - FIXED)
   const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
   const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
   const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
@@ -1021,627 +995,138 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadVoices() {
       voices = synth.getVoices().filter(v => v.lang.toLowerCase().includes('vi'));
-      voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name}</option>`).join('') || '<option value="">Mặc định</option>';
+      voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name}</option>`).join('') || '<option value="">Giọng mặc định</option>';
     }
     loadVoices();
     if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
 
     document.getElementById('btnToggleAudioSet')?.addEventListener('click', () => aaSettings?.classList.toggle('open'));
-    rateRange?.addEventListener('input', () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; });
+    rateRange?.oninput = () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; };
 
     function resetAudioUI() {
       btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Nghe';
       btnPause.style.display = 'none'; btnStop.style.display = 'none';
-      isPaused = false; currentIdx = 0;
+      isPaused = false; currentIdx = 0; synth.cancel();
     }
 
-    function speakCurrent() {
-      synth.cancel();
+    function speakSentence() {
+      synth.cancel(); // Dọn dẹp luồng cũ (Fix lỗi Mobile nháy)
       if (currentIdx >= sentences.length) { resetAudioUI(); return; }
+      if (isPaused) return;
 
       const utter = new SpeechSynthesisUtterance(sentences[currentIdx]);
       utter.lang = 'vi-VN';
       utter.rate = parseFloat(rateRange.value);
       if(voices[voiceSelect.value]) utter.voice = voices[voiceSelect.value];
 
-      utter.onend = () => { if(!isPaused) { currentIdx++; speakCurrent(); } };
+      utter.onend = () => {
+        if(!isPaused) {
+          currentIdx++;
+          setTimeout(speakSentence, 100); // Khoảng nghỉ nhỏ giữa các câu
+        }
+      };
       utter.onerror = () => resetAudioUI();
       synth.speak(utter);
     }
 
-    btnPlay.addEventListener('click', () => {
+    btnPlay.onclick = () => {
       if (isPaused) {
-        isPaused = false; speakCurrent();
+        isPaused = false;
+        speakSentence();
       } else {
+        // Lọc nội dung sạch
         const clone = content.cloneNode(true);
-        // Tích hợp loại bỏ tag .tags-container từ code mới
         clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row').forEach(el => el.remove());
+        // Tách câu theo dấu ngắt
         sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 2);
         currentIdx = 0; isPaused = false;
-        speakCurrent();
+        speakSentence();
       }
       btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
-    });
+    };
 
-    btnPause.addEventListener('click', () => { isPaused = true; synth.cancel(); btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Tiếp tục'; btnPause.style.display = 'none'; });
-    btnStop.addEventListener('click', () => { synth.cancel(); resetAudioUI(); });
-    btnNext?.addEventListener('click', () => { if(sentences.length > 0) { currentIdx++; speakCurrent(); } });
-    btnPrev?.addEventListener('click', () => { if(sentences.length > 0) { currentIdx = Math.max(0, currentIdx - 1); speakCurrent(); } });
-  }
+    btnPause.onclick = () => {
+      isPaused = true;
+      synth.cancel(); // Dùng cancel thay vì pause để ổn định trên Mobile
+      btnPlay.style.display = 'inline-block';
+      btnPlay.textContent = '▶ Tiếp tục';
+      btnPause.style.display = 'none';
+    };
 
-  // 3. READ SETTINGS & SHORTCUTS
-  let fz = parseInt(localStorage.getItem('dd_fz') || '18');
-  let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
-  const novelContent = document.querySelector('.novel-content');
-  if(novelContent) {
-     localStorage.setItem('dd_last_read_url', window.location.pathname);
-     localStorage.setItem('dd_last_read_title', document.title.split('|')[0].trim());
-  }
-  
-  const btnSet = document.getElementById('fabSettings'), popSet = document.getElementById('rsPopup');
-  const btnStats = document.getElementById('fabStats'), popStats = document.getElementById('statsPopup');
-  
-  if(btnSet && popSet) {
-    btnSet.addEventListener('click', e => { 
-        e.stopPropagation(); 
-        popSet.classList.toggle('open'); 
-        if(popStats) popStats.classList.remove('open'); 
-        if(fabWrap) fabWrap.classList.remove('open');
-    });
-    document.addEventListener('click', e => { 
-        if(!popSet.contains(e.target) && e.target !== btnSet) popSet.classList.remove('open'); 
-    });
+    btnStop.onclick = resetAudioUI;
 
-    document.getElementById('rsDec')?.addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-    document.getElementById('rsInc')?.addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
-
-    const fontBtns = popSet.querySelectorAll('[data-font]');
-    fontBtns.forEach(fb => {
-      if(fb.dataset.font === ff) { fontBtns.forEach(b=>b.classList.remove('active')); fb.classList.add('active'); }
-      fb.addEventListener('click', () => {
-        ff = fb.dataset.font;
-        root.style.setProperty('--read-ff', ff);
-        localStorage.setItem('dd_ff', ff);
-        fontBtns.forEach(b=>b.classList.remove('active'));
-        fb.classList.add('active');
-      });
-    });
-  }
-
-  if(btnStats && popStats) {
-      btnStats.addEventListener('click', e => {
-          e.stopPropagation();
-          popStats.classList.toggle('open');
-          if(popSet) popSet.classList.remove('open');
-          if(fabWrap) fabWrap.classList.remove('open');
-      });
-      document.addEventListener('click', e => { 
-        if(!popStats.contains(e.target) && e.target !== btnStats) popStats.classList.remove('open'); 
-      });
-  }
-
-  if(novelContent) {
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('copy', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if(!document.activeElement || !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-        if(e.key === 'ArrowLeft') { 
-          const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
-          if(p && !p.classList.contains('disabled')) window.location.href = p.href; 
-        }
-        if(e.key === 'ArrowRight') { 
-          const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); 
-          if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
-        }
+    btnNext.onclick = () => {
+      if (sentences.length > 0) {
+        currentIdx = Math.min(sentences.length - 1, currentIdx + 1);
+        speakSentence();
       }
-      if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) { e.preventDefault(); }
-    });
+    };
+
+    btnPrev.onclick = () => {
+      if (sentences.length > 0) {
+        currentIdx = Math.max(0, currentIdx - 1);
+        speakSentence();
+      }
+    };
   }
+
+  // 4. LIKE & COMMENTS
+  setupChapterLike();
+  setupChapComments();
 });
-
-/* ══ ADMIN AUTH BTN ══ */
-(function setupAdminBtn(){
-  const btn = document.getElementById('footerAdmin');
-  const statsBtn = document.getElementById('fabStats');
-  
-  function syncBtn(){
-    const isAdmin = !!window.__ddIsAdmin;
-    if(statsBtn) statsBtn.style.display = isAdmin ? 'flex' : 'none';
-    if(btn) btn.style.opacity = isAdmin ? "1" : "0.3";
-  }
-  
-  syncBtn();
-  window.addEventListener('dd-auth-change', syncBtn);
-  
-  btn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    const fb = window.__ddFirebase; if(!fb) return;
-    if(window.__ddIsAdmin){
-      if(confirm('Đăng xuất Admin?')) fb.signOut(fb.auth);
-    } else {
-      const p = new fb.GoogleAuthProvider();
-      fb.signInWithPopup(fb.auth, p).catch(err => alert('Lỗi: ' + err.message));
-    }
-  });
-})();
-
-/* ══ INLINE COMMENT SIDEBAR ══ */
-(function setupInlineSidebar(){
-  const novelWrap  = document.getElementById('novelLayoutWrap');
-  const content    = document.getElementById('novelContent');
-  const sidebar    = document.getElementById('icSidebar');
-  const sideList   = document.getElementById('icSidebarList');
-  const closeBtn   = document.getElementById('icSidebarClose');
-  const formName   = document.getElementById('icFormName');
-  const formText   = document.getElementById('icFormText');
-  const formSend   = document.getElementById('icFormSend');
-  const overlay    = document.getElementById('icOverlay');
-  const quotingBar = document.getElementById('icQuotingBar');
-  const quotingLabel = document.getElementById('icQuotingLabel');
-  if(!content || !sidebar || !novelWrap) return;
-
-  if(formName && getSavedName()) formName.value = getSavedName();
-
-  let currentIdx   = null;
-  let currentUnsub = null;
-  let isAdmin      = !!window.__ddIsAdmin;
-  const myToken    = getMyToken();
-  let quotingReplyId   = null;
-  let quotingReplyName = null;
-
-  document.getElementById('icQuotingCancel')?.addEventListener('click', clearQuoting);
-
-  function setQuoting(rid, rname){
-    quotingReplyId   = rid;
-    quotingReplyName = rname;
-    if(quotingBar)   quotingBar.classList.add('show');
-    if(quotingLabel) quotingLabel.textContent = '↩ Reply cho ' + (rname || 'Khách vô danh');
-    formText?.focus();
-  }
-  function clearQuoting(){
-    quotingReplyId   = null;
-    quotingReplyName = null;
-    if(quotingBar) quotingBar.classList.remove('show');
-  }
-
-  window.addEventListener('dd-auth-change', e => {
-    isAdmin = e.detail.isAdmin;
-    if(isAdmin && formName) { formName.value = ADMIN_DISPLAY_NAME; formName.style.display = 'none'; } 
-    else if(formName) { formName.style.display = ''; if(!formName.value) formName.value = getSavedName(); }
-  });
-
-  function adminBadgeHtml(){ return '<span class="ic-item-admin-badge">chủ nhà</span>'; }
-  function replyAdminBadgeHtml(){ return '<span class="ic-reply-admin-badge">chủ nhà</span>'; }
-
-  function openSidebar(idx){
-    content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
-    currentIdx = idx;
-    clearQuoting();
-    const paras   = content.querySelectorAll('p');
-    const preview = document.getElementById('icParaPreview');
-    if(preview){
-      const clone = paras[idx] ? paras[idx].cloneNode(true) : null;
-      if(clone){ clone.querySelectorAll('.ic-trigger').forEach(b => b.remove()); preview.textContent = clone.textContent.trim().substring(0,120)+(clone.textContent.trim().length>120?'…':''); }
-    }
-    if(sideList) sideList.innerHTML = '<div class="ic-empty">Đang tải...</div>';
-    if(paras[idx]) paras[idx].classList.add('ic-active');
-    novelWrap.classList.add('sidebar-open');
-    if(overlay) overlay.classList.add('show');
-    loadInlineComments(idx);
-    setTimeout(() => formText?.focus(), 200);
-  }
-
-  function closeSidebar(){
-    novelWrap.classList.remove('sidebar-open');
-    if(overlay) overlay.classList.remove('show');
-    content.querySelectorAll('p.ic-active').forEach(p => p.classList.remove('ic-active'));
-    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
-    currentIdx = null;
-    clearQuoting();
-  }
-
-  closeBtn?.addEventListener('click', closeSidebar);
-  overlay?.addEventListener('click', closeSidebar);
-
-  function loadInlineComments(idx){
-    if(currentUnsub){ try{currentUnsub();}catch(e){} currentUnsub = null; }
-    waitFirebase(({db, ref, onValue}) => {
-      const key = 'inline_' + pageKey() + '_p' + idx;
-      currentUnsub = onValue(ref(db, 'comments/' + key), snap => {
-        if(currentIdx !== idx) return;
-        renderInlineComments(snap.val(), key, idx);
-      });
-    });
-  }
-
-  function renderInlineComments(data, key, idx){
-    if(!sideList) return;
-    if(!data){ sideList.innerHTML = '<div class="ic-empty">Chưa có bình luận cho đoạn này 🌊<br><small>Hãy là người đầu tiên!</small></div>'; return; }
-    const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => (a.ts||0) - (b.ts||0));
-
-    sideList.innerHTML = items.map(c => {
-      const isMine = c.token === myToken; const canDel = isAdmin || isMine; const cIsAdmin = c.isAdmin === true;
-      const replies = c.replies ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0)) : [];
-      const repliesHtml = replies.map(r => {
-        const rMine  = r.token === myToken; const rCanDel= isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
-        const atTag  = r.replyTo ? `<span class="ic-reply-at">@${esc(r.replyTo.name)}</span>` : '';
-        return `<div class="ic-reply-item" id="icri-${esc(r.id)}">
-          <div class="ic-reply-avatar">${esc(avatarLetter(r.name))}</div>
-          <div class="ic-reply-body">
-            <span class="ic-reply-name">${esc(r.name)||'Khách vô danh'}${rIsAdmin ? replyAdminBadgeHtml() : ''}</span>
-            <div class="ic-reply-text">${atTag}${esc(r.text)}</div>
-            <button class="ic-rr-btn" data-action="rr-reply" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
-          </div>
-          ${rCanDel ? `<button class="ic-reply-del show" data-action="del-reply" data-key="${esc(key)}" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}">✕</button>` : ''}
-        </div>`;
-      }).join('');
-
-      return `<div class="ic-item" id="icitem-${esc(c.id)}">
-        <div class="ic-item-header">
-          <span class="ic-item-name">${esc(c.name)||'Khách vô danh'}${cIsAdmin ? adminBadgeHtml() : ''}</span>
-          <span class="ic-item-time">${timeAgo(c.ts)}</span>
-        </div>
-        <div class="ic-item-text">${esc(c.text)}</div>
-        <div class="ic-item-actions">
-          <button class="ic-reply-toggle" data-action="toggle-reply" data-cid="${esc(c.id)}">
-            ↩ Reply ${replies.length > 0 ? '('+replies.length+')' : ''}
-          </button>
-          ${canDel ? `<button class="ic-del-btn show" data-action="del-comment" data-key="${esc(key)}" data-id="${esc(c.id)}">✕ Xóa</button>` : ''}
-        </div>
-        <div class="ic-replies ${replies.length > 0 ? 'open' : ''}" id="icreplies-${esc(c.id)}">
-          ${repliesHtml}
-          <div class="ic-reply-form" id="icrf-${esc(c.id)}">
-            <input placeholder="Tên (tùy chọn)" data-role="rname" value="${isAdmin ? esc(ADMIN_DISPLAY_NAME) : esc(getSavedName())}" ${isAdmin ? 'readonly style="display:none"' : ''} />
-            <textarea placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
-            <div class="ic-reply-form-row">
-              <button class="ic-rf-cancel" data-action="cancel-reply" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="ic-rf-send"   data-action="send-reply"   data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-    sideList.scrollTop = sideList.scrollHeight;
-  }
-
-  sideList?.addEventListener('click', async e => {
-    const btn = e.target.closest('[data-action]');
-    if(!btn) return;
-    const action = btn.dataset.action;
-
-    if(action === 'del-comment'){
-      if(!confirm('Xóa bình luận này?')) return;
-      waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.id)));
-      return;
-    }
-    if(action === 'del-reply'){
-      if(!confirm('Xóa reply này?')) return;
-      waitFirebase(({db, ref, remove}) => remove(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies/' + btn.dataset.rid)));
-      return;
-    }
-    if(action === 'toggle-reply'){
-      const cid     = btn.dataset.cid;
-      const replies = document.getElementById('icreplies-' + cid);
-      const form    = document.getElementById('icrf-' + cid);
-      if(replies) replies.classList.add('open');
-      if(form){ form.classList.toggle('open'); if(form.classList.contains('open')) form.querySelector('[data-role="rtext"]')?.focus(); }
-      clearQuoting();
-      return;
-    }
-    if(action === 'rr-reply'){
-      const cid   = btn.dataset.cid; const rid   = btn.dataset.rid; const rname = btn.dataset.rname;
-      const form  = document.getElementById('icrf-' + cid); const replies = document.getElementById('icreplies-' + cid);
-      if(replies) replies.classList.add('open');
-      if(form){ form.classList.add('open'); form.querySelector('[data-role="rtext"]')?.focus(); }
-      setQuoting(rid, rname); setTimeout(() => sideList?.scrollTo({top: sideList.scrollHeight, behavior:'smooth'}), 50);
-      return;
-    }
-    if(action === 'cancel-reply'){ document.getElementById('icrf-' + btn.dataset.cid)?.classList.remove('open'); clearQuoting(); return; }
-    if(action === 'send-reply'){
-      const form = document.getElementById('icrf-' + btn.dataset.cid);
-      const text = (form?.querySelector('[data-role="rtext"]')?.value || '').trim();
-      if(!text) return; btn.disabled = true;
-      const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (form?.querySelector('[data-role="rname"]')?.value || '').trim() || 'Khách vô danh';
-      if(!isAdmin) saveName(nameVal);
-      const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false };
-      if(quotingReplyId){ payload.replyTo = { id: quotingReplyId, name: quotingReplyName || '' }; }
-      waitFirebase(async ({db, ref, push}) => {
-        try{
-          await push(ref(db, 'comments/' + btn.dataset.key + '/' + btn.dataset.cid + '/replies'), payload);
-          form.querySelector('[data-role="rtext"]').value = ''; form.classList.remove('open'); clearQuoting();
-        } catch(e){ alert('Lỗi: ' + e.message); }
-        btn.disabled = false;
-      });
-      return;
-    }
-  });
-
-  formSend?.addEventListener('click', async () => {
-    const text = (formText?.value || '').trim();
-    if(!text || currentIdx === null) return;
-    formSend.disabled = true;
-    const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (formName?.value || '').trim() || 'Khách vô danh';
-    if(!isAdmin) saveName(nameVal);
-    waitFirebase(async ({db, ref, push}) => {
-      const key = 'inline_' + pageKey() + '_p' + currentIdx;
-      try{
-        await push(ref(db, 'comments/' + key), { name : nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false });
-        if(formText) formText.value = '';
-      } catch(e){ alert('Lỗi: ' + e.message); }
-      formSend.disabled = false;
-    });
-  });
-  formText?.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) formSend?.click(); });
-
-  const paragraphs = content.querySelectorAll('p');
-  paragraphs.forEach((p, idx) => {
-    const btn = document.createElement('button');
-    btn.className = 'ic-trigger'; btn.title = 'Bình luận đoạn ' + (idx + 1);
-    btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
-    btn.innerHTML = '💬'; 
-    p.insertBefore(btn, p.firstChild);
-
-    waitFirebase(({db, ref, onValue}) => {
-      const key = 'inline_' + pageKey() + '_p' + idx;
-      onValue(ref(db, 'comments/' + key), snap => {
-        const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
-        btn.innerHTML = cnt > 0 ? `💬<span>${cnt}</span>` : '💬';
-        btn.classList.toggle('has-comments', cnt > 0);
-      });
-    });
-
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      if(currentIdx === idx && novelWrap.classList.contains('sidebar-open')){ closeSidebar(); } else { openSidebar(idx); }
-    });
-  });
-})();
 
 /* ══ CHAPTER LIKE SYSTEM ══ */
-(function setupChapterLike(){
-  const btn = document.getElementById('btnLikeChapter');
-  const countEl = document.getElementById('chapLikeCount');
-  if(!btn || !countEl) return;
-
-  const key = 'chap_' + pageKey();
-  const myToken = getMyToken();
-  const storageKey = 'dd_liked_' + key;
-
-  if(localStorage.getItem(storageKey) === 'true') {
-    btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️';
-  }
-
+function setupChapterLike(){
+  const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');
+  if(!btn) return;
+  const key = 'chap_' + pageKey(), myToken = getMyToken();
   waitFirebase(({db, ref, onValue, update, remove}) => {
-    const likeRef = ref(db, 'chapter_likes/' + key);
-    
-    onValue(likeRef, snap => {
+    onValue(ref(db, 'chapter_likes/' + key), snap => {
       const data = snap.val() || {};
       countEl.textContent = Object.keys(data).length;
-      if(data[myToken]) { 
-         btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; localStorage.setItem(storageKey, 'true'); 
-      } else {
-         btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; localStorage.removeItem(storageKey); 
-      }
+      if(data[myToken]) { btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; }
+      else { btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; }
     });
-
-    if(btn.dataset.bound) return;
-    btn.dataset.bound = "true";
-
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
+    btn.onclick = async () => {
       const isLiked = btn.classList.contains('liked');
-      btn.style.pointerEvents = 'none';
-      try {
-        if(isLiked) {
-          await remove(ref(db, `chapter_likes/${key}/${myToken}`));
-        } else {
-          await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
-        }
-      } catch(error) { 
-        console.error('Lỗi like:', error);
-        alert('Không thể thả tim! (Vui lòng báo Admin check lại kết nối)');
-      } finally {
-        btn.style.pointerEvents = 'auto';
-      }
-    });
+      if(isLiked) await remove(ref(db, `chapter_likes/${key}/${myToken}`));
+      else await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
+    };
   });
-})();
+}
 
-/* ══ THỐNG KÊ LƯỢT XEM VÀ TƯƠNG TÁC ══ */
-waitFirebase(({db, ref, get, update, onValue}) => {
-  const isNovel = document.querySelector('.novel-content') !== null;
-  if(!isNovel) return;
-  
-  const key = pageKey();
-  const today = new Date().toISOString().split('T')[0];
-
-  const viewRef = ref(db, 'page_views/' + key);
-  
-  get(viewRef).then(snap => {
-     let views = (snap.val() && snap.val().views) || 0;
-     let dailyViews = (snap.val() && snap.val().daily && snap.val().daily[today]) || 0;
-     
-     if(!window.__ddIsAdmin) { 
-         update(ref(db, 'page_views/' + key), { 
-             views: views + 1,
-             [`daily/${today}`]: dailyViews + 1
-         }).catch(()=>{}); 
-     }
-  });
-
-  onValue(viewRef, snap => {
-      const vEl = document.getElementById('statViews');
-      if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
-  });
-
-  onValue(ref(db, 'comments/chap_' + key), snap => {
-      const data = snap.val() || {};
-      let cmtCount = Object.keys(data).length; let likeCount = 0;
-      Object.values(data).forEach(c => {
-        if(c.likes) likeCount += Object.keys(c.likes).length;
-        if(c.replies) cmtCount += Object.keys(c.replies).length;
-      });
-      const cEl = document.getElementById('statCmts'); const lEl = document.getElementById('statLikes');
-      if(cEl) cEl.textContent = cmtCount; if(lEl) lEl.textContent = likeCount;
-  });
-});
-
-/* ══ CHAPTER-END COMMENT ══ */
-(function setupChapComments(){
-  const section   = document.getElementById('chapCommentSection');
+/* ══ CHAPTER COMMENTS ══ */
+function setupChapComments(){
+  const section = document.getElementById('chapCommentSection');
   if(!section) return;
+  const cmtList = document.getElementById('cmtList'), cmtName = document.getElementById('cmtName'), cmtText = document.getElementById('cmtText'), cmtSubmit = document.getElementById('cmtSubmit');
+  const key = 'chap_' + pageKey(), myToken = getMyToken();
+  if(cmtName) cmtName.value = getSavedName();
 
-  const cmtList   = document.getElementById('cmtList');
-  const cmtName   = document.getElementById('cmtName');
-  const cmtText   = document.getElementById('cmtText');
-  const cmtSubmit = document.getElementById('cmtSubmit');
-  if(!cmtList) return;
-
-  if(cmtName && getSavedName()) cmtName.value = getSavedName();
-
-  const myToken     = getMyToken();
-  const key         = 'chap_' + pageKey();
-  let isAdmin       = false;
-  let lastData      = null;
-  let listenerBound = false;
-  let rebuildTimer  = null;
-
-  function scheduleRebuild(data){
-    lastData = data;
-    clearTimeout(rebuildTimer);
-    rebuildTimer = setTimeout(() => rebuildComments(lastData), 60);
-  }
-
-  window.addEventListener('dd-auth-change', e => {
-    isAdmin = e.detail.isAdmin;
-    if(isAdmin){ if(cmtName){ cmtName.value = ADMIN_DISPLAY_NAME; cmtName.style.display = 'none'; } } 
-    else { if(cmtName){ cmtName.style.display = ''; if(!cmtName.value || cmtName.value === ADMIN_DISPLAY_NAME) cmtName.value = getSavedName(); } }
-    if(lastData !== null) rebuildComments(lastData);
-  });
-
-  function adminBadgeHtml(){ return '<span class="comment-admin-badge">chủ nhà</span>'; }
-  function replyAdminBadgeHtml(){ return '<span class="reply-admin-badge">chủ nhà</span>'; }
-
-  function rebuildComments(data){
-    if(!cmtList) return;
-    if(!data){ cmtList.innerHTML = '<div class="comment-empty">𓆝 Chưa có bình luận. Hãy là người đầu tiên!</div>'; return; }
-    const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => (a.ts||0) - (b.ts||0));
-
-    cmtList.innerHTML = items.map(c => {
-      const isMine = c.token === myToken; const canDel = isAdmin || isMine; const cIsAdmin = c.isAdmin === true;
-      const likeCount = c.likes ? Object.keys(c.likes).length : 0; const liked = getLiked(c.id);
-      const replies = c.replies ? Object.entries(c.replies).map(([rid,rv]) => ({id:rid,...rv})).sort((a,b) => (a.ts||0)-(b.ts||0)) : [];
-
-      const repliesHtml = replies.map(r => {
-        const rMine = r.token === myToken; const rCanDel = isAdmin || rMine; const rIsAdmin = r.isAdmin === true;
-        const atTag =r.replyTo ? `<span class="reply-at">@${esc(r.replyTo.name)}</span> ` : '';
-        return `<div class="reply-item" id="ri-${esc(r.id)}">
-          <div class="reply-avatar">${esc(avatarLetter(r.name))}</div>
-          <div class="reply-body">
-            <span class="reply-name">${esc(r.name)||'Khách vô danh'}${rIsAdmin ? replyAdminBadgeHtml() : ''}</span>
-            <span class="reply-time">${timeAgo(r.ts)}</span>
-            <div class="reply-text">${atTag}${esc(r.text)}</div>
-            <button class="reply-quote-btn" data-cid="${esc(c.id)}" data-rid="${esc(r.id)}" data-rname="${esc(r.name||'Khách vô danh')}">↩ Reply</button>
+  waitFirebase(({db, ref, push, onValue, remove}) => {
+    onValue(ref(db, 'comments/'+key), snap => {
+      const data = snap.val();
+      if(!data) { cmtList.innerHTML = '<div class="comment-empty">Chưa có bình luận nào 🌊</div>'; return; }
+      const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => a.ts - b.ts);
+      cmtList.innerHTML = items.map(c => `
+        <div class="comment-card">
+          <div class="comment-card-header">
+            <span class="comment-card-name">${esc(c.name)||'Khách'} ${c.isAdmin?'<span class="comment-admin-badge">chủ nhà</span>':''}</span>
+            <span class="comment-card-time">${timeAgo(c.ts)}</span>
           </div>
-          <button class="reply-del ${rCanDel?'show':''}" data-rid="${esc(r.id)}" data-cid="${esc(c.id)}">✕</button>
-        </div>`;
-      }).join('');
-
-      return `<div class="comment-card" id="cmt-${esc(c.id)}">
-        <div class="comment-card-header">
-          <div class="comment-card-avatar">${esc(avatarLetter(c.name))}</div>
-          <span class="comment-card-name">${esc(c.name)||'Khách vô danh'}${cIsAdmin ? adminBadgeHtml() : ''}</span>
-          <span class="comment-card-time">${timeAgo(c.ts)}</span>
+          <p class="comment-card-text">${esc(c.text)}</p>
+          ${(window.__ddIsAdmin || c.token === myToken) ? `<button class="cmt-del-btn show" onclick="window.__ddFirebase.remove(window.__ddFirebase.ref(window.__ddFirebase.db, 'comments/${key}/${c.id}'))">🗑 Xóa</button>` : ''}
         </div>
-        <p class="comment-card-text">${esc(c.text)}</p>
-        <div class="comment-card-actions">
-          <button class="cmt-like-btn ${liked?'liked':''}" data-id="${esc(c.id)}">
-            ${liked?'❤️':'🤍'} <span>${likeCount}</span>
-          </button>
-          <button class="cmt-reply-btn" data-id="${esc(c.id)}">
-            💬 ${replies.length > 0 ? replies.length+' reply' : 'Reply'}
-          </button>
-          <button class="cmt-del-btn ${canDel?'show':''}" data-id="${esc(c.id)}">🗑 Xóa</button>
-        </div>
-        <div class="reply-thread ${replies.length > 0 ? 'open' : ''}" id="thread-${esc(c.id)}">
-          <div class="reply-items-wrap" id="riwrap-${esc(c.id)}">${repliesHtml}</div>
-          <div class="reply-form" id="rf-${esc(c.id)}">
-            <div class="reply-quoting" id="rq-${esc(c.id)}" style="display:none">
-              <span class="reply-quoting-label"></span>
-              <button class="reply-quoting-cancel" data-cid="${esc(c.id)}">✕</button>
-            </div>
-            <input class="reply-inp" placeholder="Tên (tùy chọn)" data-role="rname" value="${isAdmin ? esc(ADMIN_DISPLAY_NAME) : esc(getSavedName())}" ${isAdmin ? 'readonly style="display:none"' : ''} />
-            <textarea class="reply-inp-text" placeholder="Viết reply..." rows="2" data-role="rtext"></textarea>
-            <div class="reply-form-btns">
-              <button class="reply-cancel-btn" data-cid="${esc(c.id)}">Hủy</button>
-              <button class="reply-send-btn"   data-action="send-reply"   data-cid="${esc(c.id)}" data-key="${esc(key)}">Gửi ✦</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-
-    bindEvents();
-  }
-
-  function bindEvents(){
-    const fb = window.__ddFirebase; if(!fb) return;
-    cmtList.querySelectorAll('.cmt-like-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id; if(getLiked(id)) return; setLiked(id, true);
-        try { await fb.push(fb.ref(fb.db, `comments/${key}/${id}/likes`), {ts:Date.now()}); } catch(e){}
-      });
+      `).join('');
     });
-    cmtList.querySelectorAll('.cmt-reply-btn').forEach(btn => { btn.addEventListener('click', () => openReplyForm(btn.dataset.id, null, null)); });
-    cmtList.querySelectorAll('.reply-quote-btn').forEach(btn => { btn.addEventListener('click', () => openReplyForm(btn.dataset.cid, btn.dataset.rid, btn.dataset.rname)); });
-    cmtList.querySelectorAll('.reply-quoting-cancel').forEach(btn => { btn.addEventListener('click', () => clearQuoting(btn.dataset.cid)); });
-    cmtList.querySelectorAll('.reply-cancel-btn').forEach(btn => { btn.addEventListener('click', () => { document.getElementById('rf-'+btn.dataset.cid)?.classList.remove('open'); clearQuoting(btn.dataset.cid); }); });
-    
-    cmtList.querySelectorAll('.reply-send-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const cid  = btn.dataset.cid; const form = document.getElementById('rf-'+cid); const text = (form?.querySelector('[data-role="rtext"]')?.value||'').trim();
-        if(!text) return; btn.disabled = true;
-        const nameInput = form?.querySelector('[data-role="rname"]'); const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (nameInput?.value||'').trim() || 'Khách vô danh';
-        if(!isAdmin) saveName(nameVal);
-        const quotBox = document.getElementById('rq-'+cid); const replyTo = quotBox?.dataset.replyToId ? { id: quotBox.dataset.replyToId, name: quotBox.dataset.replyToName || '' } : null;
-        const payload = { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false }; if(replyTo) payload.replyTo = replyTo;
-        try {
-          await fb.push(fb.ref(fb.db, `comments/${key}/${cid}/replies`), payload);
-          form.querySelector('[data-role="rtext"]').value = ''; form.classList.remove('open'); clearQuoting(cid);
-          setTimeout(() => { const wrap = document.getElementById('riwrap-'+cid); if(wrap) wrap.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 300);
-        } catch(e){ alert('Lỗi: '+e.message); }
-        btn.disabled = false;
-      });
-    });
-    
-    cmtList.querySelectorAll('.cmt-del-btn.show').forEach(btn => { btn.addEventListener('click', async () => { if(!confirm('Xóa bình luận này?')) return; await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.id}`)); }); });
-    cmtList.querySelectorAll('.reply-del.show').forEach(btn => { btn.addEventListener('click', async () => { if(!confirm('Xóa reply này?')) return; await fb.remove(fb.ref(fb.db, `comments/${key}/${btn.dataset.cid}/replies/${btn.dataset.rid}`)); }); });
-  }
 
-  function openReplyForm(cid, rid, rname){
-    const thread = document.getElementById('thread-'+cid); const form = document.getElementById('rf-'+cid);
-    if(thread) thread.classList.add('open');
-    if(form){ form.classList.add('open'); if(rid){ setQuoting(cid, rid, rname); } else { clearQuoting(cid); } form.querySelector('[data-role="rtext"]')?.focus(); }
-  }
-  function setQuoting(cid, rid, rname){
-    const box = document.getElementById('rq-'+cid); if(!box) return;
-    box.style.display = 'flex'; box.dataset.replyToId = rid; box.dataset.replyToName = rname;
-    const label = box.querySelector('.reply-quoting-label'); if(label) label.textContent = '↩ Reply cho ' + (rname||'Khách vô danh');
-  }
-  function clearQuoting(cid){
-    const box = document.getElementById('rq-'+cid); if(!box) return; box.style.display = 'none'; box.dataset.replyToId = ''; box.dataset.replyToName = '';
-  }
-
-  waitFirebase(({db, ref, push, onValue}) => {
-    onValue(ref(db, 'comments/'+key), snap => scheduleRebuild(snap.val()));
-    if(listenerBound) return; listenerBound = true;
-    cmtSubmit?.addEventListener('click', async () => {
-      const text = (cmtText?.value||'').trim(); if(!text) return; cmtSubmit.disabled = true;
-      const nameVal = isAdmin ? ADMIN_DISPLAY_NAME : (cmtName?.value||'').trim() || 'Khách vô danh'; if(!isAdmin) saveName(nameVal);
-      try { await push(ref(db, 'comments/'+key), { name: nameVal, text, ts: Date.now(), token: myToken, isAdmin: isAdmin ? true : false }); if(cmtText) cmtText.value = ''; } catch(e){ alert('Lỗi: '+e.message); }
-      cmtSubmit.disabled = false;
-    });
-    cmtText?.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) cmtSubmit?.click(); });
+    cmtSubmit.onclick = async () => {
+      const text = cmtText.value.trim(), name = cmtName.value.trim() || 'Khách';
+      if(!text) return; cmtSubmit.disabled = true;
+      saveName(name);
+      await push(ref(db, 'comments/'+key), { name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin });
+      cmtText.value = ''; cmtSubmit.disabled = false;
+    };
   });
-})();
+}
 </script>

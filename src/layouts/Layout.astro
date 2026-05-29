@@ -39,8 +39,7 @@ if (currentTruyenId && isNovelPage) {
   <title>{frontmatter?.title || 'Trang chủ'} | {settings.site_name}</title>
   <meta name="description" content={frontmatter?.description || settings.tagline} />
   
-  <!-- Favicon cho Tab Web -->
-  <link rel="icon" type="image/png" href="/dynamic-duo-web/logo2.png" />
+  <link rel="icon" type="image/png" href="/dynamic-duo-web/favicon.png" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -89,7 +88,7 @@ if (currentTruyenId && isNovelPage) {
   </script>
 
   <script is:inline>
-    // Khởi tạo Theme & Settings ngay lập tức để tránh giật lag (FOUC)
+    // Khởi tạo Theme & Settings ngay lập tức
     (function(){
       const t = localStorage.getItem('dd-theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
@@ -112,16 +111,13 @@ if (currentTruyenId && isNovelPage) {
       --sh-soft:0 2px 8px rgba(0,0,0,.08);
       --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
       --t:all .2s ease;
-      /* CSS Variables dùng cho phần cài đặt đọc truyện */
       --read-fz: 18px;
       --read-ff: 'Newsreader', serif;
-      /* card bg cho light */
       --bg-card:#ffffff;
       --bg-card2:#f0f9ff;
       --border-card:rgba(186,230,253,.5);
     }
 
-    /* ── DARK THEME — xanh đậm navy thực sự ── */
     [data-theme="dark"] {
       --sky:#7ec8e3; --sky2:#a8daf0; --sky-dark:#c5e8f5;
       --sky-light:#1e4a6a; --sky-pale:#0d2035;
@@ -131,6 +127,7 @@ if (currentTruyenId && isNovelPage) {
       --bg-card2:#0d2035;
       --border-card:rgba(126,200,227,.15);
     }
+    
     [data-theme="dark"] body          { background:#0a1929; color:#F3F9FF; }
     [data-theme="dark"] nav           { background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); }
     [data-theme="dark"] .mobile-menu  { background:rgba(8,18,32,.99); border-color:rgba(126,200,227,.18); }
@@ -190,17 +187,11 @@ if (currentTruyenId && isNovelPage) {
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    
-    /* Áp dụng CSS Variables cho Body */
     body { 
-      background:var(--cream); 
-      color:var(--text-main); 
+      background:var(--cream); color:var(--text-main); 
       font-family:var(--read-ff, 'Newsreader', serif); 
       font-size:var(--read-fz, 18px); 
-      line-height:1.9; 
-      margin:0; 
-      padding:0; 
-      overflow-x:hidden; 
+      line-height:1.9; margin:0; padding:0; overflow-x:hidden; 
       transition: font-size 0.2s, font-family 0.2s, background-color 0.2s, color 0.2s; 
     }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
@@ -209,12 +200,11 @@ if (currentTruyenId && isNovelPage) {
     ::-webkit-scrollbar-track { background:var(--sky-pale); }
     ::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
 
-    /* ── PROGRESS ── */
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
     /* ── NAVBAR ── */
     nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(186,230,253,.5); box-shadow:0 2px 12px rgba(2,132,199,.08); }
-    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; } /* margin-right: auto ép Menu sang phải */
+    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; }
     .nav-links { display:flex; align-items:center; gap:2px; margin-right: 12px; }
     .nav-item { position:relative; }
     .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
@@ -226,14 +216,7 @@ if (currentTruyenId && isNovelPage) {
     .dd-item:hover { background:var(--sky-pale); color:var(--sky); }
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
-    /* ── THEME BUTTON ── */
-    .nav-theme-btn {
-      font-size:.8rem; width:32px; height:32px; border-radius:50%;
-      border:1px solid rgba(186,230,253,.6); background:none;
-      color:var(--text-mid); cursor:pointer; transition:var(--t);
-      display:inline-flex; align-items:center; justify-content:center;
-      flex-shrink:0;
-    }
+    .nav-theme-btn { font-size:.8rem; width:32px; height:32px; border-radius:50%; border:1px solid rgba(186,230,253,.6); background:none; color:var(--text-mid); cursor:pointer; transition:var(--t); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
     .nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
@@ -248,14 +231,7 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .mobile-menu a:hover { background:rgba(126,200,227,.1); color:#a8daf0; }
     .mobile-section-title { font-size:.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:10px 12px 3px; }
     [data-theme="dark"] .mobile-section-title { color:#3d6a82; }
-    /* Mobile theme toggle row */
-    .mobile-theme-row {
-      display:flex; align-items:center; gap:8px;
-      padding:9px 12px; font-size:.88rem; color:var(--text-mid);
-      cursor:pointer; border-radius:var(--r-sm); transition:var(--t);
-      background:none; border:none; width:100%; text-align:left;
-      font-family:'Newsreader',serif;
-    }
+    .mobile-theme-row { display:flex; align-items:center; gap:8px; padding:9px 12px; font-size:.88rem; color:var(--text-mid); cursor:pointer; border-radius:var(--r-sm); transition:var(--t); background:none; border:none; width:100%; text-align:left; font-family:'Newsreader',serif; }
     .mobile-theme-row:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .mobile-theme-row { color:#8fbcd4; }
     [data-theme="dark"] .mobile-theme-row:hover { background:rgba(126,200,227,.1); color:#a8daf0; }
@@ -263,7 +239,7 @@ if (currentTruyenId && isNovelPage) {
 
     /* ── LAYOUT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
-    .page-content-wrap { max-width:880px; margin:32px auto 60px; padding:50px 60px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
+    .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); }
     @media(max-width:640px){ .page-content-wrap{ padding:24px 18px; margin:16px 12px 40px; } }
 
     /* ── CHAP NAV ── */
@@ -287,10 +263,11 @@ if (currentTruyenId && isNovelPage) {
     .chap-dd-list a.cur-chap { background:rgba(14,165,233,.1); color:var(--sky-dark); font-weight:700; }
 
     /* ── NOVEL LAYOUT VÀ CHỐNG COPY ── */
-    .novel-layout-wrap { max-width:800px; margin:0 auto; padding:0 16px; position:relative; }
-    .novel-content { max-width:760px; margin:24px auto 60px; padding:40px 50px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); position:relative; }
+    /* ĐÃ NỚI RỘNG max-width VÀ padding ĐỂ ĐỌC TRUYỆN THOẢI MÁI HƠN */
+    .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
+    .novel-content { width:100%; margin:24px auto 60px; padding:48px 60px; background:rgba(255,255,255,.98); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid rgba(186,230,253,.5); position:relative; }
     
-    /* CHỐNG RE-UP (Vô hiệu hóa bôi đen) */
+    /* CHỐNG RE-UP (Vô hiệu hóa bôi đen văn bản trong chương truyện) */
     .novel-content {
       user-select: none;
       -webkit-user-select: none;
@@ -298,45 +275,41 @@ if (currentTruyenId && isNovelPage) {
       -ms-user-select: none;
     }
 
-    @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 12px 40px; } }
+    @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
+    @media(max-width:640px){ .novel-content{ padding:24px 18px; margin:16px 0 40px; } }
     .novel-content p { text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* ── INLINE COMMENT TRIGGER (Bong bóng Icon mới, mượt & không nền) ── */
+    /* ── BONG BÓNG INLINE COMMENT (Tối giản, đẹp hơn) ── */
     .ic-trigger {
       display: inline-flex; align-items: center; justify-content: center;
       margin-left: 8px; padding: 4px;
-      background: transparent; /* Bỏ nền */
-      border: none; /* Bỏ viền */
-      cursor: pointer;
-      font-size: 1rem; /* Kích thước vừa phải */
-      opacity: 0;
+      background: transparent; border: none; cursor: pointer;
+      font-size: 1.1rem; opacity: 0;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      vertical-align: middle;
-      color: var(--sky);
+      vertical-align: middle; color: var(--sky);
       transform: translateY(2px) scale(0.9);
-      filter: grayscale(100%) opacity(0.5); /* Trông mờ nhạt khi chưa hover đoạn văn */
+      filter: grayscale(100%) opacity(0.5);
     }
     .novel-content p:hover .ic-trigger {
       opacity: 0.6; transform: translateY(0) scale(1); filter: grayscale(0%) opacity(1);
     }
     .ic-trigger:hover {
-      opacity: 1 !important; transform: translateY(-2px) scale(1.15) !important;
+      opacity: 1 !important; transform: translateY(-3px) scale(1.2) !important;
       color: var(--sky2); filter: grayscale(0%) opacity(1) !important;
     }
     .ic-trigger.has-comments {
       opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateY(0) scale(1);
     }
     .novel-content p.ic-active .ic-trigger {
-      opacity: 1; transform: scale(1.1); filter: grayscale(0%) opacity(1);
+      opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1);
     }
-    /* Số đếm bình luận bên cạnh icon */
     .ic-trigger span {
       font-size: 0.6rem; font-weight: bold; background: var(--sky-pale);
-      color: var(--sky-dark); border-radius: 10px; padding: 1px 5px;
-      margin-left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      color: var(--sky-dark); border-radius: 10px; padding: 1px 6px;
+      margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       font-family: sans-serif;
     }
     [data-theme="dark"] .ic-trigger span { background: rgba(126,200,227,.2); color: #a8daf0; }
@@ -435,26 +408,28 @@ if (currentTruyenId && isNovelPage) {
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* ── CHAPTER-END COMMENT ── */
-    .chap-comment-section { max-width:760px; margin:0 auto; padding:0 12px 60px; }
-    .chap-comment-title { font-family:'Merriweather',serif; font-size:.9rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
+    /* ── CHAPTER-END COMMENT (Đã khôi phục CSS) ── */
+    .chap-comment-section { max-width:800px; margin:0 auto; padding:0 12px 60px; }
+    .chap-comment-title { font-family:'Merriweather',serif; font-size:.95rem; color:var(--sky-dark); letter-spacing:1.5px; text-transform:uppercase; margin:36px 0 18px; display:flex; align-items:center; gap:10px; }
     .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
     [data-theme="dark"] .chap-comment-title { color:#a8daf0; }
     [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e4a6a,transparent); }
     .admin-bar { display:none; }
-    .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:18px; margin-bottom:20px; }
-    .comment-form-row { display:flex; gap:8px; margin-bottom:10px; }
-    .comment-inp { flex:1; padding:8px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.82rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
-    .comment-inp:focus { border-color:var(--sky); }
+    .comment-form { background:#fff; border:1px solid rgba(186,230,253,.5); border-radius:14px; padding:20px; margin-bottom:24px; box-shadow: var(--sh-soft); }
+    .comment-form-row { display:flex; gap:8px; margin-bottom:12px; }
+    .comment-inp { flex:1; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.85rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; transition: var(--t); }
+    .comment-inp:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
     [data-theme="dark"] .comment-inp { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-inp:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
     [data-theme="dark"] .comment-inp::placeholder { color:#3d6a82; }
-    .comment-textarea { width:100%; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.84rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:88px; margin-bottom:10px; }
-    .comment-textarea:focus { border-color:var(--sky); }
+    .comment-textarea { width:100%; padding:14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.9rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:90px; margin-bottom:12px; box-sizing: border-box; transition: var(--t); }
+    .comment-textarea:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
     [data-theme="dark"] .comment-textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-textarea:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
     [data-theme="dark"] .comment-textarea::placeholder { color:#3d6a82; }
-    .comment-submit-btn { padding:7px 20px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.8rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); }
-    .comment-submit-btn:hover { background:var(--sky2); }
-    .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; }
+    .comment-submit-btn { padding:8px 24px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.85rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); font-weight: bold; }
+    .comment-submit-btn:hover { background:var(--sky2); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(14,165,233,0.3); }
+    .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; transform: none; box-shadow: none;}
     .comment-list { display:flex; flex-direction:column; gap:12px; }
     .comment-card { background:#fff; border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
     .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
@@ -463,7 +438,6 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .comment-card-avatar { background:rgba(21,101,160,.3); border-color:rgba(126,200,227,.25); color:#a8daf0; }
     .comment-card-name { font-weight:700; color:var(--sky-dark); font-size:.82rem; }
     [data-theme="dark"] .comment-card-name { color:#a8daf0; }
-    /* Admin badge cho comment */
     .comment-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.52rem; font-weight:700; padding:1px 6px; border-radius:var(--r-pill); margin-left:5px; vertical-align:middle; }
     [data-theme="dark"] .comment-admin-badge { background:#1565a0; border:1px solid rgba(126,200,227,.3); }
     .comment-card-time { font-size:.68rem; color:var(--text-dim); margin-left:auto; }
@@ -576,6 +550,13 @@ if (currentTruyenId && isNovelPage) {
     [data-theme="dark"] .rs-btn { color:#8fbcd4; }
     [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
     
+    /* Tags Container */
+    .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:20px; }
+    .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
+    .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
+    [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
+    [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
+
     /* Admin floating button & Stats Button */
     #adminFloatingBtn, #adminStatsBtn {
       opacity:0.15; position:fixed; z-index:410;
@@ -625,11 +606,9 @@ if (currentTruyenId && isNovelPage) {
     </div>
     <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <!-- Theme button — desktop, inject via JS -->
     <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
   </div>
   <div style="display:flex;align-items:center;gap:6px">
-    <!-- Theme button — always visible (mobile + desktop fallback) -->
     <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -657,8 +636,9 @@ if (currentTruyenId && isNovelPage) {
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
 <div class="page-wrapper">
+  <!-- SỬA CÁCH HIỂN THỊ TAGS: THÊM flex gap ĐỂ CÁC TAGS KHÔNG DÍNH NHAU -->
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
-    <div style="text-align:center;margin-bottom:22px;margin-top:16px;">
+    <div class="tags-container">
       {frontmatter.tags.map((tag: string) => (
         <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag)}/`} class="tag-badge"># {tag}</a>
       ))}
@@ -869,7 +849,7 @@ function setLiked(id,v){ try{ const o=JSON.parse(localStorage.getItem('dd_liked'
 function getSavedName(){ return localStorage.getItem('dd_commenter_name') || ''; }
 function saveName(name){ if(name && name.trim()) localStorage.setItem('dd_commenter_name', name.trim()); }
 
-/* CÀI ĐẶT ĐỌC TRUYỆN, PHÍM TẮT VÀ LỊCH SỬ */
+/* CÀI ĐẶT ĐỌC TRUYỆN, PHÍM TẮT, LỊCH SỬ & CHỐNG COPY */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
   let fz = parseInt(localStorage.getItem('dd_fz') || '18');
@@ -885,10 +865,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup Cài đặt hiển thị
   const btn = document.getElementById('readSettingsBtn');
   const pop = document.getElementById('rsPopup');
+  const statsBtn = document.getElementById('adminStatsBtn');
+  const statsPop = document.getElementById('statsPopup');
   
   if(btn && pop) {
-    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); document.getElementById('statsPopup')?.classList.remove('open'); });
-    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
+    btn.addEventListener('click', e => { 
+        e.stopPropagation(); 
+        pop.classList.toggle('open'); 
+        if(statsPop) statsPop.classList.remove('open'); 
+    });
+    document.addEventListener('click', e => { 
+        if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); 
+    });
 
     document.getElementById('rsDec').addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
     document.getElementById('rsInc').addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
@@ -906,27 +894,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Bật Tắt Bảng Thống kê
+  if(statsBtn && statsPop) {
+      statsBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          statsPop.classList.toggle('open');
+          if(pop) pop.classList.remove('open');
+      });
+      document.addEventListener('click', e => { 
+        if(!statsPop.contains(e.target) && e.target !== statsBtn) statsPop.classList.remove('open'); 
+      });
+  }
+
   // Keyboard shortcuts (Next/Prev chapter) & Chống Copy Re-up
-  if(document.querySelector('.novel-content')) {
+  if(novelContent) {
     // Chống copy chuột phải và bôi đen
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
 
     // Bắt sự kiện bàn phím
     document.addEventListener('keydown', e => {
-      // 1. Phím tắt chuyển trang
+      // Bỏ qua phím tắt chuyển trang nếu đang gõ text
       if(!document.activeElement || !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
         if(e.key === 'ArrowLeft') { 
-          const p = document.querySelector('.chap-nav-row .chap-pn:first-child'); 
-          if(p && p.tagName === 'A' && !p.classList.contains('disabled')) window.location.href = p.href; 
+          const p = document.querySelector('.chap-nav-row a.chap-pn:first-child'); 
+          if(p && !p.classList.contains('disabled')) window.location.href = p.href; 
         }
         if(e.key === 'ArrowRight') { 
-          const n = document.querySelector('.chap-nav-row .chap-pn:last-child'); 
-          if(n && n.tagName === 'A' && !n.classList.contains('disabled')) window.location.href = n.href; 
+          const n = document.querySelector('.chap-nav-row a.chap-pn:last-child'); 
+          if(n && !n.classList.contains('disabled')) window.location.href = n.href; 
         }
       }
-      
-      // 2. Chặn các phím tắt tải trang/lưu trang
+      // Chặn các phím tắt tải trang/lưu trang
       if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'c' || e.key === 'u')) {
         e.preventDefault();
       }
@@ -967,36 +966,26 @@ waitFirebase(({db, ref, get, update, onValue}) => {
     }
   });
 
-  const btn = document.getElementById('adminStatsBtn');
-  const pop = document.getElementById('statsPopup');
-  
-  if(btn && pop) {
-    btn.addEventListener('click', e => { e.stopPropagation(); pop.classList.toggle('open'); document.getElementById('rsPopup')?.classList.remove('open');});
-    document.addEventListener('click', e => { if(!pop.contains(e.target) && e.target !== btn) pop.classList.remove('open'); });
-    
-    // Lấy số liệu Realtime Views
-    onValue(viewRef, snap => {
-       const vEl = document.getElementById('statViews');
-       if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
-    });
+  // 3. Cập nhật dữ liệu Realtime lên Bảng Thống Kê
+  onValue(viewRef, snap => {
+      const vEl = document.getElementById('statViews');
+      if(vEl) vEl.textContent = (snap.val() && snap.val().views) || 0;
+  });
 
-    // Tính tổng lượt Comment & Like của chương
-    onValue(ref(db, 'comments/chap_' + key), snap => {
-       const data = snap.val() || {};
-       let cmtCount = Object.keys(data).length;
-       let likeCount = 0;
-       Object.values(data).forEach(c => {
-          if(c.likes) likeCount += Object.keys(c.likes).length;
-          if(c.replies) cmtCount += Object.keys(c.replies).length;
-       });
-       const cEl = document.getElementById('statCmts');
-       const lEl = document.getElementById('statLikes');
-       if(cEl) cEl.textContent = cmtCount;
-       if(lEl) lEl.textContent = likeCount;
-    });
-  }
+  onValue(ref(db, 'comments/chap_' + key), snap => {
+      const data = snap.val() || {};
+      let cmtCount = Object.keys(data).length;
+      let likeCount = 0;
+      Object.values(data).forEach(c => {
+        if(c.likes) likeCount += Object.keys(c.likes).length;
+        if(c.replies) cmtCount += Object.keys(c.replies).length;
+      });
+      const cEl = document.getElementById('statCmts');
+      const lEl = document.getElementById('statLikes');
+      if(cEl) cEl.textContent = cmtCount;
+      if(lEl) lEl.textContent = likeCount;
+  });
 });
-
 
 /* ══ SCROLL + PROGRESS ══ */
 const _st=document.getElementById('scrollTop'),_sb=document.getElementById('scrollBot'),_rp=document.getElementById('read-progress');
@@ -1345,7 +1334,7 @@ syncThemeBtns();
     btn.className = 'ic-trigger';
     btn.title     = 'Bình luận đoạn ' + (idx + 1);
     btn.setAttribute('aria-label', 'Bình luận đoạn ' + (idx + 1));
-    btn.innerHTML = '💬';
+    btn.innerHTML = '💬'; 
     p.appendChild(btn);
 
     waitFirebase(({db, ref, onValue}) => {

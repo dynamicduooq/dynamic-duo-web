@@ -272,7 +272,8 @@
             <button class="editor-btn" onclick="fmt('quote')" title="Trích dẫn">Quote</button>
             <button class="editor-btn" onclick="fmt('center')" title="Căn giữa">Căn giữa</button>
             <button class="editor-btn" onclick="fmt('hr')" title="Đường kẻ ngang">HR</button>
-            
+            <button class="editor-btn" onclick="cleanFormatting()" style="background: var(--amber); color: #fff; border:none;">✨ Dọn dẹp & Tách dòng</button>
+
             <div style="display:flex; align-items:center; gap:5px; margin-left:10px; background:#fff; padding:2px 8px; border-radius:4px; border:1px solid var(--sky-light)">
               <span style="font-size:.7rem; font-weight:bold">Màu chữ:</span>
               <input type="color" id="ed-color-picker" value="#ef4444" style="border:none; width:22px; height:22px; cursor:pointer; padding:0" />
@@ -896,7 +897,28 @@ function fmt(cmd) {
   ta.selectionEnd = start + ins.length;
   updateWordCount();
 }
+function cleanFormatting() {
+  const ta = $('ed-content');
+  let val = ta.value.trim();
 
+  // 1. Tự động thêm dấu ## cho các dòng bắt đầu bằng chữ "Chương..."
+  // Nó sẽ tìm dòng "Chương 1", "Chương 10: Tên chương" để biến thành Heading
+  val = val.replace(/^(Chương\s+\d+.*)$/gm, '## $1');
+
+  // 2. Xử lý xuống dòng: Biến 1 lần xuống dòng thành 2 lần (để Markdown nhận diện đoạn văn)
+  // Nhưng tránh làm hỏng các đoạn vốn đã có 2 dòng trống trở lên
+  val = val.replace(/\n(?!\n)/g, '\n\n');
+
+  // 3. Xóa các khoảng trắng thừa ở đầu và cuối mỗi dòng
+  val = val.split('\n').map(line => line.trim()).join('\n');
+
+  // 4. Dọn dẹp các dòng trống bị thừa (nếu có 3 dòng trống liên tiếp thì chỉ giữ lại 2)
+  val = val.replace(/\n{3,}/g, '\n\n');
+
+  ta.value = val;
+  updateWordCount();
+  showToast('Đã tự động tách đoạn văn và định dạng Tiêu đề!');
+}
 function findAndReplace() {
     const f = $('fr-find').value;
     const r = $('fr-replace').value;
@@ -1069,8 +1091,9 @@ truyen_id: "${shortId}"
 chuong: ${num}
 date: "${new Date().toISOString().split('T')[0]}"
 ---`;
-        const bodyContent = lines.slice(1).join('\n').trim();
-        const content = fm + '\n\n' + bodyContent;
+let bodyContent = lines.slice(1).join('\n').trim();
+// Tự động tách đoạn cho nội dung chương khi đăng hàng loạt
+bodyContent = bodyContent.replace(/\n(?!\n)/g, '\n\n').replace(/\n{3,}/g, '\n\n');        const content = fm + '\n\n' + bodyContent;
         const filename = `chuong-${String(num).padStart(2,'0')}.md`;
         
         try {

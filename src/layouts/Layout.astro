@@ -221,31 +221,89 @@ if (isNovelPage) {
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
 
     /* ── CHAP NAV ── */
-    .chap-nav-row { display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 20px; flex-wrap:wrap; max-width:900px; margin:0 auto; }
-    .chap-pn { display:inline-flex; align-items:center; gap:5px; padding:6px 16px; border-radius:var(--r-pill); border:1px solid var(--sky-light); font-size:.78rem; color:var(--sky-dark); transition:var(--t); white-space:nowrap; background:rgba(255,255,255,.9); }
-    .chap-pn:hover { background:var(--sky-pale); border-color:var(--sky); }
-    .chap-pn.disabled { opacity:.4; pointer-events:none; }
-    [data-theme="dark"] .chap-pn { border-color:#1e4a6a; color:#8fbcd4; background:#0d2035; }
-    [data-theme="dark"] .chap-pn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; border-color:#7ec8e3; }
+/* ── CHAP NAV - GIAO DIỆN MỚI ── */
+    :root {
+      --blue-main: #0288d1;
+      --blue-light: #e1f5fe;
+      --blue-border: #81d4fa;
+    }
 
-    .chap-dd-wrap { position:relative; }
-    .chap-dd-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:var(--r-pill); border:1px solid var(--sky-light); font-size:.76rem; color:var(--sky-dark); cursor:pointer; font-family:'Newsreader',serif; background:rgba(255,255,255,.9); transition:var(--t); white-space:nowrap; }
-    .chap-dd-btn:hover { background:var(--sky-pale); border-color:var(--sky); }
-    [data-theme="dark"] .chap-dd-btn { background:#0d2035; border-color:#1e4a6a; color:#8fbcd4; }
+    .chap-nav-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    /* Hàng chứa 3 nút dưới */
+    .nav-controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    /* Nút mục lục hàng trên */
+    .nav-toc-row {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Style chung cho tất cả các nút nav */
+    .chap-pn, .chap-dd-btn, .nav-toc-btn {
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      height: 42px;
+      padding: 0 10px !important;
+      font-size: 0.82rem !important;
+      color: var(--blue-main) !important;
+      background: #fff !important;
+      border: 1.5px solid var(--blue-border) !important;
+      border-radius: 999px !important;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(2, 136, 209, 0.12);
+    }
+
+    [data-theme="dark"] .chap-pn, 
+    [data-theme="dark"] .chap-dd-btn,
+    [data-theme="dark"] .nav-toc-btn {
+      background: #0d2035 !important;
+      border-color: #1e4a6a !important;
+      color: #8fbcd4 !important;
+    }
+
+    .chap-pn:hover, .chap-dd-btn:hover, .nav-toc-btn:hover {
+      background: var(--blue-light) !important;
+      border-color: var(--blue-main) !important;
+      transform: translateY(-2px);
+    }
+
+    .chap-pn.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .chap-dd-wrap { position: relative; width: 100%; }
+    .chap-dd-btn { width: 100%; }
     
-    .chap-dd-list { position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%); z-index:700; width:220px; max-height:280px; overflow-y:auto; overflow-x:hidden; background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.15); padding:4px; display:none; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
-    .chap-dd-list::-webkit-scrollbar { width:3px; }
-    .chap-dd-list::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
-    .chap-dd-list.open { display:block; }
-    .chap-dd-list.up { top:auto; bottom:calc(100% + 6px); }
-    .chap-dd-list a { display:block; padding:6px 12px; font-size:.76rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-bottom:1px solid rgba(186,230,253,.2); }
-    .chap-dd-list a:last-child { border-bottom:none; }
-    .chap-dd-list a:hover { background:var(--sky-pale); color:var(--sky); }
-    .chap-dd-list a.cur-chap { background:rgba(14,165,233,.1); color:var(--sky-dark); font-weight:700; }
-    [data-theme="dark"] .chap-dd-list a { color:#8fbcd4; border-color:rgba(126,200,227,.1); }
-    [data-theme="dark"] .chap-dd-list a:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
-    [data-theme="dark"] .chap-dd-list a.cur-chap { background:rgba(126,200,227,.15); color:#a8daf0; font-weight:700; }
-
+    .chap-dd-list { 
+      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); 
+      z-index: 700; width: 220px; max-height: 280px; overflow-y: auto; 
+      background: var(--bg-card); border: 1px solid var(--border-card); 
+      border-radius: 12px; box-shadow: 0 16px 48px rgba(2,132,199,.15); display: none; 
+    }
+    .chap-dd-list.open { display: block; }
+    .chap-dd-list.up { top: auto; bottom: calc(100% + 6px); }
+    .chap-dd-list a { display: block; padding: 8px 12px; font-size: .8rem; color: var(--text-mid); border-bottom: 1px solid rgba(186,230,253,.2); }
+    .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
     /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     [data-theme="dark"] .auto-audio-player { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.3); }
@@ -785,30 +843,36 @@ if (isNovelPage) {
 </div>
   )}
 
-  {isNovelPage && (
-    <div class="chap-nav-row">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
-        
-      <a href={`${currentFolder}/`} class="chap-pn" style="font-weight:600; color:var(--sky-dark)" title="Quay lại mục lục">📖 Mục lục</a>      
-      
-      {chapters.length > 1 && (
-        <div class="chap-dd-wrap" id="ddTop">
-          <button class="chap-dd-btn" id="ddBtnTop">⚓ Chọn chương ▾</button>
-          <div class="chap-dd-list" id="ddListTop">
-            {chapters.map((c: any) => (
-              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
-                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
-              </a>
-            ))}
+{isNovelPage && (
+    <div class="chap-nav-container">
+      <!-- Hàng 1: Mục lục nằm riêng ở giữa -->
+      <div class="nav-toc-row">
+        <a href={`${currentFolder}/`} class="nav-toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
+      </div>
+
+      <!-- Hàng 2: 3 nút chương -->
+      <div class="nav-controls-row">
+        {prevChap
+          ? <a href={prevChap.url} class="chap-pn">← Trước</a>
+          : <span class="chap-pn disabled">← Trước</span>}
+          
+        {chapters.length > 1 && (
+          <div class="chap-dd-wrap" id="ddTop">
+            <button class="chap-dd-btn" id="ddBtnTop">⚓ Chương ▾</button>
+            <div class="chap-dd-list" id="ddListTop">
+              {chapters.map((c: any) => (
+                <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
+                  {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
+        )}
+        
+        {nextChap
+          ? <a href={nextChap.url} class="chap-pn">Sau →</a>
+          : <span class="chap-pn disabled">Sau →</span>}
+      </div>
     </div>  
   )}
 
@@ -888,26 +952,31 @@ if (isNovelPage) {
     <div class="page-content-wrap"><slot /></div>
   )}
 
-  {isNovelPage && (
-    <div class="chap-nav-row" style="margin-top:36px;">
-      {prevChap
-        ? <a href={prevChap.url} class="chap-pn">← {prevChap.frontmatter?.title || `Chương ${prevChap.frontmatter?.chuong}`}</a>
-        : <span class="chap-pn disabled">← Chương trước</span>}
-      {chapters.length > 1 && (
-        <div class="chap-dd-wrap" id="ddBot">
-          <button class="chap-dd-btn" id="ddBtnBot">⚓ Chọn chương ▾</button>
-          <div class="chap-dd-list up" id="ddListBot">
-            {chapters.map((c: any) => (
-              <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
-                {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
-              </a>
-            ))}
+{isNovelPage && (
+    <div class="chap-nav-container" style="margin-top:36px;">
+      <!-- Chỉ giữ lại hàng 3 nút điều hướng -->
+      <div class="nav-controls-row">
+        {prevChap
+          ? <a href={prevChap.url} class="chap-pn">← Trước</a>
+          : <span class="chap-pn disabled">← Trước</span>}
+
+        {chapters.length > 1 && (
+          <div class="chap-dd-wrap" id="ddBot">
+            <button class="chap-dd-btn" id="ddBtnBot">⚓ Chương ▾</button>
+            <div class="chap-dd-list up" id="ddListBot">
+              {chapters.map((c: any) => (
+                <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
+                  {c.frontmatter?.title || `Chương ${c.frontmatter?.chuong}`}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {nextChap
-        ? <a href={nextChap.url} class="chap-pn">{nextChap.frontmatter?.title || `Chương ${nextChap.frontmatter?.chuong}`} →</a>
-        : <span class="chap-pn disabled">Chương sau →</span>}
+        )}
+
+        {nextChap
+          ? <a href={nextChap.url} class="chap-pn">Sau →</a>
+          : <span class="chap-pn disabled">Sau →</span>}
+      </div>
     </div>
   )}
 

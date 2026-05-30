@@ -11,18 +11,19 @@ const currentTruyenId = frontmatter?.truyen_id;
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
 const storyFolders = Object.keys(import.meta.glob('../pages/truyen/*/index.astro'));
 
-// 2. Lấy danh sách slug duy nhất
+// 2. Lấy danh sách slug duy nhất (Sửa lỗi dính "dynamic duo web")
 const slugs = [...new Set([
   ...allPosts.map(p => {
     const parts = (p.url || "").split('/').filter(Boolean);
-    return parts[parts.indexOf('truyen') + 1];
+    const idx = parts.indexOf('truyen');
+    return idx !== -1 ? parts[idx + 1] : null; // Chỉ lấy những URL có chứa /truyen/
   }),
   ...storyFolders.map(path => {
     const parts = path.split('/');
-    return parts[parts.indexOf('truyen') + 1];
+    const idx = parts.indexOf('truyen');
+    return idx !== -1 ? parts[idx + 1] : null;
   })
 ])].filter(Boolean) as string[];
-
 // 3. Xây dựng dữ liệu cho Navbar
 const navStories = slugs.map(slug => {
   const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
@@ -276,6 +277,21 @@ if (isNovelPage) {
 
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
+/* ── MOBILE MENU (Sửa lỗi rớt chữ xuống trang) ── */
+    .mobile-menu {
+      display: none; flex-direction: column; background: var(--bg-card);
+      padding: 20px 28px; border-bottom: 1px solid var(--border-card);
+      position: fixed; top: 56px; left: 0; right: 0; z-index: 499;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      max-height: calc(100vh - 56px); overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-section-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin: 15px 0 8px; font-weight: 600; letter-spacing: 1px;}
+    .mobile-menu a { padding: 10px 0; color: var(--text-main); border-bottom: 1px dashed var(--border-card); font-family: 'Newsreader', serif; font-size: 1rem;}
+    .mobile-menu a:last-child { border-bottom: none; }
+    [data-theme="dark"] .mobile-menu { background: rgba(8,18,32,.98); }
+    [data-theme="dark"] .mobile-menu a { color: #a8daf0; }
+    
     /* Theme Button & Hamburger */
     .nav-theme-btn { 
       font-size:.8rem; width:32px; height:32px; border-radius:50%; 

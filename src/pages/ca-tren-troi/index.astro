@@ -2,17 +2,19 @@
 import Layout from '../../layouts/Layout.astro';
 const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
 
+// 1. Lọc slug chuẩn xác, bỏ các url không phải truyện
 const slugs = [...new Set(allChaps.map(p => {
   const parts = (p.url || "").split('/').filter(Boolean);
-  return parts[parts.indexOf('truyen') + 1];
-}))].filter(Boolean);
+  const idx = parts.indexOf('truyen');
+  return idx !== -1 ? parts[idx + 1] : null;
+}))].filter(Boolean) as string[];
 
+// 2. Gom dữ liệu
 const storiesData = slugs.map(slug => {
   const storyChaps = allChaps.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
   const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
-  const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
   
   return { 
     title: fm.truyen_name || slug,
@@ -20,13 +22,13 @@ const storiesData = slugs.map(slug => {
     cover: fm.cover || `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
     tags: fm.tags || [],
     desc: fm.description || '',
-    isCompleted: tongSoChuong > 0 && chapCount >= tongSoChuong,
-    url: `/dynamic-duo-web/truyen/${slug}/`,
-    tong_so_chuong: tongSoChuong
+    isUpcoming: chapCount === 0, // Dấu hiệu của Cá trên trời (có file giới thiệu nhưng chưa có chương nào)
+    url: `/dynamic-duo-web/truyen/${slug}/`
   };
 });
 
-const caTrenTroiList = storiesData.filter(s => (allChaps.filter(p => p.url?.includes(s.url)).length === 0));
+// 3. Lọc danh sách Cá trên trời
+const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
 ---
 
 <Layout frontmatter={{ title: 'Cá trên trời' }}>

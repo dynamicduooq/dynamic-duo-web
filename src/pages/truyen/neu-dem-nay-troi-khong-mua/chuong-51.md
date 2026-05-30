@@ -1,9 +1,14 @@
 ---
+layout: ../../../layouts/Layout.astro
 title: "Chương 51"
 truyen_id: "ndntkm"
-date: "2026-05-18"
+chuong: 51
+date: "2026-05-02"
 tags:
-  - "neu-dem-nay-troi-khong-mua"
+  - "nếu đêm nay trời không mưa"
+  - "đam mỹ"
+  - "hiện đại"
+  - "HE"
 ---
 
 ## **Chương** 51

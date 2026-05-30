@@ -5,17 +5,9 @@ const allPosts = Object.values(
   import.meta.glob('./*.md', { eager: true })
 ) as any[];
 
-// LỌC VÀ SẮP XẾP CHUẨN SỐ HỌC
 const chapters = allPosts
-  .filter((p) => {
-    const c = p.frontmatter?.chuong;
-    // Chỉ lấy những file có số chương hợp lệ và khác 0
-    return c !== undefined && c !== null && Number(c) !== 0;
-  })
-  .sort((a, b) => {
-    // Ép kiểu về số để 2 < 10 < 20
-    return Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong);
-  });
+  .filter((p) => p.frontmatter?.chuong !== undefined)
+  .sort((a, b) => Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong));
 
 const tong_so_chuong = 74; 
 const hoan_thanh = true;   

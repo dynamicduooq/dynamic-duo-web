@@ -4,45 +4,42 @@ import Layout from '../layouts/Layout.astro';
 // 1. Quét toàn bộ các file chương (.md)
 const allChaps = Object.values(import.meta.glob('./truyen/**/*.md', { eager: true })) as any[];
 
-// 2. Lấy danh sách các thư mục truyện (slug) dựa trên đường dẫn file .md
-// Ví dụ đường dẫn: ./truyen/ha-chay-dong-hoang/chuong-01.md -> slug là 'ha-chay-dong-hoang'
+// 2. Lấy danh sách các slug truyện từ thư mục
 const slugs = [...new Set(allChaps.map(c => {
   const parts = c.url.split('/');
-  return parts[parts.length - 2]; // Lấy tên thư mục mẹ
+  return parts[parts.length - 2]; 
 }))];
 
-// 3. Xây dựng dữ liệu storiesData từ frontmatter của chương đầu tiên tìm thấy trong mỗi thư mục
+// 3. Xây dựng dữ liệu storiesData (Thay thế hoàn toàn cho storiesList cũ)
 const storiesData = slugs.map(slug => {
-  // Tìm tất cả chương thuộc về truyện này
   const storyChaps = allChaps.filter(c => c.url.includes(`/truyen/${slug}/`));
-  
-  // Lấy "chương tiêu biểu" (ưu tiên chương 0 hoặc chương 1) để trích xuất thông tin truyện
+  // Tìm chương đại diện để lấy thông tin truyện (Author, Tags...)
   const representativeChap = storyChaps.find(c => c.frontmatter?.chuong === 0) || storyChaps[0];
   const fm = representativeChap?.frontmatter || {};
 
-  const chapCount = storyChaps.filter(c => fm.chuong !== 0).length;
+  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong !== 0).length;
   const tongSoChuong = fm.tong_so_chuong || 0;
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
 
   return {
     id: slug,
-    title: fm.truyen_name || fm.title || 'Chưa có tên', // Lấy tên truyện từ frontmatter chương
+    title: fm.truyen_name || fm.title || 'Chưa có tên',
     author: fm.author || 'Ẩn danh',
     cover: `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
     tags: fm.tags || [],
-    chapCount: chapCount,
+    chapCount,
     tong_so_chuong: tongSoChuong,
-    isCompleted: isCompleted,
+    isCompleted,
     url: `/dynamic-duo-web/truyen/${slug}/`
   };
 });
 
-// 4. Phân loại mâm truyện (Giữ nguyên logic cũ của bạn)
+// 4. Phân loại mâm truyện
 const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
 const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 
-// 5. Mới cập nhật (Giữ nguyên logic cũ của bạn)
+// 5. TỰ ĐỘNG HÓA MỤC "MỚI CẬP NHẬT"
 const recentChaps = allChaps
   .filter((c: any) => c.frontmatter?.date && c.frontmatter?.draft !== true)
   .sort((a: any, b: any) => {
@@ -684,14 +681,13 @@ const recentChaps = allChaps
       <div class="sec-line"></div>
     </div>
     
-    <div class="recent-list reveal">
+<div class="recent-list reveal">
       {recentChaps.map((chap: any, index: number) => {
-        // Trích xuất ID truyện từ đường dẫn (ví dụ: /truyen/toi-nghi-chung-toi.../chuong-74)
         const pathParts = (chap.url || '').split('/').filter(Boolean);
         const storyId = pathParts[pathParts.length - 2]; 
         
-        // Tìm tên gốc của truyện dựa vào mảng storiesList đã khai báo
-        const storyObj = storiesList.find(s => s.id === storyId);
+        // SỬA TẠI ĐÂY: Dùng storiesData thay vì storiesList
+        const storyObj = storiesData.find(s => s.id === storyId);
         const storyName = storyObj ? storyObj.title : 'Truyện chưa rõ';
 
         return (

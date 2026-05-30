@@ -1,9 +1,12 @@
 ---
 layout: "../../../layouts/Layout.astro"
 title: "Chương 1"
-truyen_id: "toi-nghi-chung-toi-sap-chia-tay"
+truyen_id: "tnctst"
+author: Hạ Nhất Thiên
+truyen_name: Tôi nghĩ chúng tôi sắp chia tay
 chuong: 1
 date: "2026-05-29"
+
 description: ""
 draft: false
 editor_note: ""

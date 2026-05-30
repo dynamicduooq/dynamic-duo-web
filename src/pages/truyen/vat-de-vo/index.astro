@@ -93,154 +93,230 @@ const publishedChaps = chaps
       </div>
     </div>
 
-    <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
-    <div class="public-reviews-widget" data-truyen-id="tdxt">
-      <div class="prw-header">
-        <h3 style="margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;">⭐ Đánh giá từ độc giả</h3>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span class="prw-avg" style="font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;">0.0</span>
-          <span class="prw-stars" style="color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px;">☆☆☆☆☆</span>
-          <span class="prw-count" style="font-size: 0.8rem; color: var(--text-dim); font-style: italic;">(0 đánh giá)</span>
-        </div>
-      </div>
-
-      <div style="background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.5);">
-        <div class="prw-star-select" id="prwStarSelect" style="font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;">
-          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active" style="color: #fbbf24;">★</span>
-        </div>
-        <input id="prwName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); outline: none; margin-bottom: 10px; box-sizing:border-box;" />
-        <textarea id="prwText" placeholder="Bộ truyện này thế nào? Chia sẻ cảm nhận của bạn với mọi người nhé..." rows="3" style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); outline: none; margin-bottom: 10px; box-sizing:border-box;"></textarea>
-        <div style="text-align:right">
-          <button id="prwSubmit" style="padding: 8px 24px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-weight: bold;">Gửi đánh giá</button>
-        </div>
-      </div>
-
-      <div id="prwList" style="display: flex; flex-direction: column; gap: 12px;">
-         <div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Đang tải đánh giá...</div>
-      </div>
+<!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
+<div class="public-reviews-widget" data-truyen-id="vdv">
+  <div class="prw-header">
+    <h3>⭐ Đánh giá từ độc giả</h3>
+    <div class="prw-stats">
+      <span class="prw-avg">0.0</span>
+      <span class="prw-stars">☆☆☆☆☆</span>
+      <span class="prw-count">(0 đánh giá)</span>
     </div>
-
-    <script is:inline>
-      (function loadPublicReviews() {
-        const widget = document.querySelector('.public-reviews-widget');
-        const listEl = document.getElementById('prwList');
-        if(!widget || !listEl) return;
-        const truyenId = widget.dataset.truyenId;
-        
-        function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-        function timeAgo(ts){
-          if(!ts) return ''; const d=Date.now()-ts;
-          if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
-          if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
-        }
-        function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
-        
-        const myToken = getMyToken();
-        const savedName = localStorage.getItem('dd_commenter_name');
-        if(savedName) document.getElementById('prwName').value = savedName;
-
-        let selectedStars = 5;
-        const starSelect = document.getElementById('prwStarSelect');
-        if(starSelect && !starSelect.dataset.bound) {
-          const stars = starSelect.querySelectorAll('span');
-          stars.forEach(s => {
-            s.addEventListener('click', () => {
-              selectedStars = parseInt(s.dataset.val);
-              stars.forEach(st => { 
-                  st.style.color = parseInt(st.dataset.val) <= selectedStars ? '#fbbf24' : '#d1d5db'; 
-              });
-            });
-          });
-          starSelect.dataset.bound = "true";
-        }
-
-        function initFirebase(fb) {
-          fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
-            const data = snap.val() || {};
-            const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
-            
-            widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
-            
-            let avg = 0;
-            if(items.length > 0) {
-               const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
-               avg = (total / items.length).toFixed(1);
-            }
-            widget.querySelector('.prw-avg').textContent = avg > 0 ? avg : '0.0';
-            
-            let starHtml = ''; const fullStars = Math.round(avg);
-            for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
-            widget.querySelector('.prw-stars').textContent = starHtml;
-
-            if(items.length === 0) {
-               listEl.innerHTML = '<div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
-            } else {
-               listEl.innerHTML = items.map(rv => {
-                  const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
-                  const badge = rv.isAdmin ? '<span style="background:var(--sky); color:#fff; font-size:0.6rem; padding:2px 6px; border-radius:99px; margin-left:6px; text-transform:uppercase; font-family:sans-serif;">chủ nhà</span>' : '';
-                  const canDel = window.__ddIsAdmin || rv.token === myToken;
-
-                  return `
-                    <div style="background: #fff; border: 1px solid rgba(186,230,253,0.8); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(14,165,233,0.05);">
-                      <div style="display: flex; flex-direction: column; gap: 3px;">
-                        <span style="font-weight: 600; font-size: 0.9rem; color: var(--sky-dark); display: flex; align-items: center;">${esc(rv.name)||'Khách ẩn danh'} ${badge}</span>
-                        <span style="color: #fbbf24; font-size: 0.85rem; letter-spacing: 2px;">${stars}</span>
-                      </div>
-                      <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6; margin: 0; word-break: break-word;">${esc(rv.text).replace(/\n/g, '<br>')}</p>
-                      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px dashed rgba(186,230,253,0.6); padding-top: 10px;">
-                        <span style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">${timeAgo(rv.ts)}</span>
-                        ${canDel ? `<button class="prw-del" data-id="${esc(rv.id)}" style="font-size: 0.7rem; color: #ef4444; background: rgba(239,68,68,0.1); border: none; cursor: pointer; padding: 4px 10px; border-radius: 6px; font-weight: bold;">Xóa</button>` : ''}
-                      </div>
-                    </div>
-                  `;
-               }).join('');
-
-               listEl.querySelectorAll('.prw-del').forEach(b => {
-                  b.addEventListener('click', async () => {
-                     if(!confirm('Bạn có chắc chắn muốn xóa đánh giá này?')) return;
-                     await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
-                  });
-               });
-            }
-          });
-
-          const submitBtn = document.getElementById('prwSubmit');
-          if(submitBtn && !submitBtn.dataset.boundSubmit) {
-            submitBtn.dataset.boundSubmit = "true";
-            submitBtn.addEventListener('click', async () => {
-              const text = document.getElementById('prwText')?.value.trim();
-              let name = document.getElementById('prwName')?.value.trim() || 'Khách';
-              if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
-              
-              if(window.__ddIsAdmin) name = 'dynamic duo 𓆝';
-              else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
-              
-              submitBtn.disabled = true;
-              submitBtn.textContent = 'Đang gửi...';
-              
-              try {
-                await fb.push(fb.ref(fb.db, 'novel_reviews/' + truyenId), {
-                  name: name,
-                  text: text,
-                  rating: selectedStars,
-                  ts: Date.now(),
-                  token: myToken,
-                  isAdmin: !!window.__ddIsAdmin
-                });
-                document.getElementById('prwText').value = '';
-              } catch(e) { 
-                alert('Lỗi khi gửi: ' + e.message); 
-              } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Gửi đánh giá';
-              }
-            });
-          }
-        }
-
-        if(window.__ddFirebase?.db) { initFirebase(window.__ddFirebase); }
-        else { window.addEventListener('dd-firebase-ready', () => initFirebase(window.__ddFirebase), {once:true}); }
-      })();
-    </script>
   </div>
+
+  <!-- FORM VIẾT ĐÁNH GIÁ MỚI -->
+  <div class="prw-form-box">
+    <div class="prw-star-select" id="prwStarSelect">
+      <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
+    </div>
+    <input class="prw-inp" id="prwName" placeholder="Tên của bạn (Tùy chọn)" autocomplete="off" />
+    <textarea class="prw-textarea" id="prwText" placeholder="Bộ truyện này thế nào? Chia sẻ cảm nhận của bạn với mọi người nhé..." rows="3"></textarea>
+    <div style="text-align:right">
+      <button class="prw-submit-btn" id="prwSubmit">Gửi đánh giá</button>
+    </div>
+  </div>
+
+  <!-- DANH SÁCH ĐÁNH GIÁ -->
+<div class="prw-list" id="prwList">
+     <div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Đang tải đánh giá...</div>
+  </div>
+
+<!-- LƯU Ý: Phải có is:global thì CSS mới ăn vào phần HTML tạo bằng Javascript -->
+<style is:global>
+  /* KHUNG TỔNG THỂ */
+  .public-reviews-widget {
+    margin-top: 40px; padding-top: 24px;
+    border-top: 2px dashed var(--sky-light);
+    font-family: var(--read-ff, 'Newsreader', serif);
+  }
+  [data-theme="dark"] .public-reviews-widget { border-color: rgba(126,200,227,0.2); }
+  
+  /* PHẦN ĐẦU (TIÊU ĐỀ & ĐIỂM SỐ) */
+  .prw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+  .prw-header h3 { margin: 0; font-size: 1.15rem; color: var(--sky-dark); font-family: 'Merriweather', serif; font-weight: bold;}
+  [data-theme="dark"] .prw-header h3 { color: #a8daf0; }
+  .prw-stats { display: flex; align-items: center; gap: 8px; }
+  .prw-avg { font-weight: bold; font-size: 1.5rem; color: var(--sky-dark); line-height: 1;}
+  [data-theme="dark"] .prw-avg { color: #a8daf0; }
+  .prw-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
+  .prw-count { font-size: 0.8rem; color: var(--text-dim); font-style: italic;}
+  
+  /* FORM ĐIỀN ĐÁNH GIÁ */
+  .prw-form-box { background: var(--sky-pale); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(186,230,253,.5); }
+  [data-theme="dark"] .prw-form-box { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
+  .prw-star-select { font-size: 2rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 12px; letter-spacing: 5px;}
+  .prw-star-select span { transition: color 0.2s; }
+  .prw-star-select span:hover, .prw-star-select span.active { color: #fbbf24; }
+  .prw-inp, .prw-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--sky-light); border-radius: 8px; font-size: .85rem; font-family: inherit; color: var(--text-main); background: var(--cream); outline: none; margin-bottom: 10px; transition: all 0.2s; box-sizing: border-box;}
+  .prw-inp:focus, .prw-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+  [data-theme="dark"] .prw-inp, [data-theme="dark"] .prw-textarea { background: #091620; border-color: #1e4a6a; color: #F3F9FF; }
+  .prw-submit-btn { padding: 8px 24px; background: #f59e0b; color: #fff; border: none; border-radius: 99px; font-size: .85rem; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s; }
+  .prw-submit-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
+  .prw-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
+
+  /* DANH SÁCH REVIEW (DẠNG LƯỚI CARD) */
+.prw-list { display: flex; flex-direction: column; gap: 12px; }
+  
+  /* TỪNG THẺ REVIEW MỘT */
+  .prw-item {
+    background: #fff; border: 1px solid rgba(186,230,253,0.8);
+    padding: 16px; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 4px 15px rgba(14,165,233,0.05);
+  }
+  .prw-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(14,165,233,0.12); }
+  [data-theme="dark"] .prw-item { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.15); box-shadow: none; }
+  [data-theme="dark"] .prw-item:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+  
+  /* THÔNG TIN NGƯỜI DÙNG & SAO */
+  .prw-user-info { display: flex; flex-direction: column; gap: 3px; }
+  .prw-name { font-weight: 600; font-size: 0.9rem; color: var(--sky-dark); font-family: sans-serif; display: flex; align-items: center;}
+  [data-theme="dark"] .prw-name { color: #a8daf0; }
+  .prw-stars { color: #fbbf24; font-size: 0.85rem; letter-spacing: 2px; }
+  .prw-admin-badge { background: var(--sky); color: #fff; font-size: 0.6rem; padding: 2px 6px; border-radius: 99px; margin-left: 6px; text-transform: uppercase;}
+  
+  /* NỘI DUNG CHỮ */
+  .prw-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.6; margin: 0; word-break: break-word;}
+  [data-theme="dark"] .prw-text { color: #F3F9FF; }
+  
+  /* PHẦN CHÂN THẺ (THỜI GIAN & NÚT XÓA) */
+  .prw-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px dashed rgba(186,230,253,0.6); padding-top: 10px;}
+  [data-theme="dark"] .prw-footer { border-top-color: rgba(126,200,227,0.2); }
+  .prw-time { font-size: 0.75rem; color: var(--text-dim); font-style: italic;}
+  
+  /* NÚT XÓA (CHỈ CHỦ NHÂN MỚI THẤY NHỜ JS) */
+  .prw-del { font-size: 0.7rem; color: #ef4444; background: rgba(239,68,68,0.1); border: none; cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; font-family: sans-serif; font-weight: bold;}
+  .prw-del:hover { background: #ef4444; color: #fff;}
+</style>
+
+<script is:inline>
+  (function loadPublicReviews() {
+    const widget = document.querySelector('.public-reviews-widget');
+    const listEl = document.getElementById('prwList');
+    if(!widget || !listEl) return;
+    const truyenId = widget.dataset.truyenId;
+    
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function timeAgo(ts){
+      if(!ts) return ''; const d=Date.now()-ts;
+      if(d<60000) return 'vừa xong'; if(d<3600000) return Math.floor(d/60000)+' phút trước';
+      if(d<86400000) return Math.floor(d/3600000)+' giờ trước'; return Math.floor(d/86400000)+' ngày trước';
+    }
+    // Lấy Token máy hiện tại để check quyền
+    function getMyToken(){ let t = localStorage.getItem('dd_token'); if(!t){ t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('dd_token',t); } return t; }
+    
+    const myToken = getMyToken();
+
+    // Khôi phục tên đã nhập lần trước
+    const savedName = localStorage.getItem('dd_commenter_name');
+    if(savedName) document.getElementById('prwName').value = savedName;
+
+    // Logic chọn sao
+    let selectedStars = 5;
+    const starSelect = document.getElementById('prwStarSelect');
+    if(starSelect) {
+      const stars = starSelect.querySelectorAll('span');
+      stars.forEach(s => {
+        s.addEventListener('click', () => {
+          selectedStars = parseInt(s.dataset.val);
+          stars.forEach(st => { st.classList.toggle('active', parseInt(st.dataset.val) <= selectedStars); });
+        });
+      });
+    }
+
+    function initFirebase(fb) {
+      // 1. Tải danh sách Review
+      fb.onValue(fb.ref(fb.db, 'novel_reviews/' + truyenId), snap => {
+        const data = snap.val() || {};
+        const items = Object.entries(data).map(([id,v]) => ({id, ...v})).sort((a,b) => b.ts - a.ts);
+        
+        widget.querySelector('.prw-count').textContent = `(${items.length} đánh giá)`;
+        
+        let avg = 0;
+        if(items.length > 0) {
+           const total = items.reduce((sum, item) => sum + (item.rating||5), 0);
+           avg = (total / items.length).toFixed(1);
+        }
+        widget.querySelector('.prw-avg').textContent = avg > 0 ? avg : '0.0';
+        
+        let starHtml = ''; const fullStars = Math.round(avg);
+        for(let i=0; i<5; i++) starHtml += (i < fullStars ? '★' : '☆');
+        widget.querySelector('.prw-stars').textContent = starHtml;
+
+        if(items.length === 0) {
+           listEl.innerHTML = '<div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem">Chưa có đánh giá nào. Chờ bạn thả sao đấy! ⭐</div>';
+        } else {
+           listEl.innerHTML = items.map(rv => {
+              const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+              const badge = rv.isAdmin ? '<span class="prw-admin-badge">chủ nhà</span>' : '';
+              
+              // BẢO MẬT GIAO DIỆN: Chỉ token của người gửi hoặc Admin mới tạo ra HTML nút Xóa
+              const canDel = window.__ddIsAdmin || rv.token === myToken;
+
+              // XUẤT HTML THẺ REVIEW CÓ CLASS VỪA ĐỊNH NGHĨA TRONG STYLE
+              return `
+                <div class="prw-item">
+                  <div class="prw-user-info">
+                    <span class="prw-name">${esc(rv.name)||'Khách ẩn danh'} ${badge}</span>
+                    <span class="prw-stars">${stars}</span>
+                  </div>
+                  <div class="prw-text">${esc(rv.text).replace(/\n/g, '<br>')}</div>
+                  <div class="prw-footer">
+                    <span class="prw-time">${timeAgo(rv.ts)}</span>
+                    ${canDel ? `<button class="prw-del" data-id="${esc(rv.id)}">Xóa</button>` : ''}
+                  </div>
+                </div>
+              `;
+           }).join('');
+
+           // Gắn sự kiện Xóa
+           listEl.querySelectorAll('.prw-del').forEach(b => {
+              b.addEventListener('click', async () => {
+                 if(!confirm('Bạn có chắc chắn muốn xóa đánh giá này?')) return;
+                 await fb.remove(fb.ref(fb.db, `novel_reviews/${truyenId}/${b.dataset.id}`));
+              });
+           });
+        }
+      });
+
+      // 2. Logic Nút Gửi Review (Có block để chống bấm gửi 2 lần)
+      const submitBtn = document.getElementById('prwSubmit');
+      if(submitBtn && !submitBtn.dataset.boundSubmit) {
+        submitBtn.dataset.boundSubmit = "true";
+        submitBtn.addEventListener('click', async () => {
+          const text = document.getElementById('prwText')?.value.trim();
+          let name = document.getElementById('prwName')?.value.trim() || 'Khách';
+          if(!text) { alert('Vui lòng viết vài lời nhận xét nhé!'); return; }
+          
+          if(window.__ddIsAdmin) name = 'dynamic duo 𓆝';
+          else if(name !== 'Khách') localStorage.setItem('dd_commenter_name', name);
+          
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Đang gửi...';
+          
+          try {
+            await fb.push(fb.ref(fb.db, 'novel_reviews/' + truyenId), {
+              name: name,
+              text: text,
+              rating: selectedStars,
+              ts: Date.now(),
+              token: myToken,
+              isAdmin: !!window.__ddIsAdmin
+            });
+            document.getElementById('prwText').value = '';
+          } catch(e) { 
+            alert('Lỗi khi gửi: ' + e.message); 
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Gửi đánh giá';
+          }
+        });
+      }
+    }
+
+    if(window.__ddFirebase?.db) { initFirebase(window.__ddFirebase); }
+    else { window.addEventListener('dd-firebase-ready', () => initFirebase(window.__ddFirebase), {once:true}); }
+  })();
+</script>
+<!-- ========================================================== -->  
 </Layout>

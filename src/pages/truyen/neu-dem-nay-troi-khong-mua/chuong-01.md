@@ -2,6 +2,8 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 1"
 truyen_id: "ndntkm"
+truyen_name: Nếu đêm nay trời không mưa
+author: Tam Đạo
 chuong: 1
 date: "2026-05-02"
 tags:

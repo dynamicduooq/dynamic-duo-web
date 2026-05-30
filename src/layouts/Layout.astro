@@ -589,156 +589,123 @@ if (isNovelPage) {
     [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
 /* =========================================
-   THIẾT LẬP BẢNG MÀU XANH & HIỆU ỨNG (CÓ THỂ TÙY CHỈNH)
+   THIẾT LẬP BẢNG MÀU XANH NƯỚC BIỂN
    ========================================= */
 :root {
-  --primary-color: #009688; /* Màu xanh Teal chính */
-  --primary-light: #e0f7fa; /* Xanh nhạt cho hover */
-  --primary-dark: #00796b; /* Xanh đậm cho chữ */
-  --text-main: #333; /* Màu chữ chính */
-  --bg-content: #ffffff; /* Màu nền khung truyện */
-  --bg-btn: #ffffff; /* Nền nút mặc định */
-  --border-btn: rgba(0, 150, 136, 0.3); /* Viền nút xanh mờ */
-  --shadow-content: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Bóng khung mượt */
-  --shadow-btn: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); /* Bóng nút nhẹ */
+  --blue-main: #0288d1;      /* Chữ và Icon màu xanh biển đậm vừa để dễ đọc */
+  --blue-light: #e1f5fe;     /* Xanh biển rất nhạt cho nền khi ấn/hover */
+  --blue-border: #81d4fa;    /* Viền xanh biển nhạt */
+  --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); /* Bóng xanh mờ */
 }
 
 /* =========================================
-   1. TỐI ƯU KHUNG ĐỌC TRUYỆN (MOBILE)
-   ========================================= */
-@media (max-width: 768px) {
-  .novel-content {
-    width: 92% !important; 
-    max-width: 100%;
-    margin: 20px auto !important; /* Tăng margin cho cân đối */
-    padding: 28px 24px !important; /* Tăng padding */
-    box-sizing: border-box;
-    background-color: var(--bg-content);
-    border-radius: 16px; /* Bo tròn nhiều hơn */
-    box-shadow: var(--shadow-content); /* Đổ bóng mượt mà */
-    transition: all 0.3s ease-in-out;
-  }
-
-  /* Tinh chỉnh bong bóng bình luận (Inline comment) */
-  .ic-trigger { 
-    left: -14px !important; /* Dịch sang trái một chút */
-    opacity: 0.5 !important; 
-    cursor: pointer;
-    color: var(--primary-color) !important; /* Màu icon xanh */
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  }
-  
-  .ic-trigger:hover {
-    opacity: 0.9 !important; 
-    transform: scale(1.1); /* Phóng to nhẹ khi lia chuột */
-    color: var(--primary-dark) !important; /* Màu xanh đậm khi hover */
-  }
-
-  .ic-trigger:active {
-    opacity: 1 !important;
-    transform: scale(0.95); /* Lún nhẹ khi bấm */
-  }
-}
-
-/* =========================================
-   2. THANH ĐIỀU HƯỚNG CHƯƠNG (NGẮN LẠI, CANH GIỮA)
+   THANH ĐIỀU HƯỚNG CHƯƠNG (2 HÀNG)
    ========================================= */
 .chap-nav-row {
   display: flex !important;
-  flex-wrap: nowrap !important;
-  justify-content: center; /* Canh giữa nội dung */
+  flex-wrap: wrap !important; /* Cho phép các nút rớt xuống hàng mới */
+  justify-content: center; 
   align-items: center;
-  gap: 12px; /* Khoảng cách tiêu chuẩn, cân đối */
-  padding: 20px 0; /* Tăng padding dọc */
+  gap: 12px; 
+  padding: 20px 0; 
   width: 100%;
-  max-width: 380px; /* GIỚI HẠN CHIỀU RỘNG để thanh không quá dài */
-  margin: 0 auto !important; /* CÂN GIỮA THANH trên trang */
+  max-width: 420px; /* Độ rộng vừa phải để 3 nút dưới không bị quá bẹt */
+  margin: 0 auto !important;
 }
 
-/* Nút điều hướng (Chương trước, Chương sau, Nút chọn chương) */
+/* ------------------------------------------------
+   1. ĐƯA MỤC LỤC LÊN HÀNG TRÊN CÙNG & CANH GIỮA
+   (Dùng :nth-child(2) vì trong ảnh Mục lục đứng thứ 2)
+   ------------------------------------------------ */
+.chap-nav-row > :nth-child(2) {
+  order: 1 !important; /* Đẩy lên vị trí đầu tiên */
+  flex: 0 0 100% !important; /* Ép chiếm trọn 100% chiều ngang để rớt dòng */
+  max-width: 160px; /* Độ rộng vừa phải cho nút Mục lục */
+  margin: 0 auto 4px auto !important; /* Canh giữa và cách hàng dưới 4px */
+}
+
+/* ------------------------------------------------
+   2. BA NÚT CÒN LẠI (HÀNG DƯỚI)
+   ------------------------------------------------ */
 .chap-pn, 
-.chap-dd-btn {
+.chap-dd-wrap {
+  order: 2; /* Nằm ở hàng thứ 2 */
+  flex: 1; /* Chia đều không gian ngang cho 3 nút */
+  min-width: 0;
+}
+
+.chap-dd-wrap .chap-dd-btn {
+  width: 100%; /* Nút chọn chương tự động co giãn bằng 2 nút kia */
+}
+
+/* ------------------------------------------------
+   3. ĐỊNH DẠNG CHUNG CHO TẤT CẢ CÁC NÚT (BO TRÒN, MÀU SẮC)
+   ------------------------------------------------ */
+.chap-pn, 
+.chap-dd-btn,
+.chap-nav-row > :nth-child(2) {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1; 
-  min-width: 0;
-  height: 42px; /* Chiều cao cố định */
+  height: 44px; /* Tăng nhẹ chiều cao để nút nhìn sang và dễ chạm hơn */
   font-size: 0.85rem !important; 
   font-weight: 500;
-  color: var(--primary-color) !important; /* Chữ xanh */
-  background-color: var(--bg-btn); /* Nền trắng */
-  border: 1px solid var(--border-btn); /* Viền xanh nhẹ */
-  border-radius: 12px; /* Bo tròn mượt mà và sâu hơn */
-  padding: 0 14px !important; /* Tăng padding ngang */
-  box-shadow: var(--shadow-btn); /* Đổ bóng nhẹ cho nút */
+  color: var(--blue-main) !important; /* Chữ xanh nước biển */
+  background-color: #ffffff; /* Nền trắng */
+  border: 1.5px solid var(--blue-border) !important; /* Viền xanh biển nhạt */
+  border-radius: 999px !important; /* BO TRÒN TỐI ĐA (DẠNG VIÊN THUỐC) */
+  padding: 0 12px !important; 
+  box-shadow: var(--shadow-btn); 
   
-  /* Cắt chữ thừa thành dấu ... */
+  /* Cắt chữ thừa gọn gàng */
   white-space: nowrap !important; 
   overflow: hidden;
   text-overflow: ellipsis;
   
-  /* Hiệu ứng */
   cursor: pointer;
-  user-select: none; /* Tránh bôi đen chữ */
+  user-select: none;
   transition: all 0.2s ease-in-out;
 }
 
-/* Hiệu ứng khi hover */
+/* Hiệu ứng khi lướt qua (Hover) */
 .chap-pn:hover, 
-.chap-dd-btn:hover {
-  background-color: var(--primary-light); /* Nền xanh nhạt */
-  border-color: rgba(0, 150, 136, 0.5); /* Viền đậm hơn */
-  color: var(--primary-dark) !important; /* Chữ xanh đậm */
-  transform: translateY(-2px); /* Bay nhẹ lên trên */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Đổ bóng đậm hơn */
+.chap-dd-btn:hover,
+.chap-nav-row > :nth-child(2):hover {
+  background-color: var(--blue-light) !important; /* Nền chuyển xanh biển siêu nhạt */
+  border-color: var(--blue-main) !important; /* Viền đậm lên 1 chút */
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
 }
 
-/* Hiệu ứng nảy/lún khi chạm (Mobile) */
+/* Hiệu ứng khi chạm/bấm (Active) */
 .chap-pn:active, 
-.chap-dd-btn:active {
-  transform: scale(0.96); /* Lún nhẹ */
-  background-color: #b2ebf2; /* Xanh đậm hơn chút khi nhấn */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Đổ bóng mờ */
+.chap-dd-btn:active,
+.chap-nav-row > :nth-child(2):active {
+  transform: scale(0.95); 
+  background-color: #b3e5fc !important;
 }
 
 /* =========================================
-   3. RESPONSIVE CHO MÀN HÌNH SIÊU NHỎ (< 480px)
+   4. RESPONSIVE CHO MÀN HÌNH SIÊU NHỎ (< 480px)
    ========================================= */
 @media (max-width: 480px) {
-  .novel-content {
-    padding: 24px 20px !important; /* Giảm nhẹ padding */
-    border-radius: 12px; /* Bo tròn ít hơn một chút trên màn siêu nhỏ */
-  }
-
   .chap-nav-row {
-    gap: 8px; /* Giảm gap */
-    max-width: 320px; /* Giới hạn chiều rộng hẹp hơn trên màn nhỏ */
+    gap: 8px; /* Thu hẹp khoảng cách giữa các nút */
     padding: 16px 0;
   }
   
   .chap-pn, 
-  .chap-dd-btn {
-    height: 38px; /* Thu nhỏ nút */
+  .chap-dd-btn,
+  .chap-nav-row > :nth-child(2) {
+    height: 40px; /* Thu nhỏ nút lại một chút trên đt */
     font-size: 0.78rem !important; 
-    padding: 0 10px !important;
-    border-radius: 8px; /* Bo tròn ít hơn */
+    padding: 0 8px !important;
   }
-  
-  .chap-pn { 
-    flex: 1; 
-  }
-  
-  /* Khung chọn chương giữa được ưu tiên diện tích lớn hơn chút */
+
+  /* Khung dropdown ở giữa cho rộng hơn xíu để hiện rõ tên chương */
   .chap-dd-wrap { 
-    flex: 1.3; 
-    min-width: 0;
+    flex: 1.4; 
   }
-  
-  .chap-dd-wrap .chap-dd-btn {
-    width: 100%; 
-  }
-}
 </style>
 </head>
 <body>

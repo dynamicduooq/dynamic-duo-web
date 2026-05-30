@@ -5,13 +5,21 @@ const allPosts = Object.values(
   import.meta.glob('./*.md', { eager: true })
 ) as any[];
 
+// LỌC VÀ SẮP XẾP CHUẨN SỐ HỌC
 const chapters = allPosts
-  .filter((p) => p.frontmatter?.chuong && p.frontmatter.chuong !== 0)
-  .sort((a, b) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
-  const tong_so_chuong = 74; // Điền tổng số chương của truyện này (nếu chưa rõ thì để 9999)
-const hoan_thanh = true;   // Nếu đã dịch xong 100%, đổi thành true
----
+  .filter((p) => {
+    const c = p.frontmatter?.chuong;
+    // Chỉ lấy những file có số chương hợp lệ và khác 0
+    return c !== undefined && c !== null && Number(c) !== 0;
+  })
+  .sort((a, b) => {
+    // Ép kiểu về số để 2 < 10 < 20
+    return Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong);
+  });
 
+const tong_so_chuong = 74; 
+const hoan_thanh = true;   
+---
 <Layout frontmatter={{
   title: 'Nếu đêm nay trời không mưa',
   description: 'Tình cờ gặp lại mối tình đầu từng đá anh — lần này thật sự không còn yêu nữa.',

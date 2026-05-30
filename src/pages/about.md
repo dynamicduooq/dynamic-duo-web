@@ -57,7 +57,7 @@ Truyện được chọn và edit hoàn toàn dựa trên gu đọc của hai đ
 <span style="font-size: 1.8rem; display:block; margin-bottom: 10px;">𓌉◯𓇋</span>
 <h4 style="margin: 0 0 8px; color: var(--sky-dark); font-size: 1.1rem;">Sẵn sàng nhảy hố?</h4>
 <p style="font-size: 15px; color: var(--text-main); margin-bottom: 20px;">Khám phá ngay tủ truyện đã tẩm đầy gia vị hoàn chỉnh của nhà cá</p>
-<a href="/dynamic-duo-web/truyen/" style="display: inline-block; background: var(--sky); color: white; padding: 10px 30px; border-radius: var(--r-pill); font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(2,132,199,0.2);" onmouseover="this.style.background='var(--sky2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='var(--sky)'; this.style.transform='translateY(0)';">Thưởng thức ngay →</a>
+<a href="/dynamic-duo-web/ca-tren-ban/" style="display: inline-block; background: var(--sky); color: white; padding: 10px 30px; border-radius: var(--r-pill); font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(2,132,199,0.2);" onmouseover="this.style.background='var(--sky2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='var(--sky)'; this.style.transform='translateY(0)';">Thưởng thức ngay →</a>
 </div>
 <div style="margin-top: 40px; padding: 24px; background: var(--sky-pale); border-radius: var(--r-md); border: 1px solid rgba(186,230,253,.5);">
 <p style="font-size: .85rem; color: var(--text-mid); margin: 0; text-align: center; line-height: 1.8;">

@@ -6,6 +6,7 @@ truyen_name: Nếu đêm nay trời không mưa
 author: Tam Đạo
 chuong: 1
 date: "2026-05-02"
+cover: /dynamic-duo-web/images/biandntkm.png
 tags:
   - "nếu đêm nay trời không mưa"
   - "đam mỹ"

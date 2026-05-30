@@ -1,34 +1,36 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// 1. Quét toàn bộ các file chương (.md)
+// 1. Quét toàn bộ file chương (.md) và file giới thiệu (index.astro)
 const allChaps = Object.values(import.meta.glob('./truyen/**/*.md', { eager: true })) as any[];
+const storyHomePages = Object.keys(import.meta.glob('./truyen/*/index.astro'));
 
-// 2. Lấy danh sách các slug truyện từ thư mục mẹ của file .md
-const slugs = [...new Set(allChaps.map(c => {
-  const pathParts = c.url.split('/').filter(Boolean);
-  return pathParts[pathParts.length - 2]; 
-}))];
+// 2. Lấy danh sách slug từ các thư mục có file index.astro (Mỗi thư mục truyện đều có file này)
+const slugs = storyHomePages.map(path => {
+  const parts = path.split('/');
+  return parts[parts.length - 2];
+});
 
 // 3. Xây dựng dữ liệu storiesData
 const storiesData = slugs.map(slug => {
-  // Lọc các chương thuộc truyện này
+  // Lọc các chương của truyện này
   const storyChaps = allChaps.filter(c => c.url.includes(`/truyen/${slug}/`));
   
-  // Tìm file có chứa thông tin truyen_name (thường là chương 0 hoặc chương 1)
+  // Tìm thông tin từ chương (nếu có)
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
 
-  // Tạo tên truyện dự phòng từ slug (ví dụ: ha-chay-dong-hoang -> Ha Chay Dong Hoang)
+  // Tên truyện dự phòng từ slug (Ví dụ: 'vat-de-vo' -> 'Vật Dễ Vỡ')
   const fallbackTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
   const chapCount = storyChaps.filter(c => c.frontmatter?.chuong !== undefined && c.frontmatter?.chuong !== 0).length;
   const tongSoChuong = fm.tong_so_chuong || 0;
+  
+  // Trạng thái truyện
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
 
   return {
     id: slug,
-    // ƯU TIÊN: truyen_name -> fallbackTitle (không dùng fm.title vì đó là tên chương)
     title: fm.truyen_name || fallbackTitle, 
     author: fm.author || 'Ẩn danh',
     cover: `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
@@ -43,7 +45,7 @@ const storiesData = slugs.map(slug => {
 // 4. Phân loại mâm truyện
 const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0);
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
-const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
+const caTrenTroiList = storiesData.filter(s => s.chapCount === 0); // Chưa có chương nào = Cá trên trời
 
 // 5. Mới cập nhật
 const recentChaps = allChaps

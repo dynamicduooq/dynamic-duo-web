@@ -6,6 +6,7 @@ truyen_name: Hạ cháy đồng hoang
 chuong: 1
 date: "2026-05-17"
 author: Hỉ Thượng Mi Sao
+tong_so_chuong: 109
 tags:
   - "hạ cháy đồng hoang"
   - "đam mỹ"

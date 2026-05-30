@@ -5,7 +5,7 @@ chuong: 1
 tags: ["thiếu đế xuân tâm", "đam mỹ", "cổ đại", "chua xót"]
 author: Hàn Nha
 truyen_name: Thiếu Đế xuân tâm
-cover: /dynamic-duo-web/images/biatdxt.png
+tong_so_chuong: 80
 editor_note: |
   --
   [1] Các Hoàng đế (đặc biệt là triều Minh) thường dùng từ "Đại bạn" (大伴) để gọi những thái giám thân tín.

@@ -5,6 +5,7 @@ truyen_id: "tnctst"
 author: Hạ Nhất Thiên
 truyen_name: Tôi nghĩ chúng tôi sắp chia tay
 chuong: 1
+tong_so_chuong: 74
 date: "2026-05-29"
 description: ""
 draft: false

@@ -2,6 +2,7 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 1: \"Có phải đã gặp ở đâu rồi không\""
 truyen_id: "hcdh"
+truyen_name: Hạ cháy đồng hoang
 chuong: 1
 date: "2026-05-17"
 tags:

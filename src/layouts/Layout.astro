@@ -317,9 +317,40 @@ if (isNovelPage) {
     .aa-btn.play:hover { background: var(--sky2); }
     .aa-btn.pause { background: #f59e0b; color: #fff; }
     .aa-btn.stop { background: #ef4444; color: #fff; }
-    .aa-btn-tool { background: none; border: 1px solid var(--sky-light); border-radius: 8px; cursor: pointer; padding: 4px 8px; font-size: 1rem; transition: var(--t); }
-    .aa-btn-tool:hover { background: var(--sky-light); }
+.aa-btn-tool { 
+      background: #fff; 
+      border: 1px solid var(--sky-light); 
+      border-radius: 8px; 
+      cursor: pointer; 
+      padding: 6px 12px; 
+      /* Fix font và size ở đây */
+      font-family: 'Newsreader', serif;
+      font-size: 0.75rem; 
+      font-weight: 600;
+      color: var(--sky-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--t); 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
     
+    [data-theme="dark"] .aa-btn-tool {
+      background: rgba(15,35,54,0.8);
+      border-color: rgba(126,200,227,0.2);
+      color: #a8daf0;
+    }
+
+    .aa-btn-tool:hover { 
+      background: var(--sky-pale); 
+      border-color: var(--sky);
+      color: var(--sky);
+      transform: translateY(-1px);
+    }
+    
+    .aa-btn-tool:active {
+      transform: translateY(0);
+    }    
     .aa-settings-collapse { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-top: 0px solid transparent; }
     .aa-settings-collapse.open { max-height: 200px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--sky-light); }
     .aa-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -898,11 +929,16 @@ if (isNovelPage) {
               <div class="aa-field"><label>Giọng:</label><select id="aaVoiceSelect"></select></div>
               <div class="aa-field"><label>Tốc độ:</label><input type="range" id="aaRateRange" min="0.5" max="2" value="1" step="0.1" /></div>
               <!-- Nút tua đưa vào đây -->
-              <div class="aa-field" style="grid-column: 1 / -1; justify-content: center; gap: 20px; padding-top: 10px; border-top: 1px solid rgba(186,230,253,0.2);">
-                <button type="button" id="btnPrevSent" class="aa-btn-tool">⏪ Câu trước</button>
-                <button type="button" id="btnNextSent" class="aa-btn-tool">Câu sau ⏩</button>
-              </div>
-            </div>
+<!-- Khu vực nút tua đã được căn chỉnh -->
+              <div class="aa-field" style="grid-column: 1 / -1; justify-content: center; gap: 12px; padding-top: 12px; border-top: 1px dashed rgba(186,230,253,0.4); margin-top: 5px;">
+                <button type="button" id="btnPrevSent" class="aa-btn-tool">
+                  <span style="font-size: 0.9rem;">⏪</span> Câu trước
+                </button>
+                <button type="button" id="btnNextSent" class="aa-btn-tool">
+                  Câu sau <span style="font-size: 0.9rem;">⏩</span>
+                </button>
+              </div>         
+</div>
           </div>
         </div>
         )}

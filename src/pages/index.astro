@@ -4,26 +4,32 @@ import Layout from '../layouts/Layout.astro';
 // 1. Quét toàn bộ các file chương (.md)
 const allChaps = Object.values(import.meta.glob('./truyen/**/*.md', { eager: true })) as any[];
 
-// 2. Lấy danh sách các slug truyện từ thư mục
+// 2. Lấy danh sách các slug truyện từ thư mục mẹ của file .md
 const slugs = [...new Set(allChaps.map(c => {
-  const parts = c.url.split('/');
-  return parts[parts.length - 2]; 
+  const pathParts = c.url.split('/').filter(Boolean);
+  return pathParts[pathParts.length - 2]; 
 }))];
 
-// 3. Xây dựng dữ liệu storiesData (Thay thế hoàn toàn cho storiesList cũ)
+// 3. Xây dựng dữ liệu storiesData
 const storiesData = slugs.map(slug => {
+  // Lọc các chương thuộc truyện này
   const storyChaps = allChaps.filter(c => c.url.includes(`/truyen/${slug}/`));
-  // Tìm chương đại diện để lấy thông tin truyện (Author, Tags...)
-  const representativeChap = storyChaps.find(c => c.frontmatter?.chuong === 0) || storyChaps[0];
-  const fm = representativeChap?.frontmatter || {};
+  
+  // Tìm file có chứa thông tin truyen_name (thường là chương 0 hoặc chương 1)
+  const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
+  const fm = infoFile?.frontmatter || {};
 
-  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong !== 0).length;
+  // Tạo tên truyện dự phòng từ slug (ví dụ: ha-chay-dong-hoang -> Ha Chay Dong Hoang)
+  const fallbackTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong !== undefined && c.frontmatter?.chuong !== 0).length;
   const tongSoChuong = fm.tong_so_chuong || 0;
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
 
   return {
     id: slug,
-    title: fm.truyen_name || fm.title || 'Chưa có tên',
+    // ƯU TIÊN: truyen_name -> fallbackTitle (không dùng fm.title vì đó là tên chương)
+    title: fm.truyen_name || fallbackTitle, 
     author: fm.author || 'Ẩn danh',
     cover: `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
     tags: fm.tags || [],
@@ -39,7 +45,7 @@ const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.chapCount > 0
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
 const caTrenTroiList = storiesData.filter(s => !s.isCompleted && s.chapCount === 0);
 
-// 5. TỰ ĐỘNG HÓA MỤC "MỚI CẬP NHẬT"
+// 5. Mới cập nhật
 const recentChaps = allChaps
   .filter((c: any) => c.frontmatter?.date && c.frontmatter?.draft !== true)
   .sort((a: any, b: any) => {

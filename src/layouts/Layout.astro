@@ -2,81 +2,72 @@
 const { frontmatter } = Astro.props;
 import settings from '../data/settings.json';
 
-// 1. Cấu hình đường dẫn và trạng thái trang
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
 const currentTruyenId = frontmatter?.truyen_id;
 
-// Hàm chuẩn hóa URL để so sánh chính xác (Xóa dấu / cuối và index.html)
-const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index\.html$/, '').replace(/\/index$/, '');
-
-// 2. Lấy toàn bộ file Markdown trong project
+// 1. Quét toàn bộ file .md VÀ danh sách thư mục (để lấy cả truyện chưa có chương)
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
+const storyFolders = Object.keys(import.meta.glob('../pages/truyen/*/index.astro'));
 
-// 3. TỰ ĐỘNG HÓA DANH SÁCH TRUYỆN CHO MENU (NAVBAR)
-// Lấy danh sách tên thư mục (slug) duy nhất nằm trong /truyen/
-const slugs = [...new Set(allPosts.map(p => {
-  const url = p.url || "";
-  if (!url.includes('/truyen/')) return null;
-  const parts = url.split('/');
-  const truyenIdx = parts.indexOf('truyen');
-  return parts[truyenIdx + 1]; // Lấy folder ngay sau folder 'truyen'
-}))].filter(Boolean) as string[];
+// 2. Lấy danh sách slug duy nhất
+const slugs = [...new Set([
+  ...allPosts.map(p => {
+    const parts = (p.url || "").split('/').filter(Boolean);
+    return parts[parts.indexOf('truyen') + 1];
+  }),
+  ...storyFolders.map(path => {
+    const parts = path.split('/');
+    return parts[parts.indexOf('truyen') + 1];
+  })
+])].filter(Boolean) as string[];
 
+// 3. Xây dựng dữ liệu cho Navbar
 const navStories = slugs.map(slug => {
   const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
-  
-  // Tìm file thông tin (ưu tiên file có truyen_name, nếu không lấy file đầu tiên)
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
 
   const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
   const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
   
-  // PHÂN LOẠI TRẠNG THÁI TRIỆT ĐỂ
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
-  const isUpcoming = chapCount === 0;
   const isOngoing = chapCount > 0 && !isCompleted;
+  const isUpcoming = chapCount === 0;
 
   return {
-    title: fm.truyen_name || slug.replace(/-/g, ' ').toUpperCase(),
+    title: fm.truyen_name || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
     url: `/dynamic-duo-web/truyen/${slug}/`,
-    isCompleted, isUpcoming, isOngoing
+    isCompleted, isOngoing, isUpcoming
   };
 });
 
-// Phân loại cho 3 mâm cá trên Navbar
 const navDuoiNuoc = navStories.filter(s => s.isOngoing);
-const navTrenBan  = navStories.filter(s => s.isCompleted);
+const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
-
-// 4. LOGIC ĐIỀU HƯỚNG CHƯƠNG (TRƯỚC/SAU)
+// LOGIC ĐIỀU HƯỚNG CHƯƠNG (Sửa lỗi sắp xếp 20 sau 10)
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
 let currentFolder = "";
 
 if (isNovelPage) {
+  const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
-  // Lấy đường dẫn thư mục mẹ của chương hiện tại
   currentFolder = cur.substring(0, cur.lastIndexOf('/'));
 
-  // Lọc các chương cùng thư mục, sắp xếp theo số
   chapters = allPosts
     .filter((p: any) => {
       const pUrl = normPath(p.url || '');
-      const pFolder = pUrl.substring(0, pUrl.lastIndexOf('/'));
-      return pFolder === currentFolder && p.frontmatter?.chuong !== undefined && p.frontmatter?.chuong !== 0;
+      return pUrl.substring(0, pUrl.lastIndexOf('/')) === currentFolder && p.frontmatter?.chuong;
     })
     .sort((a: any, b: any) => Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong));
 
-  // Tìm vị trí chương hiện tại
   const idx = chapters.findIndex((c: any) => normPath(c.url || '') === cur);
-  
   if (idx > 0) prevChap = chapters[idx - 1];
-  if (idx >= 0 && idx < chapters.length - 1) nextChap = chapters[idx + 1];
+  if (idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
 ---
 <!DOCTYPE html>
@@ -188,7 +179,7 @@ if (isNovelPage) {
 
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-/* ── NAVBAR & DROPDOWN (FIXED HOVER) ── */
+    /* ── NAVBAR & DROPDOWN (FIXED HOVER) ── */
     nav { 
       position:fixed; top:0; left:0; right:0; z-index:500; 
       display:flex; align-items:center; height:56px; padding:0 28px; 
@@ -206,26 +197,19 @@ if (isNovelPage) {
     }
     [data-theme="dark"] .nav-logo { color:#a8daf0; }
 
-    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 12px; }
-
-    .nav-item { 
-      position:relative; 
-      display: inline-flex;
-      align-items: center;
-      height: 56px; /* Chiều cao bằng thanh nav để không có khe hở */
-    }
-
-    /* "Cây cầu tàng hình" nối giữa nút và menu thả xuống */
-    .nav-item::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      height: 15px; /* Khoảng cách đệm */
-      background: transparent;
-      display: block;
-      z-index: 590;
+    /* SỬA LỖI NAVBAR HOVER */
+    .nav-links { display:flex; align-items:center; gap:5px; }
+    .nav-item { position:relative; display:flex; align-items:center; height:56px; }
+    
+    /* "Cầu nối" tàng hình giúp hover không bị mất chuột khi di chuyển xuống menu */
+    .nav-item::before {
+      content: ""; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 70px; /* Tạo vùng đệm 70px để giữ menu luôn mở khi chuột rà qua */
+      z-index: -1;
     }
 
     .nav-item > a, .nav-btn { 
@@ -303,9 +287,17 @@ if (isNovelPage) {
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
 
+    /* SỬA LỖI THỪA NÚT THEME MOBILE */
+    #navThemeBtnMobile { display: none; }
+    @media(max-width:768px){ 
+      .nav-links { display:none; }
+      #navThemeBtnMobile { display: flex; }
+    }
+
     .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
     .nav-hamburger span { display:block; width:22px; height:2px; background:var(--sky-dark); border-radius:2px; transition:var(--t); }
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
+    @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
     /* ── LAYOUT & CONTENT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
@@ -324,6 +316,10 @@ if (isNovelPage) {
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
+    /* CĂN TRÁI TIÊU ĐỀ TRONG TRANG MỤC LỤC */
+    .story-title { text-align: left !important; }
+    .story-info { text-align: left; }
+
     /* ── TAGS ── */
     .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:100px; }
     .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
@@ -331,8 +327,7 @@ if (isNovelPage) {
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
 
-    /* ── CHAP NAV ── */
-/* ── CHAP NAV - GIAO DIỆN MỚI ── */
+    /* ── CHAP NAV - GIAO DIỆN MỚI ── */
     :root {
       --blue-main: #0288d1;
       --blue-light: #e1f5fe;
@@ -415,6 +410,7 @@ if (isNovelPage) {
     .chap-dd-list.up { top: auto; bottom: calc(100% + 6px); }
     .chap-dd-list a { display: block; padding: 8px 12px; font-size: .8rem; color: var(--text-mid); border-bottom: 1px solid rgba(186,230,253,.2); }
     .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
+
     /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     [data-theme="dark"] .auto-audio-player { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.3); }
@@ -428,13 +424,12 @@ if (isNovelPage) {
     .aa-btn.play:hover { background: var(--sky2); }
     .aa-btn.pause { background: #f59e0b; color: #fff; }
     .aa-btn.stop { background: #ef4444; color: #fff; }
-.aa-btn-tool { 
+    .aa-btn-tool { 
       background: #fff; 
       border: 1px solid var(--sky-light); 
       border-radius: 8px; 
       cursor: pointer; 
       padding: 6px 12px; 
-      /* Fix font và size ở đây */
       font-family: 'Newsreader', serif;
       font-size: 0.75rem; 
       font-weight: 600;
@@ -906,6 +901,7 @@ if (isNovelPage) {
   .chap-dd-wrap { 
     flex: 1.4; 
   }
+}
 </style>
 </head>
 <body>
@@ -917,53 +913,38 @@ if (isNovelPage) {
   <div class="nav-links" id="navLinks">
     <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
     
-    <!-- MỤC CÁ DƯỚI NƯỚC -->
     <div class="nav-item">
       <button class="nav-btn">Cá dưới nước ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
         <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
         <div class="dd-divider"></div>
-        <div class="dd-section-title">Đang đăng</div>
-        {navDuoiNuoc.map(story => (
-          <a href={story.url} class="dd-item">✦ {story.title}</a>
-        ))}
-        {navDuoiNuoc.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
+        {navDuoiNuoc.map(s => <a href={s.url} class="dd-item">✦ {s.title}</a>)}
       </div>
     </div>
 
-    <!-- MỤC CÁ TRÊN BÀN -->
     <div class="nav-item">
       <button class="nav-btn">Cá trên bàn ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
         <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
         <div class="dd-divider"></div>
-        <div class="dd-section-title">Hoàn thành</div>
-        {navTrenBan.map(story => (
-          <a href={story.url} class="dd-item">✦ {story.title}</a>
-        ))}
-        {navTrenBan.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
+        {navTrenBan.map(s => <a href={s.url} class="dd-item">✦ {s.title}</a>)}
       </div>
     </div>
 
-    <!-- MỤC CÁ TRÊN TRỜI -->
     <div class="nav-item">
       <button class="nav-btn">Cá trên trời ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
         <a href="/dynamic-duo-web/ca-tren-troi/" class="dd-item">🌤️ Tất cả dự án</a>
         <div class="dd-divider"></div>
-        <div class="dd-section-title">Sắp đào</div>
-        {navTrenTroi.map(story => (
-          <a href={story.url} class="dd-item">✧ {story.title}</a>
-        ))}
-        {navTrenTroi.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
+        {navTrenTroi.map(s => <a href={s.url} class="dd-item">✧ {s.title}</a>)}
       </div>
     </div>
 
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
+    <button class="nav-theme-btn" id="navThemeBtn">🌙</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
@@ -972,6 +953,7 @@ if (isNovelPage) {
     </button>
   </div>
 </nav>
+
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
   
@@ -1010,12 +992,10 @@ if (isNovelPage) {
 
 {isNovelPage && (
     <div class="chap-nav-container">
-      <!-- Hàng 1: Mục lục nằm riêng ở giữa -->
       <div class="nav-toc-row">
         <a href={`${currentFolder}/`} class="nav-toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
       </div>
 
-      <!-- Hàng 2: 3 nút chương -->
       <div class="nav-controls-row">
         {prevChap
           ? <a href={prevChap.url} class="chap-pn">← Trước</a>
@@ -1062,8 +1042,6 @@ if (isNovelPage) {
             <div class="aa-settings-grid">
               <div class="aa-field"><label>Giọng:</label><select id="aaVoiceSelect"></select></div>
               <div class="aa-field"><label>Tốc độ:</label><input type="range" id="aaRateRange" min="0.5" max="2" value="1" step="0.1" /></div>
-              <!-- Nút tua đưa vào đây -->
-<!-- Khu vực nút tua đã được căn chỉnh -->
               <div class="aa-field" style="grid-column: 1 / -1; justify-content: center; gap: 12px; padding-top: 12px; border-top: 1px dashed rgba(186,230,253,0.4); margin-top: 5px;">
                 <button type="button" id="btnPrevSent" class="aa-btn-tool">
                   <span style="font-size: 0.9rem;">⏪</span> Câu trước
@@ -1085,7 +1063,7 @@ if (isNovelPage) {
             <div class="note-text">{frontmatter.editor_note}</div>
           </div>
         )}
-      </div>      
+      </div>     
       
       <div class="chap-like-area">
         <button class="chap-like-btn" id="btnLikeChapter">
@@ -1124,7 +1102,6 @@ if (isNovelPage) {
 
 {isNovelPage && (
     <div class="chap-nav-container" style="margin-top:36px;">
-      <!-- Chỉ giữ lại hàng 3 nút điều hướng -->
       <div class="nav-controls-row">
         {prevChap
           ? <a href={prevChap.url} class="chap-pn">← Trước</a>
@@ -1617,3 +1594,5 @@ function setupChapComments(){
   });
 }
 </script>
+</body>
+</html>

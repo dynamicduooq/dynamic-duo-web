@@ -2,65 +2,79 @@
 const { frontmatter } = Astro.props;
 import settings from '../data/settings.json';
 
+// 1. Cấu hình đường dẫn và trạng thái trang
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
 const currentTruyenId = frontmatter?.truyen_id;
 
-// --- TỰ ĐỘNG HÓA NAVIGATION ---
-// 1. Lấy tất cả file chương (.md)
+// Hàm chuẩn hóa URL để so sánh chính xác (Xóa dấu / cuối và index.html)
+const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index\.html$/, '').replace(/\/index$/, '');
+
+// 2. Lấy toàn bộ file Markdown trong project
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
 
-// 2. Lấy danh sách slug truyện (tên thư mục)
+// 3. TỰ ĐỘNG HÓA DANH SÁCH TRUYỆN CHO MENU (NAVBAR)
+// Lấy danh sách tên thư mục (slug) duy nhất nằm trong /truyen/
 const slugs = [...new Set(allPosts.map(p => {
-  const parts = (p.url || "").split('/').filter(Boolean);
-  return parts[parts.length - 2];
-}))].filter(Boolean);
+  const url = p.url || "";
+  if (!url.includes('/truyen/')) return null;
+  const parts = url.split('/');
+  const truyenIdx = parts.indexOf('truyen');
+  return parts[truyenIdx + 1]; // Lấy folder ngay sau folder 'truyen'
+}))].filter(Boolean) as string[];
 
-// 3. Xây dựng dữ liệu truyện cho Menu
 const navStories = slugs.map(slug => {
-  const storyChaps = allPosts.filter(p => p.url?.includes(`/${slug}/`));
+  const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
+  
+  // Tìm file thông tin (ưu tiên file có truyen_name, nếu không lấy file đầu tiên)
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
 
   const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
   const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
+  
+  // PHÂN LOẠI TRẠNG THÁI TRIỆT ĐỂ
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
+  const isUpcoming = chapCount === 0;
+  const isOngoing = chapCount > 0 && !isCompleted;
 
   return {
     title: fm.truyen_name || slug.replace(/-/g, ' ').toUpperCase(),
     url: `/dynamic-duo-web/truyen/${slug}/`,
-    chapCount,
-    isCompleted
+    isCompleted, isUpcoming, isOngoing
   };
 });
 
-// 4. Phân loại cho 3 mục Menu
-const navDuoiNuoc = navStories.filter(s => !s.isCompleted && s.chapCount > 0);
-const navTrenBan = navStories.filter(s => s.isCompleted);
-const navTrenTroi = navStories.filter(s => s.chapCount === 0);
+// Phân loại cho 3 mâm cá trên Navbar
+const navDuoiNuoc = navStories.filter(s => s.isOngoing);
+const navTrenBan  = navStories.filter(s => s.isCompleted);
+const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
-// --- LOGIC ĐIỀU HƯỚNG CHƯƠNG (GIỮ NGUYÊN) ---
+
+// 4. LOGIC ĐIỀU HƯỚNG CHƯƠNG (TRƯỚC/SAU)
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
 let currentFolder = "";
 
 if (isNovelPage) {
-  const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
+  // Lấy đường dẫn thư mục mẹ của chương hiện tại
   currentFolder = cur.substring(0, cur.lastIndexOf('/'));
 
+  // Lọc các chương cùng thư mục, sắp xếp theo số
   chapters = allPosts
     .filter((p: any) => {
-      if (p.frontmatter?.chuong === undefined || p.frontmatter?.chuong === 0) return false;
       const pUrl = normPath(p.url || '');
       const pFolder = pUrl.substring(0, pUrl.lastIndexOf('/'));
-      return pFolder === currentFolder;
+      return pFolder === currentFolder && p.frontmatter?.chuong !== undefined && p.frontmatter?.chuong !== 0;
     })
     .sort((a: any, b: any) => Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong));
 
+  // Tìm vị trí chương hiện tại
   const idx = chapters.findIndex((c: any) => normPath(c.url || '') === cur);
+  
   if (idx > 0) prevChap = chapters[idx - 1];
   if (idx >= 0 && idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
@@ -174,30 +188,117 @@ if (isNovelPage) {
 
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    /* ── NAVBAR ── */
-    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); }
-    [data-theme="dark"] nav { background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); }
-    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; }
-    [data-theme="dark"] .nav-logo { color:#a8daf0; }
-    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 12px; }
-    .nav-item { position:relative; }
-    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
-    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .nav-item > a, [data-theme="dark"] .nav-btn { color:#8fbcd4; }
-    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { color:#7ec8e3; background:rgba(126,200,227,.1); }
+/* ── NAVBAR & DROPDOWN (FIXED HOVER) ── */
+    nav { 
+      position:fixed; top:0; left:0; right:0; z-index:500; 
+      display:flex; align-items:center; height:56px; padding:0 28px; 
+      background:rgba(255,255,255,.97); backdrop-filter:blur(16px); 
+      border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); 
+    }
     
-    .dropdown-content { position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition:var(--t); z-index:600; }
+    [data-theme="dark"] nav { 
+      background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); 
+    }
+
+    .nav-logo { 
+      font-family:'Literata',serif; font-weight:600; font-size:.95rem; 
+      color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; 
+    }
+    [data-theme="dark"] .nav-logo { color:#a8daf0; }
+
+    .nav-links { display:flex; align-items:center; gap:2px; margin-right: 12px; }
+
+    .nav-item { 
+      position:relative; 
+      display: inline-flex;
+      align-items: center;
+      height: 56px; /* Chiều cao bằng thanh nav để không có khe hở */
+    }
+
+    /* "Cây cầu tàng hình" nối giữa nút và menu thả xuống */
+    .nav-item::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 15px; /* Khoảng cách đệm */
+      background: transparent;
+      display: block;
+      z-index: 590;
+    }
+
+    .nav-item > a, .nav-btn { 
+      font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); 
+      letter-spacing:1px; text-transform:uppercase; padding:6px 12px; 
+      border-radius:var(--r-pill); display:inline-flex; align-items:center; 
+      gap:5px; transition:var(--t); cursor:pointer; background:none; 
+      border:none; white-space:nowrap; 
+    }
+
+    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { 
+      background:var(--sky-pale); color:var(--sky); 
+    }
+    [data-theme="dark"] .nav-item > a, [data-theme="dark"] .nav-btn { color:#8fbcd4; }
+    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, 
+    [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { 
+      color:#7ec8e3; background:rgba(126,200,227,.1); 
+    }
+    
+    /* KHUNG MENU THẢ XUỐNG */
+    .dropdown-content { 
+      position:absolute; 
+      top: 100%; /* Sát mép dưới của nav-item */
+      left:50%; 
+      transform:translateX(-50%) translateY(8px); 
+      min-width:240px; 
+      background:var(--bg-card); 
+      border:1px solid var(--border-card); 
+      border-radius:var(--r-md); 
+      box-shadow:0 16px 48px rgba(2,132,199,.13); 
+      padding:8px 6px; 
+      opacity:0; 
+      visibility:hidden; 
+      pointer-events:none; 
+      transition: all 0.2s ease-out; 
+      z-index:600; 
+    }
+
     [data-theme="dark"] .dropdown-content { box-shadow:0 16px 48px rgba(0,0,0,.4); }
-    .nav-item:hover .dropdown-content { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
-    .dd-section-title { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:6px 12px 3px; }
+
+    /* Hiệu ứng khi lướt chuột qua */
+    .nav-item:hover .dropdown-content { 
+      opacity:1; 
+      visibility:visible; 
+      pointer-events:auto; 
+      transform:translateX(-50%) translateY(0); 
+    }
+
+    /* Các mục bên trong Dropdown */
+    .dd-section-title { 
+      font-size:.62rem; letter-spacing:2px; text-transform:uppercase; 
+      color:var(--text-dim); padding:6px 12px 3px; 
+    }
     [data-theme="dark"] .dd-section-title { color:#3d6a82; }
-    .dd-item { display:flex; align-items:center; gap:7px; padding:7px 12px; font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); }
+
+    .dd-item { 
+      display:flex; align-items:center; gap:7px; padding:7px 12px; 
+      font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); 
+      transition:var(--t); 
+    }
     .dd-item:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .dd-item { color:#8fbcd4; }
     [data-theme="dark"] .dd-item:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
+
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
-    .nav-theme-btn { font-size:.8rem; width:32px; height:32px; border-radius:50%; border:1px solid var(--border-card); background:none; color:var(--text-mid); cursor:pointer; transition:var(--t); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    /* Theme Button & Hamburger */
+    .nav-theme-btn { 
+      font-size:.8rem; width:32px; height:32px; border-radius:50%; 
+      border:1px solid var(--border-card); background:none; color:var(--text-mid); 
+      cursor:pointer; transition:var(--t); display:inline-flex; 
+      align-items:center; justify-content:center; flex-shrink:0; 
+    }
     .nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
@@ -205,23 +306,6 @@ if (isNovelPage) {
     .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
     .nav-hamburger span { display:block; width:22px; height:2px; background:var(--sky-dark); border-radius:2px; transition:var(--t); }
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
-    
-    .mobile-menu { display:none; position:fixed; top:56px; left:0; right:0; background:rgba(255,255,255,.99); backdrop-filter:blur(16px); border-bottom:1px solid var(--border-card); padding:10px 16px 18px; z-index:490; flex-direction:column; gap:2px; max-height:calc(100vh - 56px); overflow-y:auto; }
-    [data-theme="dark"] .mobile-menu { background:rgba(8,18,32,.99); border-color:rgba(126,200,227,.18); }
-    .mobile-menu.open { display:flex; }
-    .mobile-menu a { padding:9px 12px; font-size:.88rem; color:var(--text-mid); border-radius:var(--r-sm); display:block; transition:var(--t); }
-    .mobile-menu a:hover { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .mobile-menu a { color:#8fbcd4; }
-    [data-theme="dark"] .mobile-menu a:hover { background:rgba(126,200,227,.1); color:#a8daf0; }
-    .mobile-section-title { font-size:.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:10px 12px 3px; }
-    [data-theme="dark"] .mobile-section-title { color:#3d6a82; }
-    
-    #navThemeBtnMobile { display: none; }
-    @media(max-width:700px){ 
-      .nav-links{display:none;}  
-      #navThemeBtnMobile { display: flex; } 
-      .nav-hamburger { display: flex; } 
-    }
 
     /* ── LAYOUT & CONTENT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
@@ -833,46 +917,40 @@ if (isNovelPage) {
   <div class="nav-links" id="navLinks">
     <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
     
-    <!-- MỤC CÁ DƯỚI NƯỚC -->
     <div class="nav-item">
       <button class="nav-btn">Cá dưới nước ▾</button>
       <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Đang đăng</div>
         {navDuoiNuoc.map(story => (
           <a href={story.url} class="dd-item">✦ {story.title}</a>
         ))}
       </div>
     </div>
 
-    <!-- MỤC CÁ TRÊN BÀN -->
     <div class="nav-item">
       <button class="nav-btn">Cá trên bàn ▾</button>
       <div class="dropdown-content">
-        <div class="dd-section-title">Trang mục</div>
-        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
-        <div class="dd-divider"></div>
-        <div class="dd-section-title">Hoàn thành</div>
         {navTrenBan.map(story => (
           <a href={story.url} class="dd-item">✦ {story.title}</a>
         ))}
       </div>
     </div>
 
-    <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
-    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
+    <!-- THÊM HOVER CHO CÁ TRÊN TRỜI -->
+<div class="nav-item">
+  <button class="nav-btn">Cá trên trời ▾</button>
+  <div class="dropdown-content">
+    <a href="/dynamic-duo-web/ca-tren-troi/" class="dd-item">🌤️ Tất cả dự án sắp tới</a>
+    <div class="dd-divider"></div>
+    {navTrenTroi.map(story => (
+      <a href={story.url} class="dd-item">✧ {story.title}</a>
+    ))}
+    {navTrenTroi.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
   </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+</div>
+    <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
+    <button class="nav-theme-btn" id="navThemeBtn">🌙</button>
   </div>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
   

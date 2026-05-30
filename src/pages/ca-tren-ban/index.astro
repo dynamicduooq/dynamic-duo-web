@@ -1,37 +1,33 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-// 1. Quét toàn bộ file chương trong kho /truyen/
 const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
 
-// 2. Khai báo danh sách truyện
-const storiesList = [
-  { id: 'quan-he-ban-cung-phong', title: 'Quan hệ bạn cùng phòng', author: 'Hạnh Lan', cover: '/dynamic-duo-web/images/biaqhbcp.png', tags: ['niên hạ', 'đam mỹ', 'trai thẳng'], tong_so_chuong: 72, desc: 'Bạn cùng phòng của tôi hình như là gay...' },
-  { id: 'ha-chay-dong-hoang', title: 'Hạ cháy đồng hoang', author: 'Hỉ Thượng Mi Sao', cover: '/dynamic-duo-web/images/biahachaydonghoang.png', tags: ['mất trí nhớ', 'chua xót', 'đồng quê'], tong_so_chuong: 109, desc: 'Mùa hè năm ấy, cánh đồng hoang cháy rực...' },
-  { id: 'neu-dem-nay-troi-khong-mua', title: 'Nếu đêm nay trời không mưa', author: 'Tam Đạo', cover: '/dynamic-duo-web/images/bianeudemnaytroikhongmua.png', tags: ['HE', 'gương vỡ lại lành', 'drama motip cũ'], tong_so_chuong: 76, desc: '' },
-  { id: 'toi-nghi-chung-toi-sap-chia-tay', title: 'Tôi nghĩ chúng tôi sắp chia tay', author: 'Hạ Nhất Thiên', cover: '/dynamic-duo-web/images/biatoinghichungtoisapchiatay.png', tags: ['HE', 'chua xót', '1v1'], tong_so_chuong: 74, desc: '' },
-  { id: 'vat-de-vo', title: 'Vật dễ vỡ', author: '??', cover: '', tags: ['đam mỹ'], tong_so_chuong: 0, desc: '' },
-  { id: 'thieu-de-xuan-tam', title: 'Thiếu đế xuân tâm', author: '??', cover: '', tags: ['đam mỹ', 'cổ đại'], tong_so_chuong: 0, desc: '' }
-];
+const slugs = [...new Set(allChaps.map(p => {
+  const parts = (p.url || "").split('/').filter(Boolean);
+  return parts[parts.indexOf('truyen') + 1];
+}))].filter(Boolean);
 
-// 3. Thuật toán tự động đếm chương và phân loại
-const storiesData = storiesList.map(story => {
-  const chaps = allChaps.filter((c: any) => c.url?.includes(`/truyen/${story.id}/`) && c.frontmatter?.chuong);
-  const chapCount = chaps.length;
-  const isCompleted = story.tong_so_chuong > 0 && chapCount >= story.tong_so_chuong;
+const storiesData = slugs.map(slug => {
+  const storyChaps = allChaps.filter(p => p.url?.includes(`/truyen/${slug}/`));
+  const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
+  const fm = infoFile?.frontmatter || {};
+  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
+  const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
   
   return { 
-    ...story, 
-    chapCount, 
-    isCompleted, 
-    url: `/dynamic-duo-web/truyen/${story.id}/` 
+    title: fm.truyen_name || slug,
+    author: fm.author || 'Ẩn danh',
+    cover: fm.cover || `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
+    tags: fm.tags || [],
+    desc: fm.description || '',
+    isCompleted: tongSoChuong > 0 && chapCount >= tongSoChuong,
+    url: `/dynamic-duo-web/truyen/${slug}/`,
+    tong_so_chuong: tongSoChuong
   };
 });
 
-// 4. Các mâm truyện tự động lọc dựa vào SỐ CHƯƠNG THỰC TẾ
 const caTrenBanList = storiesData.filter(s => s.isCompleted);
 ---
-
 <Layout frontmatter={{ title: 'Cá trên bàn' }}>
   <style>
     .page-hero { text-align: center; padding: 10px 0 36px; }

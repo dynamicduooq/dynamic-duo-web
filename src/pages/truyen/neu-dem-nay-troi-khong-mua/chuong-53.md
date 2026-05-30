@@ -1,11 +1,15 @@
 ---
+layout: ../../../layouts/Layout.astro
 title: "Chương 53"
 truyen_id: "ndntkm"
-date: "2026-05-18"
+chuong: 53
+date: "2026-05-02"
 tags:
-  - "neu-dem-nay-troi-khong-mua"
+  - "nếu đêm nay trời không mưa"
+  - "đam mỹ"
+  - "hiện đại"
+  - "HE"
 ---
-
 ## **Chương** 53
 
 Khi mấy người Hạ Tranh đến văn phòng luật Quân Bình, hai đối tác cấp cao đã có mặt ở đó.

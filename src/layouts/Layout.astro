@@ -917,51 +917,72 @@ if (isNovelPage) {
   <div class="nav-links" id="navLinks">
     <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
     
+    <!-- MỤC CÁ DƯỚI NƯỚC -->
     <div class="nav-item">
       <button class="nav-btn">Cá dưới nước ▾</button>
       <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Đang đăng</div>
         {navDuoiNuoc.map(story => (
           <a href={story.url} class="dd-item">✦ {story.title}</a>
         ))}
+        {navDuoiNuoc.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
       </div>
     </div>
 
+    <!-- MỤC CÁ TRÊN BÀN -->
     <div class="nav-item">
       <button class="nav-btn">Cá trên bàn ▾</button>
       <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Hoàn thành</div>
         {navTrenBan.map(story => (
           <a href={story.url} class="dd-item">✦ {story.title}</a>
         ))}
+        {navTrenBan.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
       </div>
     </div>
 
-    <!-- THÊM HOVER CHO CÁ TRÊN TRỜI -->
-<div class="nav-item">
-  <button class="nav-btn">Cá trên trời ▾</button>
-  <div class="dropdown-content">
-    <a href="/dynamic-duo-web/ca-tren-troi/" class="dd-item">🌤️ Tất cả dự án sắp tới</a>
-    <div class="dd-divider"></div>
-    {navTrenTroi.map(story => (
-      <a href={story.url} class="dd-item">✧ {story.title}</a>
-    ))}
-    {navTrenTroi.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
-  </div>
-</div>
+    <!-- MỤC CÁ TRÊN TRỜI -->
+    <div class="nav-item">
+      <button class="nav-btn">Cá trên trời ▾</button>
+      <div class="dropdown-content">
+        <div class="dd-section-title">Trang mục</div>
+        <a href="/dynamic-duo-web/ca-tren-troi/" class="dd-item">🌤️ Tất cả dự án</a>
+        <div class="dd-divider"></div>
+        <div class="dd-section-title">Sắp đào</div>
+        {navTrenTroi.map(story => (
+          <a href={story.url} class="dd-item">✧ {story.title}</a>
+        ))}
+        {navTrenTroi.length === 0 && <div class="dd-item" style="opacity:0.5">Đang cập nhật...</div>}
+      </div>
+    </div>
+
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn">🌙</button>
+    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
   
   <div class="mobile-section-title">Cá dưới nước</div>
-  <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
+  <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả truyện đang đăng</a>
   {navDuoiNuoc.map(story => (
     <a href={story.url}>✦ {story.title}</a>
   ))}
 
   <div class="mobile-section-title">Cá trên bàn</div>
-  <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
+  <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả truyện hoàn thành</a>
   {navTrenBan.map(story => (
     <a href={story.url}>✦ {story.title}</a>
   ))}

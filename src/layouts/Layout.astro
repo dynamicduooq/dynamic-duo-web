@@ -5,17 +5,48 @@ import settings from '../data/settings.json';
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
-const currentTruyenId = frontmatter?.truyen_id; // Giữ nguyên để Firebase hoạt động
+const currentTruyenId = frontmatter?.truyen_id;
 
+// --- TỰ ĐỘNG HÓA NAVIGATION ---
+// 1. Lấy tất cả file chương (.md)
+const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
+
+// 2. Lấy danh sách slug truyện (tên thư mục)
+const slugs = [...new Set(allPosts.map(p => {
+  const parts = (p.url || "").split('/').filter(Boolean);
+  return parts[parts.length - 2];
+}))].filter(Boolean);
+
+// 3. Xây dựng dữ liệu truyện cho Menu
+const navStories = slugs.map(slug => {
+  const storyChaps = allPosts.filter(p => p.url?.includes(`/${slug}/`));
+  const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
+  const fm = infoFile?.frontmatter || {};
+
+  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
+  const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
+  const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
+
+  return {
+    title: fm.truyen_name || slug.replace(/-/g, ' ').toUpperCase(),
+    url: `/dynamic-duo-web/truyen/${slug}/`,
+    chapCount,
+    isCompleted
+  };
+});
+
+// 4. Phân loại cho 3 mục Menu
+const navDuoiNuoc = navStories.filter(s => !s.isCompleted && s.chapCount > 0);
+const navTrenBan = navStories.filter(s => s.isCompleted);
+const navTrenTroi = navStories.filter(s => s.chapCount === 0);
+
+// --- LOGIC ĐIỀU HƯỚNG CHƯƠNG (GIỮ NGUYÊN) ---
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
 let currentFolder = "";
 
 if (isNovelPage) {
-  const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
-  
-  // Xử lý đường dẫn để lấy đúng thư mục mẹ
   const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
   const cur = normPath(currentPath);
   currentFolder = cur.substring(0, cur.lastIndexOf('/'));
@@ -27,13 +58,9 @@ if (isNovelPage) {
       const pFolder = pUrl.substring(0, pUrl.lastIndexOf('/'));
       return pFolder === currentFolder;
     })
-    .sort((a: any, b: any) => (a.frontmatter?.chuong ?? 999) - (b.frontmatter?.chuong ?? 999));
+    .sort((a: any, b: any) => Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong));
 
-  const idx = chapters.findIndex((c: any) => {
-    const u = normPath(c.url || '');
-    return u === cur || cur.endsWith(u);
-  });
-  
+  const idx = chapters.findIndex((c: any) => normPath(c.url || '') === cur);
   if (idx > 0) prevChap = chapters[idx - 1];
   if (idx >= 0 && idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
@@ -805,33 +832,38 @@ if (isNovelPage) {
   <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
   <div class="nav-links" id="navLinks">
     <div class="nav-item"><a href="/dynamic-duo-web/">Trang chủ</a></div>
+    
+    <!-- MỤC CÁ DƯỚI NƯỚC -->
     <div class="nav-item">
       <button class="nav-btn">Cá dưới nước ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
         <a href="/dynamic-duo-web/ca-duoi-nuoc/" class="dd-item">🐠 Tất cả truyện</a>
         <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/" class="dd-item">✦ Quan hệ bạn cùng phòng</a>
-        <a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/" class="dd-item">✦ Hạ cháy đồng hoang</a>
+        <div class="dd-section-title">Đang đăng</div>
+        {navDuoiNuoc.map(story => (
+          <a href={story.url} class="dd-item">✦ {story.title}</a>
+        ))}
       </div>
     </div>
+
+    <!-- MỤC CÁ TRÊN BÀN -->
     <div class="nav-item">
       <button class="nav-btn">Cá trên bàn ▾</button>
       <div class="dropdown-content">
         <div class="dd-section-title">Trang mục</div>
         <a href="/dynamic-duo-web/ca-tren-ban/" class="dd-item">🍽️ Tất cả truyện</a>
         <div class="dd-divider"></div>
-        <div class="dd-section-title">Truyện</div>
-        <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/" class="dd-item">✦ Nếu đêm nay trời không mưa</a>
-        <a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/" class="dd-item">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-        <a href="/dynamic-duo-web/truyen/vat-de-vo/" class="dd-item">✦ Vật dễ vỡ</a>
-        <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/" class="dd-item">✦ Thiếu đế xuân tâm</a>
+        <div class="dd-section-title">Hoàn thành</div>
+        {navTrenBan.map(story => (
+          <a href={story.url} class="dd-item">✦ {story.title}</a>
+        ))}
       </div>
     </div>
+
     <div class="nav-item"><a href="/dynamic-duo-web/ca-tren-troi/">Cá trên trời</a></div>
     <div class="nav-item"><a href="/dynamic-duo-web/about/">About</a></div>
-    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện" aria-label="Toggle theme">🌙</button>
+    <button class="nav-theme-btn" id="navThemeBtn" title="Chuyển giao diện">🌙</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button class="nav-theme-btn" id="navThemeBtnMobile" title="Chuyển giao diện">🌙</button>
@@ -843,16 +875,19 @@ if (isNovelPage) {
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
+  
   <div class="mobile-section-title">Cá dưới nước</div>
   <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả</a>
-  <a href="/dynamic-duo-web/truyen/quan-he-ban-cung-phong/">✦ Quan hệ bạn cùng phòng</a>
-  <a href="/dynamic-duo-web/truyen/ha-chay-dong-hoang/">✦ Hạ cháy đồng hoang</a>
+  {navDuoiNuoc.map(story => (
+    <a href={story.url}>✦ {story.title}</a>
+  ))}
+
   <div class="mobile-section-title">Cá trên bàn</div>
   <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả</a>
-  <a href="/dynamic-duo-web/truyen/neu-dem-nay-troi-khong-mua/">✦ Nếu đêm nay trời không mưa</a>
-  <a href="/dynamic-duo-web/truyen/toi-nghi-chung-toi-sap-chia-tay/">✦ Tôi nghĩ chúng tôi sắp chia tay</a>
-  <a href="/dynamic-duo-web/truyen/vat-de-vo/">✦ Vật dễ vỡ</a>
-  <a href="/dynamic-duo-web/truyen/thieu-de-xuan-tam/">✦ Thiếu đế xuân tâm</a>
+  {navTrenBan.map(story => (
+    <a href={story.url}>✦ {story.title}</a>
+  ))}
+
   <div class="mobile-section-title">Khác</div>
   <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
   <a href="/dynamic-duo-web/about/">✉ About</a>

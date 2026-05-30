@@ -118,6 +118,14 @@ const hoan_thanh = true;
       ))}
     </div>
   </div>
+  <div style="background: #fff5f5; padding: 10px; border: 1px solid red; margin-bottom: 20px;">
+  <p><strong>Danh sách tất cả file hệ thống tìm thấy:</strong></p>
+  <ul>
+    {allPosts.map(p => (
+      <li>{p.file.split('/').pop()} - Số chương: {p.frontmatter?.chuong}</li>
+    ))}
+  </ul>
+</div>
 <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
 <div class="public-reviews-widget" data-truyen-id="ndntkm">
   <div class="prw-header">

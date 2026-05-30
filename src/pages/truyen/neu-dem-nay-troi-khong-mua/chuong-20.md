@@ -2,7 +2,7 @@
 layout: ../../../layouts/Layout.astro
 title: "Chương 20"
 truyen_id: "ndntkm"
-chuong: 10
+chuong: 20
 date: "2026-05-02"
 tags:
   - "nếu đêm nay trời không mưa"

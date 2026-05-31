@@ -4,30 +4,37 @@ const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: tr
 
 const slugs = [...new Set(allChaps.map(p => {
   const parts = (p.url || "").split('/').filter(Boolean);
-  return parts[parts.indexOf('truyen') + 1];
+  const idx = parts.indexOf('truyen');
+  return idx !== -1 ? parts[idx + 1] : null;
 }))].filter(Boolean);
 
 const storiesData = slugs.map(slug => {
   const storyChaps = allChaps.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
+  
+  // Đếm số chương (chỉ tính chương > 0)
   const chapCount = storyChaps.filter(c => {
     const cNum = Number(c.frontmatter?.chuong);
-    return !isNaN(cNum) && cNum > 0; // Chỉ đếm nếu là chương 1 trở đi
+    return !isNaN(cNum) && cNum > 0;
   }).length;
   
   const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
   
   return { 
-    title: fm.truyen_name || slug,
-    chapCount, // Số chương thực tế (>0)
+    title: fm.truyen_name || slug.replace(/-/g, ' '),
+    author: fm.author || 'Ẩn danh',
+    cover: fm.cover || `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
+    tags: fm.tags || [],
+    desc: fm.description || '',
+    chapCount,
     tong_so_chuong: tongSoChuong,
     isCompleted: tongSoChuong > 0 && chapCount >= tongSoChuong,
-    url: `/dynamic-duo-web/truyen/${slug}/`,
-    tong_so_chuong: tongSoChuong
+    url: `/dynamic-duo-web/truyen/${slug}/`
   };
 });
 
+// Lọc: Phải có ít nhất 1 chương (khác chương 0) và chưa hoàn thành
 const caDuoiNuocList = storiesData.filter(s => s.chapCount > 0 && !s.isCompleted);
 ---
 

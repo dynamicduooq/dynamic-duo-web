@@ -157,16 +157,18 @@ if (isNovelPage) {
       --border-card:rgba(186,230,253,.5);
     }
 
-    [data-theme="dark"] {
-      --sky:#7ec8e3; --sky2:#a8daf0; --sky-dark:#c5e8f5;
-      --sky-light:#1e4a6a; --sky-pale:#0d2035;
-      --cream:#0a1929;
-      --text-main:#F3F9FF; --text-mid:#8fbcd4; --text-dim:#527a96;
-      --bg-card:#0f2336;
-      --bg-card2:#0d2035;
-      --border-card:rgba(126,200,227,.15);
-    }
+[data-theme="dark"] {
+  --cream:#0a1929;
+  --text-main:#f8fafc; /* Màu trắng xám rất sáng, dễ đọc */
+  --text-mid:#cbd5e1;  /* Màu phụ cũng sáng hơn */
+  --bg-card:#0f2336;
+  --border-card:rgba(126,200,227,.15);
+}
 
+/* Thêm đoạn này để ép màu chữ nội dung truyện cực kỳ rõ ràng */
+[data-theme="dark"] .novel-content p {
+  color: #f1f5f9 !important; /* Trắng xám rõ nét */
+}
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { 
@@ -1588,17 +1590,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. Hàm vẽ comment ra Sidebar (Lấy từ biến allInlineComments đã tải sẵn)
-    function renderSidebarComments(pIdx) {
+function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
-      const pData = allInlineComments['p' + pIdx]; // Lấy data của đoạn p0, p1...
+      if (!listEl) return;
+
+      const pKey = 'p' + pIdx;
+      const pComments = allInlineComments[pKey]; // allInlineComments lấy từ onValue cấp trang
       
-      if (!pData) {
+      if (!pComments || Object.keys(pComments).length === 0) {
         listEl.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
         return;
       }
 
-      // Chuyển Object thành Array và sắp xếp theo thời gian
-      const items = Object.entries(pData)
+      const items = Object.entries(pComments)
         .map(([id, v]) => ({ id, ...v }))
         .sort((a, b) => a.ts - b.ts);
 
@@ -1612,7 +1616,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `).join('');
     }
-
     // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
     function startListeningInline() {
       waitFirebase(({ db, ref, onValue }) => {

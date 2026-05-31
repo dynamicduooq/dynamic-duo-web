@@ -7,9 +7,11 @@ const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !==
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
 const currentTruyenId = frontmatter?.truyen_id;
 
+// 1. Quét toàn bộ file .md VÀ danh sách thư mục
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
 const storyFolders = Object.keys(import.meta.glob('../pages/truyen/*/index.astro'));
 
+// 2. Lấy danh sách slug duy nhất
 const slugs = [...new Set([
   ...allPosts.map(p => {
     const parts = (p.url || "").split('/').filter(Boolean);
@@ -23,6 +25,7 @@ const slugs = [...new Set([
   })
 ])].filter(Boolean) as string[];
 
+// 3. Xây dựng dữ liệu cho Navbar
 const navStories = slugs.map(slug => {
   const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
@@ -46,6 +49,7 @@ const navDuoiNuoc = navStories.filter(s => s.isOngoing);
 const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
+// LOGIC ĐIỀU HƯỚNG CHƯƠNG
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
@@ -117,6 +121,7 @@ if (isNovelPage) {
   </script>
 
   <script is:inline>
+    // Khởi tạo Setting Đọc
     (function(){
       const t = localStorage.getItem('dd-theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
@@ -124,18 +129,57 @@ if (isNovelPage) {
       const fz = localStorage.getItem('dd_fz');
       const ff = localStorage.getItem('dd_ff');
       const fw = localStorage.getItem('dd_fw');
-      const lh = localStorage.getItem('dd_lh');
-      const rTheme = localStorage.getItem('dd_read_theme');
+      const tc = localStorage.getItem('dd_tc');
       
       if(fz) document.documentElement.style.setProperty('--read-fz', fz + 'px');
       if(ff) document.documentElement.style.setProperty('--read-ff', ff);
       if(fw) document.documentElement.style.setProperty('--read-fw', fw);
-      if(lh) document.documentElement.style.setProperty('--read-lh', lh);
-      if(rTheme) document.documentElement.setAttribute('data-read-theme', rTheme);
+      if(tc && t !== 'dark') document.documentElement.style.setProperty('--read-color', tc); // Chỉ đổi màu chữ sáng khi ở Light mode
     })();
   </script>
 
   <style is:global>
+  .sc-link { position: relative; z-index: 50 !important; pointer-events: auto !important; }
+  .sc-footer { position: relative; z-index: 40 !important; pointer-events: auto !important; }
+  .btn-outline { position: relative; z-index: 50 !important; pointer-events: auto !important; }
+
+[data-theme="dark"] {
+  --text-main: #f8fafc; 
+  --text-mid: #cbd5e1;
+}
+
+[data-theme="dark"] .story-title, 
+[data-theme="dark"] .sc-title {
+  color: #f1f5f9 !important; 
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .btn-outline, 
+[data-theme="dark"] .sc-link.secondary {
+  color: #a8daf0 !important; 
+  border-color: rgba(168, 218, 240, 0.4) !important;
+  background: rgba(15, 35, 54, 0.8) !important;
+}
+[data-theme="dark"] .btn-outline:hover, 
+[data-theme="dark"] .sc-link.secondary:hover {
+  background: rgba(168, 218, 240, 0.1) !important;
+  border-color: #a8daf0 !important;
+}
+
+[data-theme="dark"] .intro-block {
+  background: #1e3a5f !important; 
+  border-color: rgba(126, 200, 227, 0.2) !important;
+  color: #e2e8f0 !important; 
+}
+[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
+
+  [data-theme="dark"] .story-item, 
+  [data-theme="dark"] .sc, 
+  [data-theme="dark"] .author-card { 
+    background: #0f2336 !important; 
+    border-color: rgba(126,200,227, 0.15) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+  }    
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -147,34 +191,39 @@ if (isNovelPage) {
       --t:all .2s ease;
       --read-fz: 18px;
       --read-ff: 'Newsreader', serif;
-      --read-fw: 400; 
-      --read-lh: 1.9;
+      --read-fw: 400; /* Font weight mặc định */
+      --read-color: inherit; /* Màu chữ mặc định */
       --bg-card:#ffffff;
       --bg-card2:#f0f9ff;
       --border-card:rgba(186,230,253,.5);
     }
 
 [data-theme="dark"] {
-  --cream:#0a1929; --text-main:#f8fafc; --text-mid:#cbd5e1;  
-  --bg-card:#0f2336; --border-card:rgba(126,200,227,.15);
+  --cream:#0a1929;
+  --text-main:#f8fafc; 
+  --text-mid:#cbd5e1;  
+  --bg-card:#0f2336;
+  --border-card:rgba(126,200,227,.15);
+  --read-color: #f1f5f9 !important; /* Luôn ép chữ sáng màu khi ở Dark Mode */
 }
 
-.sc-link, .sc-footer, .btn-outline { position: relative; z-index: 50 !important; pointer-events: auto !important; }
-
-[data-theme="dark"] .story-title, [data-theme="dark"] .sc-title { color: #f1f5f9 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-[data-theme="dark"] .btn-outline, [data-theme="dark"] .sc-link.secondary { color: #a8daf0 !important; border-color: rgba(168, 218, 240, 0.4) !important; background: rgba(15, 35, 54, 0.8) !important; }
-[data-theme="dark"] .btn-outline:hover, [data-theme="dark"] .sc-link.secondary:hover { background: rgba(168, 218, 240, 0.1) !important; border-color: #a8daf0 !important; }
-[data-theme="dark"] .intro-block { background: #1e3a5f !important; border-color: rgba(126, 200, 227, 0.2) !important; color: #e2e8f0 !important; }
-[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
-[data-theme="dark"] .story-item, [data-theme="dark"] .sc, [data-theme="dark"] .author-card { background: #0f2336 !important; border-color: rgba(126,200,227, 0.15) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }    
-
-/* SỬA LỖI VIỀN BÌA TRUYỆN TRANG CHỦ QUÁ TO */
-.sc-cover-wrap { padding: 0 !important; background: var(--sky-pale) !important; }
-.sc-cover-wrap img { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 12px 0 0 12px !important; }
+/* Biến CSS cho truyện */
+.novel-content p { 
+    font-weight: var(--read-fw); 
+    color: var(--read-color); 
+    transition: color 0.3s, font-weight 0.3s;
+}
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    body { background:var(--cream); color:var(--text-main); font-family:var(--read-ff); font-size:var(--read-fz); line-height:var(--read-lh); margin:0; padding:0; overflow-x:hidden; transition: background-color 0.2s, color 0.2s; }
+    body { 
+      background:var(--cream); color:var(--text-main); 
+      font-family:var(--read-ff); 
+      font-size:var(--read-fz); 
+      line-height:1.9; margin:0; padding:0; overflow-x:hidden; 
+      transition: font-size 0.2s, font-family 0.2s, background-color 0.2s, color 0.2s; 
+    }
+    
     [data-theme="dark"] body { background:#0a1929; color:#F3F9FF; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color:#a8daf0; }
@@ -185,30 +234,83 @@ if (isNovelPage) {
 
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); transition: transform 0.3s ease; }
-    [data-theme="dark"] nav { background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); }
-    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; }
+    nav { 
+      position:fixed; top:0; left:0; right:0; z-index:500; 
+      display:flex; align-items:center; height:56px; padding:0 28px; 
+      background:rgba(255,255,255,.97); backdrop-filter:blur(16px); 
+      border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); 
+    }
+    
+    [data-theme="dark"] nav { 
+      background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); 
+    }
+
+    .nav-logo { 
+      font-family:'Literata',serif; font-weight:600; font-size:.95rem; 
+      color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; 
+    }
     [data-theme="dark"] .nav-logo { color:#a8daf0; }
+
     .nav-links { display:flex; align-items:center; gap:5px; }
     .nav-item { position:relative; display:flex; align-items:center; height:56px; }
-    .nav-item::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 70px; z-index: -1; }
-    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
-    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .nav-item > a, [data-theme="dark"] .nav-btn { color:#8fbcd4; }
-    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { color:#7ec8e3; background:rgba(126,200,227,.1); }
     
-    .dropdown-content { position:absolute; top: 100%; left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition: all 0.2s ease-out; z-index:600; }
+    .nav-item::before {
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 70px; z-index: -1;
+    }
+
+    .nav-item > a, .nav-btn { 
+      font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); 
+      letter-spacing:1px; text-transform:uppercase; padding:6px 12px; 
+      border-radius:var(--r-pill); display:inline-flex; align-items:center; 
+      gap:5px; transition:var(--t); cursor:pointer; background:none; 
+      border:none; white-space:nowrap; 
+    }
+
+    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { 
+      background:var(--sky-pale); color:var(--sky); 
+    }
+    [data-theme="dark"] .nav-item > a, [data-theme="dark"] .nav-btn { color:#8fbcd4; }
+    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, 
+    [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { 
+      color:#7ec8e3; background:rgba(126,200,227,.1); 
+    }
+    
+    .dropdown-content { 
+      position:absolute; top: 100%; left:50%; transform:translateX(-50%) translateY(8px); 
+      min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); 
+      border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; 
+      opacity:0; visibility:hidden; pointer-events:none; transition: all 0.2s ease-out; z-index:600; 
+    }
+
     [data-theme="dark"] .dropdown-content { box-shadow:0 16px 48px rgba(0,0,0,.4); }
-    .nav-item:hover .dropdown-content { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
-    .dd-section-title { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:6px 12px 3px; }
+
+    .nav-item:hover .dropdown-content { 
+      opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); 
+    }
+
+    .dd-section-title { 
+      font-size:.62rem; letter-spacing:2px; text-transform:uppercase; 
+      color:var(--text-dim); padding:6px 12px 3px; 
+    }
     [data-theme="dark"] .dd-section-title { color:#3d6a82; }
-    .dd-item { display:flex; align-items:center; gap:7px; padding:7px 12px; font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); }
+
+    .dd-item { 
+      display:flex; align-items:center; gap:7px; padding:7px 12px; 
+      font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); 
+    }
     .dd-item:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .dd-item { color:#8fbcd4; }
     [data-theme="dark"] .dd-item:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
+
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
-    .mobile-menu { display: none; flex-direction: column; background: var(--bg-card); padding: 20px 28px; border-bottom: 1px solid var(--border-card); position: fixed; top: 56px; left: 0; right: 0; z-index: 499; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-height: calc(100vh - 56px); overflow-y: auto; }
+    .mobile-menu {
+      display: none; flex-direction: column; background: var(--bg-card);
+      padding: 20px 28px; border-bottom: 1px solid var(--border-card);
+      position: fixed; top: 56px; left: 0; right: 0; z-index: 499;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      max-height: calc(100vh - 56px); overflow-y: auto;
+    }
     .mobile-menu.open { display: flex; }
     .mobile-section-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin: 15px 0 8px; font-weight: 600; letter-spacing: 1px;}
     .mobile-menu a { padding: 10px 0; color: var(--text-main); border-bottom: 1px dashed var(--border-card); font-family: 'Newsreader', serif; font-size: 1rem;}
@@ -216,124 +318,56 @@ if (isNovelPage) {
     [data-theme="dark"] .mobile-menu { background: rgba(8,18,32,.98); }
     [data-theme="dark"] .mobile-menu a { color: #a8daf0; }
     
-    .nav-theme-btn { font-size:.8rem; width:32px; height:32px; border-radius:50%; border:1px solid var(--border-card); background:none; color:var(--text-mid); cursor:pointer; transition:var(--t); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .nav-theme-btn { 
+      font-size:.8rem; width:32px; height:32px; border-radius:50%; 
+      border:1px solid var(--border-card); background:none; color:var(--text-mid); 
+      cursor:pointer; transition:var(--t); display:inline-flex; 
+      align-items:center; justify-content:center; flex-shrink:0; 
+    }
     .nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
 
     #navThemeBtnMobile { display: none; }
-    @media(max-width:768px){ .nav-links { display:none; } #navThemeBtnMobile { display: flex; } }
+    @media(max-width:768px){ 
+      .nav-links { display:none; }
+      #navThemeBtnMobile { display: flex; }
+    }
 
     .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
     .nav-hamburger span { display:block; width:22px; height:2px; background:var(--sky-dark); border-radius:2px; transition:var(--t); }
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
     @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
-    /* ── FOCUS MODE (CHẾ ĐỘ TẬP TRUNG) ── */
-    body.focus-mode nav, 
-    body.focus-mode footer, 
-    body.focus-mode .chap-nav-container, 
-    body.focus-mode .chap-comment-section, 
-    body.focus-mode .auto-audio-player,
-    body.focus-mode .chap-like-area,
-    body.focus-mode .tags-container,
-    body.focus-mode .editor-note-box { display: none !important; }
-    body.focus-mode { background: transparent !important; } /* Để Theme Đọc phía dưới phát huy tác dụng */
-    body.focus-mode .page-wrapper { margin-top: 0 !important; padding-top: 20px; }
-    body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; padding-top: 20px !important; }
-
-    /* ── CẤU TRÚC ĐỌC TRUYỆN ── */
-    .page-wrapper { margin-top:56px; min-height:70vh; transition: margin 0.3s ease;}
+    .page-wrapper { margin-top:56px; min-height:70vh; }
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); }
     .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
-    
-    .novel-content { 
-      width:100%; margin:24px auto 60px; padding:48px 60px; 
-      background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); 
-      border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; 
-      transition: background-color 0.4s ease, border-color 0.4s ease;
-    }
-    
-    .novel-content p { 
-      position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; 
-      font-weight: var(--read-fw); line-height: var(--read-lh); transition: color 0.3s;
-    }
-
-    /* THEME ĐỌC (READING THEMES) - HOẠT ĐỘNG CẢ TRONG FOCUS MODE */
-    [data-read-theme="sepia"] body.focus-mode { background-color: #fcf6e8 !important; }
-    [data-read-theme="sepia"] .novel-content { background-color: #fcf6e8 !important; border-color: #e6d3bf !important; }
-    [data-read-theme="sepia"] .novel-content p, [data-read-theme="sepia"] .editor-note-box { color: #43302b !important; }
-    
-    [data-read-theme="green"] body.focus-mode { background-color: #f0fdf4 !important; }
-    [data-read-theme="green"] .novel-content { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
-    [data-read-theme="green"] .novel-content p, [data-read-theme="green"] .editor-note-box { color: #064e3b !important; }
-    
-    [data-read-theme="dark"] body.focus-mode { background-color: #0f172a !important; }
-    [data-read-theme="dark"] .novel-content { background-color: #0f172a !important; border-color: #334155 !important; }
-    [data-read-theme="dark"] .novel-content p, [data-read-theme="dark"] .editor-note-box { color: #e2e8f0 !important; }
-
+    .novel-content { width:100%; margin:24px auto 60px; padding:48px 60px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; }
     [data-theme="dark"] .page-content-wrap { color:#d8eeff; }
-    [data-theme="dark"]:not([data-read-theme="sepia"]):not([data-read-theme="green"]):not([data-read-theme="light"]) .novel-content p { color: #f1f5f9 !important; }
     
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
     @media(max-width:640px){ 
-      .novel-content, .page-content-wrap { padding: 24px 16px !important; margin: 16px auto 40px !important; width: 100% !important; box-sizing: border-box; } 
+      .novel-content, .page-content-wrap { 
+        padding: 24px 16px !important; 
+        margin: 16px auto 40px !important;
+        width: 100% !important; 
+        box-sizing: border-box;
+      } 
     }    
-    
-    blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
+    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; }
+    blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     [data-theme="dark"] blockquote { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
+
     .story-title { text-align: left !important; }
     .story-info { text-align: left; }
+
     .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:100px; }
     .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
     .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
-
-    /* ── NAV CHƯƠNG ĐƯỢC THIẾT KẾ LẠI THÀNH DOCK BO TRÒN ── */
-    .chap-nav-container { margin: 30px auto 40px; display: flex; justify-content: center; width: 100%; padding: 0 16px; box-sizing: border-box;}
-    .chap-nav-dock { 
-        display: flex; align-items: center; justify-content: space-between; 
-        background: var(--bg-card); border: 1.5px solid var(--sky-light); border-radius: 999px; 
-        padding: 4px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12); width: 100%; max-width: 500px; 
-    }
-    .dock-btn { 
-        flex: 1; display: flex; justify-content: center; align-items: center; height: 42px; 
-        font-size: 0.85rem; font-family: 'Newsreader', serif; font-weight: bold; 
-        color: var(--sky-dark); background: transparent; border: none; cursor: pointer; 
-        border-radius: 999px; transition: all 0.2s ease; white-space: nowrap; text-decoration: none; 
-    }
-    .dock-btn:hover:not(.disabled) { background: var(--sky-pale); color: var(--sky); transform: scale(1.02); }
-    .dock-btn.disabled { opacity: 0.4; pointer-events: none; }
-    .toc-btn { flex: 0.8; border-left: 1px solid var(--sky-light); border-right: 1px solid var(--sky-light); border-radius: 0; }
-    
-    [data-theme="dark"] .chap-nav-dock { background: #0f2336; border-color: #1e4a6a; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-    [data-theme="dark"] .dock-btn { color: #a8daf0; }
-    [data-theme="dark"] .dock-btn:hover:not(.disabled) { background: #1e4a6a; color: #fff; }
-    [data-theme="dark"] .toc-btn { border-color: #1e4a6a; }
-
-    .chap-dd-wrap { position: relative; display: flex; justify-content: center; flex: 1; }
-    .chap-dd-list { 
-        position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); 
-        width: 260px; max-height: 50vh; overflow-y: auto; background: var(--bg-card); 
-        border: 1px solid var(--border-card); border-radius: 16px; box-shadow: 0 16px 40px rgba(2,132,199,.2); 
-        display: none; flex-direction: column; z-index: 1000; padding: 6px;
-    }
-    .chap-dd-list.open { display: flex !important; }
-    .chap-dd-list.up { top: auto; bottom: calc(100% + 12px); }
-    .chap-dd-list a { 
-        display: block; padding: 12px 10px; font-size: .85rem; color: var(--text-main); 
-        border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif;
-        text-align: center; white-space: normal; line-height: 1.4; border-radius: 8px;
-    }
-    .chap-dd-list a:last-child { border-bottom: none; }
-    .chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky-dark); }
-    .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
-    
-    [data-theme="dark"] .chap-dd-list { box-shadow: 0 16px 40px rgba(0,0,0,.6); }
-    [data-theme="dark"] .chap-dd-list a:hover { background: rgba(126,200,227,.1); }
 
     /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
@@ -351,6 +385,7 @@ if (isNovelPage) {
     .aa-btn-tool { background: #fff; border: 1px solid var(--sky-light); border-radius: 8px; cursor: pointer; padding: 6px 12px; font-family: 'Newsreader', serif; font-size: 0.75rem; font-weight: 600; color: var(--sky-dark); display: inline-flex; align-items: center; gap: 5px; transition: var(--t); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     [data-theme="dark"] .aa-btn-tool { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .aa-btn-tool:hover { background: var(--sky-pale); border-color: var(--sky); color: var(--sky); transform: translateY(-1px); }
+    .aa-btn-tool:active { transform: translateY(0); }    
     .aa-settings-collapse { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-top: 0px solid transparent; }
     .aa-settings-collapse.open { max-height: 200px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--sky-light); }
     .aa-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -360,6 +395,7 @@ if (isNovelPage) {
     #aaVoiceSelect { padding: 3px 8px; border-radius: 6px; border: 1px solid var(--sky-light); background: #fff; font-family: inherit; font-size: 0.75rem; outline: none; max-width: 150px; }
     #aaRateRange { cursor: pointer; accent-color: var(--sky); width: 80px; }
     #aaRateValue { min-width: 25px; font-weight: bold; color: var(--sky); }
+    @media(max-width: 640px) { .aa-settings { flex-direction: column; align-items: flex-start; gap: 8px; } #aaVoiceSelect { max-width: 100%; } }
 
     .editor-note-box { margin-top: 50px; padding: 20px; background: var(--sky-pale); border-radius: var(--r-md); border-top: 2px dashed var(--sky-light); position: relative; }
     .editor-note-box::before { content: "𓆝"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--bg-card); padding: 0 15px; color: var(--sky-light); font-size: 1.2rem; }
@@ -368,66 +404,72 @@ if (isNovelPage) {
     .note-text { font-style: italic; font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; }
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
-    /* --- BONG BÓNG BÌNH LUẬN INLINE --- */
-    .ic-trigger {
-      position: absolute; left: -40px; top: 6px; width: 24px; height: 20px;
-      background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 6px 6px 6px 2px;
-      display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
-      transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
-      opacity: 0.1; 
-    }
-    .ic-trigger::after { content: ""; position: absolute; bottom: -4px; left: 0; border-left: 4px solid rgba(14, 165, 233, 0.3); border-bottom: 4px solid transparent; }
-    .ic-count { font-family: sans-serif; font-size: 9px; font-weight: 800; color: var(--sky-dark); pointer-events: none; }
-    .novel-content p:hover .ic-trigger, .ic-trigger.has-comments { opacity: 1; background: rgba(14, 165, 233, 0.25); border-color: var(--sky); }
-    .ic-trigger:hover { transform: scale(1.2) translateY(-2px); background: var(--sky) !important; }
-    .ic-trigger:hover .ic-count { color: #fff; }
-    [data-theme="dark"] .ic-trigger { background: rgba(126, 200, 227, 0.1); border-color: rgba(126, 200, 227, 0.2); }
-    [data-theme="dark"] .ic-count { color: #a8daf0; }
+/* --- BONG BÓNG BÌNH LUẬN --- */
+.ic-trigger {
+  position: absolute; left: -40px; top: 6px; width: 24px; height: 20px;
+  background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 6px 6px 6px 2px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+  transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
+  opacity: 0.1; 
+}
+.ic-trigger::after { content: ""; position: absolute; bottom: -4px; left: 0; border-left: 4px solid rgba(14, 165, 233, 0.3); border-bottom: 4px solid transparent; }
+.ic-count { font-family: sans-serif; font-size: 9px; font-weight: 800; color: var(--sky-dark); pointer-events: none; }
+.novel-content p:hover .ic-trigger, .ic-trigger.has-comments { opacity: 1; background: rgba(14, 165, 233, 0.25); border-color: var(--sky); }
+.ic-trigger:hover { transform: scale(1.2) translateY(-2px); background: var(--sky) !important; }
+.ic-trigger:hover .ic-count { color: #fff; }
 
-    @media (max-width: 640px) {
-      .novel-content p { padding-right: 0 !important; padding-left: 0 !important; }
-      .ic-trigger { left: auto !important; right: 0 !important; top: -12px !important; opacity: 0; transform: scale(0.5); pointer-events: none; } 
-      .ic-trigger::after { left: auto; right: 8px; border-left: none; border-right: 4px solid rgba(14, 165, 233, 0.3); }
-      .novel-content p.show-mobile-bubble .ic-trigger { transform: scale(0.9) !important; opacity: 1 !important; pointer-events: auto; }
-      .ic-trigger.has-comments { opacity: 0.6; transform: scale(0.85); pointer-events: auto; }
-    }
+[data-theme="dark"] .ic-trigger { background: rgba(126, 200, 227, 0.1); border-color: rgba(126, 200, 227, 0.2); }
+[data-theme="dark"] .ic-count { color: #a8daf0; }
 
-    .ic-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease; }
-    .ic-overlay.show { display: block; opacity: 1; }
-    
-    /* SIDEBAR KÉO DÀI LÊN TẬN CÙNG MÀN HÌNH */
-    .ic-sidebar { position:fixed; top:0; right:0; bottom:0; width:340px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:1050; overflow:hidden; }
-    .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
-    @media(max-width:600px){ .ic-sidebar { width:min(340px,88vw); } }
+@media (max-width: 640px) {
+  .novel-content p { padding-right: 0 !important; padding-left: 0 !important; }
+  .ic-trigger { 
+    left: auto !important; right: 0 !important; top: -12px !important;
+    opacity: 0; transform: scale(0.5); pointer-events: none;
+  } 
+  .ic-trigger::after { left: auto; right: 8px; border-left: none; border-right: 4px solid rgba(14, 165, 233, 0.3); }
+  .novel-content p.show-mobile-bubble .ic-trigger { transform: scale(0.9) !important; opacity: 1 !important; pointer-events: auto; }
+  .ic-trigger.has-comments { opacity: 0.6; transform: scale(0.85); pointer-events: auto; }
+}
+
+.ic-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 998; display: none; opacity: 0; transition: opacity 0.3s ease; }
+.ic-overlay.show { display: block; opacity: 1; }
+
+.ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:999; overflow:hidden; }
+.novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
+@media(max-width:600px){ .ic-sidebar { width:min(320px,88vw); } }
 
     .ic-sidebar-inner { display:flex; flex-direction:column; height:100%; overflow:hidden; }
-    .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:24px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; background: var(--sky-pale);}
-    [data-theme="dark"] .ic-sidebar-header { border-color:rgba(126,200,227,.13); background: rgba(15,35,54,0.8);}
+    .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:14px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; }
+    [data-theme="dark"] .ic-sidebar-header { border-color:rgba(126,200,227,.13); }
     .ic-para-preview { flex:1; font-size:.68rem; color:var(--text-dim); font-style:italic; line-height:1.5; max-height:3.5em; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-    .ic-sidebar-close { flex-shrink:0; width:26px; height:26px; border-radius:50%; border:1px solid rgba(186,230,253,.5); background:#fff; cursor:pointer; font-size:.7rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; transition:var(--t); }
-    .ic-sidebar-close:hover { background:#ef4444; color:#fff; border-color:#ef4444;}
-    [data-theme="dark"] .ic-sidebar-close { border-color:rgba(126,200,227,.18); color:#527a96; background: #0f2336;}
+    .ic-sidebar-close { flex-shrink:0; width:24px; height:24px; border-radius:50%; border:1px solid rgba(186,230,253,.5); background:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; transition:var(--t); }
+    .ic-sidebar-close:hover { background:var(--sky-pale); color:var(--sky); }
+    [data-theme="dark"] .ic-sidebar-close { border-color:rgba(126,200,227,.18); color:#527a96; }
     
     .ic-sidebar-form { padding:10px 12px; border-bottom:1px solid rgba(186,230,253,.3); flex-shrink:0; display:flex; flex-direction:column; gap:6px; }
     [data-theme="dark"] .ic-sidebar-form { border-color:rgba(126,200,227,.1); }
     .ic-form-name { width:100%; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.72rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
     .ic-form-name:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-form-name { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .ic-form-name::placeholder { color:#3d6a82; }
     .ic-form-body { display:flex; gap:6px; align-items:flex-end; }
     .ic-form-text { flex:1; padding:7px 10px; border:1.5px solid var(--sky-light); border-radius:10px; font-size:.74rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:none; min-height:48px; }
     .ic-form-text:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-form-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .ic-form-text::placeholder { color:#3d6a82; }
     .ic-form-send { width:32px; height:32px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:.88rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:var(--t); }
     .ic-form-send:hover { background:var(--sky2); }
     .ic-form-send:disabled { opacity:.5; cursor:not-allowed; }
 
-    .ic-sidebar-list { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:12px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
+    .ic-sidebar-list { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
     .ic-sidebar-list::-webkit-scrollbar { width:3px; }
     .ic-sidebar-list::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
     .ic-empty { font-size:.74rem; color:var(--text-dim); font-style:italic; text-align:center; padding:20px 0; line-height:1.7; }
+    [data-theme="dark"] .ic-empty { color:#3d6a82; }
     
-    .ic-item { background:var(--sky-pale); border:1px solid rgba(186,230,253,.5); border-radius:10px; padding:10px 12px; font-size:.74rem; }
+    .ic-item { background:var(--sky-pale); border:1px solid rgba(186,230,253,.5); border-radius:10px; padding:9px 10px; font-size:.74rem; }
     [data-theme="dark"] .ic-item { background:rgba(15,45,72,.5) !important; border-color:rgba(126,200,227,.13); }
     .ic-item-header { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
     .ic-item-name { font-weight:700; color:var(--sky-dark); font-size:.72rem; }
@@ -435,11 +477,16 @@ if (isNovelPage) {
     .ic-item-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.52rem; font-weight:700; padding:1px 5px; border-radius:var(--r-pill); margin-left:4px; vertical-align:middle; }
     [data-theme="dark"] .ic-item-admin-badge { background:#1565a0; }
     .ic-item-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
-    .ic-item-text { font-size:.76rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
+    .ic-item-text { font-size:.74rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
     [data-theme="dark"] .ic-item-text { color:#F3F9FF; }
     
-    .toggle-replies-btn { background: none; border: none; font-size: 0.65rem; color: var(--sky); cursor: pointer; padding: 5px 0; font-weight: bold; display: block; margin-top: 5px; font-family: 'Newsreader', serif; transition: color 0.2s; position: relative; }
-    .toggle-replies-btn:hover { color: var(--sky2); text-decoration:underline; }
+    /* ── Nút xem Reply (Chuẩn Wattpad) ── */
+    .toggle-replies-btn {
+      background: none; border: none; font-size: 0.65rem; color: var(--sky);
+      cursor: pointer; padding: 5px 0; font-weight: bold; display: block; margin-top: 5px;
+      font-family: 'Newsreader', serif; transition: color 0.2s;
+    }
+    .toggle-replies-btn:hover { color: var(--sky2); }
     [data-theme="dark"] .toggle-replies-btn { color: #a8daf0; }
 
     .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; font-weight: 600;}
@@ -448,14 +495,11 @@ if (isNovelPage) {
     .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    /* KẾT NỐI THREAD COMMENT TRỰC QUAN */
-    .ic-replies { display:none; flex-direction:column; gap:8px; margin-top:7px; padding:7px 0 7px 14px; border-left:2px solid rgba(186,230,253,.8); }
+    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px 0 7px 8px; border-left:2px solid rgba(186,230,253,.5); }
     .ic-replies.open { display:flex; }
-    [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.4); }
-    .ic-reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
-    .ic-reply-body { flex:1; min-width:0; background: rgba(255,255,255,0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(186,230,253,0.3);}
-    [data-theme="dark"] .ic-reply-body { background: rgba(0,0,0,0.2); border-color: rgba(126,200,227,0.1); }
-    
+    [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.2); }
+    .ic-reply-item { display:flex; gap:6px; align-items:flex-start; position:relative; }
+    .ic-reply-body { flex:1; min-width:0; }
     .ic-reply-name { font-weight:700; font-size:.66rem; color:var(--sky-dark); }
     [data-theme="dark"] .ic-reply-name { color:#a8daf0; }
     .ic-reply-text { font-size:.7rem; color:var(--text-main); line-height:1.45; margin-top:2px; word-break:break-word; }
@@ -474,14 +518,15 @@ if (isNovelPage) {
     .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
     .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color:var(--sky); }
     [data-theme="dark"] .ic-reply-form input, [data-theme="dark"] .ic-reply-form textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .ic-reply-form input::placeholder, [data-theme="dark"] .ic-reply-form textarea::placeholder { color:#3d6a82; }
     .ic-reply-form-row { display:flex; gap:5px; justify-content:flex-end; }
     .ic-rf-cancel { padding:3px 9px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
     .ic-rf-cancel:hover { color:var(--sky); }
-    .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); font-weight:600;}
+    .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* ── CHAPTER-END COMMENTS ── */
+    /* ── CHAPTER-END COMMENTS & LIKES ── */
     .chap-like-area { text-align:center; margin: 30px 0 40px; }
     .chap-like-btn { background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark); padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08); }
     .chap-like-btn .heart { transition: transform 0.3s; display: inline-block; margin-right: 6px; font-size: 1.1rem; }
@@ -503,9 +548,13 @@ if (isNovelPage) {
     .comment-inp { flex:1; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.85rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; transition: var(--t); }
     .comment-inp:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
     [data-theme="dark"] .comment-inp { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-inp:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
+    [data-theme="dark"] .comment-inp::placeholder { color:#3d6a82; }
     .comment-textarea { width:100%; padding:14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.9rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:90px; margin-bottom:12px; box-sizing: border-box; transition: var(--t); }
     .comment-textarea:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
     [data-theme="dark"] .comment-textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .comment-textarea:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
+    [data-theme="dark"] .comment-textarea::placeholder { color:#3d6a82; }
     .comment-submit-btn { padding:8px 24px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.85rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); font-weight: bold; }
     .comment-submit-btn:hover { background:var(--sky2); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(14,165,233,0.3); }
     .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; transform: none; box-shadow: none;}
@@ -535,24 +584,20 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
-    /* CSS THREAD TRANG CHÍNH */
-    .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.8); padding-left:16px; display:none; flex-direction:column; gap:10px; }
+    /* CSS THREAD LỚN */
+    .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.5); padding-left:12px; display:none; flex-direction:column; gap:7px; }
     .reply-thread.open { display:flex; }
-    [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.4); }
-    
-    .reply-item { display:flex; gap:10px; align-items:flex-start; position:relative; }
-    .reply-avatar { width:28px; height:28px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
+    [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.2); }
+    .reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
+    .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
     [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
-    
-    .reply-body { flex:1; min-width:0; background: rgba(240,249,255,0.6); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(186,230,253,0.3); }
-    [data-theme="dark"] .reply-body { background: rgba(0,0,0,0.2); border-color: rgba(126,200,227,0.1); }
-    
-    .reply-name { font-weight:700; font-size:.75rem; color:var(--sky-dark); }
+    .reply-body { flex:1; min-width:0; }
+    .reply-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
     [data-theme="dark"] .reply-name { color:#a8daf0; }
     .reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
     [data-theme="dark"] .reply-admin-badge { background:#1565a0; }
     .reply-time { font-size:.6rem; color:var(--text-dim); font-weight:normal; margin-left:6px; }
-    .reply-text { font-size:.82rem; color:var(--text-main); margin:4px 0 0; line-height:1.5; word-break:break-word; }
+    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
     [data-theme="dark"] .reply-text { color:#c8e0f0; }
     .reply-del { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .reply-del:hover { color:#ef4444; }
@@ -564,6 +609,7 @@ if (isNovelPage) {
     .reply-inp-text { border-radius:10px; font-size:.76rem; resize:none; min-height:52px; }
     .reply-inp:focus,.reply-inp-text:focus { border-color:var(--sky); }
     [data-theme="dark"] .reply-inp,[data-theme="dark"] .reply-inp-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
+    [data-theme="dark"] .reply-inp::placeholder,[data-theme="dark"] .reply-inp-text::placeholder { color:#3d6a82; }
     .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
     .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
     .reply-cancel-btn:hover { color:var(--sky); }
@@ -571,36 +617,24 @@ if (isNovelPage) {
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* HỘP THƯ TIN NHẮN (MAIL POPUP) CHUẨN ZALO */
-    .msg-popup { position:fixed; bottom:80px; right:75px; z-index:1000; width:min(350px,calc(100vw - 32px)); background:rgba(255,255,255,0.98); backdrop-filter: blur(16px); border:1px solid rgba(186,230,253,.6); border-radius:18px; box-shadow:0 16px 50px rgba(2,132,199,.2); padding:16px; opacity:0; pointer-events:none; transform:translateY(15px) scale(.95); transition:all .25s ease; }
-    @media(max-width:600px){ .msg-popup { right: 16px; bottom: 85px; } }
-    [data-theme="dark"] .msg-popup { background:rgba(15,35,54,0.98); border-color:rgba(80,150,210,.3); box-shadow:0 16px 50px rgba(0,0,0,.5); }
-    .msg-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
-    .msg-popup-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-    .msg-popup-title { font-family:'Merriweather',serif; font-size:.85rem; color:var(--sky-dark); font-weight: bold; }
-    [data-theme="dark"] .msg-popup-title { color:#a8daf0; }
-    .msg-popup-close { width:24px; height:24px; border:none; background:transparent; cursor:pointer; font-size:.8rem; color:var(--text-dim); transition:var(--t); }
-    .msg-popup-close:hover { color:#ef4444; }
-    
-    .chat-container { display: flex; flex-direction: column; gap: 8px; height: 280px; overflow-y: auto; padding-right: 4px; margin-bottom: 12px; scrollbar-width: thin; }
-    .chat-bubble { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 0.8rem; line-height: 1.4; word-break: break-word; }
-    .chat-user { align-self: flex-end; background: var(--sky); color: #fff; border-bottom-right-radius: 2px; }
-    .chat-admin { align-self: flex-start; background: var(--sky-pale); color: var(--text-main); border: 1px solid rgba(186,230,253,.5); border-bottom-left-radius: 2px; }
-    [data-theme="dark"] .chat-admin { background: rgba(20,55,90,.6); color: #F3F9FF; border-color: rgba(80,150,210,.3); }
-    .chat-time { display: block; font-size: 0.6rem; opacity: 0.7; margin-top: 4px; text-align: right; }
-    
-    .msg-form { display: flex; gap: 6px; }
-    .msg-form input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill); outline: none; font-family: 'Newsreader', serif; font-size: 0.8rem; }
-    .msg-form button { padding: 0 16px; background: var(--sky); color: #fff; border: none; border-radius: var(--r-pill); cursor: pointer; font-weight: bold; transition: background 0.2s;}
-    .msg-form button:hover { background: var(--sky2); }
-    [data-theme="dark"] .msg-form input { background: #091620; border-color: #1e4a6a; color: #fff; }
-
-    /* Admin Chat Thread List */
-    .admin-thread-card { border: 1px solid var(--sky-light); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
-    [data-theme="dark"] .admin-thread-card { border-color: rgba(80,150,210,.3); }
+    /* ── POPUPS SETTINGS & REVIEWS ── */
+    .rs-popup { position:fixed; bottom:80px; right:74px; z-index:420; width:280px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15); padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95); transition:opacity .2s ease, transform .2s ease; transform-origin: bottom right; }
+    [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+    .rs-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+    .rs-title { font-family:'Merriweather',serif; font-size:.75rem; color:var(--sky-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; text-align:center; font-weight:bold;}
+    [data-theme="dark"] .rs-title { color:#a8daf0; }
+    .rs-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .rs-label { font-size:.75rem; color:var(--text-dim); }
+    [data-theme="dark"] .rs-label { color:#8fbcd4; }
+    .rs-btn-group { display:flex; gap:6px; background:var(--sky-pale); border-radius:var(--r-pill); padding:4px; border:1px solid rgba(186,230,253,.5); }
+    [data-theme="dark"] .rs-btn-group { background:rgba(15,35,54,.6); border-color:rgba(126,200,227,.15); }
+    .rs-btn { background:none; border:none; border-radius:var(--r-pill); font-size:.8rem; padding:4px 12px; cursor:pointer; color:var(--text-mid); transition:var(--t); font-family:inherit; }
+    .rs-btn.active, .rs-btn:hover { background:var(--sky); color:#fff; }
+    [data-theme="dark"] .rs-btn { color:#8fbcd4; }
+    [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
 
     /* ── FOOTER & FAB TOOLS ── */
-    footer { background:var(--bg-card); border-top:1px solid var(--border-card); padding:44px 20px 26px; margin-top:auto; transition: transform 0.3s ease;}
+    footer { background:var(--bg-card); border-top:1px solid var(--border-card); padding:44px 20px 26px; margin-top:auto; }
     [data-theme="dark"] footer { background:#0f2336; border-color:rgba(126,200,227,.1); color:#8fbcd4; }
     .footer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; gap:28px; align-items:start; }
     @media(max-width:600px){ .footer-inner{grid-template-columns:1fr;text-align:center;} .ft-social{align-items:center!important;} }
@@ -630,7 +664,74 @@ if (isNovelPage) {
     .tool-fab-toggle:hover { opacity: 1; transform: scale(1.05); }
     [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
-  </style>
+
+:root {
+  --blue-main: #0288d1;      
+  --blue-light: #e1f5fe;     
+  --blue-border: #81d4fa;    
+  --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); 
+}
+
+/* =========================================
+   SỬA LỖI MỤC LỤC TRÀN CHỮ THÀNH MENU DROPDOWN
+   ========================================= */
+.chap-nav-row {
+  display: flex !important; flex-wrap: wrap !important; justify-content: center; align-items: center;
+  gap: 12px; padding: 20px 0; width: 100%; max-width: 420px; margin: 0 auto !important;
+}
+
+.chap-nav-row > :nth-child(2) {
+  order: 1 !important; flex: 0 0 100% !important; max-width: 160px; margin: 0 auto 4px auto !important; 
+}
+
+.chap-pn, .chap-dd-wrap { order: 2; flex: 1; min-width: 0; }
+.chap-dd-wrap { position: relative; display: flex; justify-content: center; } /* Căn giữa button */
+.chap-dd-btn { width: 100%; }
+
+.chap-pn, .chap-dd-btn, .chap-nav-row > :nth-child(2) {
+  display: flex; justify-content: center; align-items: center; height: 44px; 
+  font-size: 0.85rem !important; font-weight: 500; color: var(--blue-main) !important; 
+  background-color: #ffffff; border: 1.5px solid var(--blue-border) !important; 
+  border-radius: 999px !important; padding: 0 12px !important; box-shadow: var(--shadow-btn); 
+  white-space: nowrap !important; overflow: hidden; text-overflow: ellipsis;
+  cursor: pointer; user-select: none; transition: all 0.2s ease-in-out;
+}
+
+.chap-pn:hover, .chap-dd-btn:hover, .chap-nav-row > :nth-child(2):hover {
+  background-color: var(--blue-light) !important; border-color: var(--blue-main) !important; 
+  transform: translateY(-2px); box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
+}
+
+.chap-pn:active, .chap-dd-btn:active, .chap-nav-row > :nth-child(2):active {
+  transform: scale(0.95); background-color: #b3e5fc !important;
+}
+
+/* Bảng menu thả xuống */
+.chap-dd-list { 
+  position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); 
+  width: 260px; max-height: 50vh; overflow-y: auto; 
+  background: var(--bg-card); border: 1px solid var(--border-card); 
+  border-radius: 12px; box-shadow: 0 16px 48px rgba(2,132,199,.15); 
+  display: none; flex-direction: column; z-index: 1000; 
+}
+.chap-dd-list.open { display: flex !important; }
+.chap-dd-list.up { top: auto; bottom: calc(100% + 8px); }
+.chap-dd-list a { 
+  display: block; padding: 12px; font-size: .85rem; color: var(--text-main); 
+  border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif;
+  text-align: center; white-space: normal; line-height: 1.4;
+}
+.chap-dd-list a:last-child { border-bottom: none; }
+.chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky-dark); }
+.chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
+[data-theme="dark"] .chap-dd-list a:hover { background: rgba(126,200,227,.1); }
+
+@media (max-width: 480px) {
+  .chap-nav-row { gap: 8px; padding: 16px 0; }
+  .chap-pn, .chap-dd-btn, .chap-nav-row > :nth-child(2) { height: 40px; font-size: 0.78rem !important; padding: 0 8px !important; }
+  .chap-dd-wrap { flex: 1.4; }
+}
+</style>
 </head>
 <body>
 
@@ -684,13 +785,18 @@ if (isNovelPage) {
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
+  
   <div class="mobile-section-title">Cá dưới nước</div>
   <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả truyện đang đăng</a>
-  {navDuoiNuoc.map(story => (<a href={story.url}>✦ {story.title}</a>))}
+  {navDuoiNuoc.map(story => (
+    <a href={story.url}>✦ {story.title}</a>
+  ))}
 
   <div class="mobile-section-title">Cá trên bàn</div>
   <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả truyện hoàn thành</a>
-  {navTrenBan.map(story => (<a href={story.url}>✦ {story.title}</a>))}
+  {navTrenBan.map(story => (
+    <a href={story.url}>✦ {story.title}</a>
+  ))}
 
   <div class="mobile-section-title">Khác</div>
   <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
@@ -701,21 +807,27 @@ if (isNovelPage) {
 
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
-    <div class="tags-container">
-      {frontmatter.tags.map((tag: string) => (<a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag.trim().toLowerCase())}/`} class="tag-badge"># {tag.trim()}</a>))}
-    </div>
+<div class="tags-container">
+  {frontmatter.tags.map((tag: string) => (
+    <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag.trim().toLowerCase())}/`} class="tag-badge"># {tag.trim()}</a>
+  ))}
+</div>
   )}
 
 {isNovelPage && (
     <div class="chap-nav-container">
-      <div class="chap-nav-dock">
-        {prevChap ? <a href={prevChap.url} class="dock-btn">← Trước</a> : <span class="dock-btn disabled">← Trước</span>}
-        
-        <a href={`${currentFolder}/`} class="dock-btn toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
-        
+      <div class="nav-toc-row">
+        <a href={`${currentFolder}/`} class="nav-toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
+      </div>
+
+      <div class="nav-controls-row">
+        {prevChap
+          ? <a href={prevChap.url} class="chap-pn">← Trước</a>
+          : <span class="chap-pn disabled">← Trước</span>}
+          
         {chapters.length > 1 && (
           <div class="chap-dd-wrap" id="ddTop">
-            <button class="dock-btn chap-dd-btn" id="ddBtnTop">Chương ▾</button>
+            <button class="chap-dd-btn" id="ddBtnTop">⚓ Chương ▾</button>
             <div class="chap-dd-list" id="ddListTop">
               {chapters.map((c: any) => (
                 <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
@@ -726,7 +838,9 @@ if (isNovelPage) {
           </div>
         )}
         
-        {nextChap ? <a href={nextChap.url} class="dock-btn">Sau →</a> : <span class="dock-btn disabled">Sau →</span>}
+        {nextChap
+          ? <a href={nextChap.url} class="chap-pn">Sau →</a>
+          : <span class="chap-pn disabled">Sau →</span>}
       </div>
     </div>  
   )}
@@ -737,7 +851,10 @@ if (isNovelPage) {
 {isNovelPage && (
         <div class="auto-audio-player">
           <div class="aa-top-row">
-            <div class="aa-header"><span class="aa-icon">🎧</span><span>Nghe tự động</span></div>
+            <div class="aa-header">
+              <span class="aa-icon">🎧</span>
+              <span>Nghe tự động</span>
+            </div>
             <div class="aa-main-btns">
               <button type="button" id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
               <button type="button" id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
@@ -801,14 +918,12 @@ if (isNovelPage) {
 
 {isNovelPage && (
     <div class="chap-nav-container" style="margin-top:36px;">
-      <div class="chap-nav-dock">
-        {prevChap ? <a href={prevChap.url} class="dock-btn">← Trước</a> : <span class="dock-btn disabled">← Trước</span>}
-
-        <a href={`${currentFolder}/`} class="dock-btn toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
+      <div class="nav-controls-row">
+        {prevChap ? <a href={prevChap.url} class="chap-pn">← Trước</a> : <span class="chap-pn disabled">← Trước</span>}
 
         {chapters.length > 1 && (
           <div class="chap-dd-wrap" id="ddBot">
-            <button class="dock-btn chap-dd-btn" id="ddBtnBot">Chương ▾</button>
+            <button class="chap-dd-btn" id="ddBtnBot">⚓ Chương ▾</button>
             <div class="chap-dd-list up" id="ddListBot">
               {chapters.map((c: any) => (
                 <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
@@ -819,7 +934,7 @@ if (isNovelPage) {
           </div>
         )}
 
-        {nextChap ? <a href={nextChap.url} class="dock-btn">Sau →</a> : <span class="dock-btn disabled">Sau →</span>}
+        {nextChap ? <a href={nextChap.url} class="chap-pn">Sau →</a> : <span class="chap-pn disabled">Sau →</span>}
       </div>
     </div>
   )}
@@ -874,9 +989,7 @@ if (isNovelPage) {
 
 <div class="tool-fab-wrap" id="toolFabWrap">
   <div class="tool-fab-menu" id="toolFabMenu">
-    <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>
-    {isNovelPage && <button class="fab-btn" id="fabAutoScroll" title="Cuộn tự động" style="background:#f59e0b">⏬</button>}
-    {isNovelPage && <button class="fab-btn" id="fabFocus" title="Chế độ tập trung" style="background:#10b981">👁️</button>}
+    {isHome && <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>}
     {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
     <button class="fab-btn" id="fabUp" title="Lên đầu">↑</button>
     <button class="fab-btn" id="fabDown" title="Xuống cuối">↓</button>
@@ -884,39 +997,15 @@ if (isNovelPage) {
   <button class="tool-fab-toggle" id="toolFabToggle">⋮</button>
 </div>
 
-<!-- ── MAIL POPUP (HỘP THƯ CHAT) ── -->
-<div class="msg-popup" id="mailPopup">
-  <div class="msg-popup-header">
-    <span class="msg-popup-title">✉ Hộp thư nhà cá</span>
-    <button class="msg-popup-close" id="mailPopupClose">✕</button>
-  </div>
-  
-  <div id="chatUserView">
-      <p style="font-size: 0.7rem; color: var(--text-dim); margin: 0 0 10px; font-style: italic;">Chat trực tiếp với admin 🐋</p>
-      <div class="chat-container" id="chatContainer">
-         <div style="text-align: center; color: var(--text-dim); font-size: 0.75rem; padding: 20px;">Đang tải tin nhắn...</div>
-      </div>
-      <div class="msg-form">
-        <input id="chatInput" placeholder="Nhắn tin cho Admin..." autocomplete="off">
-        <button id="chatSend">Gửi</button>
-      </div>
-  </div>
-
-  <div id="chatAdminView" style="display:none;">
-      <p style="font-size: 0.7rem; color: #10b981; font-weight:bold; margin: 0 0 10px;">Chế độ Quản trị viên</p>
-      <div id="adminChatList" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"></div>
-  </div>
-</div>
-
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
-    <div class="rs-title">Cài đặt hiển thị</div>
+    <div class="rs-title">Thiết lập đọc</div>
     
     <div class="rs-row">
       <span class="rs-label">Cỡ chữ</span>
       <div class="rs-btn-group">
-        <button class="rs-btn" id="rsDec">A-</button>
-        <button class="rs-btn" id="rsInc">A+</button>
+        <button class="rs-btn" id="rsDec">-</button>
+        <button class="rs-btn" id="rsInc">+</button>
       </div>
     </div>
 
@@ -927,37 +1016,28 @@ if (isNovelPage) {
         <button class="rs-btn fw-btn" data-fw="600" style="font-weight: 600">Aa</button>
       </div>
     </div>
-
-    <div class="rs-row">
-      <span class="rs-label">Dãn dòng</span>
-      <div class="rs-btn-group">
-        <button class="rs-btn lh-btn" data-lh="1.6">1.6</button>
-        <button class="rs-btn lh-btn" data-lh="1.9">1.9</button>
-        <button class="rs-btn lh-btn" data-lh="2.2">2.2</button>
-      </div>
-    </div>
     
     <div class="rs-row" style="margin-top: 15px">
-      <span class="rs-label">Nền đọc</span>
-    </div>
-    <div class="rs-btn-group" style="padding: 4px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-      <button class="rs-btn theme-btn" data-theme-val="light" style="background: #ffffff; color: #1e3a5f; border: 1px solid #bae6fd;">Sáng</button>
-      <button class="rs-btn theme-btn" data-theme-val="sepia" style="background: #fdf6e3; color: #43302b;">Giấy</button>
-      <button class="rs-btn theme-btn" data-theme-val="green" style="background: #f0fdf4; color: #064e3b;">Mắt</button>
-      <button class="rs-btn theme-btn" data-theme-val="dark" style="background: #0f172a; color: #e2e8f0;">Tối</button>
+      <span class="rs-label">Màu chữ (Sáng)</span>
+      <div class="rs-btn-group" style="padding: 2px;">
+        <button class="rs-btn color-btn" data-color="inherit" style="background: #ffffff; color: #1e3a5f; border: 1px solid #bae6fd;">A</button>
+        <button class="rs-btn color-btn" data-color="#475569" style="background: #f8fafc; color: #475569;">A</button>
+        <button class="rs-btn color-btn" data-color="#5d4037" style="background: #fdf8f5; color: #5d4037;">A</button>
+      </div>
     </div>
 
-    <div class="rs-row" style="margin-top: 15px;">
+    <div class="rs-row" style="margin-top: 10px;">
       <span class="rs-label">Font chữ</span>
     </div>
     <div class="rs-btn-group" style="flex-wrap:wrap; justify-content:center; gap:8px; padding:8px; border-radius:12px; margin-bottom: 6px;">
-        <button class="rs-btn ff-btn" data-font="'Newsreader', serif" style="font-family:'Newsreader', serif;">N</button>
+        <button class="rs-btn active ff-btn" data-font="'Newsreader', serif" style="font-family:'Newsreader', serif;">N</button>
         <button class="rs-btn ff-btn" data-font="'Literata', serif" style="font-family:'Literata', serif;">L</button>
         <button class="rs-btn ff-btn" data-font="'Merriweather', serif" style="font-family:'Merriweather', serif;">M</button>
         <button class="rs-btn ff-btn" data-font="'Palatino Linotype', serif" style="font-family:'Palatino Linotype', serif;">P</button>
         <button class="rs-btn ff-btn" data-font="Arial, sans-serif" style="font-family:Arial, sans-serif;">A</button>
         <button class="rs-btn ff-btn" data-font="'Segoe UI', sans-serif" style="font-family:'Segoe UI', sans-serif;">S</button>
     </div>
+    <p style="font-size:.65rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">💡 Bấm ⬅️ ➡️ trên bàn phím để sang trang</p>
   </div>
 )}
 
@@ -983,9 +1063,13 @@ function waitFirebase(cb){
   let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
 }
 
+/* ══════════════════════════════════════════
+   CHƯƠNG TRÌNH ĐIỀU KHIỂN TỔNG HỢP
+   ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
+  // 1. UI: Hamburger, FAB, Progress, Theme
   const mm = document.getElementById('mobileMenu'), hb = document.getElementById('hamburger');
   hb?.addEventListener('click', () => mm?.classList.toggle('open'));
   document.addEventListener('click', e => { if(mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target)) mm.classList.remove('open'); });
@@ -1016,163 +1100,93 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-// --- 2. FOCUS MODE & AUTO SCROLL ---
-  const fabFocus = document.getElementById('fabFocus');
-  if(fabFocus) {
-    fabFocus.addEventListener('click', () => {
-      document.body.classList.toggle('focus-mode');
-      if (document.body.classList.contains('focus-mode')) {
-        fabFocus.style.background = '#ef4444';
-        fabFocus.innerText = '✕';
-        // Hiển thị thông báo nhỏ
-        const msg = document.createElement('div');
-        msg.innerText = 'Đã bật chế độ Tập trung';
-        msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--sky);color:#fff;padding:8px 16px;border-radius:20px;z-index:9999;font-size:0.8rem;opacity:0.9;';
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 2000);
-      } else {
-        fabFocus.style.background = '#10b981';
-        fabFocus.innerText = '👁️';
-      }
+// 2. AUDIO LOGIC
+  const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
+  const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
+  const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
+  const content = document.getElementById('novelContent'), aaSettings = document.getElementById('aaSettings');
+
+  if(btnPlay && content && 'speechSynthesis' in window) {
+    const synth = window.speechSynthesis;
+    let sentences = [];
+    let currentIdx = 0;
+    let isPaused = false;
+    let voices = []; 
+
+    function loadVoices() {
+      const allVoices = synth.getVoices();
+      if (allVoices.length === 0) return; 
+
+      let vnVoices = allVoices.filter(v => v.lang.toLowerCase().includes('vi') || v.name.toLowerCase().includes('viet'));
+      if (vnVoices.length === 0) vnVoices = allVoices;
+
+      voices = vnVoices;
+      voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`).join('');
+    }
+
+    loadVoices();
+    if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+
+    document.getElementById('btnToggleAudioSet')?.addEventListener('click', () => aaSettings?.classList.toggle('open'));
+    if(rateRange) rateRange.oninput = () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; };
+
+    function resetAudioUI() {
+      synth.cancel();
+      btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Nghe';
+      btnPause.style.display = 'none'; btnStop.style.display = 'none';
+      isPaused = false; currentIdx = 0;
+    }
+
+    function initSentences() {
+      const clone = content.cloneNode(true);
+      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row').forEach(el => el.remove());
+      sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 1);
+    }
+
+    function speakSentence() {
+      synth.cancel(); 
+      if (currentIdx < 0) currentIdx = 0;
+      if (currentIdx >= sentences.length) { resetAudioUI(); return; }
+      if (isPaused) return;
+
+      const utter = new SpeechSynthesisUtterance(sentences[currentIdx]);
+      utter.rate = parseFloat(rateRange.value || 1);
+      
+      const selectedIdx = voiceSelect.value;
+      if (voices.length > 0 && selectedIdx !== "") {
+        utter.voice = voices[selectedIdx];
+        utter.lang = utter.voice.lang; 
+      } else { utter.lang = 'vi-VN'; }
+
+      utter.onend = () => { if(!isPaused) { currentIdx++; speakSentence(); } };
+      utter.onerror = (e) => { if (e.error !== 'interrupted') resetAudioUI(); };
+      synth.speak(utter);
+    }
+
+    btnPlay.addEventListener('click', () => {
+      if (isPaused) { isPaused = false; } else { initSentences(); if (sentences.length === 0) return alert("Không tìm thấy nội dung"); currentIdx = 0; }
+      speakSentence();
+      btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
+    });
+
+    btnPause.addEventListener('click', () => {
+      isPaused = true; synth.cancel();
+      btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Tiếp tục'; btnPause.style.display = 'none';
+    });
+    btnStop.addEventListener('click', resetAudioUI);
+
+    btnNext?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences(); 
+      if (sentences.length > 0) { isPaused = false; currentIdx = Math.min(sentences.length - 1, currentIdx + 1); speakSentence(); btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block'; }
+    });
+
+    btnPrev?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences();
+      if (sentences.length > 0) { isPaused = false; currentIdx = Math.max(0, currentIdx - 1); speakSentence(); btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block'; }
     });
   }
-
-  let autoScrollTimer = null;
-  const fabAutoScroll = document.getElementById('fabAutoScroll');
-  if(fabAutoScroll) {
-    fabAutoScroll.addEventListener('click', () => {
-      if (autoScrollTimer) {
-        clearInterval(autoScrollTimer);
-        autoScrollTimer = null;
-        fabAutoScroll.style.boxShadow = '';
-      } else {
-        fabAutoScroll.style.boxShadow = '0 0 0 4px rgba(245, 158, 11, 0.4)';
-        autoScrollTimer = setInterval(() => { window.scrollBy(0, 1); }, 30);
-      }
-    });
-    window.addEventListener('touchstart', () => { if(autoScrollTimer) fabAutoScroll.click(); }, {passive:true});
-    window.addEventListener('wheel', () => { if(autoScrollTimer) fabAutoScroll.click(); }, {passive:true});
-  }
-
-// --- 3. MAIL POPUP CHAT ---
-  const mailBtn = document.getElementById('fabMail');
-  const mailPopup = document.getElementById('mailPopup');
   
-  if(mailBtn && mailPopup) {
-     mailBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        mailPopup.classList.add('open');
-        document.getElementById('toolFabWrap')?.classList.remove('open');
-     });
-     
-     document.getElementById('mailPopupClose').addEventListener('click', () => {
-        mailPopup.classList.remove('open');
-     });
-     
-     mailPopup.addEventListener('click', (e) => e.stopPropagation());
-
-     const chatContainer = document.getElementById('chatContainer');
-     const chatInput = document.getElementById('chatInput');
-     const chatSend = document.getElementById('chatSend');
-     
-     const adminChatList = document.getElementById('adminChatList');
-     const userChatView = document.getElementById('chatUserView');
-     const adminChatView = document.getElementById('chatAdminView');
-     
-     const myToken = getMyToken();
-     
-     waitFirebase(({ db, ref, onValue, push }) => {
-        if(window.__ddIsAdmin) {
-            // ADMIN VIEW
-            userChatView.style.display = 'none';
-            adminChatView.style.display = 'block';
-            
-            onValue(ref(db, 'chats'), snap => {
-                const data = snap.val();
-                if(!data) { adminChatList.innerHTML = '<div style="font-size:0.8rem;color:#888;">Chưa có tin nhắn nào.</div>'; return; }
-                
-                let html = '';
-                Object.entries(data).forEach(([token, msgs]) => {
-                    const msgItems = Object.entries(msgs).map(([id, m]) => ({id, ...m})).sort((a,b)=>a.ts-b.ts);
-                    const chatHtml = msgItems.map(m => {
-                        const isMe = m.isAdmin;
-                        return `<div class="chat-bubble ${isMe ? 'chat-user' : 'chat-admin'}">${esc(m.text)} <span class="chat-time">${timeAgo(m.ts)}</span></div>`;
-                    }).join('');
-                    
-                    html += `<div class="admin-thread-card">
-                       <div style="font-size:0.7rem; color:var(--sky-dark); font-weight:bold; margin-bottom:5px;">User: ${token.substring(0,6)}...</div>
-                       <div class="chat-container" style="height:140px">${chatHtml}</div>
-                       <div class="msg-form">
-                          <input id="admin-chat-inp-${token}" placeholder="Trả lời..." autocomplete="off">
-                          <button onclick="window.sendAdminChat('${token}')">Gửi</button>
-                       </div>
-                    </div>`;
-                });
-                adminChatList.innerHTML = html;
-                // Cuộn từng box xuống cuối
-                adminChatList.querySelectorAll('.chat-container').forEach(c => c.scrollTop = c.scrollHeight);
-            });
-            
-            // Cài đặt hàm gửi cho Admin vào window để gọi từ inline HTML
-            window.sendAdminChat = async function(token) {
-                const inp = document.getElementById('admin-chat-inp-' + token);
-                const text = inp.value.trim();
-                if(!text) return;
-                inp.disabled = true;
-                try {
-                    await push(ref(db, `chats/${token}`), {
-                        name: 'Admin 🐋', text, ts: Date.now(), isAdmin: true
-                    });
-                    inp.value = '';
-                } catch(e) { alert("Lỗi gửi tin: " + e.message); }
-                finally { inp.disabled = false; }
-            };
-
-        } else {
-            // USER VIEW
-            const chatPath = `chats/${myToken}`;
-            
-            onValue(ref(db, chatPath), snap => {
-                const data = snap.val();
-                if(!data) {
-                    chatContainer.innerHTML = '<div style="text-align: center; color: var(--text-dim); font-size: 0.75rem; padding: 20px;">Hãy để lại lời nhắn cho Admin nhé 𓆝</div>';
-                    return;
-                }
-                
-                const msgs = Object.values(data).sort((a,b) => a.ts - b.ts);
-                chatContainer.innerHTML = msgs.map(m => {
-                    const isMe = m.isAdmin === window.__ddIsAdmin; 
-                    const bubbleClass = isMe ? 'chat-user' : 'chat-admin';
-                    const nameLabel = isMe ? '' : `<b style="font-size:0.7rem; color:var(--sky-dark)">${m.name}</b><br/>`;
-                    return `<div class="chat-bubble ${bubbleClass}">${nameLabel}${esc(m.text)} <span class="chat-time">${timeAgo(m.ts)}</span></div>`;
-                }).join('');
-                
-                chatContainer.scrollTop = chatContainer.scrollHeight; // Cuộn xuống cuối
-            });
-            
-            chatSend.onclick = async () => {
-                const text = chatInput.value.trim();
-                if(!text) return;
-                chatSend.disabled = true;
-                
-                const name = getSavedName() || 'Khách';
-                
-                try {
-                    await push(ref(db, chatPath), {
-                        text, name, ts: Date.now(), isAdmin: false
-                    });
-                    chatInput.value = '';
-                } catch(e) {
-                    alert("Lỗi gửi tin: " + e.message);
-                } finally {
-                    chatSend.disabled = false;
-                }
-            };
-        }
-     });
-  }
-
-// --- 4. ADMIN LOGIN ---
+  // 3. ADMIN LOGIN
   const footerAdminBtn = document.getElementById('footerAdmin');
   if (footerAdminBtn) {
     footerAdminBtn.addEventListener('click', (e) => {
@@ -1198,64 +1212,56 @@ document.addEventListener('DOMContentLoaded', () => {
     if (footerAdminBtn && isAdmin) { footerAdminBtn.style.opacity = '1'; footerAdminBtn.style.color = 'var(--sky)'; footerAdminBtn.title = "Đăng xuất Admin"; }
   });
 
-  // --- 5. TÙY CHỈNH THIẾT LẬP ĐỌC ---
+  // 4. THIẾT LẬP ĐỌC (Cải tiến Auto-close & Đổi màu/đậm)
   let fz = parseInt(localStorage.getItem('dd_fz') || '18');
   let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
   
   const btnSet = document.getElementById('fabSettings'), popSet = document.getElementById('rsPopup');
   
+  // Nút bật/tắt bảng cài đặt
   btnSet?.addEventListener('click', e => { 
     e.stopPropagation(); 
     popSet?.classList.toggle('open'); 
     document.getElementById('toolFabWrap')?.classList.remove('open');
   });
 
+  // Tự động đóng bảng cài đặt khi bấm ra ngoài
   document.addEventListener('click', (e) => {
     if (popSet && popSet.classList.contains('open') && !popSet.contains(e.target)) {
       popSet.classList.remove('open');
     }
+    // Ẩn menu dropdown của chương
     document.querySelectorAll('.chap-dd-list').forEach(el=>el.classList.remove('open'));
-    if (mailPopup && mailPopup.classList.contains('open') && !mailPopup.contains(e.target) && !mailBtn.contains(e.target)) {
-        mailPopup.classList.remove('open');
-    }
   });
 
   document.getElementById('rsDec')?.addEventListener('click', () => { if(fz > 12) { fz-=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
   document.getElementById('rsInc')?.addEventListener('click', () => { if(fz < 30) { fz+=1; root.style.setProperty('--read-fz', fz + 'px'); localStorage.setItem('dd_fz', fz); } });
   
+  // Font Family
   popSet?.querySelectorAll('.ff-btn').forEach(fb => fb.addEventListener('click', () => {
       ff = fb.dataset.font; root.style.setProperty('--read-ff', ff); localStorage.setItem('dd_ff', ff);
       popSet.querySelectorAll('.ff-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
+  // Font Weight
   popSet?.querySelectorAll('.fw-btn').forEach(fb => fb.addEventListener('click', () => {
       const fw = fb.dataset.fw; root.style.setProperty('--read-fw', fw); localStorage.setItem('dd_fw', fw);
       popSet.querySelectorAll('.fw-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
-  popSet?.querySelectorAll('.lh-btn').forEach(fb => fb.addEventListener('click', () => {
-      const lh = fb.dataset.lh; root.style.setProperty('--read-lh', lh); localStorage.setItem('dd_lh', lh);
-      popSet.querySelectorAll('.lh-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
+  // Text Color
+  popSet?.querySelectorAll('.color-btn').forEach(fb => fb.addEventListener('click', () => {
+      const tc = fb.dataset.color; root.style.setProperty('--read-color', tc); localStorage.setItem('dd_tc', tc);
+      popSet.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
-  popSet?.querySelectorAll('.theme-btn').forEach(fb => fb.addEventListener('click', () => {
-      const th = fb.dataset.themeVal; root.setAttribute('data-read-theme', th); localStorage.setItem('dd_read_theme', th);
-      popSet.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
-  }));
+  // Phục hồi trạng thái nút thiết lập
+  const initFw = localStorage.getItem('dd_fw');
+  if(initFw) { popSet?.querySelectorAll('.fw-btn').forEach(b=>{ b.classList.remove('active'); if(b.dataset.fw === initFw) b.classList.add('active'); });}
+  const initTc = localStorage.getItem('dd_tc');
+  if(initTc) { popSet?.querySelectorAll('.color-btn').forEach(b=>{ b.classList.remove('active'); if(b.dataset.color === initTc) b.classList.add('active'); });}
 
-  const syncActiveButton = (selector, key, defaultVal) => {
-      const val = localStorage.getItem(key) || defaultVal;
-      popSet?.querySelectorAll(selector).forEach(b=>{ 
-         b.classList.remove('active'); 
-         if(b.dataset.font === val || b.dataset.fw === val || b.dataset.lh === val || b.dataset.themeVal === val) b.classList.add('active'); 
-      });
-  };
-  syncActiveButton('.ff-btn', 'dd_ff', "'Newsreader', serif");
-  syncActiveButton('.fw-btn', 'dd_fw', "400");
-  syncActiveButton('.lh-btn', 'dd_lh', "1.9");
-  syncActiveButton('.theme-btn', 'dd_read_theme', "light");
-
-  // --- 6. MENU MỤC LỤC CHƯƠNG ---
+  // 5. DROPDOWNS (MENU MỤC LỤC CHƯƠNG)
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);
     if(!btn || !list) return;
@@ -1263,7 +1269,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
 
-// --- 7. HỆ THỐNG COMMENT INLINE TỐI ƯU ---
+// --- HỆ THỐNG COMMENT INLINE TỐI ƯU ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
@@ -1341,6 +1347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
+        // Nút Hiển thị Câu trả lời (Wattpad)
         const toggleBtnHtml = repliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${item.id}">Hiển thị ${repliesCount} câu trả lời ▾</button>` : '';
 
         return `
@@ -1378,6 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pIdx = document.getElementById('icFormSend').getAttribute('data-current-p');
         const pKey = 'p' + pIdx;
         
+        // Nút Bật/Tắt List Reply (Chuẩn Wattpad)
         if (tgt.classList.contains('toggle-replies-btn')) {
             const thread = document.getElementById('thread-' + tgt.dataset.cid);
             if(thread) {
@@ -1387,11 +1395,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Mở khung trả lời (Gốc)
         if (tgt.classList.contains('ic-reply-toggle')) {
             const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
             if (form) form.style.display = form.style.display === 'flex' ? 'none' : 'flex';
         }
         
+        // Trả lời một Reply con -> Tag tên
         if (tgt.classList.contains('ic-reply-at-btn')) {
             const cid = tgt.dataset.cid;
             const form = document.getElementById('ic-rf-' + cid);
@@ -1403,11 +1413,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
+        // Hủy
         if (tgt.classList.contains('ic-rf-cancel')) {
             const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
             if (form) form.style.display = 'none';
         }
         
+        // Gửi Reply Sidebar
         if (tgt.classList.contains('ic-rf-send')) {
             const cid = tgt.dataset.cid;
             const nameInp = document.getElementById('ic-rn-' + cid);
@@ -1426,12 +1438,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     textInp.value = '';
                     const form = document.getElementById('ic-rf-' + cid);
                     if(form) form.style.display = 'none'; 
+                    // Tự động mở thread ra xem
                     document.getElementById('thread-' + cid)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
                 finally { tgt.disabled = false; tgt.innerText = 'Gửi'; }
             });
         }
         
+        // Xóa bình luận cha
         if (tgt.classList.contains('ic-del-btn')) {
             if (confirm('Bạn muốn xóa bình luận này? Toàn bộ trả lời bên trong cũng sẽ bị xóa.')) {
                 waitFirebase(async ({db, ref, remove}) => {
@@ -1440,6 +1454,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
+        // Xóa Reply con
         if (tgt.classList.contains('ic-del-reply-btn')) {
             if (confirm('Bạn muốn xóa phản hồi này?')) {
                 waitFirebase(async ({db, ref, remove}) => {
@@ -1606,6 +1621,7 @@ function setupChapComments(){
     cmtList.onclick = async (e) => {
        const tgt = e.target;
        
+       // Đóng mở Thread
        if(tgt.classList.contains('toggle-replies-btn')) {
            const thread = document.getElementById('chap-thread-' + tgt.dataset.cid);
            if(thread) {

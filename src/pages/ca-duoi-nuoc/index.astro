@@ -11,28 +11,24 @@ const storiesData = slugs.map(slug => {
   const storyChaps = allChaps.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
-  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
+  const chapCount = storyChaps.filter(c => {
+    const cNum = Number(c.frontmatter?.chuong);
+    return !isNaN(cNum) && cNum > 0; // Chỉ đếm nếu là chương 1 trở đi
+  }).length;
+  
   const tongSoChuong = parseInt(fm.tong_so_chuong) || 0;
   
   return { 
     title: fm.truyen_name || slug,
-    author: fm.author || 'Ẩn danh',
-    cover: fm.cover || `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
-    tags: fm.tags || [],
-    desc: fm.description || '',
+    chapCount, // Số chương thực tế (>0)
+    tong_so_chuong: tongSoChuong,
     isCompleted: tongSoChuong > 0 && chapCount >= tongSoChuong,
     url: `/dynamic-duo-web/truyen/${slug}/`,
     tong_so_chuong: tongSoChuong
   };
 });
 
-// Chỉ những truyện đã có ít nhất 1 chương (khác chương 0) 
-// và chưa hoàn thành thì mới vào danh sách "Cá dưới nước"
-const caDuoiNuocList = storiesData.filter(s => 
-  !s.isCompleted && 
-  s.chapCount > 0 &&        // QUAN TRỌNG: Phải có ít nhất chương 1 trở đi
-  s.tong_so_chuong > 0
-);
+const caDuoiNuocList = storiesData.filter(s => s.chapCount > 0 && !s.isCompleted);
 ---
 
 <Layout frontmatter={{ title: 'Cá dưới nước' }}>
@@ -43,14 +39,14 @@ const caDuoiNuocList = storiesData.filter(s =>
     .page-sub { font-size: .85rem; color: var(--text-dim); font-style: italic; margin: 0; }
 
     .story-list { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; max-width: 900px; margin-left: auto; margin-right: auto;}
-    .story-item {
-      display: flex; gap: 20px;
-      border: 1px solid rgba(186,230,253,.5);
-      border-radius: var(--r-md);
-      overflow: hidden;
-      background: #fff;
-      transition: var(--t);
-    }
+.story-item {
+  display: flex; gap: 20px;
+  border: 1px solid rgba(186,230,253,.5);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--bg-card); /* Dùng biến này để tự đổi màu theo theme */
+  transition: var(--t);
+}
     [data-theme="dark"] .story-item { background: var(--bg-card); border-color: rgba(126,200,227,0.15); }
     .story-item:hover { box-shadow: var(--sh-card); transform: translateY(-2px); }
     .story-cover { width: 140px; min-height: 180px; object-fit: cover; flex-shrink: 0; background: var(--sky-pale); display: block; }

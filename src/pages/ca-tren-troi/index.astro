@@ -1,34 +1,49 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+// 1. Quét toàn bộ file .md và các thư mục truyện (để lấy cả những truyện chưa có file chương nào)
 const allChaps = Object.values(import.meta.glob('../truyen/**/*.md', { eager: true })) as any[];
+const storyFolders = Object.keys(import.meta.glob('../truyen/*/index.astro'));
 
-// 1. Lọc slug chuẩn xác, bỏ các url không phải truyện
-const slugs = [...new Set(allChaps.map(p => {
-  const parts = (p.url || "").split('/').filter(Boolean);
-  const idx = parts.indexOf('truyen');
-  return idx !== -1 ? parts[idx + 1] : null;
-}))].filter(Boolean) as string[];
+// 2. Lấy danh sách slug duy nhất
+const slugs = [...new Set([
+  ...allChaps.map(p => {
+    const parts = (p.url || "").split('/').filter(Boolean);
+    const idx = parts.indexOf('truyen');
+    return idx !== -1 ? parts[idx + 1] : null;
+  }),
+  ...storyFolders.map(path => {
+    const parts = path.split('/');
+    const idx = parts.indexOf('truyen');
+    return idx !== -1 ? parts[idx + 1] : null;
+  })
+])].filter(Boolean) as string[];
 
-// 2. Gom dữ liệu
+// 3. Gom dữ liệu và tính toán số chương
 const storiesData = slugs.map(slug => {
   const storyChaps = allChaps.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
-  const chapCount = storyChaps.filter(c => c.frontmatter?.chuong && c.frontmatter.chuong !== 0).length;
   
+  // Đếm chương chuẩn (Chỉ tính từ chương 1 trở đi)
+  const chapCount = storyChaps.filter(c => {
+    const cNum = Number(c.frontmatter?.chuong);
+    return !isNaN(cNum) && cNum > 0;
+  }).length;
+
   return { 
-    title: fm.truyen_name || slug,
+    title: fm.truyen_name || slug.replace(/-/g, ' '),
     author: fm.author || 'Ẩn danh',
     cover: fm.cover || `/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`,
     tags: fm.tags || [],
-    desc: fm.description || '',
-    isUpcoming: chapCount === 0, // Dấu hiệu của Cá trên trời (có file giới thiệu nhưng chưa có chương nào)
+    desc: fm.description || 'Dự án đang trong quá trình chuẩn bị.',
+    chapCount,
     url: `/dynamic-duo-web/truyen/${slug}/`
   };
 });
 
-// 3. Lọc danh sách Cá trên trời
-const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
+// 4. Lọc: Chỉ lấy những truyện chưa có chương nào (chapCount = 0)
+const caTrenTroiList = storiesData.filter(s => s.chapCount === 0);
 ---
 
 <Layout frontmatter={{ title: 'Cá trên trời' }}>
@@ -39,15 +54,21 @@ const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
     .page-sub { font-size: .85rem; color: var(--text-dim); font-style: italic; margin: 0; }
 
     .story-list { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; max-width: 900px; margin-left: auto; margin-right: auto;}
+    
     .story-item {
       display: flex; gap: 20px;
       border: 1px solid rgba(186,230,253,.5);
       border-radius: var(--r-md);
       overflow: hidden;
-      background: #fff;
+      background: var(--bg-card); /* FIX DARK THEME */
       transition: var(--t);
     }
-    [data-theme="dark"] .story-item { background: var(--bg-card); border-color: rgba(126,200,227,0.15); }
+    
+    [data-theme="dark"] .story-item { 
+      border-color: rgba(126,200,227,0.15); 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
     .story-item:hover { box-shadow: var(--sh-card); transform: translateY(-2px); }
     
     /* Cover cho truyện chưa có bìa thì hiện mây */
@@ -55,7 +76,6 @@ const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
     
     .story-info { padding: 18px 20px 18px 0; flex: 1; display: flex; flex-direction: column; }
     
-    /* Đổi màu Badge cho Cá trên trời (Màu xám/bạc) */
     .story-badge {
       display: inline-block; font-size: .65rem; letter-spacing: 1.5px;
       text-transform: uppercase; padding: 2px 10px; border-radius: var(--r-pill);
@@ -69,18 +89,20 @@ const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
     .story-author { font-size: .76rem; color: var(--text-dim); font-style: italic; margin: 0 0 8px; }
     .story-desc { font-size: .84rem; color: var(--text-mid); line-height: 1.65; margin: 0 0 10px; flex: 1; }
     [data-theme="dark"] .story-desc { color: #b8d4e8; }
+    
     .story-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
     .story-tag { font-size: .68rem; padding: 2px 8px; border: 1px solid var(--sky-light); border-radius: var(--r-pill); color: var(--sky); background: var(--sky-pale); }
     [data-theme="dark"] .story-tag { background: rgba(20,55,90,.6); border-color: rgba(80,150,210,.4); color: #a8d4f0; }
+    
     .story-progress { font-size: .72rem; color: var(--text-dim); margin-bottom: 12px; }
     .story-btns { display: flex; gap: 8px; }
+    
     .btn-outline {
       padding: 7px 16px; border: 1.5px solid var(--sky-light); border-radius: var(--r-pill);
       color: var(--sky-dark); font-size: .8rem; font-family: 'Newsreader', serif; transition: var(--t);
     }
     [data-theme="dark"] .btn-outline { color: #a8daf0; border-color: rgba(80,150,210,.4); }
-    .btn-outline:hover { background: var(--sky-pale); color: var(--sky); }
-    [data-theme="dark"] .btn-outline:hover { background: rgba(20,55,90,.6); }
+
     @media (max-width: 500px) {
       .story-item { flex-direction: column; }
       .story-cover { width: 100%; height: 180px; }
@@ -97,14 +119,14 @@ const caTrenTroiList = storiesData.filter(s => s.isUpcoming);
   <div class="story-list">
     {caTrenTroiList.length === 0 ? (
       <div style="text-align: center; color: var(--text-dim); font-style: italic; padding: 40px 0;">
-        Hiện không có dự án nào sắp ra mắt.
+        Hiện không có dự án nào đang chuẩn bị.
       </div>
     ) : (
       caTrenTroiList.map(s => (
         <div class="story-item">
           <a href={s.url}>
             {s.cover ? (
-               <img src={s.cover} alt={s.title} class="story-cover" onerror="this.parentElement.style.background='var(--sky-pale)'; this.style.display='none'" />
+               <img src={s.cover} alt={s.title} class="story-cover" onerror="this.parentElement.innerHTML='<div class=\'story-cover\'>☁️</div>'" />
             ) : (
                <div class="story-cover">☁️</div>
             )}

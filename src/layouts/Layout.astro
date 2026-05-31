@@ -1298,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                      <input class="cfm-name reply-inp" id="rn-${r.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                      <div class="cfm-bottom">
                         <textarea class="cfm-text reply-inp-text" id="rt-${r.id}" placeholder="Phản hồi..." rows="1"></textarea>
-                        <button class="cfm-send ic-rf-send" data-cid="${rootCid}" data-replyto="${r.id}" data-formid="${r.id}">➤</button>
+<button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="" data-formid="${item.id}">➤</button>
                      </div>
                      <button class="ic-rf-cancel" data-formid="${r.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
                   </div>
@@ -1654,8 +1654,7 @@ function setupChapComments(){
                <input class="cfm-name reply-inp" id="rn-${c.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
                   <textarea class="cfm-text reply-inp-text" id="rt-${c.id}" placeholder="Phản hồi..." rows="1"></textarea>
-                  <button class="cfm-send reply-send-btn" data-cid="${c.id}" data-replyto="${c.id}" data-formid="${c.id}">➤</button>
-               </div>
+<button class="cfm-send reply-send-btn" data-cid="${c.id}" data-replyto="" data-formid="${c.id}">➤</button>               </div>
                <button class="reply-cancel-btn" data-formid="${c.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>

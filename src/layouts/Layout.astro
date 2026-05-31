@@ -133,6 +133,49 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
+  /* ─── FIX DARK THEME TOÀN DIỆN ─── */
+[data-theme="dark"] {
+  /* 1. Nâng độ sáng chữ nội dung chính */
+  --text-main: #f8fafc; 
+  --text-mid: #cbd5e1;
+}
+
+/* 2. Fix Tên truyện (Index cá) */
+[data-theme="dark"] .story-title, 
+[data-theme="dark"] .sc-title {
+  color: #f1f5f9 !important; /* Màu trắng xám rất sáng */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 3. Fix Nút "Trang truyện" (Nút viền mảnh) */
+[data-theme="dark"] .btn-outline, 
+[data-theme="dark"] .sc-link.secondary {
+  color: #a8daf0 !important; /* Màu xanh nhạt sáng */
+  border-color: rgba(168, 218, 240, 0.4) !important;
+  background: rgba(15, 35, 54, 0.8) !important;
+}
+[data-theme="dark"] .btn-outline:hover, 
+[data-theme="dark"] .sc-link.secondary:hover {
+  background: rgba(168, 218, 240, 0.1) !important;
+  border-color: #a8daf0 !important;
+}
+
+/* 4. Fix lỗi Khung giới thiệu bị trắng (Trong trang giới thiệu truyện) */
+[data-theme="dark"] .intro-block {
+  background: #1e3a5f !important; /* Đổi từ trắng sang xanh Navy đậm */
+  border-color: rgba(126, 200, 227, 0.2) !important;
+  color: #e2e8f0 !important; /* Chữ sáng lên */
+}
+
+/* 5. Fix tiêu đề "GIỚI THIỆU" bên trong khung */
+[data-theme="dark"] .intro-block h4 {
+  color: #7ec8e3 !important;
+}
+
+/* 6. Fix chữ nội dung truyện (novel-content) sáng hơn nữa */
+[data-theme="dark"] .novel-content p {
+  color: #f1f5f9 !important;
+}
 /* FIX DARK MODE CHO KHUNG TRUYỆN */
   [data-theme="dark"] .story-item, 
   [data-theme="dark"] .sc, 

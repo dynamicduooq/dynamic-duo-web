@@ -1226,7 +1226,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let allInlineComments = {}; 
   
   // Hàm dọn rác tự động cho Inline Comments
-  function autoCleanupInline(data, maxItems = 500) {
+  function autoCleanupInline(data, maxItems = 200) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           Object.keys(data).forEach(pKey => {
@@ -1276,10 +1276,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hàm đệ quy render reply
     function renderThreadHtml(repliesFlat, parentId, level, rootCid) {
-const children = repliesFlat.filter(r => {
-    const rt = r.replyTo || null;
-    return parentId === null ? (rt === null || rt === rootCid) : (rt === parentId);
-});
+        // Fix tương thích cho dữ liệu cũ (lỡ lưu replyTo bằng rootCid)
+        const children = repliesFlat.filter(r => {
+            const rt = r.replyTo || null;
+            return parentId === null ? (rt === null || rt === rootCid) : (rt === parentId);
+        });
+
         if(children.length === 0) return '';
         
         const myToken = getMyToken();
@@ -1306,7 +1308,7 @@ const children = repliesFlat.filter(r => {
                      <input class="cfm-name reply-inp" id="rn-${r.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                      <div class="cfm-bottom">
                         <textarea class="cfm-text reply-inp-text" id="rt-${r.id}" placeholder="Phản hồi..." rows="1"></textarea>
-<button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="" data-formid="${item.id}">➤</button>
+                        <button class="cfm-send ic-rf-send" data-cid="${rootCid}" data-replyto="${r.id}" data-formid="${r.id}">➤</button>
                      </div>
                      <button class="ic-rf-cancel" data-formid="${r.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
                   </div>
@@ -1338,7 +1340,8 @@ const children = repliesFlat.filter(r => {
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
         const rootRepliesHtml = renderThreadHtml(repliesFlat, null, 1, item.id);
-const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === item.id).length;        
+        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === item.id).length;
+        
         const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${item.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `
@@ -1362,7 +1365,8 @@ const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === ite
                <input class="cfm-name reply-inp" id="rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
                   <textarea class="cfm-text reply-inp-text" id="rt-${item.id}" placeholder="Phản hồi..." rows="1"></textarea>
-<button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="" data-formid="${item.id}">➤</button>               </div>
+                  <button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="" data-formid="${item.id}">➤</button>
+               </div>
                <button class="ic-rf-cancel" data-formid="${item.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>
@@ -1430,10 +1434,12 @@ const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === ite
                     textInp.value = '';
                     const form = document.getElementById('ic-rf-' + formId);
                     if(form) { form.style.display = 'none'; }
-const targetThread = replyTo ? `thread-${replyTo}` : `thread-${rootCid}`;
+                    
+                    const targetThread = replyTo ? `thread-${replyTo}` : `thread-${rootCid}`;
                     document.getElementById(targetThread)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
-                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }            });
+                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
+            });
         }
         
         if (tgtBtn.classList.contains('ic-del-btn')) {
@@ -1454,7 +1460,7 @@ const targetThread = replyTo ? `thread-${replyTo}` : `thread-${rootCid}`;
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
           const data = snap.val() || {}; 
           allInlineComments = data;
-          autoCleanupInline(data, 500); // Dọn rác
+          autoCleanupInline(data, 200); // Dọn rác
           
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
@@ -1543,7 +1549,6 @@ function setupChapterLike(){
       if(isLiked) {
           await remove(ref(db, `chapter_likes/${key}/${myToken}`));
       } else {
-          // Bắn pháo giấy khi thích
           const rect = btn.getBoundingClientRect();
           shootConfetti(rect.left + rect.width / 2, rect.top);
           await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
@@ -1564,8 +1569,8 @@ function setupChapComments(){
   
   if(cmtName) cmtName.value = getSavedName();
 
-  // Dọn rác
-  function autoCleanupComments(data, maxItems = 500) {
+  // Dọn rác comment cuối chương
+  function autoCleanupComments(data, maxItems = 300) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           const keys = Object.keys(data);
@@ -1578,7 +1583,11 @@ function setupChapComments(){
   }
 
   function renderMainThreadHtml(repliesFlat, parentId, level, rootCid) {
-        const children = repliesFlat.filter(r => (r.replyTo || null) === parentId);
+        const children = repliesFlat.filter(r => {
+            const rt = r.replyTo || null;
+            return parentId === null ? (rt === null || rt === rootCid) : (rt === parentId);
+        });
+
         if(children.length === 0) return '';
         
         return children.map(r => {
@@ -1617,7 +1626,7 @@ function setupChapComments(){
   waitFirebase(({db, ref, push, onValue, remove}) => {
     onValue(ref(db, 'comments/'+key), snap => {
       const data = snap.val();
-      autoCleanupComments(data);
+      autoCleanupComments(data, 300); // Kích hoạt dọn rác
       
       const openThreads = new Set();
       if(cmtList) { cmtList.querySelectorAll('.reply-thread.open').forEach(el => openThreads.add(el.id)); }
@@ -1631,7 +1640,8 @@ function setupChapComments(){
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
         const rootRepliesHtml = renderMainThreadHtml(repliesFlat, null, 1, c.id);
-const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === c.id).length;
+        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === c.id).length;
+
         const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${c.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `
@@ -1659,7 +1669,8 @@ const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === c.i
                <input class="cfm-name reply-inp" id="rn-${c.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
                   <textarea class="cfm-text reply-inp-text" id="rt-${c.id}" placeholder="Phản hồi..." rows="1"></textarea>
-<button class="cfm-send reply-send-btn" data-cid="${c.id}" data-replyto="" data-formid="${c.id}">➤</button>               </div>
+                  <button class="cfm-send reply-send-btn" data-cid="${c.id}" data-replyto="" data-formid="${c.id}">➤</button>
+               </div>
                <button class="reply-cancel-btn" data-formid="${c.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>
@@ -1726,11 +1737,11 @@ const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === c.i
                  const form = document.getElementById('rf-' + formId);
                  if(form) { form.style.display = 'none'; }
                  
-const targetThread = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${rootCid}`;
-                    document.getElementById(targetThread)?.classList.add('open');
-                } catch (err) { alert("Lỗi: " + err.message); } 
-                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
-                         });
+                 const targetThread = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${rootCid}`;
+                 document.getElementById(targetThread)?.classList.add('open');
+             } catch (err) { alert("Lỗi: " + err.message); } 
+             finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
+         });
        }
        
        if(tgtBtn.classList.contains('cmt-del-btn')) {

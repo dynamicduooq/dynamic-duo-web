@@ -226,7 +226,7 @@ if (isNovelPage) {
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
     @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
-    /* ── FOCUS MODE (CHẾ ĐỘ TẬP TRUNG) ── */
+    /* ── FOCUS MODE (CHẾ ĐỘ TẬP TRUNG TỐI ƯU CẢ NỀN WEB) ── */
     body.focus-mode nav, 
     body.focus-mode footer, 
     body.focus-mode .chap-nav-container, 
@@ -235,10 +235,17 @@ if (isNovelPage) {
     body.focus-mode .chap-like-area,
     body.focus-mode .tags-container,
     body.focus-mode .editor-note-box { display: none !important; }
-    body.focus-mode { background: var(--bg-card) !important; }
+    
     body.focus-mode .page-wrapper { margin-top: 0 !important; padding-top: 20px; }
-    body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; padding-top: 20px !important; }
-    /* Menu mờ đi khi ở Focus Mode, hover sẽ hiện lại bình thường */
+    body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; padding-top: 20px !important; }
+    
+    /* Gán Theme màu nền Full Màn hình khi bật Focus Mode */
+    body.focus-mode { background-color: var(--bg-card) !important; }
+    html[data-read-theme="sepia"] body.focus-mode { background-color: #fcf6e8 !important; }
+    html[data-read-theme="green"] body.focus-mode { background-color: #f0fdf4 !important; }
+    html[data-read-theme="dark"] body.focus-mode { background-color: #0f172a !important; color: #e2e8f0 !important; }
+    
+    /* Làm mờ FAB ở Focus Mode (Hover hiện lại để chỉnh cài đặt Theme) */
     body.focus-mode .tool-fab-wrap { opacity: 0.15; transition: opacity 0.3s ease; }
     body.focus-mode .tool-fab-wrap:hover { opacity: 1; }
 
@@ -356,7 +363,6 @@ if (isNovelPage) {
     .ic-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 9998; display: none; opacity: 0; transition: opacity 0.3s ease; }
     .ic-overlay.show { display: block; opacity: 1; }
     
-    /* SIDEBAR INLINE CHAT ĐÈ LÊN THANH NAV */
     .ic-sidebar { position:fixed; top:0; right:0; bottom:0; width:320px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:9999; overflow:hidden; }
     .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
     @media(max-width:600px){ .ic-sidebar { width:min(340px,90vw); } }
@@ -399,11 +405,13 @@ if (isNovelPage) {
     .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    /* CSS ĐỆ QUY THREAD */
+    /* CSS ĐỆ QUY THREAD (Thụt lề duy nhất 1 lần đầu) */
     .ic-replies { display:none; flex-direction:column; gap:8px; margin-top:7px; padding:7px 0 7px 14px; border-left:2px solid rgba(186,230,253,.8); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.4); }
-    .ic-replies .ic-replies { padding: 0 !important; border-left: none !important; margin-top: 5px; }
+    
+    /* Ghi đè: Từ Level 2 trở đi không thụt lề nữa */
+    .ic-replies .ic-replies { padding-left: 0 !important; border-left: none !important; margin-top: 5px; margin-left: 0 !important; }
     
     .ic-reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
     .ic-reply-body { flex:1; min-width:0; background: rgba(255,255,255,0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(186,230,253,0.3);}
@@ -442,7 +450,7 @@ if (isNovelPage) {
     .cfm-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     /* ── CHAPTER-END COMMENTS ── */
-    .chap-like-area { text-align:center; margin: 30px 0 40px; }
+    .chap-like-area { text-align:center; margin: 30px 0 40px; position: relative;}
     .chap-like-btn { background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark); padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08); user-select: none;}
     .chap-like-btn .heart { transition: transform 0.3s; display: inline-block; margin-right: 6px; font-size: 1.1rem; }
     .chap-like-btn:hover { transform: translateY(-3px); border-color: var(--sky); box-shadow: 0 6px 16px rgba(2,132,199,.15); }
@@ -482,9 +490,12 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
+    /* CSS THREAD CUỐI CHƯƠNG */
     .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.8); padding-left:16px; display:none; flex-direction:column; gap:10px; }
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.4); }
+    
+    /* Ghi đè: Từ Level 2 trở đi không thụt lề nữa */
     .reply-thread .reply-thread { padding-left: 0 !important; border-left: none !important; margin-top: 5px; }
     
     .reply-item { display:flex; gap:10px; align-items:flex-start; position:relative; }
@@ -556,6 +567,10 @@ if (isNovelPage) {
 <body>
 
 <div id="read-progress"></div>
+
+<audio id="bgmAudio" loop style="display:none;">
+    <source src="https://assets.mixkit.co/active_storage/sfx/1231/1231-preview.mp3" type="audio/mpeg">
+</audio>
 
 <nav id="navbar">
   <a class="nav-logo" href="/dynamic-duo-web/">dynamic duo 𓆝.°•</a>
@@ -802,7 +817,7 @@ if (isNovelPage) {
 
 <div class="tool-fab-wrap" id="toolFabWrap">
   <div class="tool-fab-menu" id="toolFabMenu">
-    {isHome && <button class="fab-btn" id="fabMail" title="Hòm thư" style="background:#0284c7">✉️</button>}
+    {isNovelPage && <button class="fab-btn" id="fabAudio" title="Nhạc nền thư giãn (Mưa)" style="background:#ec4899">🎵</button>}
     {isNovelPage && <button class="fab-btn" id="fabAutoScroll" title="Cuộn tự động" style="background:#f59e0b">⏬</button>}
     {isNovelPage && <button class="fab-btn" id="fabFocus" title="Chế độ tập trung" style="background:#10b981">👁️</button>}
     {isNovelPage && <button class="fab-btn" id="fabSettings" title="Cài đặt hiển thị" style="background:#8b5cf6">⚙️</button>}
@@ -885,20 +900,42 @@ function waitFirebase(cb){
   let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
 }
 
+/* HIỆU ỨNG THẢ TIM (CONFETTI) */
+function shootConfetti(x, y) {
+    const emojis = ['🤍', '✨', '🌸', '🐳', '🌊'];
+    for(let i=0; i<8; i++) {
+        const el = document.createElement('div');
+        el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.position = 'fixed';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.fontSize = (Math.random() * 10 + 15) + 'px';
+        el.style.pointerEvents = 'none';
+        el.style.zIndex = '99999';
+        el.style.transition = 'all 1s cubic-bezier(0.25, 1, 0.5, 1)';
+        document.body.appendChild(el);
+        
+        setTimeout(() => {
+            el.style.transform = `translate(${(Math.random()-0.5)*100}px, -${Math.random()*100 + 50}px) scale(0)`;
+            el.style.opacity = '0';
+        }, 50);
+        setTimeout(() => el.remove(), 1050);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-  // LƯU LỊCH SỬ ĐỌC CHO NÚT "TIẾP TỤC ĐỌC" Ở PC/MOBILE
+  // LƯU LỊCH SỬ ĐỌC VÀ TÍNH THỜI GIAN ĐỌC
   if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);
       localStorage.setItem('dd_last_read_title', chapTitle);
       
-      // Tính thời gian đọc
       const contentEl = document.getElementById('novelContent');
       if (contentEl) {
          const words = contentEl.innerText.trim().split(/\s+/).length;
-         const readTime = Math.ceil(words / 200); // TB đọc 200 từ/phút
+         const readTime = Math.ceil(words / 200); 
          const badge = document.getElementById('readTimeBadge');
          if (badge) {
              badge.innerHTML = `⏳ Thời gian đọc: ~${readTime} phút`;
@@ -910,7 +947,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const mm = document.getElementById('mobileMenu'), hb = document.getElementById('hamburger');
   hb?.addEventListener('click', () => mm?.classList.toggle('open'));
   
-  // FIX BONG BÓNG VÀ NÚT BA CHẤM KHÔNG PHẢN HỒI
   const fabWrap = document.getElementById('toolFabWrap'), fabToggle = document.getElementById('toolFabToggle');
   fabToggle?.addEventListener('click', (e) => { e.stopPropagation(); fabWrap.classList.toggle('open'); });
   document.getElementById('fabUp')?.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); fabWrap?.classList.remove('open'); });
@@ -942,6 +978,25 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
+// --- AMBIENT SOUND (BGM) ---
+  const fabAudio = document.getElementById('fabAudio');
+  const bgm = document.getElementById('bgmAudio');
+  let isBgmPlaying = false;
+  
+  if(fabAudio && bgm) {
+      fabAudio.addEventListener('click', () => {
+          if(isBgmPlaying) {
+              bgm.pause();
+              fabAudio.style.boxShadow = '';
+              isBgmPlaying = false;
+          } else {
+              bgm.play().catch(e => alert("Không thể phát nhạc nền: " + e));
+              fabAudio.style.boxShadow = '0 0 0 4px rgba(236, 72, 153, 0.4)';
+              isBgmPlaying = true;
+          }
+      });
+  }
+
 // --- FOCUS MODE & AUTO SCROLL ---
   const fabFocus = document.getElementById('fabFocus');
   if(fabFocus) {
@@ -950,7 +1005,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.body.classList.contains('focus-mode')) {
         fabFocus.style.background = '#ef4444';
         fabFocus.innerText = '✕';
-        alert('Đã bật Chế độ Tập trung. (Menu nổi vẫn có thể tương tác khi di chuột vào)');
       } else {
         fabFocus.style.background = '#10b981';
         fabFocus.innerText = '👁️';
@@ -1085,7 +1139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAdmin = e.detail?.isAdmin;
     if (footerAdminBtn && isAdmin) { footerAdminBtn.style.opacity = '1'; footerAdminBtn.style.color = 'var(--sky)'; footerAdminBtn.title = "Đăng xuất Admin"; }
     
-    // Khóa trường tên nếu là Admin
     document.querySelectorAll('.ic-form-name, .comment-inp, .cfm-name, .reply-inp').forEach(inp => {
         if(isAdmin) {
             inp.value = 'dynamic duo 𓆝';
@@ -1152,7 +1205,6 @@ document.addEventListener('DOMContentLoaded', () => {
   syncActiveButton('.lh-btn', 'dd_lh', "1.9");
   syncActiveButton('.theme-btn', 'dd_read_theme', "light");
 
-  // --- MENU MỤC LỤC CHƯƠNG ---
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);
     if(!btn || !list) return;
@@ -1160,13 +1212,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setupDD('ddBtnTop','ddListTop'); setupDD('ddBotBtn','ddListBot');
 
-// --- HỆ THỐNG COMMENT INLINE (ĐỆ QUY THREAD) ---
+// --- HỆ THỐNG COMMENT INLINE (ĐỆ QUY VÔ HẠN - CHỈ THỤT LỀ 1 LẦN) ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
   const icOverlay = document.getElementById('icOverlay');
   const pageId = pageKey(); 
   let allInlineComments = {}; 
+  
+  // Hàm dọn rác tự động cho Inline Comments
+  function autoCleanupInline(data, maxItems = 100) {
+      if(!data) return;
+      waitFirebase(({db, ref, remove}) => {
+          Object.keys(data).forEach(pKey => {
+              const pComments = data[pKey];
+              const keys = Object.keys(pComments);
+              if (keys.length > maxItems) {
+                  const sorted = keys.sort((a,b) => pComments[a].ts - pComments[b].ts);
+                  const toDelete = sorted.slice(0, keys.length - maxItems);
+                  toDelete.forEach(k => remove(ref(db, `inline_comments/${pageId}/${pKey}/${k}`)));
+              }
+          });
+      });
+  }
 
   if (novelContent && icSidebar) {
     const paragraphs = novelContent.querySelectorAll('p');
@@ -1207,13 +1275,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if(children.length === 0) return '';
         
         const myToken = getMyToken();
-        const html = children.map(r => {
+        return children.map(r => {
             const sub = repliesFlat.filter(sr => sr.replyTo === r.id);
             const rCanDel = window.__ddIsAdmin || r.token === myToken;
             
             return `
               <div class="ic-reply-item">
-                <div class="ic-reply-body">
+                <div class="ic-reply-body" style="width: 100%;">
                   <div class="ic-reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''} <span style="font-size:0.6rem;color:var(--text-dim);font-weight:normal">${timeAgo(r.ts)}</span></div>
                   <div class="ic-reply-text">${esc(r.text)}</div>
                   <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
@@ -1225,17 +1293,28 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="ic-replies" id="thread-${r.id}">
                      ${renderThreadHtml(repliesFlat, r.id, level + 1, rootCid)}
                   </div>
+                  
+                  <div class="chat-form-modern" id="ic-rf-${r.id}" style="display:none; margin-top: 8px;">
+                     <input class="cfm-name reply-inp" id="rn-${r.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+                     <div class="cfm-bottom">
+                        <textarea class="cfm-text reply-inp-text" id="rt-${r.id}" placeholder="Phản hồi..." rows="1"></textarea>
+                        <button class="cfm-send ic-rf-send" data-cid="${rootCid}" data-replyto="${r.id}" data-formid="${r.id}">➤</button>
+                     </div>
+                     <button class="ic-rf-cancel" data-formid="${r.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
+                  </div>
                 </div>
               </div>
             `;
         }).join('');
-        return html;
     }
 
     function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
       const pKey = 'p' + pIdx;
       const pComments = allInlineComments[pKey];
+      
+      const openThreads = new Set();
+      if(listEl) { listEl.querySelectorAll('.ic-replies.open').forEach(el => openThreads.add(el.id)); }
       
       if (!pComments || Object.keys(pComments).length === 0) {
         listEl.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
@@ -1247,7 +1326,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       listEl.innerHTML = items.map(item => {
         const canDel = window.__ddIsAdmin || item.token === myToken;
-        
         const repliesData = item.replies || {};
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
@@ -1273,17 +1351,22 @@ document.addEventListener('DOMContentLoaded', () => {
                ${rootRepliesHtml}
             </div>
             
-            <div class="chat-form-modern" id="ic-rf-${item.id}" style="display:none;">
-               <input class="cfm-name" id="ic-rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+            <div class="chat-form-modern" id="ic-rf-${item.id}" style="display:none; margin-top: 8px;">
+               <input class="cfm-name reply-inp" id="rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
-                  <textarea class="cfm-text" id="ic-rt-${item.id}" placeholder="Phản hồi..." rows="1"></textarea>
-                  <button class="cfm-send ic-rf-send" data-cid="${item.id}" data-pidx="${pIdx}">➤</button>
+                  <textarea class="cfm-text reply-inp-text" id="rt-${item.id}" placeholder="Phản hồi..." rows="1"></textarea>
+                  <button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="${item.id}" data-formid="${item.id}">➤</button>
                </div>
-               <button class="ic-rf-cancel" data-cid="${item.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0;">Hủy</button>
+               <button class="ic-rf-cancel" data-formid="${item.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>
         `;
       }).join('');
+
+      openThreads.forEach(id => { document.getElementById(id)?.classList.add('open'); });
+      if(window.__ddIsAdmin) {
+         document.querySelectorAll('.ic-form-name, .reply-inp').forEach(inp => { inp.value = 'dynamic duo 𓆝'; inp.disabled = true; inp.style.opacity = '0.7'; });
+      }
     }
 
     document.getElementById('icSidebarList').onclick = async (e) => {
@@ -1303,36 +1386,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (tgtBtn.classList.contains('ic-reply-toggle') || tgtBtn.classList.contains('ic-reply-at-btn')) {
-            const cid = tgtBtn.dataset.cid;
-            const rid = tgtBtn.dataset.rid || ''; 
-            const form = document.getElementById('ic-rf-' + cid);
+            const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid; // Mở form của id tương ứng
+            const form = document.getElementById('ic-rf-' + rid);
             if (form) {
                 form.style.display = 'flex';
-                const textInput = document.getElementById('ic-rt-' + cid);
+                const textInput = document.getElementById('rt-' + rid);
                 if(tgtBtn.dataset.name) {
                     textInput.value = `@${tgtBtn.dataset.name} ` + textInput.value;
                 }
                 textInput.focus();
-                form.querySelector('.ic-rf-send').dataset.replyto = rid;
             }
         }
         
         if (tgtBtn.classList.contains('ic-rf-cancel')) {
-            const form = document.getElementById('ic-rf-' + tgtBtn.dataset.cid);
-            if (form) {
-                form.style.display = 'none';
-                form.querySelector('.ic-rf-send').dataset.replyto = '';
-            }
+            const form = document.getElementById('ic-rf-' + tgtBtn.dataset.formid);
+            if (form) { form.style.display = 'none'; }
         }
         
         if (tgtBtn.classList.contains('ic-rf-send')) {
-            const cid = tgtBtn.dataset.cid;
-            const replyTo = tgtBtn.dataset.replyto || null;
-            const nameInp = document.getElementById('ic-rn-' + cid);
-            const textInp = document.getElementById('ic-rt-' + cid);
-            const text = textInp.value.trim();
+            const formId = tgtBtn.dataset.formid;
+            const rootCid = tgtBtn.dataset.cid;
+            const replyTo = tgtBtn.dataset.replyto;
             
-            // Xử lý ép buộc tên Admin
+            const nameInp = document.getElementById('rn-' + formId);
+            const textInp = document.getElementById('rt-' + formId);
+            const text = textInp.value.trim();
             const finalName = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (nameInp.value.trim() || 'Khách');
             
             if (!text) return;
@@ -1340,15 +1418,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             waitFirebase(async ({db, ref, push}) => {
                 try {
-                    await push(ref(db, `inline_comments/${pageId}/${pKey}/${cid}/replies`), {
+                    await push(ref(db, `inline_comments/${pageId}/${pKey}/${rootCid}/replies`), {
                         name: finalName, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin, replyTo
                     });
                     textInp.value = '';
-                    const form = document.getElementById('ic-rf-' + cid);
-                    if(form) { form.style.display = 'none'; form.querySelector('.ic-rf-send').dataset.replyto = ''; }
-                    
-                    const targetThreadId = replyTo ? `thread-${replyTo}` : `thread-${cid}`;
-                    document.getElementById(targetThreadId)?.classList.add('open');
+                    const form = document.getElementById('ic-rf-' + formId);
+                    if(form) { form.style.display = 'none'; }
+                    document.getElementById(`thread-${replyTo}`)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
                 finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
             });
@@ -1370,7 +1446,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function startListeningInline() {
       waitFirebase(({ db, ref, onValue }) => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
-          allInlineComments = snap.val() || {}; 
+          const data = snap.val() || {}; 
+          allInlineComments = data;
+          autoCleanupInline(data, 150); // Dọn rác
+          
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
             const trigger = p.querySelector('.ic-trigger');
@@ -1427,22 +1506,21 @@ document.addEventListener('DOMContentLoaded', () => {
   setupChapComments();
 }); 
 
-/* ══ MODULE: DOUBLE TAP TO LIKE & COMMENTS CUỐI CHƯƠNG ══ */
+/* ══ MODULE: DOUBLE TAP LIKES & CHAT CUỐI CHƯƠNG ══ */
 function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');
   if(!btn) return;
   const key = 'chap_' + pageKey(), myToken = getMyToken();
   
-  // Xử lý Double tap thả tim
   let lastTap = 0;
   const contentEl = document.getElementById('novelContent');
   if (contentEl) {
       contentEl.addEventListener('touchend', (e) => {
           const currentTime = new Date().getTime();
           const tapLength = currentTime - lastTap;
-          if (tapLength < 500 && tapLength > 0) {
-              btn.click();
-              e.preventDefault();
+          if (tapLength < 500 && tapLength > 0) { 
+              btn.click(); 
+              e.preventDefault(); 
           }
           lastTap = currentTime;
       });
@@ -1454,10 +1532,16 @@ function setupChapterLike(){
       if(data[myToken]) { btn.classList.add('liked'); btn.querySelector('.heart').textContent = '❤️'; }
       else { btn.classList.remove('liked'); btn.querySelector('.heart').textContent = '🤍'; }
     });
-    btn.onclick = async () => {
+    btn.onclick = async (e) => {
       const isLiked = btn.classList.contains('liked');
-      if(isLiked) await remove(ref(db, `chapter_likes/${key}/${myToken}`));
-      else await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
+      if(isLiked) {
+          await remove(ref(db, `chapter_likes/${key}/${myToken}`));
+      } else {
+          // Bắn pháo giấy khi thích
+          const rect = btn.getBoundingClientRect();
+          shootConfetti(rect.left + rect.width / 2, rect.top);
+          await update(ref(db, `chapter_likes/${key}`), { [myToken]: Date.now() });
+      }
     };
   });
 }
@@ -1474,6 +1558,19 @@ function setupChapComments(){
   
   if(cmtName) cmtName.value = getSavedName();
 
+  // Dọn rác
+  function autoCleanupComments(data, maxItems = 150) {
+      if(!data) return;
+      waitFirebase(({db, ref, remove}) => {
+          const keys = Object.keys(data);
+          if (keys.length > maxItems) {
+              const sorted = keys.sort((a,b) => data[a].ts - data[b].ts);
+              const toDelete = sorted.slice(0, keys.length - maxItems);
+              toDelete.forEach(k => remove(ref(db, `comments/${key}/${k}`)));
+          }
+      });
+  }
+
   function renderMainThreadHtml(repliesFlat, parentId, level, rootCid) {
         const children = repliesFlat.filter(r => (r.replyTo || null) === parentId);
         if(children.length === 0) return '';
@@ -1485,7 +1582,7 @@ function setupChapComments(){
             return `
             <div class="reply-item">
               <div class="reply-avatar">${avatarLetter(r.name)}</div>
-              <div class="reply-body">
+              <div class="reply-body" style="width: 100%;">
                 <div class="reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="reply-admin-badge">chủ nhà</span>':''} <span class="reply-time">${timeAgo(r.ts)}</span></div>
                 <div class="reply-text">${esc(r.text)}</div>
                 <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
@@ -1497,6 +1594,15 @@ function setupChapComments(){
                 <div class="reply-thread" id="chap-thread-${r.id}">
                     ${renderMainThreadHtml(repliesFlat, r.id, level + 1, rootCid)}
                 </div>
+                
+                <div class="chat-form-modern" id="rf-${r.id}" style="display:none; margin-top:8px;">
+                   <input class="cfm-name reply-inp" id="rn-${r.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+                   <div class="cfm-bottom">
+                      <textarea class="cfm-text reply-inp-text" id="rt-${r.id}" placeholder="Phản hồi..." rows="1"></textarea>
+                      <button class="cfm-send reply-send-btn" data-cid="${rootCid}" data-replyto="${r.id}" data-formid="${r.id}">➤</button>
+                   </div>
+                   <button class="reply-cancel-btn" data-formid="${r.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
+                </div>
               </div>
             </div>`;
         }).join('');
@@ -1505,13 +1611,16 @@ function setupChapComments(){
   waitFirebase(({db, ref, push, onValue, remove}) => {
     onValue(ref(db, 'comments/'+key), snap => {
       const data = snap.val();
-      if(!data) { cmtList.innerHTML = '<div class="comment-empty">Chưa có bình luận nào 🌊</div>'; return; }
+      autoCleanupComments(data);
       
+      const openThreads = new Set();
+      if(cmtList) { cmtList.querySelectorAll('.reply-thread.open').forEach(el => openThreads.add(el.id)); }
+      
+      if(!data) { cmtList.innerHTML = '<div class="comment-empty">Chưa có bình luận nào 🌊</div>'; return; }
       const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => a.ts - b.ts);
       
       cmtList.innerHTML = items.map(c => {
         const canDel = window.__ddIsAdmin || c.token === myToken;
-        
         const repliesData = c.replies || {};
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
@@ -1541,17 +1650,22 @@ function setupChapComments(){
               ${rootRepliesHtml}
             </div>
             
-            <div class="chat-form-modern" id="rf-${c.id}" style="display:none;">
+            <div class="chat-form-modern" id="rf-${c.id}" style="display:none; margin-top:8px;">
                <input class="cfm-name reply-inp" id="rn-${c.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
                   <textarea class="cfm-text reply-inp-text" id="rt-${c.id}" placeholder="Phản hồi..." rows="1"></textarea>
-                  <button class="cfm-send reply-send-btn" data-cid="${c.id}">➤</button>
+                  <button class="cfm-send reply-send-btn" data-cid="${c.id}" data-replyto="${c.id}" data-formid="${c.id}">➤</button>
                </div>
-               <button class="reply-cancel-btn" data-cid="${c.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0;">Hủy</button>
+               <button class="reply-cancel-btn" data-formid="${c.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>
         `;
       }).join('');
+      
+      openThreads.forEach(id => { document.getElementById(id)?.classList.add('open'); });
+      if(window.__ddIsAdmin) {
+         document.querySelectorAll('.comment-inp, .reply-inp').forEach(inp => { inp.value = 'dynamic duo 𓆝'; inp.disabled = true; inp.style.opacity = '0.7'; });
+      }
     });
     
     cmtList.onclick = async (e) => {
@@ -1568,30 +1682,30 @@ function setupChapComments(){
        }
        
        if(tgtBtn.classList.contains('cmt-reply-btn') || tgtBtn.classList.contains('reply-at-btn')) {
-         const cid = tgtBtn.dataset.cid;
-         const rid = tgtBtn.dataset.rid || '';
-         const form = document.getElementById('rf-' + cid);
+         const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid;
+         const form = document.getElementById('rf-' + rid);
          if(form) {
              form.style.display = 'flex';
-             const textInput = document.getElementById('rt-' + cid);
+             const textInput = document.getElementById('rt-' + rid);
              if (tgtBtn.dataset.name) {
                 textInput.value = `@${tgtBtn.dataset.name} ` + textInput.value;
              }
              textInput.focus();
-             form.querySelector('.reply-send-btn').dataset.replyto = rid;
          }
        }
        
        if(tgtBtn.classList.contains('reply-cancel-btn')) {
-         const form = document.getElementById('rf-' + tgtBtn.dataset.cid);
-         if(form) { form.style.display = 'none'; form.querySelector('.reply-send-btn').dataset.replyto = ''; }
+         const form = document.getElementById('rf-' + tgtBtn.dataset.formid);
+         if(form) { form.style.display = 'none'; }
        }
        
        if(tgtBtn.classList.contains('reply-send-btn')) {
-         const cid = tgtBtn.dataset.cid;
-         const replyTo = tgtBtn.dataset.replyto || null;
-         const nameInput = document.getElementById('rn-' + cid);
-         const textInput = document.getElementById('rt-' + cid);
+         const formId = tgtBtn.dataset.formid;
+         const rootCid = tgtBtn.dataset.cid;
+         const replyTo = tgtBtn.dataset.replyto;
+         
+         const nameInput = document.getElementById('rn-' + formId);
+         const textInput = document.getElementById('rt-' + formId);
          const text = textInput.value.trim();
          
          const finalName = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (nameInput.value.trim() || 'Khách');
@@ -1601,15 +1715,14 @@ function setupChapComments(){
          
          waitFirebase(async ({db, ref, push}) => {
              try {
-                 await push(ref(db, `comments/${key}/${cid}/replies`), {
+                 await push(ref(db, `comments/${key}/${rootCid}/replies`), {
                    name: finalName, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin, replyTo
                  });
                  textInput.value = '';
-                 const form = document.getElementById('rf-' + cid);
-                 if(form) { form.style.display = 'none'; form.querySelector('.reply-send-btn').dataset.replyto = ''; }
+                 const form = document.getElementById('rf-' + formId);
+                 if(form) { form.style.display = 'none'; }
                  
-                 const targetThreadId = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${cid}`;
-                 document.getElementById(targetThreadId)?.classList.add('open');
+                 document.getElementById(`chap-thread-${replyTo}`)?.classList.add('open');
              } catch (err) { alert("Lỗi: " + err.message); } 
              finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
          });

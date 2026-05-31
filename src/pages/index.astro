@@ -312,7 +312,6 @@ const recentChaps = allChaps
 [data-theme="dark"] .msg-popup-close:hover { background:rgba(239,68,68,0.15); border-color:#ef4444;}
 </style>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
@@ -325,10 +324,8 @@ const recentChaps = allChaps
 </div>
 
 <div class="home-shell">
-  <!-- ── MAIN COLUMN ── -->
   <div class="main-col">
 
-    <!-- HERO -->
     <div class="hero">
       <div id="dynamicGreeting" class="hero-greeting">Chào bạn!</div>
       <div class="hero-banner-wrap reveal">
@@ -339,7 +336,6 @@ const recentChaps = allChaps
       <p class="hero-tagline reveal">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
-    <!-- LƯU Ý -->
     <div class="notice-section reveal">
       <div class="sec-hd">
         <h2>📌 Lưu ý</h2>
@@ -350,7 +346,6 @@ const recentChaps = allChaps
       </div>
     </div>
 
-    <!-- FILTER + STORIES -->
     <div class="sec-hd reveal">
       <h2>📚 Tủ truyện</h2>
       <div class="sec-line"></div>
@@ -467,8 +462,7 @@ const recentChaps = allChaps
       </div>
     </div>
 
-<!-- MỚI CẬP NHẬT -->
-    <div class="sec-hd reveal" style="margin-top:32px">
+<div class="sec-hd reveal" style="margin-top:32px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
@@ -497,10 +491,7 @@ const recentChaps = allChaps
       })}
     </div>
 
-  </div><!-- /main-col -->
-
-  <!-- ── SIDEBAR ── -->
-  <aside class="sidebar-col">
+  </div><aside class="sidebar-col">
 
     <div class="widget reveal">
       <div class="widget-title">✦ Về nhà cá</div>
@@ -563,7 +554,6 @@ const recentChaps = allChaps
               </ul>
             </details>
           </li>
-    <!-- Quote of the day -->
     <div class="widget reveal" style="margin-top: 16px;">
       <div class="widget-title">✨ Quote of the day</div>
       <div class="quote-widget-inner">
@@ -572,7 +562,6 @@ const recentChaps = allChaps
       </div>
     </div>
 
-    <!-- ✉ LỜI NHẮN WIDGET (CHAT BUBBLE STYLE) -->
     <div class="widget reveal" id="msgSidebarWidget">
       <div class="widget-title">✉ Lời nhắn</div>
       <div class="msg-widget-tabs">
@@ -580,9 +569,7 @@ const recentChaps = allChaps
         <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Tường chung</button>
       </div>
 
-      <!-- Panel: Riêng tư -->
       <div class="msg-panel active" id="msgPanelPrivate">
-        <!-- Khung chat của User -->
         <div id="msgPrivateUserBox">
             <p style="font-size:.65rem;color:var(--text-dim);font-style:italic;margin-bottom:8px;text-align:center;">Nhắn riêng cho chủ nhà 🐋 (Chỉ admin đọc được)</p>
             <div class="chat-feed-container" id="msgPrivateFeedSidebar"></div>
@@ -595,7 +582,6 @@ const recentChaps = allChaps
             </div>
         </div>
 
-        <!-- Khung danh sách của Admin -->
         <div id="msgPrivateAdminBox" style="display:none">
             <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic; border-bottom: 1px solid rgba(186,230,253,.4); padding-bottom: 5px;">📬 Danh sách thư (Admin):</p>
             <div class="admin-user-list" id="msgAdminUserListSidebar"></div>
@@ -613,7 +599,6 @@ const recentChaps = allChaps
         </div>
       </div>
 
-      <!-- Panel: Public -->
       <div class="msg-panel" id="msgPanelPublic">
         <div class="chat-feed-container" id="msgPublicFeed">
           <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
@@ -628,7 +613,6 @@ const recentChaps = allChaps
       </div>
     </div>
 
-    <!-- Contact widget with Copy Feature -->
     <div class="widget reveal" style="text-align:center; position: relative;">
       <div class="widget-title">✉ Liên hệ</div>
       <p class="contact-email" id="sidebarEmailCopy" title="Nhấn để copy" style="cursor: pointer; position: relative;">dynamicduoo.q@gmail.com 📋</p>
@@ -639,10 +623,7 @@ const recentChaps = allChaps
     </div>
 
   </aside>
-</div><!-- /home-shell -->
-
-<!-- Popup from bubble (Đồng bộ với Sidebar) -->
-<div class="msg-popup" id="msgPopup">
+</div><div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
     <span class="msg-popup-title">✉ Hòm thư nhà cá</span>
     <button class="msg-popup-close" id="msgPopupClose">✕</button>
@@ -653,7 +634,6 @@ const recentChaps = allChaps
   </div>
   
   <div class="msg-panel active" id="msgPopupPanelPrivate">
-     <!-- Bubble: Khung chat của User -->
      <div id="msgPrivateUserBoxPopup">
         <p style="font-size:.65rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5;text-align:center;">Tin nhắn gửi ở đây chỉ có Admin đọc được thui nhé 🐋</p>
         <div class="chat-feed-container" id="msgPrivateFeedPopup"></div>
@@ -666,7 +646,6 @@ const recentChaps = allChaps
         </div>
      </div>
      
-     <!-- Bubble: Khung Admin -->
      <div id="msgPrivateAdminBoxPopup" style="display:none">
         <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic;">📬 Danh sách thư:</p>
         <div class="admin-user-list" id="msgAdminUserListPopup"></div>
@@ -675,7 +654,7 @@ const recentChaps = allChaps
             <div class="chat-feed-container" id="msgAdminFeedPopup" style="max-height: 200px;"></div>
             <div class="chat-form-modern">
                <div class="cfm-bottom">
-                   <textarea class="cfm-text" id="msgAdminReplyTextPopup" placeholder="Trả lời..." rows="1"></textarea>
+                   <textarea class="cfm-text" id="msgAdminReplyTextPopup" placeholder="Trả lời người này..." rows="1"></textarea>
                    <button class="cfm-send" id="msgAdminReplySendPopup">➤</button>
                </div>
             </div>
@@ -820,9 +799,8 @@ const recentChaps = allChaps
   const myToken = getMsgToken();
   const ADMIN_NAME = 'dynamic duo 𓆝';
   const popup = document.getElementById('msgPopup');
-  const fabMailBtn = document.getElementById('fabMail'); // Chỉ dùng Nút Thư trong FAB
+  const fabMailBtn = document.getElementById('fabMail');
 
-  // ── POPUP CONTROL ──
   if(fabMailBtn && popup) {
     fabMailBtn.addEventListener('click', (e) => {
       e.stopPropagation(); popup.classList.toggle('open');
@@ -834,7 +812,6 @@ const recentChaps = allChaps
     });
   }
 
-  // Tabs cho Widget và Popup
   function setupTabs(containerId, dataAttr) {
     const container = document.getElementById(containerId);
     if(!container) return;
@@ -855,11 +832,20 @@ const recentChaps = allChaps
   setupTabs('msgSidebarWidget', 'data-panel');
   setupTabs('msgPopup', 'data-popup-panel');
 
-  // ── FIREBASE MESSAGING LOGIC ──
   function initFirebaseLogic() {
     const fb = window.__ddFirebase; if(!fb || !fb.db) return;
     
-    // Tạo cấu trúc render Chat Bubble
+    // Tự động dọn rác cho Tường Chung (Giữ lại 150 tin nhắn mới nhất để tiết kiệm data)
+    function autoCleanupPublic(data) {
+        if(!data) return;
+        const keys = Object.keys(data);
+        if(keys.length > 150) {
+            const sortedKeys = keys.sort((a,b) => data[a].ts - data[b].ts);
+            const keysToDelete = sortedKeys.slice(0, keys.length - 150);
+            keysToDelete.forEach(k => fb.remove(fb.ref(fb.db, `public_messages/${k}`)));
+        }
+    }
+
     const renderChatFeed = (messages, currentToken, isAdminUser) => {
         if(!messages || messages.length === 0) return '<div class="msg-public-empty">Hãy bắt đầu trò chuyện 𓆝</div>';
         return messages.map(m => {
@@ -868,7 +854,7 @@ const recentChaps = allChaps
             
             const wrapClass = isMyMsg ? 'user' : 'admin';
             const nameLabel = isSentByAdmin ? '🐋 Admin' : (esc(m.name) || 'Khách');
-            const canDel = isAdminUser || (m.token === currentToken && !isSentByAdmin);
+            const canDel = window.__ddIsAdmin || (m.token === currentToken && !isSentByAdmin);
 
             return `
             <div class="chat-bubble-wrap ${wrapClass}">
@@ -884,7 +870,6 @@ const recentChaps = allChaps
 
     let activeAdminChatToken = null;
 
-    // Update UI theo quyền Admin
     const syncAdminUI = () => {
       const isAdmin = !!window.__ddIsAdmin;
       document.getElementById('msgPrivateAdminBox').style.display = isAdmin ? 'block' : 'none';
@@ -893,7 +878,6 @@ const recentChaps = allChaps
       document.getElementById('msgPrivateAdminBoxPopup').style.display = isAdmin ? 'block' : 'none';
       document.getElementById('msgPrivateUserBoxPopup').style.display = isAdmin ? 'none' : 'block';
 
-      // Khóa và set cứng tên Admin
       document.querySelectorAll('.cfm-name').forEach(inp => {
           if (isAdmin) {
               inp.value = ADMIN_NAME;
@@ -909,6 +893,7 @@ const recentChaps = allChaps
     // 1. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
       const data = snap.val();
+      autoCleanupPublic(data); // Gọi hàm dọn rác
       const renderPublic = (containerId) => {
         const el = document.getElementById(containerId);
         if(!el) return;
@@ -939,8 +924,7 @@ const recentChaps = allChaps
       renderPublic('msgPopupPublicFeed');
     });
 
-    // 2. PRIVATE MESSAGING LOGIC (Khung Chat)
-    // USER LISTENER
+    // 2. PRIVATE MESSAGING LOGIC
     fb.onValue(fb.ref(fb.db, `private_messages/${myToken}`), snap => {
         if(window.__ddIsAdmin) return;
         const data = snap.val();
@@ -959,7 +943,6 @@ const recentChaps = allChaps
         });
     });
 
-    // ADMIN LISTENER
     fb.onValue(fb.ref(fb.db, 'private_messages'), snap => {
         if(!window.__ddIsAdmin) return;
         const fullData = snap.val() || {};
@@ -1037,12 +1020,13 @@ const recentChaps = allChaps
     const handleSend = async (btnId, nameId, textId, targetPathResolver, isAdminMode = false) => {
       const btn = document.getElementById(btnId);
       if(!btn) return;
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (e) => {
+        const tgt = e.target.closest('button'); // Fix lỗi click nhầm thẻ con bên trong button
         const textInp = document.getElementById(textId);
         const text = textInp.value.trim();
         if(!text) return;
         
-        btn.disabled = true;
+        tgt.disabled = true;
         const name = window.__ddIsAdmin ? ADMIN_NAME : (document.getElementById(nameId)?.value.trim() || 'Khách');
         const tokenToSave = isAdminMode ? activeAdminChatToken : myToken;
         const payload = { name, text, ts: Date.now(), token: tokenToSave, isAdmin: !!window.__ddIsAdmin };
@@ -1053,7 +1037,7 @@ const recentChaps = allChaps
           await fb.push(fb.ref(fb.db, path), payload);
           textInp.value = '';
         } catch(e) { alert("Lỗi: " + e.message); }
-        finally { btn.disabled = false; }
+        finally { tgt.disabled = false; }
       });
     };
 

@@ -1596,61 +1596,103 @@ document.addEventListener('DOMContentLoaded', () => {
 // Hàm tải bình luận riêng cho từng đoạn (Đã Fix lỗi giật lag)
   let currentInlineUnsub = null; // Khai báo biến dọn dẹp bộ nhớ
   
-  function loadInlineComments(pIdx) {
-    const key = 'inline_' + pageKey() + '_p' + pIdx;
-    icSidebarList.innerHTML = '<div class="comment-loading">Đang tải...</div>';
-    
-    waitFirebase(({db, ref, onValue}) => {
-      // Xóa kết nối dữ liệu của đoạn văn trước đó để chống treo máy
-      if (currentInlineUnsub) {
-        currentInlineUnsub(); 
-      }
+// --- OPTIMIZED INLINE COMMENTS LOGIC ---
+const pageId = pageKey();
+let allInlineComments = {}; // Lưu trữ toàn bộ comment của chương
+
+function initInlineComments() {
+  const paragraphs = document.querySelectorAll('#novelContent p');
+  
+  waitFirebase(({db, ref, onValue}) => {
+    // 1. Lắng nghe TOÀN BỘ comment inline của trang này
+    onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
+      allInlineComments = snap.val() || {};
       
-      currentInlineUnsub = onValue(ref(db, 'inline_comments/' + key), (snap) => {
-        const data = snap.val();
-        if (!data) {
-          icSidebarList.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
-          return;
+      // Cập nhật số lượng bong bóng
+      paragraphs.forEach((p, idx) => {
+        const countEl = p.querySelector('.ic-count');
+        const pComments = allInlineComments['p' + idx];
+        if (pComments && countEl) {
+          const count = Object.keys(pComments).length;
+          countEl.innerText = count;
+          countEl.style.display = 'inline-block';
+          p.querySelector('.ic-trigger').classList.add('has-comments');
         }
-        const items = Object.entries(data).map(([id, v]) => ({id, ...v}));
-        icSidebarList.innerHTML = items.map(item => `
-          <div class="ic-item">
-            <div class="ic-item-header">
-              <span class="ic-item-name">${esc(item.name || 'Khách')}</span>
-              <span class="ic-item-time">${timeAgo(item.ts)}</span>
-            </div>
-            <div class="ic-item-text">${esc(item.text)}</div>
-          </div>
-        `).join('');
       });
+
+      // Nếu sidebar đang mở đoạn nào, cập nhật luôn danh sách đó
+      const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
+      if (activeIdx !== null) renderSidebarComments(activeIdx);
     });
+  });
+}
+
+function renderSidebarComments(pIdx) {
+  const listEl = document.getElementById('icSidebarList');
+  const pComments = allInlineComments['p' + pIdx];
+  
+  if (!pComments) {
+    listEl.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
+    return;
   }
 
-  // Gửi bình luận inline
-  const icSend = document.getElementById('icFormSend');
-  const icInput = document.getElementById('icFormText');
-  const icName = document.getElementById('icFormName');
+  const items = Object.entries(pComments)
+    .map(([id, v]) => ({id, ...v}))
+    .sort((a, b) => a.ts - b.ts);
 
-  if(icSend) {
-    icSend.onclick = async () => {
-      const pIdx = icSend.getAttribute('data-current-p');
-      const text = icInput.value.trim();
-      const name = icName.value.trim() || 'Khách';
-      if (!text || pIdx === null) return;
+  listEl.innerHTML = items.map(item => `
+    <div class="ic-item">
+      <div class="ic-item-header">
+        <span class="ic-item-name">${esc(item.name || 'Khách')}</span>
+        <span class="ic-item-time">${timeAgo(item.ts)}</span>
+      </div>
+      <div class="ic-item-text">${esc(item.text)}</div>
+    </div>
+  `).join('');
+}
 
-      icSend.disabled = true;
-      const key = 'inline_' + pageKey() + '_p' + pIdx;
-      
-      waitFirebase(async ({db, ref, push}) => {
-        await push(ref(db, 'inline_comments/' + key), {
-          name, text, ts: Date.now(), token: getMyToken()
-        });
-        icInput.value = '';
-        icSend.disabled = false;
-      });
-    };
-  }
+// Khi bấm vào trigger
+document.querySelectorAll('.ic-trigger').forEach(btn => {
+  btn.onclick = (e) => {
+    e.stopPropagation();
+    const idx = btn.getAttribute('data-idx');
+    const p = btn.closest('p');
+    
+    document.querySelectorAll('#novelContent p').forEach(el => el.classList.remove('ic-active'));
+    p.classList.add('ic-active');
+    
+    document.getElementById('novelLayoutWrap').classList.add('sidebar-open');
+    document.getElementById('icParaPreview').innerText = p.innerText.substring(0, 80) + '...';
+    document.getElementById('icFormSend').setAttribute('data-current-p', idx);
+    
+    renderSidebarComments(idx); // Hiện ngay lập tức vì data đã có sẵn
+  };
 });
+
+// Khi gửi comment
+document.getElementById('icFormSend').onclick = async () => {
+  const pIdx = document.getElementById('icFormSend').getAttribute('data-current-p');
+  const text = document.getElementById('icFormText').value.trim();
+  const name = document.getElementById('icFormName').value.trim() || 'Khách';
+  if (!text) return;
+
+  const btn = document.getElementById('icFormSend');
+  btn.disabled = true;
+
+  waitFirebase(async ({db, ref, push}) => {
+    // Lưu vào đường dẫn: inline_comments/PAGE_ID/p_INDEX
+    await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
+      name, text, ts: Date.now(), token: getMyToken()
+    });
+    document.getElementById('icFormText').value = '';
+    btn.disabled = false;
+    // Không cần gọi render vì onValue sẽ tự động cập nhật ngay lập tức
+  });
+};
+
+// Khởi chạy
+initInlineComments();  }
+);
 
 /* ══ MODULE: LIKE & COMMENTS ══ */
 function setupChapterLike(){

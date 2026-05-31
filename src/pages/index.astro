@@ -762,18 +762,24 @@ const recentChaps = allChaps
               </ul>
             </details>
           </li>
-          <li>
+<li>
             <details>
               <summary>🌤️ Cá trên trời</summary>
               <ul>
-                <li><a href="/dynamic-duo-web/ca-tren-troi/">Xem danh sách →</a></li>
+                {caTrenTroiList.map(story => (
+                  <li>
+                    <a href={story.url}>{story.title}</a>
+                    <span class="cat-count">Sắp đào</span>
+                  </li>
+                ))}
+                <li>
+                  <a href="/dynamic-duo-web/ca-tren-troi/" style="color: var(--sky); font-style: italic; margin-top: 6px;">
+                    Xem tất cả danh sách →
+                  </a>
+                </li>
               </ul>
             </details>
           </li>
-        </ul>
-      </div>
-    </div>
-
     <!-- Quote of the day -->
     <div class="widget reveal">
       <div class="widget-title">✨ Quote of the day</div>

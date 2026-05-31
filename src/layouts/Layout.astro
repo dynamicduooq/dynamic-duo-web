@@ -621,9 +621,53 @@ if (isNovelPage) {
 }
     .ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:460; overflow:hidden; }
     .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
-    .ic-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:450; backdrop-filter:blur(1px); }
-    .ic-overlay.show { display:block; }
-    @media(max-width:600px){ .ic-sidebar { width:min(300px,88vw); } }
+/* 1. Lớp phủ Overlay (Sửa lại đoạn .ic-overlay hiện có hoặc thêm mới) */
+.ic-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+  backdrop-filter: blur(2px);    /* Làm mờ nhẹ hậu cảnh */
+  z-index: 950;                  /* Nằm dưới Sidebar (1000) nhưng trên nội dung */
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Hiện overlay khi mở sidebar */
+.sidebar-open .ic-overlay {
+  display: block;
+  opacity: 1;
+}
+
+/* 2. Sửa lỗi lệch nội dung trên Mobile (Khoảng dòng 210) */
+@media (max-width: 640px) {
+  .novel-content {
+    /* Đổi padding thành cân bằng 2 bên để chữ ra giữa */
+    padding: 24px 16px !important; 
+    margin: 16px auto !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  /* Đưa bong bóng vào bên trong phần padding trái để không đẩy khung */
+  .ic-trigger {
+    left: 4px !important;   /* Nằm sát mép trái bên trong khung */
+    opacity: 0.4;   /* Để mờ mờ cho đỡ rối mắt trên màn hình nhỏ */
+    width: 20px;    /* Nhỏ hơn một chút trên mobile */
+    height: 16px;
+    z-index: 5;
+  }
+  
+  .ic-count {
+    font-size: 8px;
+  }
+    /* Khi Sidebar mở trên mobile, nó sẽ chiếm gần hết màn hình */
+  .ic-sidebar {
+    width: 85vw !important;
+    z-index: 1000;
+  }
+}    @media(max-width:600px){ .ic-sidebar { width:min(300px,88vw); } }
 
     .ic-sidebar-inner { display:flex; flex-direction:column; height:100%; overflow:hidden; }
     .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:14px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; }
@@ -1660,38 +1704,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
-  const pageId = pageKey(); // Ví dụ: _truyen_vat_de_vo_chuong_01
-  let allInlineComments = {}; // Biến cục bộ lưu toàn bộ comment của chương
+  const pageId = pageKey();
+  let allInlineComments = {}; 
 
   if (novelContent && icSidebar) {
     const paragraphs = novelContent.querySelectorAll('p');
     
     // 1. Gắn bong bóng vào từng đoạn văn
     paragraphs.forEach((p, index) => {
-const btn = document.createElement('button');
-btn.className = 'ic-trigger';
-btn.innerHTML = '<span class="ic-count">0</span>'; // Bỏ icon 💬, chỉ để số
+      const btn = document.createElement('button');
+      btn.className = 'ic-trigger';
+      btn.innerHTML = '<span class="ic-count">0</span>'; 
       btn.setAttribute('data-idx', index);
       p.prepend(btn);
 
       btn.onclick = (e) => {
         e.stopPropagation();
-        // Đổi màu đoạn văn đang chọn
         document.querySelectorAll('.novel-content p').forEach(el => el.classList.remove('ic-active'));
         p.classList.add('ic-active');
         
-        // Mở Sidebar
+        // Mở Sidebar & Hiện lớp phủ
         layoutWrap.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden'; // Chống cuộn trang phía sau
+
         document.getElementById('icParaPreview').innerText = p.innerText.substring(0, 80) + '...';
         document.getElementById('icFormSend').setAttribute('data-current-p', index);
-        
-        // Vẽ danh sách comment của đoạn này ra sidebar
         renderSidebarComments(index);
       };
     });
 
-    // 2. Hàm vẽ comment ra Sidebar (Lấy từ biến allInlineComments đã tải sẵn)
-function renderSidebarComments(pIdx) {
+    // 2. Hàm vẽ comment ra Sidebar
+    function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
       const pKey = 'p' + pIdx;
       const pComments = allInlineComments[pKey];
@@ -1706,9 +1749,7 @@ function renderSidebarComments(pIdx) {
         .sort((a, b) => a.ts - b.ts);
 
       listEl.innerHTML = items.map(item => {
-        // Kiểm tra quyền xóa: Nếu là Admin HOẶC Token trùng khớp
         const canDel = window.__ddIsAdmin || item.token === getMyToken();
-
         return `
           <div class="ic-item">
             <div class="ic-item-header">
@@ -1721,90 +1762,71 @@ function renderSidebarComments(pIdx) {
         `;
       }).join('');
 
-      // Gắn sự kiện xóa cho các nút vừa tạo
       listEl.querySelectorAll('.ic-del-btn').forEach(btn => {
         btn.onclick = async () => {
           if (!confirm('Bạn muốn xóa bình luận này?')) return;
-          const cId = btn.dataset.id;
           waitFirebase(async ({ db, ref, remove }) => {
-            await remove(ref(db, `inline_comments/${pageId}/${pKey}/${cId}`));
-            // Sidebar sẽ tự động cập nhật lại nhờ hàm onValue đã cài đặt trước đó
+            await remove(ref(db, `inline_comments/${pageId}/${pKey}/${btn.dataset.id}`));
           });
         };
       });
     }
-        // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
+
+    // 3. Lắng nghe dữ liệu Realtime
     function startListeningInline() {
       waitFirebase(({ db, ref, onValue }) => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
-          allInlineComments = snap.val() || {}; // Cập nhật biến tổng
-          
-          // Cập nhật số lượng trên từng bong bóng 💬
-// Cập nhật số lượng trên từng bong bóng (Số 0 mờ, Số > 0 hiện rõ)
+          allInlineComments = snap.val() || {};
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
             const trigger = p.querySelector('.ic-trigger');
             const pComments = allInlineComments['p' + idx];
-            
             if (countEl && trigger) {
               const count = pComments ? Object.keys(pComments).length : 0;
               countEl.innerText = count;
-              
-              if (count > 0) {
-                trigger.classList.add('has-comments');
-              } else {
-                trigger.classList.remove('has-comments');
-              }
+              if (count > 0) trigger.classList.add('has-comments');
+              else trigger.classList.remove('has-comments');
             }
           });
-          // Nếu người dùng đang mở sidebar ở đoạn nào đó, cập nhật luôn nội dung sidebar đó
           const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
-          if (activeIdx !== null && activeIdx !== undefined) {
-            renderSidebarComments(activeIdx);
-          }
+          if (activeIdx !== null && activeIdx !== undefined) renderSidebarComments(activeIdx);
         });
       });
     }
 
-// 4. Xử lý khi nhấn nút Gửi (Dòng 1146)
+    // 4. Xử lý nút Gửi
     document.getElementById('icFormSend').onclick = async () => {
       const btn = document.getElementById('icFormSend');
       const pIdx = btn.getAttribute('data-current-p');
-      const textEl = document.getElementById('icFormText'); // Lấy element để xóa chữ sau khi gửi
+      const textEl = document.getElementById('icFormText');
       const text = textEl.value.trim();
-      const name = document.getElementById('icFormName').value.trim() || 'Khách';
-      
       if (!text || pIdx === null) return;
       btn.disabled = true;
-
       waitFirebase(async ({ db, ref, push }) => {
         try {
           await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
-            name, text, ts: Date.now(), token: getMyToken()
+            name: document.getElementById('icFormName').value.trim() || 'Khách',
+            text, ts: Date.now(), token: getMyToken()
           });
-          textEl.value = ''; // Xóa khung nhập sau khi gửi thành công
-        } catch (e) {
-          alert("Lỗi gửi comment: " + e.message);
-        } finally {
-          btn.disabled = false;
-        }
+          textEl.value = '';
+        } finally { btn.disabled = false; }
       });
     };
-    // Khởi chạy lắng nghe ngay khi load trang
+
+    // 5. LOGIC ĐÓNG SIDEBAR (VỊ TRÍ ĐÚNG CỦA ĐOẠN BẠN HỎI)
+    const closeSidebar = () => {
+      layoutWrap.classList.remove('sidebar-open');
+      document.body.style.overflow = ''; // Mở lại cuộn trang
+    };
+
+    const btnClose = document.getElementById('icSidebarClose');
+    if (btnClose) btnClose.onclick = closeSidebar;
+
+    const overlayEl = document.getElementById('icOverlay');
+    if (overlayEl) overlayEl.onclick = closeSidebar;
+
     startListeningInline();
   }
-
-  // Đóng sidebar
-  document.getElementById('icSidebarClose').onclick = () => {
-    layoutWrap.classList.remove('sidebar-open');
-    document.getElementById('icOverlay').classList.remove('show');
-  };
-  
-  // Khởi chạy các module khác
-  setupChapterLike();
-  setupChapComments();
-}); // Kết thúc DOMContentLoaded
-
 /* ══ MODULE: LIKE & COMMENTS TRANG ══ */
 function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');

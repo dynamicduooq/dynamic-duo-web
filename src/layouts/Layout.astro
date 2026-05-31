@@ -1435,7 +1435,56 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  
+  // --- LOGIC ĐĂNG NHẬP ADMIN QUA NÚT CHÌA KHÓA ---
+  const footerAdminBtn = document.getElementById('footerAdmin');
+  if (footerAdminBtn) {
+    footerAdminBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      waitFirebase(async ({ auth, GoogleAuthProvider, signInWithPopup, signOut }) => {
+        if (!auth) return alert('Hệ thống Firebase chưa sẵn sàng. Vui lòng thử lại sau.');
+        
+        // Nếu đã đăng nhập thì hỏi xem có muốn đăng xuất không
+        if (window.__ddIsAdmin) {
+          if (confirm('Bạn đang đăng nhập với quyền Admin. Bạn có muốn đăng xuất không?')) {
+            await signOut(auth);
+            alert('Đã đăng xuất thành công.');
+            location.reload(); // Tải lại trang để xóa các nút xóa/sửa
+          }
+        } else {
+          // Chưa đăng nhập -> Gọi popup Google Login
+          try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            
+            // Kiểm tra xem email đăng nhập có khớp với ADMIN_EMAIL không
+            if (result.user.email === window.__ddFirebase.ADMIN_EMAIL) {
+              alert('Chào mừng Admin đã quay trở lại! 🌊');
+              location.reload(); // Tải lại trang để hiện các nút quyền lực (Xóa bình luận,...)
+            } else {
+              alert('Cảnh báo: Tài khoản này không có quyền Admin!');
+              await signOut(auth); // Ép đăng xuất ngay lập tức
+            }
+          } catch (error) {
+            console.error(error);
+            // Bỏ qua lỗi nếu người dùng tự bấm đóng popup
+            if (error.code !== 'auth/popup-closed-by-user') {
+              alert('Lỗi đăng nhập: ' + error.message);
+            }
+          }
+        }
+      });
+    });
+  }
+
+  // --- LÀM SÁNG CHÌA KHÓA KHI ADMIN ĐÃ ĐĂNG NHẬP ---
+  window.addEventListener('dd-auth-change', (e) => {
+    const isAdmin = e.detail?.isAdmin;
+    if (footerAdminBtn && isAdmin) {
+      footerAdminBtn.style.opacity = '1';
+      footerAdminBtn.style.color = 'var(--sky)';
+      footerAdminBtn.title = "Đăng xuất Admin";
+    }
+  });
   // 3. DROPDOWNS
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);

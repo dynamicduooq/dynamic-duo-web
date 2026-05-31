@@ -1635,10 +1635,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Hàm vẽ comment ra Sidebar (Lấy từ biến allInlineComments đã tải sẵn)
 function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
-      if (!listEl) return;
-
       const pKey = 'p' + pIdx;
-      const pComments = allInlineComments[pKey]; // allInlineComments lấy từ onValue cấp trang
+      const pComments = allInlineComments[pKey];
       
       if (!pComments || Object.keys(pComments).length === 0) {
         listEl.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
@@ -1649,17 +1647,35 @@ function renderSidebarComments(pIdx) {
         .map(([id, v]) => ({ id, ...v }))
         .sort((a, b) => a.ts - b.ts);
 
-      listEl.innerHTML = items.map(item => `
-        <div class="ic-item">
-          <div class="ic-item-header">
-            <span class="ic-item-name">${esc(item.name || 'Khách')}</span>
-            <span class="ic-item-time">${timeAgo(item.ts)}</span>
+      listEl.innerHTML = items.map(item => {
+        // Kiểm tra quyền xóa: Nếu là Admin HOẶC Token trùng khớp
+        const canDel = window.__ddIsAdmin || item.token === getMyToken();
+
+        return `
+          <div class="ic-item">
+            <div class="ic-item-header">
+              <span class="ic-item-name">${esc(item.name || 'Khách')}</span>
+              <span class="ic-item-time">${timeAgo(item.ts)}</span>
+            </div>
+            <div class="ic-item-text">${esc(item.text)}</div>
+            ${canDel ? `<button class="ic-del-btn show" data-id="${item.id}" style="font-size: 0.6rem; color: #ef4444; background: none; border: 1px solid #fca5a5; padding: 2px 6px; border-radius: 4px; cursor: pointer; margin-top: 5px;">✕ Xóa</button>` : ''}
           </div>
-          <div class="ic-item-text">${esc(item.text)}</div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+
+      // Gắn sự kiện xóa cho các nút vừa tạo
+      listEl.querySelectorAll('.ic-del-btn').forEach(btn => {
+        btn.onclick = async () => {
+          if (!confirm('Bạn muốn xóa bình luận này?')) return;
+          const cId = btn.dataset.id;
+          waitFirebase(async ({ db, ref, remove }) => {
+            await remove(ref(db, `inline_comments/${pageId}/${pKey}/${cId}`));
+            // Sidebar sẽ tự động cập nhật lại nhờ hàm onValue đã cài đặt trước đó
+          });
+        };
+      });
     }
-    // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
+        // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
     function startListeningInline() {
       waitFirebase(({ db, ref, onValue }) => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {

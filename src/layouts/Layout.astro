@@ -245,6 +245,11 @@ if (isNovelPage) {
     html[data-read-theme="green"] body.focus-mode { background-color: #f0fdf4 !important; }
     html[data-read-theme="dark"] body.focus-mode { background-color: #0f172a !important; color: #e2e8f0 !important; }
     
+    /* Fix nền Sidebar Inline Comment trong Focus Mode */
+    html[data-read-theme="sepia"] .ic-sidebar { background-color: #fcf6e8 !important; }
+    html[data-read-theme="green"] .ic-sidebar { background-color: #f0fdf4 !important; }
+    html[data-read-theme="dark"] .ic-sidebar { background-color: #0f172a !important; border-color: #334155 !important; }
+
     /* Làm mờ FAB ở Focus Mode (Hover hiện lại để chỉnh cài đặt Theme) */
     body.focus-mode .tool-fab-wrap { opacity: 0.15; transition: opacity 0.3s ease; }
     body.focus-mode .tool-fab-wrap:hover { opacity: 1; }
@@ -1271,7 +1276,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hàm đệ quy render reply
     function renderThreadHtml(repliesFlat, parentId, level, rootCid) {
-        const children = repliesFlat.filter(r => (r.replyTo || null) === parentId);
+const children = repliesFlat.filter(r => {
+    const rt = r.replyTo || null;
+    return parentId === null ? (rt === null || rt === rootCid) : (rt === parentId);
+});
         if(children.length === 0) return '';
         
         const myToken = getMyToken();
@@ -1330,8 +1338,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
         const rootRepliesHtml = renderThreadHtml(repliesFlat, null, 1, item.id);
-        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo).length;
-        
+const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === item.id).length;        
         const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${item.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `
@@ -1355,8 +1362,7 @@ document.addEventListener('DOMContentLoaded', () => {
                <input class="cfm-name reply-inp" id="rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <div class="cfm-bottom">
                   <textarea class="cfm-text reply-inp-text" id="rt-${item.id}" placeholder="Phản hồi..." rows="1"></textarea>
-                  <button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="${item.id}" data-formid="${item.id}">➤</button>
-               </div>
+<button class="cfm-send ic-rf-send" data-cid="${item.id}" data-replyto="" data-formid="${item.id}">➤</button>               </div>
                <button class="ic-rf-cancel" data-formid="${item.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0; cursor:pointer;">Hủy</button>
             </div>
           </div>
@@ -1625,8 +1631,7 @@ function setupChapComments(){
         const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
         const rootRepliesHtml = renderMainThreadHtml(repliesFlat, null, 1, c.id);
-        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo).length;
-
+const rootRepliesCount = repliesFlat.filter(r => !r.replyTo || r.replyTo === c.id).length;
         const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${c.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `

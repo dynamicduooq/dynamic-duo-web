@@ -11,12 +11,12 @@ const currentTruyenId = frontmatter?.truyen_id;
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
 const storyFolders = Object.keys(import.meta.glob('../pages/truyen/*/index.astro'));
 
-// 2. Lấy danh sách slug duy nhất (Sửa lỗi dính "dynamic duo web")
+// 2. Lấy danh sách slug duy nhất
 const slugs = [...new Set([
   ...allPosts.map(p => {
     const parts = (p.url || "").split('/').filter(Boolean);
     const idx = parts.indexOf('truyen');
-    return idx !== -1 ? parts[idx + 1] : null; // Chỉ lấy những URL có chứa /truyen/
+    return idx !== -1 ? parts[idx + 1] : null; 
   }),
   ...storyFolders.map(path => {
     const parts = path.split('/');
@@ -49,7 +49,7 @@ const navDuoiNuoc = navStories.filter(s => s.isOngoing);
 const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
-// LOGIC ĐIỀU HƯỚNG CHƯƠNG (Sửa lỗi sắp xếp 20 sau 10)
+// LOGIC ĐIỀU HƯỚNG CHƯƠNG 
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
@@ -121,7 +121,6 @@ if (isNovelPage) {
   </script>
 
   <script is:inline>
-    // Khởi tạo Theme & Settings ngay lập tức
     (function(){
       const t = localStorage.getItem('dd-theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
@@ -134,29 +133,24 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
-  /* ─── FIX NÚT ĐỌC ĐẢM BẢO BẤM ĐƯỢC ─── */
   .sc-link { position: relative; z-index: 50 !important; pointer-events: auto !important; }
   .sc-footer { position: relative; z-index: 40 !important; pointer-events: auto !important; }
   .btn-outline { position: relative; z-index: 50 !important; pointer-events: auto !important; }
 
-  /* ─── FIX DARK THEME TOÀN DIỆN ─── */
 [data-theme="dark"] {
-  /* 1. Nâng độ sáng chữ nội dung chính */
   --text-main: #f8fafc; 
   --text-mid: #cbd5e1;
 }
 
-/* 2. Fix Tên truyện (Index cá) */
 [data-theme="dark"] .story-title, 
 [data-theme="dark"] .sc-title {
-  color: #f1f5f9 !important; /* Màu trắng xám rất sáng */
+  color: #f1f5f9 !important; 
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 3. Fix Nút "Trang truyện" (Nút viền mảnh) */
 [data-theme="dark"] .btn-outline, 
 [data-theme="dark"] .sc-link.secondary {
-  color: #a8daf0 !important; /* Màu xanh nhạt sáng */
+  color: #a8daf0 !important; 
   border-color: rgba(168, 218, 240, 0.4) !important;
   background: rgba(15, 35, 54, 0.8) !important;
 }
@@ -166,26 +160,20 @@ if (isNovelPage) {
   border-color: #a8daf0 !important;
 }
 
-/* 4. Fix lỗi Khung giới thiệu bị trắng (Trong trang giới thiệu truyện) */
 [data-theme="dark"] .intro-block {
-  background: #1e3a5f !important; /* Đổi từ trắng sang xanh Navy đậm */
+  background: #1e3a5f !important; 
   border-color: rgba(126, 200, 227, 0.2) !important;
-  color: #e2e8f0 !important; /* Chữ sáng lên */
+  color: #e2e8f0 !important; 
 }
+[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
 
-/* 5. Fix tiêu đề "GIỚI THIỆU" bên trong khung */
-[data-theme="dark"] .intro-block h4 {
-  color: #7ec8e3 !important;
-}
-
-/* FIX DARK MODE CHO KHUNG TRUYỆN */
   [data-theme="dark"] .story-item, 
   [data-theme="dark"] .sc, 
   [data-theme="dark"] .author-card { 
     background: #0f2336 !important; 
     border-color: rgba(126,200,227, 0.15) !important;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-  }    /* ── VARIABLES ── */
+  }    
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -204,16 +192,13 @@ if (isNovelPage) {
 
 [data-theme="dark"] {
   --cream:#0a1929;
-  --text-main:#f8fafc; /* Màu trắng xám rất sáng, dễ đọc */
-  --text-mid:#cbd5e1;  /* Màu phụ cũng sáng hơn */
+  --text-main:#f8fafc; 
+  --text-mid:#cbd5e1;  
   --bg-card:#0f2336;
   --border-card:rgba(126,200,227,.15);
 }
 
-/* Thêm đoạn này để ép màu chữ nội dung truyện cực kỳ rõ ràng */
-[data-theme="dark"] .novel-content p {
-  color: #f1f5f9 !important; /* Trắng xám rõ nét */
-}
+[data-theme="dark"] .novel-content p { color: #f1f5f9 !important; }
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { 
@@ -234,7 +219,6 @@ if (isNovelPage) {
 
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    /* ── NAVBAR & DROPDOWN (FIXED HOVER) ── */
     nav { 
       position:fixed; top:0; left:0; right:0; z-index:500; 
       display:flex; align-items:center; height:56px; padding:0 28px; 
@@ -252,19 +236,11 @@ if (isNovelPage) {
     }
     [data-theme="dark"] .nav-logo { color:#a8daf0; }
 
-    /* SỬA LỖI NAVBAR HOVER */
     .nav-links { display:flex; align-items:center; gap:5px; }
     .nav-item { position:relative; display:flex; align-items:center; height:56px; }
     
-    /* "Cầu nối" tàng hình giúp hover không bị mất chuột khi di chuyển xuống menu */
     .nav-item::before {
-      content: ""; 
-      position: absolute; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 70px; /* Tạo vùng đệm 70px để giữ menu luôn mở khi chuột rà qua */
-      z-index: -1;
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 70px; z-index: -1;
     }
 
     .nav-item > a, .nav-btn { 
@@ -284,36 +260,19 @@ if (isNovelPage) {
       color:#7ec8e3; background:rgba(126,200,227,.1); 
     }
     
-    /* KHUNG MENU THẢ XUỐNG */
     .dropdown-content { 
-      position:absolute; 
-      top: 100%; /* Sát mép dưới của nav-item */
-      left:50%; 
-      transform:translateX(-50%) translateY(8px); 
-      min-width:240px; 
-      background:var(--bg-card); 
-      border:1px solid var(--border-card); 
-      border-radius:var(--r-md); 
-      box-shadow:0 16px 48px rgba(2,132,199,.13); 
-      padding:8px 6px; 
-      opacity:0; 
-      visibility:hidden; 
-      pointer-events:none; 
-      transition: all 0.2s ease-out; 
-      z-index:600; 
+      position:absolute; top: 100%; left:50%; transform:translateX(-50%) translateY(8px); 
+      min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); 
+      border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; 
+      opacity:0; visibility:hidden; pointer-events:none; transition: all 0.2s ease-out; z-index:600; 
     }
 
     [data-theme="dark"] .dropdown-content { box-shadow:0 16px 48px rgba(0,0,0,.4); }
 
-    /* Hiệu ứng khi lướt chuột qua */
     .nav-item:hover .dropdown-content { 
-      opacity:1; 
-      visibility:visible; 
-      pointer-events:auto; 
-      transform:translateX(-50%) translateY(0); 
+      opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); 
     }
 
-    /* Các mục bên trong Dropdown */
     .dd-section-title { 
       font-size:.62rem; letter-spacing:2px; text-transform:uppercase; 
       color:var(--text-dim); padding:6px 12px 3px; 
@@ -322,8 +281,7 @@ if (isNovelPage) {
 
     .dd-item { 
       display:flex; align-items:center; gap:7px; padding:7px 12px; 
-      font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); 
-      transition:var(--t); 
+      font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); 
     }
     .dd-item:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .dd-item { color:#8fbcd4; }
@@ -331,7 +289,6 @@ if (isNovelPage) {
 
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
-/* ── MOBILE MENU (Sửa lỗi rớt chữ xuống trang) ── */
     .mobile-menu {
       display: none; flex-direction: column; background: var(--bg-card);
       padding: 20px 28px; border-bottom: 1px solid var(--border-card);
@@ -346,7 +303,6 @@ if (isNovelPage) {
     [data-theme="dark"] .mobile-menu { background: rgba(8,18,32,.98); }
     [data-theme="dark"] .mobile-menu a { color: #a8daf0; }
     
-    /* Theme Button & Hamburger */
     .nav-theme-btn { 
       font-size:.8rem; width:32px; height:32px; border-radius:50%; 
       border:1px solid var(--border-card); background:none; color:var(--text-mid); 
@@ -357,7 +313,6 @@ if (isNovelPage) {
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
 
-    /* SỬA LỖI THỪA NÚT THEME MOBILE */
     #navThemeBtnMobile { display: none; }
     @media(max-width:768px){ 
       .nav-links { display:none; }
@@ -369,7 +324,6 @@ if (isNovelPage) {
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
     @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
-    /* ── LAYOUT & CONTENT ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); }
     .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
@@ -385,107 +339,21 @@ if (isNovelPage) {
         box-sizing: border-box;
       } 
     }    
-    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; }
+    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; transition: background 0.2s;}
     [data-theme="dark"] .novel-content p { color:#d8eeff; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     [data-theme="dark"] blockquote { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
 
-    /* CĂN TRÁI TIÊU ĐỀ TRONG TRANG MỤC LỤC */
     .story-title { text-align: left !important; }
     .story-info { text-align: left; }
 
-    /* ── TAGS ── */
     .tags-container { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; margin-top:100px; }
     .tag-badge { display:inline-block; padding:4px 14px; border:1px solid var(--sky-light); border-radius:var(--r-pill); font-size:.75rem; color:var(--sky-dark); transition:var(--t); background:var(--sky-pale); font-family: 'Newsreader', serif;}
     .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
-
-    /* ── CHAP NAV - GIAO DIỆN MỚI ── */
-    :root {
-      --blue-main: #0288d1;
-      --blue-light: #e1f5fe;
-      --blue-border: #81d4fa;
-    }
-
-    .chap-nav-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto;
-    }
-
-    /* Hàng chứa 3 nút dưới */
-    .nav-controls-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      width: 100%;
-    }
-
-    /* Nút mục lục hàng trên */
-    .nav-toc-row {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    /* Style chung cho tất cả các nút nav */
-    .chap-pn, .chap-dd-btn, .nav-toc-btn {
-      display: flex !important;
-      justify-content: center;
-      align-items: center;
-      height: 42px;
-      padding: 0 10px !important;
-      font-size: 0.82rem !important;
-      color: var(--blue-main) !important;
-      background: #fff !important;
-      border: 1.5px solid var(--blue-border) !important;
-      border-radius: 999px !important;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      white-space: nowrap;
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(2, 136, 209, 0.12);
-    }
-
-    [data-theme="dark"] .chap-pn, 
-    [data-theme="dark"] .chap-dd-btn,
-    [data-theme="dark"] .nav-toc-btn {
-      background: #0d2035 !important;
-      border-color: #1e4a6a !important;
-      color: #8fbcd4 !important;
-    }
-
-    .chap-pn:hover, .chap-dd-btn:hover, .nav-toc-btn:hover {
-      background: var(--blue-light) !important;
-      border-color: var(--blue-main) !important;
-      transform: translateY(-2px);
-    }
-
-    .chap-pn.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .chap-dd-wrap { position: relative; width: 100%; }
-    .chap-dd-btn { width: 100%; }
-    
-    .chap-dd-list { 
-      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); 
-      z-index: 700; width: 220px; max-height: 280px; overflow-y: auto; 
-      background: var(--bg-card); border: 1px solid var(--border-card); 
-      border-radius: 12px; box-shadow: 0 16px 48px rgba(2,132,199,.15); display: none; 
-    }
-    .chap-dd-list.open { display: block; }
-    .chap-dd-list.up { top: auto; bottom: calc(100% + 6px); }
-    .chap-dd-list a { display: block; padding: 8px 12px; font-size: .8rem; color: var(--text-mid); border-bottom: 1px solid rgba(186,230,253,.2); }
-    .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
 
     /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
@@ -500,39 +368,10 @@ if (isNovelPage) {
     .aa-btn.play:hover { background: var(--sky2); }
     .aa-btn.pause { background: #f59e0b; color: #fff; }
     .aa-btn.stop { background: #ef4444; color: #fff; }
-    .aa-btn-tool { 
-      background: #fff; 
-      border: 1px solid var(--sky-light); 
-      border-radius: 8px; 
-      cursor: pointer; 
-      padding: 6px 12px; 
-      font-family: 'Newsreader', serif;
-      font-size: 0.75rem; 
-      font-weight: 600;
-      color: var(--sky-dark);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: var(--t); 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    
-    [data-theme="dark"] .aa-btn-tool {
-      background: rgba(15,35,54,0.8);
-      border-color: rgba(126,200,227,0.2);
-      color: #a8daf0;
-    }
-
-    .aa-btn-tool:hover { 
-      background: var(--sky-pale); 
-      border-color: var(--sky);
-      color: var(--sky);
-      transform: translateY(-1px);
-    }
-    
-    .aa-btn-tool:active {
-      transform: translateY(0);
-    }    
+    .aa-btn-tool { background: #fff; border: 1px solid var(--sky-light); border-radius: 8px; cursor: pointer; padding: 6px 12px; font-family: 'Newsreader', serif; font-size: 0.75rem; font-weight: 600; color: var(--sky-dark); display: inline-flex; align-items: center; gap: 5px; transition: var(--t); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    [data-theme="dark"] .aa-btn-tool { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
+    .aa-btn-tool:hover { background: var(--sky-pale); border-color: var(--sky); color: var(--sky); transform: translateY(-1px); }
+    .aa-btn-tool:active { transform: translateY(0); }    
     .aa-settings-collapse { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-top: 0px solid transparent; }
     .aa-settings-collapse.open { max-height: 200px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--sky-light); }
     .aa-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -544,7 +383,6 @@ if (isNovelPage) {
     #aaRateValue { min-width: 25px; font-weight: bold; color: var(--sky); }
     @media(max-width: 640px) { .aa-settings { flex-direction: column; align-items: flex-start; gap: 8px; } #aaVoiceSelect { max-width: 100%; } }
 
-    /* ── EDITOR NOTE ── */
     .editor-note-box { margin-top: 50px; padding: 20px; background: var(--sky-pale); border-radius: var(--r-md); border-top: 2px dashed var(--sky-light); position: relative; }
     .editor-note-box::before { content: "𓆝"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--bg-card); padding: 0 15px; color: var(--sky-light); font-size: 1.2rem; }
     [data-theme="dark"] .editor-note-box { background: rgba(14, 165, 233, 0.1); border-left-color: var(--sky); }
@@ -552,116 +390,45 @@ if (isNovelPage) {
     .note-text { font-style: italic; font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; }
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
-/* --- BONG BÓNG BÌNH LUẬN 3D GLASS --- */
+/* --- BONG BÓNG BÌNH LUẬN --- */
 .ic-trigger {
-  position: absolute;
-  left: -40px;          /* Desktop: Nằm lề bên trái */
-  top: 6px;
-  width: 24px;
-  height: 20px;
-  background: rgba(14, 165, 233, 0.15); 
-  backdrop-filter: blur(4px);           
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(14, 165, 233, 0.3);
-  border-radius: 6px 6px 6px 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
+  position: absolute; left: -40px; top: 6px; width: 24px; height: 20px;
+  background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 6px 6px 6px 2px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+  transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
   opacity: 0.1; 
 }
-
-.ic-trigger::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  border-left: 4px solid rgba(14, 165, 233, 0.3);
-  border-bottom: 4px solid transparent;
-}
-
-.ic-count {
-  font-family: sans-serif;
-  font-size: 9px;
-  font-weight: 800;
-  color: var(--sky-dark);
-  pointer-events: none;
-}
-
-.novel-content p:hover .ic-trigger,
-.ic-trigger.has-comments {
-  opacity: 1;
-  background: rgba(14, 165, 233, 0.25);
-  border-color: var(--sky);
-}
-
-.ic-trigger:hover {
-  transform: scale(1.2) translateY(-2px);
-  background: var(--sky) !important;
-}
-
+.ic-trigger::after { content: ""; position: absolute; bottom: -4px; left: 0; border-left: 4px solid rgba(14, 165, 233, 0.3); border-bottom: 4px solid transparent; }
+.ic-count { font-family: sans-serif; font-size: 9px; font-weight: 800; color: var(--sky-dark); pointer-events: none; }
+.novel-content p:hover .ic-trigger, .ic-trigger.has-comments { opacity: 1; background: rgba(14, 165, 233, 0.25); border-color: var(--sky); }
+.ic-trigger:hover { transform: scale(1.2) translateY(-2px); background: var(--sky) !important; }
 .ic-trigger:hover .ic-count { color: #fff; }
 
-/* Dark Mode Fix */
-[data-theme="dark"] .ic-trigger {
-  background: rgba(126, 200, 227, 0.1);
-  border-color: rgba(126, 200, 227, 0.2);
-}
+[data-theme="dark"] .ic-trigger { background: rgba(126, 200, 227, 0.1); border-color: rgba(126, 200, 227, 0.2); }
 [data-theme="dark"] .ic-count { color: #a8daf0; }
 
-/* ─── FIX MOBILE: BONG BÓNG LỆCH PHẢI ĐỂ KHÔNG ĐÈ LÊN CHỮ ─── */
+/* ─── FIX MOBILE: BONG BÓNG ẤN VÀO CHỮ MỚI HIỆN, KHÔNG ĐÈ CHỮ ─── */
 @media (max-width: 640px) {
   .novel-content p {
-    padding-right: 28px !important; /* Dành khoảng trống an toàn bên phải cho bong bóng */
+    padding-right: 0 !important; 
     padding-left: 0 !important;
   }
   .ic-trigger { 
-    left: auto !important;
-    right: -4px !important; /* Đặt bong bóng gọn gàng vào mép phải */
-    top: 2px !important;
-    opacity: 0.5; 
-    transform: scale(0.85);
+    left: auto !important; right: 0 !important; top: -12px !important;
+    opacity: 0; transform: scale(0.5); pointer-events: none;
   } 
-  .ic-trigger::after {
-    left: auto;
-    right: 0;
-    border-left: none;
-    border-right: 4px solid rgba(14, 165, 233, 0.3);
-  }
-  .novel-content p:hover .ic-trigger, .ic-trigger.has-comments {
-    transform: scale(0.85); /* Giữ nguyên scale trên mobile */
-    opacity: 1;
-  }
-  .ic-trigger:hover {
-    transform: scale(1) translateY(-2px) !important; 
-  }
+  .ic-trigger::after { left: auto; right: 8px; border-left: none; border-right: 4px solid rgba(14, 165, 233, 0.3); }
+  
+  .novel-content p.show-mobile-bubble .ic-trigger { transform: scale(0.9) !important; opacity: 1 !important; pointer-events: auto; }
+  .ic-trigger.has-comments { opacity: 0.6; transform: scale(0.85); pointer-events: auto; }
 }
 
-/* 1. Lớp phủ Overlay */
-.ic-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
-  backdrop-filter: blur(2px);    /* Làm mờ nhẹ hậu cảnh */
-  z-index: 998;                  /* Nằm sát dưới Sidebar */
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+.ic-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 998; display: none; opacity: 0; transition: opacity 0.3s ease; }
+.ic-overlay.show { display: block; opacity: 1; }
 
-/* Hiện overlay khi mở sidebar */
-.ic-overlay.show {
-  display: block;
-  opacity: 1;
-}
-
-/* 2. Sidebar được ưu tiên nằm trên cùng */
 .ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:999; overflow:hidden; }
 .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
-
 @media(max-width:600px){ .ic-sidebar { width:min(320px,88vw); } }
 
     .ic-sidebar-inner { display:flex; flex-direction:column; height:100%; overflow:hidden; }
@@ -704,14 +471,12 @@ if (isNovelPage) {
     .ic-item-text { font-size:.74rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
     [data-theme="dark"] .ic-item-text { color:#F3F9FF; }
     
-    /* Các nút chung cho Trả lời / Xóa */
     .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; font-weight: 600;}
     .ic-reply-toggle:hover { color:var(--sky2); text-decoration:underline; }
     [data-theme="dark"] .ic-reply-toggle { color:#a8daf0; }
     .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    /* CSS CHO REPLY THREAD TRONG SIDEBAR */
     .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px 0 7px 8px; border-left:2px solid rgba(186,230,253,.5); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.2); }
@@ -758,8 +523,6 @@ if (isNovelPage) {
     .chap-comment-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--sky-light),transparent); }
     [data-theme="dark"] .chap-comment-title { color:#a8daf0; }
     [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e4a6a,transparent); }
-    .admin-bar { display:none; }
-    [data-theme="dark"] .admin-bar { background:rgba(15,70,115,.12); border-color:rgba(126,200,227,.18); color:#527a96; }
     
     .comment-form { background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; padding:20px; margin-bottom:24px; box-shadow: var(--sh-soft); }
     [data-theme="dark"] .comment-form { background:#0f2336 !important; border-color:rgba(126,200,227,.16) !important; }
@@ -803,7 +566,7 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
-    /* CSS CHO THREAD COMMENTS CUỐI TRANG */
+    /* CSS THREAD LỚN */
     .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.5); padding-left:12px; display:none; flex-direction:column; gap:7px; }
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.2); }
@@ -883,9 +646,7 @@ if (isNovelPage) {
     .tool-fab-toggle:hover { opacity: 1; transform: scale(1.05); }
     [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
-/* =========================================
-   THIẾT LẬP BẢNG MÀU XANH NƯỚC BIỂN
-   ========================================= */
+
 :root {
   --blue-main: #0288d1;      
   --blue-light: #e1f5fe;     
@@ -893,9 +654,6 @@ if (isNovelPage) {
   --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); 
 }
 
-/* =========================================
-   THANH ĐIỀU HƯỚNG CHƯƠNG (2 HÀNG)
-   ========================================= */
 .chap-nav-row {
   display: flex !important;
   flex-wrap: wrap !important; 
@@ -1057,7 +815,6 @@ if (isNovelPage) {
   <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
-<!-- LỚP MỜ ĐƯỢC CHÈN NGAY ĐÂY -->
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
@@ -1162,10 +919,6 @@ if (isNovelPage) {
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
           </div>
           <div class="ic-sidebar-form">
-            <div class="ic-quoting-bar" id="icQuotingBar">
-              <span class="ic-quoting-label" id="icQuotingLabel"></span>
-              <button class="ic-quoting-cancel" id="icQuotingCancel">✕</button>
-            </div>
             <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
             <div class="ic-form-body">
               <textarea class="ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="2"></textarea>
@@ -1292,12 +1045,6 @@ if (isNovelPage) {
         <button class="rs-btn" data-font="'Segoe UI', sans-serif" title="Segoe UI" style="font-family:'Segoe UI', sans-serif; padding:4px 8px;">S</button>
     </div>
     <p style="font-size:.65rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">💡 Bấm ⬅️ ➡️ trên bàn phím để sang trang</p>
-  </div>
-)}
-
-{isNovelPage && (
-  <div class="stats-popup" id="statsPopup" style="display: none;">
-    <!-- Nội dung Thống Kê (nếu có) -->
   </div>
 )}
 
@@ -1576,6 +1323,14 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.setAttribute('data-idx', index);
       p.prepend(btn);
 
+      // CẢI TIẾN MOBILE: Bấm vào đoạn văn mới hiện bong bóng, không đè chữ
+      p.onclick = (e) => {
+         if (window.innerWidth <= 640) {
+            document.querySelectorAll('.novel-content p').forEach(el => el.classList.remove('show-mobile-bubble'));
+            p.classList.add('show-mobile-bubble');
+         }
+      };
+
       btn.onclick = (e) => {
         e.stopPropagation();
         document.querySelectorAll('.novel-content p').forEach(el => el.classList.remove('ic-active'));
@@ -1687,7 +1442,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (form) form.style.display = 'none';
         }
         
-        // Nút Gửi (SỬA LỖI Ở ĐÂY: Thêm TRY CATCH)
+        // Nút Gửi (SỬA LỖI Ở ĐÂY: Thêm TRY CATCH & FIX CHẾT NÚT)
         if (tgt.classList.contains('ic-rf-send')) {
             const cid = tgt.dataset.cid;
             const nameInp = document.getElementById('ic-rn-' + cid);
@@ -1698,7 +1453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!text) return;
             
             tgt.disabled = true;
-            tgt.innerText = '...'; // Hiệu ứng chờ
+            tgt.innerText = '...'; 
             saveName(name);
             
             waitFirebase(async ({db, ref, push}) => {

@@ -551,16 +551,74 @@ if (isNovelPage) {
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
     /* ── INLINE COMMENTS ── */
-    .ic-trigger { position: absolute; left: -50px; top: -2px; display: inline-flex; align-items: center; justify-content: center; padding: 4px; background: transparent; border: none; cursor: pointer; font-size: 1.1rem; opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); color: var(--sky); transform: translateX(-5px) scale(0.9); filter: grayscale(100%) opacity(0.5); z-index: 10; }
-    @media(max-width: 768px) { .ic-trigger { left: -35px; } }
-    @media(max-width: 640px) { .ic-trigger { left: -15px; background: rgba(255,255,255,0.8); border-radius: 50%; padding: 2px; } }
-    .novel-content p:hover .ic-trigger { opacity: 0.6; transform: translateX(0) scale(1); filter: grayscale(0%) opacity(1); }
-    .ic-trigger:hover { opacity: 1 !important; transform: translateX(2px) scale(1.2) !important; color: var(--sky2); filter: grayscale(0%) opacity(1) !important; }
-    .ic-trigger.has-comments { opacity: 0.8; filter: grayscale(0%) opacity(1); transform: translateX(0) scale(1); }
-    .novel-content p.ic-active .ic-trigger { opacity: 1; transform: scale(1.15); filter: grayscale(0%) opacity(1); }
-    .ic-trigger span { font-size: 0.6rem; font-weight: bold; background: var(--sky-pale); color: var(--sky-dark); border-radius: 10px; padding: 1px 6px; margin-left: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-family: sans-serif; }
-    [data-theme="dark"] .ic-trigger span { background: rgba(126,200,227,.2); color: #a8daf0; }
+/* --- BONG BÓNG BÌNH LUẬN 3D GLASS --- */
+.ic-trigger {
+  position: absolute;
+  left: -38px;          /* Đẩy ra lề trái, không chiếm chỗ của chữ */
+  top: 6px;
+  width: 24px;
+  height: 20px;
+  background: rgba(14, 165, 233, 0.15); /* Màu xanh trong suốt */
+  backdrop-filter: blur(4px);           /* Kính mờ */
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  border-radius: 6px 6px 6px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
+  opacity: 0.1; /* Mờ đi khi không dùng */
+}
 
+/* Đuôi nhọn bong bóng */
+.ic-trigger::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  border-left: 4px solid rgba(14, 165, 233, 0.3);
+  border-bottom: 4px solid transparent;
+}
+
+/* Số bên trong */
+.ic-count {
+  font-family: sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--sky-dark);
+  pointer-events: none;
+}
+
+/* Hiện rõ khi có người bình luận hoặc rê chuột vào đoạn văn */
+.novel-content p:hover .ic-trigger,
+.ic-trigger.has-comments {
+  opacity: 1;
+  background: rgba(14, 165, 233, 0.25);
+  border-color: var(--sky);
+}
+
+.ic-trigger:hover {
+  transform: scale(1.2) translateY(-2px);
+  background: var(--sky) !important;
+}
+
+.ic-trigger:hover .ic-count { color: #fff; }
+
+/* Dark Mode Fix */
+[data-theme="dark"] .ic-trigger {
+  background: rgba(126, 200, 227, 0.1);
+  border-color: rgba(126, 200, 227, 0.2);
+}
+[data-theme="dark"] .ic-count { color: #a8daf0; }
+
+/* Responsive cho Mobile: Không để bong bóng bay mất khỏi màn hình */
+@media (max-width: 640px) {
+  .novel-content { padding-left: 35px !important; } /* Tạo lề trái */
+  .ic-trigger { left: 8px; opacity: 0.5; } /* Đưa bong bóng vào lề vừa tạo */
+}
     .ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:460; overflow:hidden; }
     .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
     .ic-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:450; backdrop-filter:blur(1px); }
@@ -1610,9 +1668,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 1. Gắn bong bóng vào từng đoạn văn
     paragraphs.forEach((p, index) => {
-      const btn = document.createElement('button');
-      btn.className = 'ic-trigger';
-      btn.innerHTML = '💬 <span class="ic-count" style="display:none">0</span>';
+const btn = document.createElement('button');
+btn.className = 'ic-trigger';
+btn.innerHTML = '<span class="ic-count">0</span>'; // Bỏ icon 💬, chỉ để số
       btn.setAttribute('data-idx', index);
       p.prepend(btn);
 
@@ -1682,16 +1740,23 @@ function renderSidebarComments(pIdx) {
           allInlineComments = snap.val() || {}; // Cập nhật biến tổng
           
           // Cập nhật số lượng trên từng bong bóng 💬
+// Cập nhật số lượng trên từng bong bóng (Số 0 mờ, Số > 0 hiện rõ)
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
+            const trigger = p.querySelector('.ic-trigger');
             const pComments = allInlineComments['p' + idx];
-            if (pComments && countEl) {
-              countEl.innerText = Object.keys(pComments).length;
-              countEl.style.display = 'inline-block';
-              p.querySelector('.ic-trigger').classList.add('has-comments');
+            
+            if (countEl && trigger) {
+              const count = pComments ? Object.keys(pComments).length : 0;
+              countEl.innerText = count;
+              
+              if (count > 0) {
+                trigger.classList.add('has-comments');
+              } else {
+                trigger.classList.remove('has-comments');
+              }
             }
           });
-
           // Nếu người dùng đang mở sidebar ở đoạn nào đó, cập nhật luôn nội dung sidebar đó
           const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
           if (activeIdx !== null && activeIdx !== undefined) {
@@ -1701,11 +1766,12 @@ function renderSidebarComments(pIdx) {
       });
     }
 
-    // 4. Xử lý khi nhấn nút Gửi
+// 4. Xử lý khi nhấn nút Gửi (Dòng 1146)
     document.getElementById('icFormSend').onclick = async () => {
       const btn = document.getElementById('icFormSend');
       const pIdx = btn.getAttribute('data-current-p');
-      const text = document.getElementById('icFormText').value.trim();
+      const textEl = document.getElementById('icFormText'); // Lấy element để xóa chữ sau khi gửi
+      const text = textEl.value.trim();
       const name = document.getElementById('icFormName').value.trim() || 'Khách';
       
       if (!text || pIdx === null) return;
@@ -1713,11 +1779,10 @@ function renderSidebarComments(pIdx) {
 
       waitFirebase(async ({ db, ref, push }) => {
         try {
-          // Lưu vào: inline_comments / ID_TRANG / p0, p1...
           await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
             name, text, ts: Date.now(), token: getMyToken()
           });
-          document.getElementById('icFormText').value = ''; // Xóa khung nhập
+          textEl.value = ''; // Xóa khung nhập sau khi gửi thành công
         } catch (e) {
           alert("Lỗi gửi comment: " + e.message);
         } finally {
@@ -1725,7 +1790,6 @@ function renderSidebarComments(pIdx) {
         }
       });
     };
-
     // Khởi chạy lắng nghe ngay khi load trang
     startListeningInline();
   }

@@ -1424,10 +1424,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     textInp.value = '';
                     const form = document.getElementById('ic-rf-' + formId);
                     if(form) { form.style.display = 'none'; }
-                    document.getElementById(`thread-${replyTo}`)?.classList.add('open');
+const targetThread = replyTo ? `thread-${replyTo}` : `thread-${rootCid}`;
+                    document.getElementById(targetThread)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
-                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
-            });
+                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }            });
         }
         
         if (tgtBtn.classList.contains('ic-del-btn')) {
@@ -1721,10 +1721,11 @@ function setupChapComments(){
                  const form = document.getElementById('rf-' + formId);
                  if(form) { form.style.display = 'none'; }
                  
-                 document.getElementById(`chap-thread-${replyTo}`)?.classList.add('open');
-             } catch (err) { alert("Lỗi: " + err.message); } 
-             finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
-         });
+const targetThread = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${rootCid}`;
+                    document.getElementById(targetThread)?.classList.add('open');
+                } catch (err) { alert("Lỗi: " + err.message); } 
+                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
+                         });
        }
        
        if(tgtBtn.classList.contains('cmt-del-btn')) {

@@ -1553,17 +1553,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Khởi chạy Firebase module
   setupChapterLike();
   setupChapComments();
-// --- OPTIMIZED INLINE COMMENTS LOGIC ---
+// --- HỆ THỐNG COMMENT INLINE TỐI ƯU ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
-  const pageId = pageKey();
-  let allInlineComments = {}; 
+  const pageId = pageKey(); // Ví dụ: _truyen_vat_de_vo_chuong_01
+  let allInlineComments = {}; // Biến cục bộ lưu toàn bộ comment của chương
 
   if (novelContent && icSidebar) {
     const paragraphs = novelContent.querySelectorAll('p');
     
-    // 1. Tạo bong bóng bình luận cho từng đoạn
+    // 1. Gắn bong bóng vào từng đoạn văn
     paragraphs.forEach((p, index) => {
       const btn = document.createElement('button');
       btn.className = 'ic-trigger';
@@ -1573,50 +1573,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
       btn.onclick = (e) => {
         e.stopPropagation();
+        // Đổi màu đoạn văn đang chọn
         document.querySelectorAll('.novel-content p').forEach(el => el.classList.remove('ic-active'));
         p.classList.add('ic-active');
+        
+        // Mở Sidebar
         layoutWrap.classList.add('sidebar-open');
         document.getElementById('icParaPreview').innerText = p.innerText.substring(0, 80) + '...';
         document.getElementById('icFormSend').setAttribute('data-current-p', index);
-        renderSidebarComments(index); // Hiện ngay lập tức
+        
+        // Vẽ danh sách comment của đoạn này ra sidebar
+        renderSidebarComments(index);
       };
     });
 
-    // 2. Lắng nghe dữ liệu Realtime từ Firebase
-    function startListeningInline() {
-      waitFirebase(({db, ref, onValue}) => {
-        onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
-          allInlineComments = snap.val() || {};
-          
-          // Cập nhật số lượng trên các bong bóng
-          paragraphs.forEach((p, idx) => {
-            const countEl = p.querySelector('.ic-count');
-            const pData = allInlineComments['p' + idx];
-            if (pData && countEl) {
-              countEl.innerText = Object.keys(pData).length;
-              countEl.style.display = 'inline-block';
-              p.querySelector('.ic-trigger').classList.add('has-comments');
-            }
-          });
-
-          // Cập nhật nội dung sidebar nếu đang mở
-          const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
-          if (activeIdx !== null) renderSidebarComments(activeIdx);
-        });
-      });
-    }
-
+    // 2. Hàm vẽ comment ra Sidebar (Lấy từ biến allInlineComments đã tải sẵn)
     function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
-      const pComments = allInlineComments['p' + pIdx];
+      const pData = allInlineComments['p' + pIdx]; // Lấy data của đoạn p0, p1...
       
-      if (!pComments) {
+      if (!pData) {
         listEl.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
         return;
       }
 
-      const items = Object.entries(pComments)
-        .map(([id, v]) => ({id, ...v}))
+      // Chuyển Object thành Array và sắp xếp theo thời gian
+      const items = Object.entries(pData)
+        .map(([id, v]) => ({ id, ...v }))
         .sort((a, b) => a.ts - b.ts);
 
       listEl.innerHTML = items.map(item => `
@@ -1630,7 +1613,33 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // 3. Xử lý nút gửi comment
+    // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
+    function startListeningInline() {
+      waitFirebase(({ db, ref, onValue }) => {
+        onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
+          allInlineComments = snap.val() || {}; // Cập nhật biến tổng
+          
+          // Cập nhật số lượng trên từng bong bóng 💬
+          paragraphs.forEach((p, idx) => {
+            const countEl = p.querySelector('.ic-count');
+            const pComments = allInlineComments['p' + idx];
+            if (pComments && countEl) {
+              countEl.innerText = Object.keys(pComments).length;
+              countEl.style.display = 'inline-block';
+              p.querySelector('.ic-trigger').classList.add('has-comments');
+            }
+          });
+
+          // Nếu người dùng đang mở sidebar ở đoạn nào đó, cập nhật luôn nội dung sidebar đó
+          const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
+          if (activeIdx !== null && activeIdx !== undefined) {
+            renderSidebarComments(activeIdx);
+          }
+        });
+      });
+    }
+
+    // 4. Xử lý khi nhấn nút Gửi
     document.getElementById('icFormSend').onclick = async () => {
       const btn = document.getElementById('icFormSend');
       const pIdx = btn.getAttribute('data-current-p');
@@ -1640,16 +1649,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!text || pIdx === null) return;
       btn.disabled = true;
 
-      waitFirebase(async ({db, ref, push}) => {
-        await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
-          name, text, ts: Date.now(), token: getMyToken()
-        });
-        document.getElementById('icFormText').value = '';
-        btn.disabled = false;
+      waitFirebase(async ({ db, ref, push }) => {
+        try {
+          // Lưu vào: inline_comments / ID_TRANG / p0, p1...
+          await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
+            name, text, ts: Date.now(), token: getMyToken()
+          });
+          document.getElementById('icFormText').value = ''; // Xóa khung nhập
+        } catch (e) {
+          alert("Lỗi gửi comment: " + e.message);
+        } finally {
+          btn.disabled = false;
+        }
       });
     };
 
-    // Khởi chạy lắng nghe
+    // Khởi chạy lắng nghe ngay khi load trang
     startListeningInline();
   }
 
@@ -1658,7 +1673,7 @@ document.addEventListener('DOMContentLoaded', () => {
     layoutWrap.classList.remove('sidebar-open');
     document.getElementById('icOverlay').classList.remove('show');
   };
-
+  
   // Khởi chạy các module khác
   setupChapterLike();
   setupChapComments();

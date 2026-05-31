@@ -1221,7 +1221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let allInlineComments = {}; 
   
   // Hàm dọn rác tự động cho Inline Comments
-  function autoCleanupInline(data, maxItems = 100) {
+  function autoCleanupInline(data, maxItems = 500) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           Object.keys(data).forEach(pKey => {
@@ -1448,7 +1448,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
           const data = snap.val() || {}; 
           allInlineComments = data;
-          autoCleanupInline(data, 150); // Dọn rác
+          autoCleanupInline(data, 500); // Dọn rác
           
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
@@ -1559,7 +1559,7 @@ function setupChapComments(){
   if(cmtName) cmtName.value = getSavedName();
 
   // Dọn rác
-  function autoCleanupComments(data, maxItems = 150) {
+  function autoCleanupComments(data, maxItems = 500) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           const keys = Object.keys(data);

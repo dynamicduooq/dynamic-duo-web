@@ -312,11 +312,18 @@ const recentChaps = allChaps
 
 /* ─── SIDEBAR ─── */
 .sidebar-col {
-  display:flex; flex-direction:column; gap:16px;
-  position:sticky; top:68px; max-height:calc(100vh - 84px); overflow-y:auto; overflow-x:hidden;
-  scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; padding-bottom:8px;
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  position: static; 
+  align-self: start; /* Giúp sidebar không bị kéo dài thượt theo cột trái */
+  width: 100%;
+  padding-bottom: 20px;
 }
-.sidebar-col::-webkit-scrollbar { width:4px; }
+
+/* Các đoạn liên quan đến scrollbar bên dưới có thể xóa đi vì 
+   sidebar static sẽ không bao giờ tự xuất hiện thanh cuộn riêng nữa */
+   .sidebar-col::-webkit-scrollbar { width:4px; }
 .sidebar-col::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:4px; }
 
 /* Bỏ phần @media 900px của sidebar đi vì đã gộp lên trên đầu */

@@ -7,11 +7,9 @@ const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !==
 const isHome = Astro.props.isHome === true || frontmatter?.isHome === true;
 const currentTruyenId = frontmatter?.truyen_id;
 
-// 1. Quét toàn bộ file .md VÀ danh sách thư mục
 const allPosts = Object.values(import.meta.glob('../pages/**/*.md', { eager: true })) as any[];
 const storyFolders = Object.keys(import.meta.glob('../pages/truyen/*/index.astro'));
 
-// 2. Lấy danh sách slug duy nhất
 const slugs = [...new Set([
   ...allPosts.map(p => {
     const parts = (p.url || "").split('/').filter(Boolean);
@@ -25,7 +23,6 @@ const slugs = [...new Set([
   })
 ])].filter(Boolean) as string[];
 
-// 3. Xây dựng dữ liệu cho Navbar
 const navStories = slugs.map(slug => {
   const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
@@ -49,7 +46,6 @@ const navDuoiNuoc = navStories.filter(s => s.isOngoing);
 const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
-// LOGIC ĐIỀU HƯỚNG CHƯƠNG
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
@@ -121,7 +117,6 @@ if (isNovelPage) {
   </script>
 
   <script is:inline>
-    // Khởi tạo Setting Đọc
     (function(){
       const t = localStorage.getItem('dd-theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
@@ -129,57 +124,18 @@ if (isNovelPage) {
       const fz = localStorage.getItem('dd_fz');
       const ff = localStorage.getItem('dd_ff');
       const fw = localStorage.getItem('dd_fw');
-      const tc = localStorage.getItem('dd_tc');
+      const lh = localStorage.getItem('dd_lh');
+      const rTheme = localStorage.getItem('dd_read_theme');
       
       if(fz) document.documentElement.style.setProperty('--read-fz', fz + 'px');
       if(ff) document.documentElement.style.setProperty('--read-ff', ff);
       if(fw) document.documentElement.style.setProperty('--read-fw', fw);
-      if(tc && t !== 'dark') document.documentElement.style.setProperty('--read-color', tc); // Chỉ đổi màu chữ sáng khi ở Light mode
+      if(lh) document.documentElement.style.setProperty('--read-lh', lh);
+      if(rTheme) document.documentElement.setAttribute('data-read-theme', rTheme);
     })();
   </script>
 
   <style is:global>
-  .sc-link { position: relative; z-index: 50 !important; pointer-events: auto !important; }
-  .sc-footer { position: relative; z-index: 40 !important; pointer-events: auto !important; }
-  .btn-outline { position: relative; z-index: 50 !important; pointer-events: auto !important; }
-
-[data-theme="dark"] {
-  --text-main: #f8fafc; 
-  --text-mid: #cbd5e1;
-}
-
-[data-theme="dark"] .story-title, 
-[data-theme="dark"] .sc-title {
-  color: #f1f5f9 !important; 
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-[data-theme="dark"] .btn-outline, 
-[data-theme="dark"] .sc-link.secondary {
-  color: #a8daf0 !important; 
-  border-color: rgba(168, 218, 240, 0.4) !important;
-  background: rgba(15, 35, 54, 0.8) !important;
-}
-[data-theme="dark"] .btn-outline:hover, 
-[data-theme="dark"] .sc-link.secondary:hover {
-  background: rgba(168, 218, 240, 0.1) !important;
-  border-color: #a8daf0 !important;
-}
-
-[data-theme="dark"] .intro-block {
-  background: #1e3a5f !important; 
-  border-color: rgba(126, 200, 227, 0.2) !important;
-  color: #e2e8f0 !important; 
-}
-[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
-
-  [data-theme="dark"] .story-item, 
-  [data-theme="dark"] .sc, 
-  [data-theme="dark"] .author-card { 
-    background: #0f2336 !important; 
-    border-color: rgba(126,200,227, 0.15) !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-  }    
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -191,8 +147,8 @@ if (isNovelPage) {
       --t:all .2s ease;
       --read-fz: 18px;
       --read-ff: 'Newsreader', serif;
-      --read-fw: 400; /* Font weight mặc định */
-      --read-color: inherit; /* Màu chữ mặc định */
+      --read-fw: 400; 
+      --read-lh: 1.9;
       --bg-card:#ffffff;
       --bg-card2:#f0f9ff;
       --border-card:rgba(186,230,253,.5);
@@ -204,26 +160,18 @@ if (isNovelPage) {
   --text-mid:#cbd5e1;  
   --bg-card:#0f2336;
   --border-card:rgba(126,200,227,.15);
-  --read-color: #f1f5f9 !important; /* Luôn ép chữ sáng màu khi ở Dark Mode */
 }
 
-/* Biến CSS cho truyện */
-.novel-content p { 
-    font-weight: var(--read-fw); 
-    color: var(--read-color); 
-    transition: color 0.3s, font-weight 0.3s;
-}
+[data-theme="dark"] .story-title, [data-theme="dark"] .sc-title { color: #f1f5f9 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+[data-theme="dark"] .btn-outline, [data-theme="dark"] .sc-link.secondary { color: #a8daf0 !important; border-color: rgba(168, 218, 240, 0.4) !important; background: rgba(15, 35, 54, 0.8) !important; }
+[data-theme="dark"] .btn-outline:hover, [data-theme="dark"] .sc-link.secondary:hover { background: rgba(168, 218, 240, 0.1) !important; border-color: #a8daf0 !important; }
+[data-theme="dark"] .intro-block { background: #1e3a5f !important; border-color: rgba(126, 200, 227, 0.2) !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
+[data-theme="dark"] .story-item, [data-theme="dark"] .sc, [data-theme="dark"] .author-card { background: #0f2336 !important; border-color: rgba(126,200,227, 0.15) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }    
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    body { 
-      background:var(--cream); color:var(--text-main); 
-      font-family:var(--read-ff); 
-      font-size:var(--read-fz); 
-      line-height:1.9; margin:0; padding:0; overflow-x:hidden; 
-      transition: font-size 0.2s, font-family 0.2s, background-color 0.2s, color 0.2s; 
-    }
-    
+    body { background:var(--cream); color:var(--text-main); font-family:var(--read-ff); font-size:var(--read-fz); line-height:var(--read-lh); margin:0; padding:0; overflow-x:hidden; transition: background-color 0.2s, color 0.2s; }
     [data-theme="dark"] body { background:#0a1929; color:#F3F9FF; }
     h1,h2,h3,h4 { font-family:'Merriweather',serif; color:var(--sky-dark); text-align:center; }
     [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color:#a8daf0; }
@@ -234,83 +182,30 @@ if (isNovelPage) {
 
     #read-progress { position:fixed; top:0; left:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--sky-light),var(--sky),var(--sky2)); width:0%; transition:width .1s linear; pointer-events:none; }
 
-    nav { 
-      position:fixed; top:0; left:0; right:0; z-index:500; 
-      display:flex; align-items:center; height:56px; padding:0 28px; 
-      background:rgba(255,255,255,.97); backdrop-filter:blur(16px); 
-      border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); 
-    }
-    
-    [data-theme="dark"] nav { 
-      background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); 
-    }
-
-    .nav-logo { 
-      font-family:'Literata',serif; font-weight:600; font-size:.95rem; 
-      color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; 
-    }
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; height:56px; padding:0 28px; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid var(--border-card); box-shadow:0 2px 12px rgba(2,132,199,.08); }
+    [data-theme="dark"] nav { background:rgba(8,18,32,.98); border-color:rgba(126,200,227,.15); }
+    .nav-logo { font-family:'Literata',serif; font-weight:600; font-size:.95rem; color:var(--sky-dark); white-space:nowrap; letter-spacing:.5px; margin-right: auto; }
     [data-theme="dark"] .nav-logo { color:#a8daf0; }
-
     .nav-links { display:flex; align-items:center; gap:5px; }
     .nav-item { position:relative; display:flex; align-items:center; height:56px; }
-    
-    .nav-item::before {
-      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 70px; z-index: -1;
-    }
-
-    .nav-item > a, .nav-btn { 
-      font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); 
-      letter-spacing:1px; text-transform:uppercase; padding:6px 12px; 
-      border-radius:var(--r-pill); display:inline-flex; align-items:center; 
-      gap:5px; transition:var(--t); cursor:pointer; background:none; 
-      border:none; white-space:nowrap; 
-    }
-
-    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { 
-      background:var(--sky-pale); color:var(--sky); 
-    }
+    .nav-item::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 70px; z-index: -1; }
+    .nav-item > a, .nav-btn { font-family:'Newsreader',serif; font-size:.76rem; color:var(--text-mid); letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border-radius:var(--r-pill); display:inline-flex; align-items:center; gap:5px; transition:var(--t); cursor:pointer; background:none; border:none; white-space:nowrap; }
+    .nav-item > a:hover, .nav-btn:hover, .nav-item:hover > a, .nav-item:hover > .nav-btn { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .nav-item > a, [data-theme="dark"] .nav-btn { color:#8fbcd4; }
-    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, 
-    [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { 
-      color:#7ec8e3; background:rgba(126,200,227,.1); 
-    }
+    [data-theme="dark"] .nav-item > a:hover, [data-theme="dark"] .nav-btn:hover, [data-theme="dark"] .nav-item:hover > a, [data-theme="dark"] .nav-item:hover > .nav-btn { color:#7ec8e3; background:rgba(126,200,227,.1); }
     
-    .dropdown-content { 
-      position:absolute; top: 100%; left:50%; transform:translateX(-50%) translateY(8px); 
-      min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); 
-      border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; 
-      opacity:0; visibility:hidden; pointer-events:none; transition: all 0.2s ease-out; z-index:600; 
-    }
-
+    .dropdown-content { position:absolute; top: 100%; left:50%; transform:translateX(-50%) translateY(8px); min-width:240px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--r-md); box-shadow:0 16px 48px rgba(2,132,199,.13); padding:8px 6px; opacity:0; visibility:hidden; pointer-events:none; transition: all 0.2s ease-out; z-index:600; }
     [data-theme="dark"] .dropdown-content { box-shadow:0 16px 48px rgba(0,0,0,.4); }
-
-    .nav-item:hover .dropdown-content { 
-      opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); 
-    }
-
-    .dd-section-title { 
-      font-size:.62rem; letter-spacing:2px; text-transform:uppercase; 
-      color:var(--text-dim); padding:6px 12px 3px; 
-    }
+    .nav-item:hover .dropdown-content { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+    .dd-section-title { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); padding:6px 12px 3px; }
     [data-theme="dark"] .dd-section-title { color:#3d6a82; }
-
-    .dd-item { 
-      display:flex; align-items:center; gap:7px; padding:7px 12px; 
-      font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); 
-    }
+    .dd-item { display:flex; align-items:center; gap:7px; padding:7px 12px; font-size:.82rem; color:var(--text-mid); border-radius:var(--r-sm); transition:var(--t); }
     .dd-item:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .dd-item { color:#8fbcd4; }
     [data-theme="dark"] .dd-item:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
-
     .dd-divider { height:1px; background:rgba(186,230,253,.45); margin:5px 8px; }
 
-    .mobile-menu {
-      display: none; flex-direction: column; background: var(--bg-card);
-      padding: 20px 28px; border-bottom: 1px solid var(--border-card);
-      position: fixed; top: 56px; left: 0; right: 0; z-index: 499;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      max-height: calc(100vh - 56px); overflow-y: auto;
-    }
+    .mobile-menu { display: none; flex-direction: column; background: var(--bg-card); padding: 20px 28px; border-bottom: 1px solid var(--border-card); position: fixed; top: 56px; left: 0; right: 0; z-index: 499; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-height: calc(100vh - 56px); overflow-y: auto; }
     .mobile-menu.open { display: flex; }
     .mobile-section-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin: 15px 0 8px; font-weight: 600; letter-spacing: 1px;}
     .mobile-menu a { padding: 10px 0; color: var(--text-main); border-bottom: 1px dashed var(--border-card); font-family: 'Newsreader', serif; font-size: 1rem;}
@@ -318,44 +213,59 @@ if (isNovelPage) {
     [data-theme="dark"] .mobile-menu { background: rgba(8,18,32,.98); }
     [data-theme="dark"] .mobile-menu a { color: #a8daf0; }
     
-    .nav-theme-btn { 
-      font-size:.8rem; width:32px; height:32px; border-radius:50%; 
-      border:1px solid var(--border-card); background:none; color:var(--text-mid); 
-      cursor:pointer; transition:var(--t); display:inline-flex; 
-      align-items:center; justify-content:center; flex-shrink:0; 
-    }
+    .nav-theme-btn { font-size:.8rem; width:32px; height:32px; border-radius:50%; border:1px solid var(--border-card); background:none; color:var(--text-mid); cursor:pointer; transition:var(--t); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
     .nav-theme-btn:hover { background:var(--sky-pale); color:var(--sky); }
     [data-theme="dark"] .nav-theme-btn { border-color:rgba(126,200,227,.25); color:#8fbcd4; }
     [data-theme="dark"] .nav-theme-btn:hover { background:rgba(126,200,227,.1); color:#F3F9FF; }
 
     #navThemeBtnMobile { display: none; }
-    @media(max-width:768px){ 
-      .nav-links { display:none; }
-      #navThemeBtnMobile { display: flex; }
-    }
+    @media(max-width:768px){ .nav-links { display:none; } #navThemeBtnMobile { display: flex; } }
 
     .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
     .nav-hamburger span { display:block; width:22px; height:2px; background:var(--sky-dark); border-radius:2px; transition:var(--t); }
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
     @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
+    /* ── CẤU TRÚC ĐỌC TRUYỆN ── */
     .page-wrapper { margin-top:56px; min-height:70vh; }
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); }
     .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
-    .novel-content { width:100%; margin:24px auto 60px; padding:48px 60px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; }
+    
+    /* KHUNG NỘI DUNG VÀ THEME ĐỌC TÙY BIẾN */
+    .novel-content { 
+      width:100%; margin:24px auto 60px; padding:48px 60px; 
+      background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); 
+      border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; 
+      transition: background-color 0.4s ease, border-color 0.4s ease;
+    }
+    
+    .novel-content p { 
+      position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; 
+      font-weight: var(--read-fw); line-height: var(--read-lh); transition: color 0.3s;
+    }
+
+    /* THEME: GIẤY (SEPIA) */
+    [data-read-theme="sepia"] .novel-content { background-color: #fcf6e8 !important; border-color: #e6d3bf !important; }
+    [data-read-theme="sepia"] .novel-content p, [data-read-theme="sepia"] .editor-note-box { color: #43302b !important; }
+    
+    /* THEME: XANH LÁ (GREEN) */
+    [data-read-theme="green"] .novel-content { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
+    [data-read-theme="green"] .novel-content p, [data-read-theme="green"] .editor-note-box { color: #064e3b !important; }
+    
+    /* THEME: TỐI (DARK) - Ép buộc khi chọn Theme Đọc Tối, bất chấp giao diện ngoài */
+    [data-read-theme="dark"] .novel-content { background-color: #0f172a !important; border-color: #334155 !important; }
+    [data-read-theme="dark"] .novel-content p, [data-read-theme="dark"] .editor-note-box { color: #e2e8f0 !important; }
+
+    /* Fix Dark Theme tổng thể cho trang */
     [data-theme="dark"] .page-content-wrap { color:#d8eeff; }
+    [data-theme="dark"]:not([data-read-theme="sepia"]):not([data-read-theme="green"]):not([data-read-theme="light"]) .novel-content p { color: #f1f5f9 !important; }
     
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
     @media(max-width:640px){ 
-      .novel-content, .page-content-wrap { 
-        padding: 24px 16px !important; 
-        margin: 16px auto 40px !important;
-        width: 100% !important; 
-        box-sizing: border-box;
-      } 
+      .novel-content, .page-content-wrap { padding: 24px 16px !important; margin: 16px auto 40px !important; width: 100% !important; box-sizing: border-box; } 
     }    
-    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; }
-    blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
+    
+    blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     [data-theme="dark"] blockquote { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
     hr { border:none; text-align:center; margin:40px 0; }
     hr::after { content:"𓆝 𓆟 𓆞 𓆝 𓆟"; color:var(--sky-light); font-size:20px; letter-spacing:5px; }
@@ -368,6 +278,50 @@ if (isNovelPage) {
     .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
+
+    /* ── NAV CHƯƠNG ĐƯỢC THIẾT KẾ LẠI THÀNH DOCK BO TRÒN ── */
+    .chap-nav-container { margin: 30px auto 40px; display: flex; justify-content: center; width: 100%; padding: 0 16px; box-sizing: border-box;}
+    .chap-nav-dock { 
+        display: flex; align-items: center; justify-content: space-between; 
+        background: var(--bg-card); border: 1.5px solid var(--sky-light); border-radius: 999px; 
+        padding: 4px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12); width: 100%; max-width: 500px; 
+    }
+    .dock-btn { 
+        flex: 1; display: flex; justify-content: center; align-items: center; height: 42px; 
+        font-size: 0.85rem; font-family: 'Newsreader', serif; font-weight: bold; 
+        color: var(--sky-dark); background: transparent; border: none; cursor: pointer; 
+        border-radius: 999px; transition: all 0.2s ease; white-space: nowrap; text-decoration: none; 
+    }
+    .dock-btn:hover:not(.disabled) { background: var(--sky-pale); color: var(--sky); transform: scale(1.02); }
+    .dock-btn.disabled { opacity: 0.4; pointer-events: none; }
+    .toc-btn { flex: 0.8; border-left: 1px solid var(--sky-light); border-right: 1px solid var(--sky-light); border-radius: 0; }
+    
+    [data-theme="dark"] .chap-nav-dock { background: #0f2336; border-color: #1e4a6a; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    [data-theme="dark"] .dock-btn { color: #a8daf0; }
+    [data-theme="dark"] .dock-btn:hover:not(.disabled) { background: #1e4a6a; color: #fff; }
+    [data-theme="dark"] .toc-btn { border-color: #1e4a6a; }
+
+    /* MENU CHỌN CHƯƠNG FIX TRÀN LỀ */
+    .chap-dd-wrap { position: relative; display: flex; justify-content: center; flex: 1; }
+    .chap-dd-list { 
+        position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); 
+        width: 260px; max-height: 50vh; overflow-y: auto; background: var(--bg-card); 
+        border: 1px solid var(--border-card); border-radius: 16px; box-shadow: 0 16px 40px rgba(2,132,199,.2); 
+        display: none; flex-direction: column; z-index: 1000; padding: 6px;
+    }
+    .chap-dd-list.open { display: flex !important; }
+    .chap-dd-list.up { top: auto; bottom: calc(100% + 12px); }
+    .chap-dd-list a { 
+        display: block; padding: 12px 10px; font-size: .85rem; color: var(--text-main); 
+        border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif;
+        text-align: center; white-space: normal; line-height: 1.4; border-radius: 8px;
+    }
+    .chap-dd-list a:last-child { border-bottom: none; }
+    .chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky-dark); }
+    .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
+    
+    [data-theme="dark"] .chap-dd-list { box-shadow: 0 16px 40px rgba(0,0,0,.6); }
+    [data-theme="dark"] .chap-dd-list a:hover { background: rgba(126,200,227,.1); }
 
     /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
@@ -404,7 +358,7 @@ if (isNovelPage) {
     .note-text { font-style: italic; font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; }
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
-/* --- BONG BÓNG BÌNH LUẬN --- */
+/* --- BONG BÓNG BÌNH LUẬN INLINE --- */
 .ic-trigger {
   position: absolute; left: -40px; top: 6px; width: 24px; height: 20px;
   background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
@@ -480,14 +434,17 @@ if (isNovelPage) {
     .ic-item-text { font-size:.74rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
     [data-theme="dark"] .ic-item-text { color:#F3F9FF; }
     
-    /* ── Nút xem Reply (Chuẩn Wattpad) ── */
+    /* STYLE NÚT HIỂN THỊ CÂU TRẢ LỜI */
     .toggle-replies-btn {
       background: none; border: none; font-size: 0.65rem; color: var(--sky);
       cursor: pointer; padding: 5px 0; font-weight: bold; display: block; margin-top: 5px;
-      font-family: 'Newsreader', serif; transition: color 0.2s;
+      font-family: 'Newsreader', serif; transition: color 0.2s; position: relative;
     }
+    .toggle-replies-btn::before { content:''; position: absolute; left: 0; bottom: 0; width: 10px; height: 1px; background: var(--sky); transition: width 0.3s;}
+    .toggle-replies-btn:hover::before { width: 100%; }
     .toggle-replies-btn:hover { color: var(--sky2); }
     [data-theme="dark"] .toggle-replies-btn { color: #a8daf0; }
+    [data-theme="dark"] .toggle-replies-btn::before { background: #a8daf0; }
 
     .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; font-weight: 600;}
     .ic-reply-toggle:hover { color:var(--sky2); text-decoration:underline; }
@@ -495,11 +452,14 @@ if (isNovelPage) {
     .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px 0 7px 8px; border-left:2px solid rgba(186,230,253,.5); }
+    /* KẾT NỐI THREAD COMMENT TRỰC QUAN */
+    .ic-replies { display:none; flex-direction:column; gap:8px; margin-top:7px; padding:7px 0 7px 14px; border-left:2px solid rgba(186,230,253,.8); }
     .ic-replies.open { display:flex; }
-    [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.2); }
-    .ic-reply-item { display:flex; gap:6px; align-items:flex-start; position:relative; }
-    .ic-reply-body { flex:1; min-width:0; }
+    [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.4); }
+    .ic-reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
+    .ic-reply-body { flex:1; min-width:0; background: rgba(255,255,255,0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(186,230,253,0.3);}
+    [data-theme="dark"] .ic-reply-body { background: rgba(0,0,0,0.2); border-color: rgba(126,200,227,0.1); }
+    
     .ic-reply-name { font-weight:700; font-size:.66rem; color:var(--sky-dark); }
     [data-theme="dark"] .ic-reply-name { color:#a8daf0; }
     .ic-reply-text { font-size:.7rem; color:var(--text-main); line-height:1.45; margin-top:2px; word-break:break-word; }
@@ -522,11 +482,11 @@ if (isNovelPage) {
     .ic-reply-form-row { display:flex; gap:5px; justify-content:flex-end; }
     .ic-rf-cancel { padding:3px 9px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
     .ic-rf-cancel:hover { color:var(--sky); }
-    .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); }
+    .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); font-weight:600;}
     .ic-rf-send:hover { background:var(--sky2); }
     .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* ── CHAPTER-END COMMENTS & LIKES ── */
+    /* ── CHAPTER-END COMMENTS ── */
     .chap-like-area { text-align:center; margin: 30px 0 40px; }
     .chap-like-btn { background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark); padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08); }
     .chap-like-btn .heart { transition: transform 0.3s; display: inline-block; margin-right: 6px; font-size: 1.1rem; }
@@ -584,20 +544,24 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
-    /* CSS THREAD LỚN */
-    .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.5); padding-left:12px; display:none; flex-direction:column; gap:7px; }
+    /* CSS THREAD TRANG CHÍNH */
+    .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.8); padding-left:16px; display:none; flex-direction:column; gap:10px; }
     .reply-thread.open { display:flex; }
-    [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.2); }
-    .reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
-    .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
+    [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.4); }
+    
+    .reply-item { display:flex; gap:10px; align-items:flex-start; position:relative; }
+    .reply-avatar { width:28px; height:28px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
     [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
-    .reply-body { flex:1; min-width:0; }
-    .reply-name { font-weight:700; font-size:.7rem; color:var(--sky-dark); }
+    
+    .reply-body { flex:1; min-width:0; background: rgba(240,249,255,0.6); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(186,230,253,0.3); }
+    [data-theme="dark"] .reply-body { background: rgba(0,0,0,0.2); border-color: rgba(126,200,227,0.1); }
+    
+    .reply-name { font-weight:700; font-size:.75rem; color:var(--sky-dark); }
     [data-theme="dark"] .reply-name { color:#a8daf0; }
     .reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
     [data-theme="dark"] .reply-admin-badge { background:#1565a0; }
     .reply-time { font-size:.6rem; color:var(--text-dim); font-weight:normal; margin-left:6px; }
-    .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
+    .reply-text { font-size:.82rem; color:var(--text-main); margin:4px 0 0; line-height:1.5; word-break:break-word; }
     [data-theme="dark"] .reply-text { color:#c8e0f0; }
     .reply-del { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .reply-del:hover { color:#ef4444; }
@@ -664,74 +628,7 @@ if (isNovelPage) {
     .tool-fab-toggle:hover { opacity: 1; transform: scale(1.05); }
     [data-theme="dark"] .tool-fab-toggle { background: rgba(15,35,54,0.8); border-color: rgba(126,200,227,0.2); color: #a8daf0; }
     .tool-fab-wrap.open .tool-fab-toggle { opacity: 1; background: var(--sky); color: #fff; border-color: transparent;}
-
-:root {
-  --blue-main: #0288d1;      
-  --blue-light: #e1f5fe;     
-  --blue-border: #81d4fa;    
-  --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); 
-}
-
-/* =========================================
-   SỬA LỖI MỤC LỤC TRÀN CHỮ THÀNH MENU DROPDOWN
-   ========================================= */
-.chap-nav-row {
-  display: flex !important; flex-wrap: wrap !important; justify-content: center; align-items: center;
-  gap: 12px; padding: 20px 0; width: 100%; max-width: 420px; margin: 0 auto !important;
-}
-
-.chap-nav-row > :nth-child(2) {
-  order: 1 !important; flex: 0 0 100% !important; max-width: 160px; margin: 0 auto 4px auto !important; 
-}
-
-.chap-pn, .chap-dd-wrap { order: 2; flex: 1; min-width: 0; }
-.chap-dd-wrap { position: relative; display: flex; justify-content: center; } /* Căn giữa button */
-.chap-dd-btn { width: 100%; }
-
-.chap-pn, .chap-dd-btn, .chap-nav-row > :nth-child(2) {
-  display: flex; justify-content: center; align-items: center; height: 44px; 
-  font-size: 0.85rem !important; font-weight: 500; color: var(--blue-main) !important; 
-  background-color: #ffffff; border: 1.5px solid var(--blue-border) !important; 
-  border-radius: 999px !important; padding: 0 12px !important; box-shadow: var(--shadow-btn); 
-  white-space: nowrap !important; overflow: hidden; text-overflow: ellipsis;
-  cursor: pointer; user-select: none; transition: all 0.2s ease-in-out;
-}
-
-.chap-pn:hover, .chap-dd-btn:hover, .chap-nav-row > :nth-child(2):hover {
-  background-color: var(--blue-light) !important; border-color: var(--blue-main) !important; 
-  transform: translateY(-2px); box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
-}
-
-.chap-pn:active, .chap-dd-btn:active, .chap-nav-row > :nth-child(2):active {
-  transform: scale(0.95); background-color: #b3e5fc !important;
-}
-
-/* Bảng menu thả xuống */
-.chap-dd-list { 
-  position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); 
-  width: 260px; max-height: 50vh; overflow-y: auto; 
-  background: var(--bg-card); border: 1px solid var(--border-card); 
-  border-radius: 12px; box-shadow: 0 16px 48px rgba(2,132,199,.15); 
-  display: none; flex-direction: column; z-index: 1000; 
-}
-.chap-dd-list.open { display: flex !important; }
-.chap-dd-list.up { top: auto; bottom: calc(100% + 8px); }
-.chap-dd-list a { 
-  display: block; padding: 12px; font-size: .85rem; color: var(--text-main); 
-  border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif;
-  text-align: center; white-space: normal; line-height: 1.4;
-}
-.chap-dd-list a:last-child { border-bottom: none; }
-.chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky-dark); }
-.chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
-[data-theme="dark"] .chap-dd-list a:hover { background: rgba(126,200,227,.1); }
-
-@media (max-width: 480px) {
-  .chap-nav-row { gap: 8px; padding: 16px 0; }
-  .chap-pn, .chap-dd-btn, .chap-nav-row > :nth-child(2) { height: 40px; font-size: 0.78rem !important; padding: 0 8px !important; }
-  .chap-dd-wrap { flex: 1.4; }
-}
-</style>
+  </style>
 </head>
 <body>
 
@@ -785,18 +682,13 @@ if (isNovelPage) {
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="/dynamic-duo-web/">🏠 Trang chủ</a>
-  
   <div class="mobile-section-title">Cá dưới nước</div>
   <a href="/dynamic-duo-web/ca-duoi-nuoc/">🐠 Tất cả truyện đang đăng</a>
-  {navDuoiNuoc.map(story => (
-    <a href={story.url}>✦ {story.title}</a>
-  ))}
+  {navDuoiNuoc.map(story => (<a href={story.url}>✦ {story.title}</a>))}
 
   <div class="mobile-section-title">Cá trên bàn</div>
   <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả truyện hoàn thành</a>
-  {navTrenBan.map(story => (
-    <a href={story.url}>✦ {story.title}</a>
-  ))}
+  {navTrenBan.map(story => (<a href={story.url}>✦ {story.title}</a>))}
 
   <div class="mobile-section-title">Khác</div>
   <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
@@ -807,27 +699,21 @@ if (isNovelPage) {
 
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
   {frontmatter?.tags && frontmatter.tags.length > 0 && (
-<div class="tags-container">
-  {frontmatter.tags.map((tag: string) => (
-    <a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag.trim().toLowerCase())}/`} class="tag-badge"># {tag.trim()}</a>
-  ))}
-</div>
+    <div class="tags-container">
+      {frontmatter.tags.map((tag: string) => (<a href={`/dynamic-duo-web/tags/${encodeURIComponent(tag.trim().toLowerCase())}/`} class="tag-badge"># {tag.trim()}</a>))}
+    </div>
   )}
 
 {isNovelPage && (
     <div class="chap-nav-container">
-      <div class="nav-toc-row">
-        <a href={`${currentFolder}/`} class="nav-toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
-      </div>
-
-      <div class="nav-controls-row">
-        {prevChap
-          ? <a href={prevChap.url} class="chap-pn">← Trước</a>
-          : <span class="chap-pn disabled">← Trước</span>}
-          
+      <div class="chap-nav-dock">
+        {prevChap ? <a href={prevChap.url} class="dock-btn">← Trước</a> : <span class="dock-btn disabled">← Trước</span>}
+        
+        <a href={`${currentFolder}/`} class="dock-btn toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
+        
         {chapters.length > 1 && (
           <div class="chap-dd-wrap" id="ddTop">
-            <button class="chap-dd-btn" id="ddBtnTop">⚓ Chương ▾</button>
+            <button class="dock-btn chap-dd-btn" id="ddBtnTop">Chương ▾</button>
             <div class="chap-dd-list" id="ddListTop">
               {chapters.map((c: any) => (
                 <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
@@ -838,9 +724,7 @@ if (isNovelPage) {
           </div>
         )}
         
-        {nextChap
-          ? <a href={nextChap.url} class="chap-pn">Sau →</a>
-          : <span class="chap-pn disabled">Sau →</span>}
+        {nextChap ? <a href={nextChap.url} class="dock-btn">Sau →</a> : <span class="dock-btn disabled">Sau →</span>}
       </div>
     </div>  
   )}
@@ -851,10 +735,7 @@ if (isNovelPage) {
 {isNovelPage && (
         <div class="auto-audio-player">
           <div class="aa-top-row">
-            <div class="aa-header">
-              <span class="aa-icon">🎧</span>
-              <span>Nghe tự động</span>
-            </div>
+            <div class="aa-header"><span class="aa-icon">🎧</span><span>Nghe tự động</span></div>
             <div class="aa-main-btns">
               <button type="button" id="btnPlayTTS" class="aa-btn play">▶ Nghe</button>
               <button type="button" id="btnPauseTTS" class="aa-btn pause" style="display:none;">⏸ Tạm dừng</button>
@@ -918,12 +799,14 @@ if (isNovelPage) {
 
 {isNovelPage && (
     <div class="chap-nav-container" style="margin-top:36px;">
-      <div class="nav-controls-row">
-        {prevChap ? <a href={prevChap.url} class="chap-pn">← Trước</a> : <span class="chap-pn disabled">← Trước</span>}
+      <div class="chap-nav-dock">
+        {prevChap ? <a href={prevChap.url} class="dock-btn">← Trước</a> : <span class="dock-btn disabled">← Trước</span>}
+
+        <a href={`${currentFolder}/`} class="dock-btn toc-btn" title="Quay lại mục lục">📖 Mục lục</a>
 
         {chapters.length > 1 && (
           <div class="chap-dd-wrap" id="ddBot">
-            <button class="chap-dd-btn" id="ddBtnBot">⚓ Chương ▾</button>
+            <button class="dock-btn chap-dd-btn" id="ddBtnBot">Chương ▾</button>
             <div class="chap-dd-list up" id="ddListBot">
               {chapters.map((c: any) => (
                 <a href={c.url} class={c.frontmatter?.chuong === frontmatter?.chuong ? 'cur-chap' : ''}>
@@ -934,7 +817,7 @@ if (isNovelPage) {
           </div>
         )}
 
-        {nextChap ? <a href={nextChap.url} class="chap-pn">Sau →</a> : <span class="chap-pn disabled">Sau →</span>}
+        {nextChap ? <a href={nextChap.url} class="dock-btn">Sau →</a> : <span class="dock-btn disabled">Sau →</span>}
       </div>
     </div>
   )}
@@ -999,13 +882,13 @@ if (isNovelPage) {
 
 {isNovelPage && (
   <div class="rs-popup" id="rsPopup">
-    <div class="rs-title">Thiết lập đọc</div>
+    <div class="rs-title">Cài đặt hiển thị</div>
     
     <div class="rs-row">
       <span class="rs-label">Cỡ chữ</span>
       <div class="rs-btn-group">
-        <button class="rs-btn" id="rsDec">-</button>
-        <button class="rs-btn" id="rsInc">+</button>
+        <button class="rs-btn" id="rsDec">A-</button>
+        <button class="rs-btn" id="rsInc">A+</button>
       </div>
     </div>
 
@@ -1016,28 +899,37 @@ if (isNovelPage) {
         <button class="rs-btn fw-btn" data-fw="600" style="font-weight: 600">Aa</button>
       </div>
     </div>
-    
-    <div class="rs-row" style="margin-top: 15px">
-      <span class="rs-label">Màu chữ (Sáng)</span>
-      <div class="rs-btn-group" style="padding: 2px;">
-        <button class="rs-btn color-btn" data-color="inherit" style="background: #ffffff; color: #1e3a5f; border: 1px solid #bae6fd;">A</button>
-        <button class="rs-btn color-btn" data-color="#475569" style="background: #f8fafc; color: #475569;">A</button>
-        <button class="rs-btn color-btn" data-color="#5d4037" style="background: #fdf8f5; color: #5d4037;">A</button>
+
+    <div class="rs-row">
+      <span class="rs-label">Dãn dòng</span>
+      <div class="rs-btn-group">
+        <button class="rs-btn lh-btn" data-lh="1.6">1.6</button>
+        <button class="rs-btn lh-btn" data-lh="1.9">1.9</button>
+        <button class="rs-btn lh-btn" data-lh="2.2">2.2</button>
       </div>
     </div>
+    
+    <div class="rs-row" style="margin-top: 15px">
+      <span class="rs-label">Nền đọc</span>
+    </div>
+    <div class="rs-btn-group" style="padding: 4px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+      <button class="rs-btn theme-btn" data-theme-val="light" style="background: #ffffff; color: #1e3a5f; border: 1px solid #bae6fd;">Sáng</button>
+      <button class="rs-btn theme-btn" data-theme-val="sepia" style="background: #fdf6e3; color: #43302b;">Giấy</button>
+      <button class="rs-btn theme-btn" data-theme-val="green" style="background: #f0fdf4; color: #064e3b;">Mắt</button>
+      <button class="rs-btn theme-btn" data-theme-val="dark" style="background: #0f172a; color: #e2e8f0;">Tối</button>
+    </div>
 
-    <div class="rs-row" style="margin-top: 10px;">
+    <div class="rs-row" style="margin-top: 15px;">
       <span class="rs-label">Font chữ</span>
     </div>
     <div class="rs-btn-group" style="flex-wrap:wrap; justify-content:center; gap:8px; padding:8px; border-radius:12px; margin-bottom: 6px;">
-        <button class="rs-btn active ff-btn" data-font="'Newsreader', serif" style="font-family:'Newsreader', serif;">N</button>
+        <button class="rs-btn ff-btn" data-font="'Newsreader', serif" style="font-family:'Newsreader', serif;">N</button>
         <button class="rs-btn ff-btn" data-font="'Literata', serif" style="font-family:'Literata', serif;">L</button>
         <button class="rs-btn ff-btn" data-font="'Merriweather', serif" style="font-family:'Merriweather', serif;">M</button>
         <button class="rs-btn ff-btn" data-font="'Palatino Linotype', serif" style="font-family:'Palatino Linotype', serif;">P</button>
         <button class="rs-btn ff-btn" data-font="Arial, sans-serif" style="font-family:Arial, sans-serif;">A</button>
         <button class="rs-btn ff-btn" data-font="'Segoe UI', sans-serif" style="font-family:'Segoe UI', sans-serif;">S</button>
     </div>
-    <p style="font-size:.65rem;color:var(--text-dim);text-align:center;margin:10px 0 0;font-style:italic">💡 Bấm ⬅️ ➡️ trên bàn phím để sang trang</p>
   </div>
 )}
 
@@ -1063,13 +955,9 @@ function waitFirebase(cb){
   let n=0; const t=setInterval(()=>{ if(window.__ddFirebase?.db){clearInterval(t);cb(window.__ddFirebase);} if(++n>60) clearInterval(t); },200);
 }
 
-/* ══════════════════════════════════════════
-   CHƯƠNG TRÌNH ĐIỀU KHIỂN TỔNG HỢP
-   ══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-  // 1. UI: Hamburger, FAB, Progress, Theme
   const mm = document.getElementById('mobileMenu'), hb = document.getElementById('hamburger');
   hb?.addEventListener('click', () => mm?.classList.toggle('open'));
   document.addEventListener('click', e => { if(mm?.classList.contains('open') && !mm.contains(e.target) && !hb?.contains(e.target)) mm.classList.remove('open'); });
@@ -1249,17 +1137,30 @@ document.addEventListener('DOMContentLoaded', () => {
       popSet.querySelectorAll('.fw-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
-  // Text Color
-  popSet?.querySelectorAll('.color-btn').forEach(fb => fb.addEventListener('click', () => {
-      const tc = fb.dataset.color; root.style.setProperty('--read-color', tc); localStorage.setItem('dd_tc', tc);
-      popSet.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
+  // Line Height
+  popSet?.querySelectorAll('.lh-btn').forEach(fb => fb.addEventListener('click', () => {
+      const lh = fb.dataset.lh; root.style.setProperty('--read-lh', lh); localStorage.setItem('dd_lh', lh);
+      popSet.querySelectorAll('.lh-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
+  }));
+
+  // Themes
+  popSet?.querySelectorAll('.theme-btn').forEach(fb => fb.addEventListener('click', () => {
+      const th = fb.dataset.themeVal; root.setAttribute('data-read-theme', th); localStorage.setItem('dd_read_theme', th);
+      popSet.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
   // Phục hồi trạng thái nút thiết lập
-  const initFw = localStorage.getItem('dd_fw');
-  if(initFw) { popSet?.querySelectorAll('.fw-btn').forEach(b=>{ b.classList.remove('active'); if(b.dataset.fw === initFw) b.classList.add('active'); });}
-  const initTc = localStorage.getItem('dd_tc');
-  if(initTc) { popSet?.querySelectorAll('.color-btn').forEach(b=>{ b.classList.remove('active'); if(b.dataset.color === initTc) b.classList.add('active'); });}
+  const syncActiveButton = (selector, key, defaultVal) => {
+      const val = localStorage.getItem(key) || defaultVal;
+      popSet?.querySelectorAll(selector).forEach(b=>{ 
+         b.classList.remove('active'); 
+         if(b.dataset.font === val || b.dataset.fw === val || b.dataset.lh === val || b.dataset.themeVal === val) b.classList.add('active'); 
+      });
+  };
+  syncActiveButton('.ff-btn', 'dd_ff', "'Newsreader', serif");
+  syncActiveButton('.fw-btn', 'dd_fw', "400");
+  syncActiveButton('.lh-btn', 'dd_lh', "1.9");
+  syncActiveButton('.theme-btn', 'dd_read_theme', "light");
 
   // 5. DROPDOWNS (MENU MỤC LỤC CHƯƠNG)
   function setupDD(btnId, listId){

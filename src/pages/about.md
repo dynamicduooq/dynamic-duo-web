@@ -127,7 +127,6 @@ date: 2026-05-02
 
 <div class="about-container">
 
-    <!-- Hero Section -->
     <div class="about-hero">
         <span class="hero-whale" id="interactiveWhale" title="Chọc cá voi đi!">🐋</span>
         <p style="color: var(--text-dim); letter-spacing: 5px; margin-top: 10px; font-size: 1.2rem; font-weight: 300;">⋆✴︎˚｡⋆</p>
@@ -140,7 +139,6 @@ date: 2026-05-02
         </p>
     </div>
 
-    <!-- Tác giả Polaroid Cards -->
     <div class="team-grid">
         <div class="polaroid-card">
             <div class="polaroid-img-wrap">
@@ -159,7 +157,6 @@ date: 2026-05-02
         </div>
     </div>
 
-    <!-- Message Block -->
     <h3 style="text-align: center; margin-top: 50px; letter-spacing: 3px; font-family: 'Merriweather', serif; color: var(--sky-dark);">LỜI NHẮN GỬI 🌊</h3>
     
     <div class="message-box">
@@ -168,7 +165,6 @@ date: 2026-05-02
         <p>Truyện được chọn và edit hoàn toàn dựa trên gu đọc của hai đứa, vô cùng chào đón các bạn có chung sở thích, và cả các bạn muốn thử thách bản thân ở những thể loại bối cảnh mới.</p>
     </div>
 
-    <!-- Lời chào & Đàn cá bay -->
     <div style="text-align: center; margin: 40px 0;">
         <p style="font-family: 'Merriweather', serif; font-style: italic; color: var(--sky2); font-weight: bold; font-size: 1.15rem;">
             Hoan nghênh các cậu ở lại, chào mừng các cậu ghé qua! 🌸
@@ -178,7 +174,6 @@ date: 2026-05-02
         </div>
     </div>
 
-    <!-- Call to Action Box -->
     <div class="cta-box">
         <span style="font-size: 2.2rem; display:block; margin-bottom: 15px; color: var(--sky);">𓌉◯𓇋</span>
         <h4 style="margin: 0 0 10px; color: var(--sky-dark); font-size: 1.3rem; font-family: 'Merriweather', serif;">Sẵn sàng nhảy hố?</h4>
@@ -186,7 +181,6 @@ date: 2026-05-02
         <a href="/dynamic-duo-web/ca-tren-ban/" class="cta-btn">Thưởng thức ngay →</a>
     </div>
 
-    <!-- Contact Box -->
     <div class="contact-box">
         <p style="font-size: 0.9rem; color: var(--text-mid); margin: 0 0 12px 0;">Hòm thư liên hệ góp ý, báo lỗi, hoặc chỉ để hỏi thăm!</p>
         <div class="email-copy" id="aboutEmailCopy" title="Nhấn để copy">
@@ -195,7 +189,6 @@ date: 2026-05-02
         </div>
     </div>
 
-    <!-- Note & Highlight -->
     <div style="text-align: center; margin-top: 50px; padding: 20px 0;">
         <p style="font-size: 0.95rem; font-family: 'Merriweather', serif; color: var(--text-main); line-height: 1.8;">
             Một lưu ý nhỏ nữa: <span class="highlight-text">Tất cả truyện đăng ở đây đều là edit (dịch + chỉnh sửa). Bản quyền thuộc về tác giả gốc. Vui lòng không re-up/chuyển ver, không spoil, gây war trong nhà chúng mình nhé!</span>
@@ -214,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emailBtn.addEventListener('click', () => {
             navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
                 tooltip.classList.add('show');
+                
                 // Sinh ra vài icon mặt cười rơi nhẹ
                 const drop = document.createElement('div');
                 drop.innerHTML = '🐳';
@@ -265,9 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fishGroup = document.getElementById('swimFishTrigger');
     if (fishGroup) {
         fishGroup.addEventListener('animationend', () => {
-            // Sau khi animation bơi xong, tắt animation để cá về chỗ cũ
             fishGroup.style.animation = 'none';
-            // Trigger reflow để reset animation
             void fishGroup.offsetWidth;
         });
     }

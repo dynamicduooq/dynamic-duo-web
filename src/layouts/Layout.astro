@@ -1331,143 +1331,141 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-// 3. AUDIO LOGIC (LỌC GIỌNG TIẾNG VIỆT CHUẨN)
-const btnPlay = document.getElementById('btnPlayTTS'), 
-      btnPause = document.getElementById('btnPauseTTS'), 
-      btnStop = document.getElementById('btnStopTTS');
-const btnNext = document.getElementById('btnNextSent'), 
-      btnPrev = document.getElementById('btnPrevSent');
-const voiceSelect = document.getElementById('aaVoiceSelect'), 
-      rateRange = document.getElementById('aaRateRange'), 
-      rateValue = document.getElementById('aaRateValue');
-const content = document.getElementById('novelContent'), 
-      aaSettings = document.getElementById('aaSettings');
+// 3. AUDIO LOGIC (SENTENCE BY SENTENCE - FIX LỖI DANH SÁCH GIỌNG)
+  const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
+  const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
+  const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
+  const content = document.getElementById('novelContent'), aaSettings = document.getElementById('aaSettings');
 
-if(btnPlay && content && 'speechSynthesis' in window) {
-  const synth = window.speechSynthesis;
-  let sentences = [];
-  let currentIdx = 0;
-  let isPaused = false;
-  let viVoices = []; 
+  if(btnPlay && content && 'speechSynthesis' in window) {
+    const synth = window.speechSynthesis;
+    let sentences = [];
+    let currentIdx = 0;
+    let isPaused = false;
+    let voices = []; 
 
-  // Hàm lọc giọng Tiếng Việt
-  function updateVoiceList() {
-    // Lấy tất cả giọng đọc hệ thống hỗ trợ
-    const allVoices = synth.getVoices();
+    // Hàm tải và lọc giọng đọc
+    function loadVoices() {
+      const allVoices = synth.getVoices();
+      
+      // Khắc phục lỗi độ trễ: Nếu trình duyệt chưa tải xong giọng, tạm dừng và đợi sự kiện onvoiceschanged
+      if (allVoices.length === 0) return; 
+
+      // 1. Cố gắng lọc các giọng đọc Tiếng Việt (có chứa 'vi' hoặc 'viet')
+      let vnVoices = allVoices.filter(v => 
+        v.lang.toLowerCase().includes('vi') || 
+        v.name.toLowerCase().includes('viet')
+      );
+
+      // 2. Dự phòng: Nếu máy không cài giọng TV nào, hiển thị TOÀN BỘ giọng đang có để user tự chọn
+      if (vnVoices.length === 0) {
+        vnVoices = allVoices;
+      }
+
+      voices = vnVoices; // Lưu vào biến toàn cục
+
+      // Render danh sách ra thẻ Select
+      voiceSelect.innerHTML = voices.map((v, i) => 
+        `<option value="${i}">${v.name} (${v.lang})</option>`
+      ).join('');
+    }
+
+    // Chạy lần đầu (dành cho trình duyệt đã cache sẵn giọng)
+    loadVoices();
     
-    // Lọc giọng Tiếng Việt (kiểm tra lang và cả tên để tránh sót)
-    viVoices = allVoices.filter(v => {
-      const lang = v.lang.toLowerCase();
-      const name = v.name.toLowerCase();
-      return lang.includes('vi') || name.includes('vietnamese') || name.includes('tiếng việt');
+    // Bắt sự kiện khi tải xong giọng (Cực kỳ quan trọng để fix lỗi trên Chrome/Safari)
+    if(synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = loadVoices;
+    }
+
+    document.getElementById('btnToggleAudioSet')?.addEventListener('click', () => aaSettings?.classList.toggle('open'));
+    if(rateRange) rateRange.oninput = () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; };
+
+    function resetAudioUI() {
+      synth.cancel();
+      btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Nghe';
+      btnPause.style.display = 'none'; btnStop.style.display = 'none';
+      isPaused = false; currentIdx = 0;
+    }
+
+    function initSentences() {
+      const clone = content.cloneNode(true);
+      clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-row').forEach(el => el.remove());
+      sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 1);
+    }
+
+    function speakSentence() {
+      synth.cancel(); 
+      if (currentIdx < 0) currentIdx = 0;
+      if (currentIdx >= sentences.length) { resetAudioUI(); return; }
+      if (isPaused) return;
+
+      const utter = new SpeechSynthesisUtterance(sentences[currentIdx]);
+      utter.rate = parseFloat(rateRange.value || 1);
+      
+      // Áp dụng đúng giọng đọc đã chọn
+      const selectedIdx = voiceSelect.value;
+      if (voices.length > 0 && selectedIdx !== "") {
+        utter.voice = voices[selectedIdx];
+        utter.lang = utter.voice.lang; // Gắn lang theo đúng giọng đó để tránh trình duyệt tự ghi đè
+      } else {
+        utter.lang = 'vi-VN'; // Fallback cuối cùng
+      }
+
+      utter.onend = () => {
+        if(!isPaused) {
+          currentIdx++;
+          speakSentence();
+        }
+      };
+      
+      utter.onerror = (e) => {
+        if (e.error !== 'interrupted') resetAudioUI();
+      };
+
+      synth.speak(utter);
+    }
+
+    btnPlay.addEventListener('click', () => {
+      if (isPaused) {
+        isPaused = false;
+      } else {
+        initSentences();
+        if (sentences.length === 0) return alert("Không tìm thấy nội dung");
+        currentIdx = 0;
+      }
+      speakSentence();
+      btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
     });
 
-    if (viVoices.length > 0) {
-      const savedVoiceName = localStorage.getItem('dd_audio_voice');
-      voiceSelect.innerHTML = viVoices.map((v, i) => {
-        const selected = v.name === savedVoiceName ? 'selected' : '';
-        return `<option value="${i}" ${selected}>${v.name}</option>`;
-      }).join('');
-    } else {
-      voiceSelect.innerHTML = '<option value="">Mặc định hệ thống (Việt)</option>';
-    }
-  }
+    btnPause.addEventListener('click', () => {
+      isPaused = true;
+      synth.cancel();
+      btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Tiếp tục'; btnPause.style.display = 'none';
+    });
 
-  // Quan trọng: Sự kiện này kích hoạt khi trình duyệt đã load xong danh sách giọng
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = updateVoiceList;
-  }
-  // Gọi thử ngay lập tức (phòng trường hợp đã load xong trước đó)
-  updateVoiceList();
+    btnStop.addEventListener('click', resetAudioUI);
 
-  // Lưu lựa chọn giọng của người dùng
-  voiceSelect.onchange = () => {
-    if(viVoices[voiceSelect.value]) {
-      localStorage.setItem('dd_audio_voice', viVoices[voiceSelect.value].name);
-    }
-  };
-
-  document.getElementById('btnToggleAudioSet')?.addEventListener('click', () => aaSettings?.classList.toggle('open'));
-  if(rateRange) rateRange.oninput = () => { if(rateValue) rateValue.textContent = rateRange.value + 'x'; };
-
-  function resetAudioUI() {
-    synth.cancel();
-    btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Nghe';
-    btnPause.style.display = 'none'; btnStop.style.display = 'none';
-    isPaused = false; currentIdx = 0;
-  }
-
-  function initSentences() {
-    const clone = content.cloneNode(true);
-    // Xóa các thành phần rác
-    clone.querySelectorAll('.ic-trigger, .editor-note-box, .tags-container, script, style, .auto-audio-player, .chap-nav-container').forEach(el => el.remove());
-    sentences = clone.innerText.split(/[.?!|\n]/).map(s => s.trim()).filter(s => s.length > 1);
-  }
-
-  function speakSentence() {
-    synth.cancel(); 
-    if (currentIdx < 0) currentIdx = 0;
-    if (currentIdx >= sentences.length) { resetAudioUI(); return; }
-    if (isPaused) return;
-
-    const utter = new SpeechSynthesisUtterance(sentences[currentIdx]);
-    utter.lang = 'vi-VN';
-    utter.rate = parseFloat(rateRange.value || 1);
-    
-    // Gán giọng đã chọn
-    const selectedIdx = voiceSelect.value;
-    if (selectedIdx !== "" && viVoices[selectedIdx]) {
-      utter.voice = viVoices[selectedIdx];
-    }
-
-    utter.onend = () => {
-      if(!isPaused) {
-        currentIdx++;
+    btnNext?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences(); 
+      if (sentences.length > 0) {
+        isPaused = false; 
+        currentIdx = Math.min(sentences.length - 1, currentIdx + 1);
         speakSentence();
+        btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
       }
-    };
-    
-    utter.onerror = (e) => {
-      if (e.error !== 'interrupted') resetAudioUI();
-    };
+    });
 
-    synth.speak(utter);
+    btnPrev?.addEventListener('click', () => {
+      if (sentences.length === 0) initSentences();
+      if (sentences.length > 0) {
+        isPaused = false;
+        currentIdx = Math.max(0, currentIdx - 1);
+        speakSentence();
+        btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
+      }
+    });
   }
-
-  btnPlay.addEventListener('click', () => {
-    if (isPaused) {
-      isPaused = false;
-    } else {
-      initSentences();
-      if (sentences.length === 0) return;
-      currentIdx = 0;
-    }
-    speakSentence();
-    btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
-  });
-
-  btnPause.addEventListener('click', () => {
-    isPaused = true;
-    synth.cancel();
-    btnPlay.style.display = 'inline-block'; btnPlay.textContent = '▶ Tiếp tục'; btnPause.style.display = 'none';
-  });
-
-  btnStop.addEventListener('click', resetAudioUI);
-
-  btnNext?.addEventListener('click', () => {
-    if (sentences.length === 0) initSentences();
-    currentIdx = Math.min(sentences.length - 1, currentIdx + 1);
-    isPaused = false; speakSentence();
-    btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
-  });
-
-  btnPrev?.addEventListener('click', () => {
-    if (sentences.length === 0) initSentences();
-    currentIdx = Math.max(0, currentIdx - 1);
-    isPaused = false; speakSentence();
-    btnPlay.style.display = 'none'; btnPause.style.display = 'inline-block'; btnStop.style.display = 'inline-block';
-  });
-}
   // --- LOGIC ĐĂNG NHẬP ADMIN QUA NÚT CHÌA KHÓA ---
   const footerAdminBtn = document.getElementById('footerAdmin');
   if (footerAdminBtn) {

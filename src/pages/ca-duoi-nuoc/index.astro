@@ -26,7 +26,13 @@ const storiesData = slugs.map(slug => {
   };
 });
 
-const caDuoiNuocList = storiesData.filter(s => !s.isCompleted && s.tong_so_chuong > 0 && (allChaps.filter(p => p.url?.includes(s.url)).length > 0));
+// Chỉ những truyện đã có ít nhất 1 chương (khác chương 0) 
+// và chưa hoàn thành thì mới vào danh sách "Cá dưới nước"
+const caDuoiNuocList = storiesData.filter(s => 
+  !s.isCompleted && 
+  s.chapCount > 0 &&        // QUAN TRỌNG: Phải có ít nhất chương 1 trở đi
+  s.tong_so_chuong > 0
+);
 ---
 
 <Layout frontmatter={{ title: 'Cá dưới nước' }}>

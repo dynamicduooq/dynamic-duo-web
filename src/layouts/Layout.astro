@@ -134,6 +134,11 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
+  /* ─── FIX NÚT ĐỌC ĐẢM BẢO BẤM ĐƯỢC ─── */
+  .sc-link { position: relative; z-index: 50 !important; pointer-events: auto !important; }
+  .sc-footer { position: relative; z-index: 40 !important; pointer-events: auto !important; }
+  .btn-outline { position: relative; z-index: 50 !important; pointer-events: auto !important; }
+
   /* ─── FIX DARK THEME TOÀN DIỆN ─── */
 [data-theme="dark"] {
   /* 1. Nâng độ sáng chữ nội dung chính */
@@ -173,10 +178,6 @@ if (isNovelPage) {
   color: #7ec8e3 !important;
 }
 
-/* 6. Fix chữ nội dung truyện (novel-content) sáng hơn nữa */
-[data-theme="dark"] .novel-content p {
-  color: #f1f5f9 !important;
-}
 /* FIX DARK MODE CHO KHUNG TRUYỆN */
   [data-theme="dark"] .story-item, 
   [data-theme="dark"] .sc, 
@@ -378,14 +379,13 @@ if (isNovelPage) {
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
     @media(max-width:640px){ 
       .novel-content, .page-content-wrap { 
-        /* Bỏ các loại padding thừa gây lệch, đảm bảo đều 2 bên */
-        padding: 24px 20px !important; 
+        padding: 24px 16px !important; 
         margin: 16px auto 40px !important;
         width: 100% !important; 
         box-sizing: border-box;
       } 
     }    
-    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
+    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; }
     [data-theme="dark"] .novel-content p { color:#d8eeff; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     [data-theme="dark"] blockquote { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
@@ -552,16 +552,15 @@ if (isNovelPage) {
     .note-text { font-style: italic; font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; }
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
-    /* ── INLINE COMMENTS ── */
 /* --- BONG BÓNG BÌNH LUẬN 3D GLASS --- */
 .ic-trigger {
   position: absolute;
-  left: -38px;          /* Đẩy ra lề trái, không chiếm chỗ của chữ */
+  left: -40px;          /* Desktop: Nằm lề bên trái */
   top: 6px;
   width: 24px;
   height: 20px;
-  background: rgba(14, 165, 233, 0.15); /* Màu xanh trong suốt */
-  backdrop-filter: blur(4px);           /* Kính mờ */
+  background: rgba(14, 165, 233, 0.15); 
+  backdrop-filter: blur(4px);           
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 6px 6px 6px 2px;
@@ -572,10 +571,9 @@ if (isNovelPage) {
   z-index: 10;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
-  opacity: 0.1; /* Mờ đi khi không dùng */
+  opacity: 0.1; 
 }
 
-/* Đuôi nhọn bong bóng */
 .ic-trigger::after {
   content: "";
   position: absolute;
@@ -585,7 +583,6 @@ if (isNovelPage) {
   border-bottom: 4px solid transparent;
 }
 
-/* Số bên trong */
 .ic-count {
   font-family: sans-serif;
   font-size: 9px;
@@ -594,7 +591,6 @@ if (isNovelPage) {
   pointer-events: none;
 }
 
-/* Hiện rõ khi có người bình luận hoặc rê chuột vào đoạn văn */
 .novel-content p:hover .ic-trigger,
 .ic-trigger.has-comments {
   opacity: 1;
@@ -616,18 +612,31 @@ if (isNovelPage) {
 }
 [data-theme="dark"] .ic-count { color: #a8daf0; }
 
-/* Responsive cho Mobile: Fix lệch chữ và bong bóng */
+/* ─── FIX MOBILE: BONG BÓNG LỆCH PHẢI ĐỂ KHÔNG ĐÈ LÊN CHỮ ─── */
 @media (max-width: 640px) {
+  .novel-content p {
+    padding-right: 28px !important; /* Dành khoảng trống an toàn bên phải cho bong bóng */
+    padding-left: 0 !important;
+  }
   .ic-trigger { 
-    left: -10px; /* Đặt lấn một chút ra lề trái của trang để không bị ép vào chữ */
+    left: auto !important;
+    right: -4px !important; /* Đặt bong bóng gọn gàng vào mép phải */
+    top: 2px !important;
     opacity: 0.5; 
-    transform: scale(0.85); /* Thu nhỏ bong bóng lại */
+    transform: scale(0.85);
   } 
+  .ic-trigger::after {
+    left: auto;
+    right: 0;
+    border-left: none;
+    border-right: 4px solid rgba(14, 165, 233, 0.3);
+  }
   .novel-content p:hover .ic-trigger, .ic-trigger.has-comments {
-    transform: scale(0.85); /* Giữ tỷ lệ nhỏ khi hiện rõ */
+    transform: scale(0.85); /* Giữ nguyên scale trên mobile */
+    opacity: 1;
   }
   .ic-trigger:hover {
-    transform: scale(1) translateY(-2px); 
+    transform: scale(1) translateY(-2px) !important; 
   }
 }
 
@@ -677,13 +686,6 @@ if (isNovelPage) {
     .ic-form-send { width:32px; height:32px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:.88rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:var(--t); }
     .ic-form-send:hover { background:var(--sky2); }
     .ic-form-send:disabled { opacity:.5; cursor:not-allowed; }
-    .ic-quoting-bar { display:none; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; border-left:3px solid var(--sky-light); font-size:.66rem; }
-    .ic-quoting-bar.show { display:flex; }
-    [data-theme="dark"] .ic-quoting-bar { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
-    .ic-quoting-label { flex:1; color:var(--sky); font-style:italic; }
-    [data-theme="dark"] .ic-quoting-label { color:#a8daf0; }
-    .ic-quoting-cancel { background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); padding:0 2px; border-radius:3px; transition:color .15s; }
-    .ic-quoting-cancel:hover { color:#ef4444; }
 
     .ic-sidebar-list { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
     .ic-sidebar-list::-webkit-scrollbar { width:3px; }
@@ -701,30 +703,33 @@ if (isNovelPage) {
     .ic-item-time { font-size:.6rem; color:var(--text-dim); margin-left:auto; }
     .ic-item-text { font-size:.74rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
     [data-theme="dark"] .ic-item-text { color:#F3F9FF; }
-    .ic-item-actions { display:flex; align-items:center; gap:6px; }
-    .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; }
+    
+    /* Các nút chung cho Trả lời / Xóa */
+    .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; font-weight: 600;}
     .ic-reply-toggle:hover { color:var(--sky2); text-decoration:underline; }
     [data-theme="dark"] .ic-reply-toggle { color:#a8daf0; }
-    .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; display:none; transition:color .15s; }
-    .ic-del-btn.show { display:inline-flex; align-items:center; gap:2px; }
+    .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px; border-left:2px solid rgba(186,230,253,.5); }
+    /* CSS CHO REPLY THREAD TRONG SIDEBAR */
+    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px 0 7px 8px; border-left:2px solid rgba(186,230,253,.5); }
     .ic-replies.open { display:flex; }
-    [data-theme="dark"] .ic-replies { border-color:rgba(126,200,227,.1); }
+    [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.2); }
     .ic-reply-item { display:flex; gap:6px; align-items:flex-start; position:relative; }
     .ic-reply-body { flex:1; min-width:0; }
     .ic-reply-name { font-weight:700; font-size:.66rem; color:var(--sky-dark); }
     [data-theme="dark"] .ic-reply-name { color:#a8daf0; }
-    .ic-reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
-    [data-theme="dark"] .ic-reply-admin-badge { background:#1565a0; }
     .ic-reply-text { font-size:.7rem; color:var(--text-main); line-height:1.45; margin-top:2px; word-break:break-word; }
     [data-theme="dark"] .ic-reply-text { color:#b8d8f0; }
-    .ic-reply-del-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:opacity .15s,color .15s; padding:2px 3px; border-radius:3px; }
-    .ic-reply-del-btn:hover { color:#ef4444; background:rgba(239,68,68,0.05); }
+    
+    .ic-reply-at-btn, .reply-at-btn { background: none; border: none; cursor: pointer; font-size: 0.58rem; color: var(--sky); padding: 0; transition: color 0.15s; font-weight: 600; font-family: 'Newsreader', serif;}
+    .ic-reply-at-btn:hover, .reply-at-btn:hover { color: var(--sky2); text-decoration: underline; }
+    [data-theme="dark"] .ic-reply-at-btn, [data-theme="dark"] .reply-at-btn { color: #a8daf0; }
+    
+    .ic-del-reply-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
+    .ic-del-reply-btn:hover { color:#ef4444; }
     
     .ic-reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
-    .ic-reply-form.open { display:flex; }
     .ic-reply-form input, .ic-reply-form textarea { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
     .ic-reply-form input { border-radius:var(--r-pill); }
     .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
@@ -790,7 +795,7 @@ if (isNovelPage) {
     [data-theme="dark"] .comment-card-text { color:#F3F9FF; }
     
     .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
-    .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
+    .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; font-weight: 600; }
     .cmt-reply-btn:hover { border-color:var(--sky-light); color:var(--sky); background:var(--sky-pale); }
     [data-theme="dark"] .cmt-reply-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
     [data-theme="dark"] .cmt-reply-btn:hover { background:rgba(126,200,227,.08); color:#a8daf0; }
@@ -798,6 +803,7 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
+    /* CSS CHO THREAD COMMENTS CUỐI TRANG */
     .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.5); padding-left:12px; display:none; flex-direction:column; gap:7px; }
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.2); }
@@ -812,8 +818,8 @@ if (isNovelPage) {
     .reply-time { font-size:.6rem; color:var(--text-dim); font-weight:normal; margin-left:6px; }
     .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
     [data-theme="dark"] .reply-text { color:#c8e0f0; }
-    .reply-del { background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); transition:color .15s; padding:2px 4px; border-radius:3px; }
-    .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
+    .reply-del { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
+    .reply-del:hover { color:#ef4444; }
     
     .reply-form { display:none; margin-top:10px; flex-direction:column; gap:5px; }
     .reply-form.open { display:flex; }
@@ -826,7 +832,7 @@ if (isNovelPage) {
     .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
     .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
     .reply-cancel-btn:hover { color:var(--sky); }
-    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
+    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); font-weight:600;}
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 
@@ -881,10 +887,10 @@ if (isNovelPage) {
    THIẾT LẬP BẢNG MÀU XANH NƯỚC BIỂN
    ========================================= */
 :root {
-  --blue-main: #0288d1;      /* Chữ và Icon màu xanh biển đậm vừa để dễ đọc */
-  --blue-light: #e1f5fe;     /* Xanh biển rất nhạt cho nền khi ấn/hover */
-  --blue-border: #81d4fa;    /* Viền xanh biển nhạt */
-  --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); /* Bóng xanh mờ */
+  --blue-main: #0288d1;      
+  --blue-light: #e1f5fe;     
+  --blue-border: #81d4fa;    
+  --shadow-btn: 0 2px 6px rgba(2, 136, 209, 0.12); 
 }
 
 /* =========================================
@@ -892,32 +898,32 @@ if (isNovelPage) {
    ========================================= */
 .chap-nav-row {
   display: flex !important;
-  flex-wrap: wrap !important; /* Cho phép các nút rớt xuống hàng mới */
+  flex-wrap: wrap !important; 
   justify-content: center; 
   align-items: center;
   gap: 12px; 
   padding: 20px 0; 
   width: 100%;
-  max-width: 420px; /* Độ rộng vừa phải để 3 nút dưới không bị quá bẹt */
+  max-width: 420px; 
   margin: 0 auto !important;
 }
 
 .chap-nav-row > :nth-child(2) {
-  order: 1 !important; /* Đẩy lên vị trí đầu tiên */
-  flex: 0 0 100% !important; /* Ép chiếm trọn 100% chiều ngang để rớt dòng */
-  max-width: 160px; /* Độ rộng vừa phải cho nút Mục lục */
-  margin: 0 auto 4px auto !important; /* Canh giữa và cách hàng dưới 4px */
+  order: 1 !important; 
+  flex: 0 0 100% !important; 
+  max-width: 160px; 
+  margin: 0 auto 4px auto !important; 
 }
 
 .chap-pn, 
 .chap-dd-wrap {
-  order: 2; /* Nằm ở hàng thứ 2 */
-  flex: 1; /* Chia đều không gian ngang cho 3 nút */
+  order: 2; 
+  flex: 1; 
   min-width: 0;
 }
 
 .chap-dd-wrap .chap-dd-btn {
-  width: 100%; /* Nút chọn chương tự động co giãn bằng 2 nút kia */
+  width: 100%; 
 }
 
 .chap-pn, 
@@ -926,17 +932,16 @@ if (isNovelPage) {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 44px; /* Tăng nhẹ chiều cao để nút nhìn sang và dễ chạm hơn */
+  height: 44px; 
   font-size: 0.85rem !important; 
   font-weight: 500;
-  color: var(--blue-main) !important; /* Chữ xanh nước biển */
-  background-color: #ffffff; /* Nền trắng */
-  border: 1.5px solid var(--blue-border) !important; /* Viền xanh biển nhạt */
-  border-radius: 999px !important; /* BO TRÒN TỐI ĐA (DẠNG VIÊN THUỐC) */
+  color: var(--blue-main) !important; 
+  background-color: #ffffff; 
+  border: 1.5px solid var(--blue-border) !important; 
+  border-radius: 999px !important; 
   padding: 0 12px !important; 
   box-shadow: var(--shadow-btn); 
   
-  /* Cắt chữ thừa gọn gàng */
   white-space: nowrap !important; 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -949,8 +954,8 @@ if (isNovelPage) {
 .chap-pn:hover, 
 .chap-dd-btn:hover,
 .chap-nav-row > :nth-child(2):hover {
-  background-color: var(--blue-light) !important; /* Nền chuyển xanh biển siêu nhạt */
-  border-color: var(--blue-main) !important; /* Viền đậm lên 1 chút */
+  background-color: var(--blue-light) !important; 
+  border-color: var(--blue-main) !important; 
   transform: translateY(-2px); 
   box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
 }
@@ -964,19 +969,18 @@ if (isNovelPage) {
 
 @media (max-width: 480px) {
   .chap-nav-row {
-    gap: 8px; /* Thu hẹp khoảng cách giữa các nút */
+    gap: 8px; 
     padding: 16px 0;
   }
   
   .chap-pn, 
   .chap-dd-btn,
   .chap-nav-row > :nth-child(2) {
-    height: 40px; /* Thu nhỏ nút lại một chút trên đt */
+    height: 40px; 
     font-size: 0.78rem !important; 
     padding: 0 8px !important;
   }
 
-  /* Khung dropdown ở giữa cho rộng hơn xíu để hiện rõ tên chương */
   .chap-dd-wrap { 
     flex: 1.4; 
   }
@@ -1053,6 +1057,7 @@ if (isNovelPage) {
   <a href="/dynamic-duo-web/about/">✉ About</a>
 </div>
 
+<!-- LỚP MỜ ĐƯỢC CHÈN NGAY ĐÂY -->
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
 <div class="page-wrapper" data-truyen-id={currentTruyenId}>
@@ -1291,14 +1296,8 @@ if (isNovelPage) {
 )}
 
 {isNovelPage && (
-  <div class="rs-popup" id="statsPopup">
-    <div class="rs-title" style="color: #10b981;">📊 Thống kê Chương</div>
-    <div style="font-size: .8rem; color: var(--text-main); display: flex; flex-direction: column; gap: 10px;">
-       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>👁 Lượt xem:</span> <strong id="statViews" style="color:var(--sky)">0</strong></div>
-       <div style="display:flex; justify-content:space-between; border-bottom: 1px dashed rgba(186,230,253,.5); padding-bottom: 6px;"><span>💬 Bình luận:</span> <strong id="statCmts" style="color:var(--sky)">0</strong></div>
-       <div style="display:flex; justify-content:space-between;"><span>❤️ Lượt thích:</span> <strong id="statLikes" style="color:var(--sky)">0</strong></div>
-    </div>
-    <p style="font-size:.6rem;color:var(--text-dim);text-align:center;margin:12px 0 0;font-style:italic">Cập nhật theo thời gian thực</p>
+  <div class="stats-popup" id="statsPopup" style="display: none;">
+    <!-- Nội dung Thống Kê (nếu có) -->
   </div>
 )}
 
@@ -1490,6 +1489,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+  
   // --- LOGIC ĐĂNG NHẬP ADMIN QUA NÚT CHÌA KHÓA ---
   const footerAdminBtn = document.getElementById('footerAdmin');
   if (footerAdminBtn) {
@@ -1582,7 +1582,7 @@ document.addEventListener('DOMContentLoaded', () => {
         p.classList.add('ic-active');
         
         layoutWrap.classList.add('sidebar-open');
-        icOverlay.classList.add('show'); // SỬA LỖI 1: Bật Lớp Phủ Overlay
+        icOverlay.classList.add('show'); 
         document.body.style.overflow = 'hidden'; 
 
         document.getElementById('icParaPreview').innerText = p.innerText.substring(0, 80) + '...';
@@ -1609,7 +1609,6 @@ document.addEventListener('DOMContentLoaded', () => {
       listEl.innerHTML = items.map(item => {
         const canDel = window.__ddIsAdmin || item.token === myToken;
         
-        // Tải danh sách Reply
         const repliesData = item.replies || {};
         const replies = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
@@ -1620,8 +1619,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="ic-reply-body">
                   <div class="ic-reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''} <span style="font-size:0.6rem;color:var(--text-dim);font-weight:normal">${timeAgo(r.ts)}</span></div>
                   <div class="ic-reply-text">${esc(r.text)}</div>
+                  <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
+                      <button class="ic-reply-at-btn" data-cid="${item.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
+                      ${rCanDel ? `<button class="ic-del-reply-btn" data-cid="${item.id}" data-rid="${r.id}">✕ Xóa</button>` : ''}
+                  </div>
                 </div>
-                ${rCanDel ? `<button class="ic-del-reply-btn" data-cid="${item.id}" data-rid="${r.id}" style="font-size:0.6rem; color:#ef4444; background:none; border:none; cursor:pointer;">✕</button>` : ''}
               </div>
             `;
         }).join('');
@@ -1635,7 +1637,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="ic-item-text">${esc(item.text)}</div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
                <button class="ic-reply-toggle" data-cid="${item.id}">💬 Trả lời</button>
-               ${canDel ? `<button class="ic-del-btn" data-cid="${item.id}">✕ Xóa</button>` : ''}
+               ${canDel ? `<button class="ic-del-btn show" data-cid="${item.id}">✕ Xóa</button>` : ''}
             </div>
             
             <div class="ic-replies ${replies.length > 0 ? 'open' : ''}">
@@ -1655,7 +1657,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).join('');
     }
 
-    // Lắng nghe sự kiện click cho các nút Trả lời / Xóa bên trong Sidebar
+    // 3. Lắng nghe dữ kiện Nhấp chuột vào Danh sách Sidebar
     document.getElementById('icSidebarList').onclick = async (e) => {
         const tgt = e.target;
         const pIdx = document.getElementById('icFormSend').getAttribute('data-current-p');
@@ -1667,13 +1669,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (form) form.style.display = form.style.display === 'flex' ? 'none' : 'flex';
         }
         
-        // Nút Hủy Trả lời
+        // Nhấn trả lời tại 1 Reply con -> Điền tên
+        if (tgt.classList.contains('ic-reply-at-btn')) {
+            const cid = tgt.dataset.cid;
+            const form = document.getElementById('ic-rf-' + cid);
+            if(form) {
+                form.style.display = 'flex';
+                const textInput = document.getElementById('ic-rt-' + cid);
+                textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+                textInput.focus();
+            }
+        }
+        
+        // Nút Hủy
         if (tgt.classList.contains('ic-rf-cancel')) {
             const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
             if (form) form.style.display = 'none';
         }
         
-        // Nút Gửi Trả lời
+        // Nút Gửi (SỬA LỖI Ở ĐÂY: Thêm TRY CATCH)
         if (tgt.classList.contains('ic-rf-send')) {
             const cid = tgt.dataset.cid;
             const nameInp = document.getElementById('ic-rn-' + cid);
@@ -1682,17 +1696,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = nameInp.value.trim() || 'Khách';
             
             if (!text) return;
+            
             tgt.disabled = true;
+            tgt.innerText = '...'; // Hiệu ứng chờ
             saveName(name);
             
             waitFirebase(async ({db, ref, push}) => {
-                await push(ref(db, `inline_comments/${pageId}/${pKey}/${cid}/replies`), {
-                    name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin
-                });
+                try {
+                    await push(ref(db, `inline_comments/${pageId}/${pKey}/${cid}/replies`), {
+                        name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin
+                    });
+                    textInp.value = '';
+                    const form = document.getElementById('ic-rf-' + cid);
+                    if(form) form.style.display = 'none'; // Ẩn khung chat khi gửi xong
+                } catch(err) {
+                    alert("Lỗi: " + err.message);
+                } finally {
+                    tgt.disabled = false;
+                    tgt.innerText = 'Gửi';
+                }
             });
         }
         
-        // Nút Xóa Bình luận gốc
+        // Xóa bình luận cha
         if (tgt.classList.contains('ic-del-btn')) {
             if (confirm('Bạn muốn xóa bình luận này? Toàn bộ trả lời bên trong cũng sẽ bị xóa.')) {
                 waitFirebase(async ({db, ref, remove}) => {
@@ -1701,7 +1727,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Nút Xóa Trả lời
+        // Xóa bình luận con (Reply)
         if (tgt.classList.contains('ic-del-reply-btn')) {
             if (confirm('Bạn muốn xóa phản hồi này?')) {
                 waitFirebase(async ({db, ref, remove}) => {
@@ -1836,8 +1862,11 @@ function setupChapComments(){
               <div class="reply-body">
                 <div class="reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="reply-admin-badge">chủ nhà</span>':''} <span class="reply-time">${timeAgo(r.ts)}</span></div>
                 <div class="reply-text">${esc(r.text)}</div>
+                <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
+                    <button class="reply-at-btn" data-cid="${c.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
+                    ${rCanDel ? `<button class="reply-del show" data-cid="${c.id}" data-rid="${r.id}">✕ Xóa</button>` : ''}
+                </div>
               </div>
-              ${rCanDel ? `<button class="reply-del show" data-cid="${c.id}" data-rid="${r.id}">✕</button>` : ''}
             </div>
           `;
         }).join('');
@@ -1882,13 +1911,25 @@ function setupChapComments(){
          if(form) form.classList.toggle('open');
        }
        
+       // Click Trả lời trong một Reply con -> Tag tên
+       if (tgt.classList.contains('reply-at-btn')) {
+            const cid = tgt.dataset.cid;
+            const form = document.getElementById('rf-' + cid);
+            if(form) {
+                form.classList.add('open');
+                const textInput = document.getElementById('rt-' + cid);
+                textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+                textInput.focus();
+            }
+       }
+       
        // Hủy trả lời
        if(tgt.classList.contains('reply-cancel-btn')) {
          const form = document.getElementById('rf-' + tgt.dataset.cid);
          if(form) form.classList.remove('open');
        }
        
-       // Gửi trả lời
+       // Gửi trả lời (SỬA LỖI Ở ĐÂY: Thêm TRY CATCH)
        if(tgt.classList.contains('reply-send-btn')) {
          const cid = tgt.dataset.cid;
          const nameInput = document.getElementById('rn-' + cid);
@@ -1897,28 +1938,43 @@ function setupChapComments(){
          const name = nameInput.value.trim() || 'Khách';
          
          if(!text) return;
+         
          tgt.disabled = true;
+         tgt.innerText = '...';
          saveName(name);
          
-         await push(ref(db, `comments/${key}/${cid}/replies`), {
-           name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin
+         waitFirebase(async ({db, ref, push}) => {
+             try {
+                 await push(ref(db, `comments/${key}/${cid}/replies`), {
+                   name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin
+                 });
+                 textInput.value = '';
+                 const form = document.getElementById('rf-' + cid);
+                 if(form) form.classList.remove('open');
+             } catch (err) {
+                 alert("Lỗi: " + err.message);
+             } finally {
+                 tgt.disabled = false;
+                 tgt.innerText = 'Gửi';
+             }
          });
-         
-         textInput.value = '';
-         tgt.disabled = false;
        }
        
        // Xóa Comment cha
        if(tgt.classList.contains('cmt-del-btn')) {
          if(confirm('Bạn muốn xóa bình luận này? Các phản hồi bên trong cũng sẽ biến mất.')) {
-           await remove(ref(db, `comments/${key}/${tgt.dataset.cid}`));
+           waitFirebase(async ({db, ref, remove}) => {
+               await remove(ref(db, `comments/${key}/${tgt.dataset.cid}`));
+           });
          }
        }
        
        // Xóa Reply con
        if(tgt.classList.contains('reply-del')) {
          if(confirm('Bạn muốn xóa phản hồi này?')) {
-           await remove(ref(db, `comments/${key}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`));
+           waitFirebase(async ({db, ref, remove}) => {
+               await remove(ref(db, `comments/${key}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`));
+           });
          }
        }
     };

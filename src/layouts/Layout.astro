@@ -136,6 +136,7 @@ if (isNovelPage) {
   </script>
 
   <style is:global>
+    /* TOÀN BỘ CSS TOÀN CỤC CŨ GIỮ NGUYÊN */
     :root {
       --sky:#0ea5e9; --sky2:#0284c7; --sky-dark:#0369a1;
       --sky-light:#bae6fd; --sky-pale:#f0f9ff;
@@ -166,7 +167,6 @@ if (isNovelPage) {
 [data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
 [data-theme="dark"] .story-item, [data-theme="dark"] .sc, [data-theme="dark"] .author-card { background: #0f2336 !important; border-color: rgba(126,200,227, 0.15) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }    
 
-/* SỬA LỖI VIỀN BÌA TRUYỆN TRANG CHỦ QUÁ TO */
 .sc-cover-wrap { padding: 0 !important; background: var(--sky-pale) !important; }
 .sc-cover-wrap img { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 12px 0 0 12px !important; }
 
@@ -235,34 +235,18 @@ if (isNovelPage) {
     body.focus-mode .auto-audio-player,
     body.focus-mode .chap-like-area,
     body.focus-mode .tags-container,
-    body.focus-mode .editor-note-box {
-      display: none !important;
-    }
+    body.focus-mode .editor-note-box { display: none !important; }
     body.focus-mode { background: var(--bg-card) !important; }
     body.focus-mode .page-wrapper { margin-top: 0 !important; padding-top: 20px; }
-    body.focus-mode .novel-content { 
-      margin-top: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important;
-      padding-top: 20px !important;
-    }
+    body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; padding-top: 20px !important; }
 
-    /* ── CẤU TRÚC ĐỌC TRUYỆN ── */
     .page-wrapper { margin-top:56px; min-height:70vh; transition: margin 0.3s ease;}
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); }
     .novel-layout-wrap { max-width:920px; margin:0 auto; padding:0 16px; position:relative; }
     
-    .novel-content { 
-      width:100%; margin:24px auto 60px; padding:48px 60px; 
-      background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); 
-      border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; 
-      transition: background-color 0.4s ease, border-color 0.4s ease;
-    }
-    
-    .novel-content p { 
-      position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; 
-      font-weight: var(--read-fw); line-height: var(--read-lh); transition: color 0.3s;
-    }
+    .novel-content { width:100%; margin:24px auto 60px; padding:48px 60px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); position:relative; user-select: none; -webkit-user-select: none; transition: background-color 0.4s ease, border-color 0.4s ease; }
+    .novel-content p { position:relative; text-align:justify; text-justify:inter-word; margin-bottom:1.1em; display:block; font-weight: var(--read-fw); line-height: var(--read-lh); transition: color 0.3s; }
 
-    /* THEME ĐỌC (READING THEMES) */
     [data-read-theme="sepia"] .novel-content { background-color: #fcf6e8 !important; border-color: #e6d3bf !important; }
     [data-read-theme="sepia"] .novel-content p, [data-read-theme="sepia"] .editor-note-box { color: #43302b !important; }
     [data-read-theme="green"] .novel-content { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
@@ -274,9 +258,7 @@ if (isNovelPage) {
     [data-theme="dark"]:not([data-read-theme="sepia"]):not([data-read-theme="green"]):not([data-read-theme="light"]) .novel-content p { color: #f1f5f9 !important; }
     
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
-    @media(max-width:640px){ 
-      .novel-content, .page-content-wrap { padding: 24px 16px !important; margin: 16px auto 40px !important; width: 100% !important; box-sizing: border-box; } 
-    }    
+    @media(max-width:640px){ .novel-content, .page-content-wrap { padding: 24px 16px !important; margin: 16px auto 40px !important; width: 100% !important; box-sizing: border-box; } }    
     
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
     [data-theme="dark"] blockquote { background:rgba(15,35,54,.9); color:#8fbcd4; border-left-color:#1e4a6a; }
@@ -292,19 +274,9 @@ if (isNovelPage) {
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
 
-    /* ── NAV CHƯƠNG ĐƯỢC THIẾT KẾ LẠI THÀNH DOCK BO TRÒN ── */
     .chap-nav-container { margin: 30px auto 40px; display: flex; justify-content: center; width: 100%; padding: 0 16px; box-sizing: border-box;}
-    .chap-nav-dock { 
-        display: flex; align-items: center; justify-content: space-between; 
-        background: var(--bg-card); border: 1.5px solid var(--sky-light); border-radius: 999px; 
-        padding: 4px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12); width: 100%; max-width: 500px; 
-    }
-    .dock-btn { 
-        flex: 1; display: flex; justify-content: center; align-items: center; height: 42px; 
-        font-size: 0.85rem; font-family: 'Newsreader', serif; font-weight: bold; 
-        color: var(--sky-dark); background: transparent; border: none; cursor: pointer; 
-        border-radius: 999px; transition: all 0.2s ease; white-space: nowrap; text-decoration: none; 
-    }
+    .chap-nav-dock { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1.5px solid var(--sky-light); border-radius: 999px; padding: 4px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12); width: 100%; max-width: 500px; }
+    .dock-btn { flex: 1; display: flex; justify-content: center; align-items: center; height: 42px; font-size: 0.85rem; font-family: 'Newsreader', serif; font-weight: bold; color: var(--sky-dark); background: transparent; border: none; cursor: pointer; border-radius: 999px; transition: all 0.2s ease; white-space: nowrap; text-decoration: none; }
     .dock-btn:hover:not(.disabled) { background: var(--sky-pale); color: var(--sky); transform: scale(1.02); }
     .dock-btn.disabled { opacity: 0.4; pointer-events: none; }
     .toc-btn { flex: 0.8; border-left: 1px solid var(--sky-light); border-right: 1px solid var(--sky-light); border-radius: 0; }
@@ -315,19 +287,10 @@ if (isNovelPage) {
     [data-theme="dark"] .toc-btn { border-color: #1e4a6a; }
 
     .chap-dd-wrap { position: relative; display: flex; justify-content: center; flex: 1; }
-    .chap-dd-list { 
-        position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); 
-        width: 260px; max-height: 50vh; overflow-y: auto; background: var(--bg-card); 
-        border: 1px solid var(--border-card); border-radius: 16px; box-shadow: 0 16px 40px rgba(2,132,199,.2); 
-        display: none; flex-direction: column; z-index: 1000; padding: 6px;
-    }
+    .chap-dd-list { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); width: 260px; max-height: 50vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px; box-shadow: 0 16px 40px rgba(2,132,199,.2); display: none; flex-direction: column; z-index: 1000; padding: 6px; }
     .chap-dd-list.open { display: flex !important; }
     .chap-dd-list.up { top: auto; bottom: calc(100% + 12px); }
-    .chap-dd-list a { 
-        display: block; padding: 12px 10px; font-size: .85rem; color: var(--text-main); 
-        border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif;
-        text-align: center; white-space: normal; line-height: 1.4; border-radius: 8px;
-    }
+    .chap-dd-list a { display: block; padding: 12px 10px; font-size: .85rem; color: var(--text-main); border-bottom: 1px dashed rgba(186,230,253,.4); font-family: 'Newsreader', serif; text-align: center; white-space: normal; line-height: 1.4; border-radius: 8px; }
     .chap-dd-list a:last-child { border-bottom: none; }
     .chap-dd-list a:hover { background: var(--sky-pale); color: var(--sky-dark); }
     .chap-dd-list a.cur-chap { background: rgba(14,165,233,.1); color: var(--sky-dark); font-weight: 700; }
@@ -335,7 +298,6 @@ if (isNovelPage) {
     [data-theme="dark"] .chap-dd-list { box-shadow: 0 16px 40px rgba(0,0,0,.6); }
     [data-theme="dark"] .chap-dd-list a:hover { background: rgba(126,200,227,.1); }
 
-    /* ── AUDIO PLAYER ── */
     .auto-audio-player { max-width: 100%; margin: 0 auto 24px; padding: 14px 16px; background: var(--sky-pale); border: 1px dashed var(--sky-light); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     [data-theme="dark"] .auto-audio-player { background: rgba(15,35,54,0.6); border-color: rgba(126,200,227,0.3); }
     .aa-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; }
@@ -368,15 +330,9 @@ if (isNovelPage) {
     .note-text { font-style: italic; font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; }
     [data-theme="dark"] .note-text { color: #8fbcd4; }
 
-    /* --- BONG BÓNG BÌNH LUẬN INLINE --- */
-    .ic-trigger {
-      position: absolute; left: -40px; top: 6px; width: 24px; height: 20px;
-      background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 6px 6px 6px 2px;
-      display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
-      transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4);
-      opacity: 0.1; 
-    }
+    /* ── CẬP NHẬT: CSS THREAD COMMENT ── */
+    /* Nút trigger Inline Comment */
+    .ic-trigger { position: absolute; left: -40px; top: 6px; width: 24px; height: 20px; background: rgba(14, 165, 233, 0.15); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 6px 6px 6px 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255,255,255,0.4); opacity: 0.1;  }
     .ic-trigger::after { content: ""; position: absolute; bottom: -4px; left: 0; border-left: 4px solid rgba(14, 165, 233, 0.3); border-bottom: 4px solid transparent; }
     .ic-count { font-family: sans-serif; font-size: 9px; font-weight: 800; color: var(--sky-dark); pointer-events: none; }
     .novel-content p:hover .ic-trigger, .ic-trigger.has-comments { opacity: 1; background: rgba(14, 165, 233, 0.25); border-color: var(--sky); }
@@ -437,7 +393,6 @@ if (isNovelPage) {
     .ic-item-text { font-size:.74rem; color:var(--text-main); line-height:1.5; margin-bottom:6px; word-break:break-word; }
     [data-theme="dark"] .ic-item-text { color:#F3F9FF; }
     
-    /* STYLE NÚT HIỂN THỊ CÂU TRẢ LỜI */
     .toggle-replies-btn { background: none; border: none; font-size: 0.65rem; color: var(--sky); cursor: pointer; padding: 5px 0; font-weight: bold; display: block; margin-top: 5px; font-family: 'Newsreader', serif; transition: color 0.2s; position: relative; }
     .toggle-replies-btn::before { content:''; position: absolute; left: 0; bottom: 0; width: 10px; height: 1px; background: var(--sky); transition: width 0.3s;}
     .toggle-replies-btn:hover::before { width: 100%; }
@@ -451,10 +406,14 @@ if (isNovelPage) {
     .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; transition:color .15s; }
     .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    /* KẾT NỐI THREAD COMMENT TRỰC QUAN */
+    /* CSS ĐỆ QUY THREAD: Chỉ cấp 1 thụt lề, cấp sâu hơn hiển thị ngang hàng với cấp 1 */
     .ic-replies { display:none; flex-direction:column; gap:8px; margin-top:7px; padding:7px 0 7px 14px; border-left:2px solid rgba(186,230,253,.8); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.4); }
+    
+    /* Ghi đè padding/border cho các container con (level > 1) để không thụt lề thêm */
+    .ic-replies .ic-replies { padding: 0 !important; border-left: none !important; margin-top: 5px; }
+    
     .ic-reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
     .ic-reply-body { flex:1; min-width:0; background: rgba(255,255,255,0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(186,230,253,0.3);}
     [data-theme="dark"] .ic-reply-body { background: rgba(0,0,0,0.2); border-color: rgba(126,200,227,0.1); }
@@ -540,10 +499,10 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
-    /* CSS THREAD TRANG CHÍNH */
     .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.8); padding-left:16px; display:none; flex-direction:column; gap:10px; }
     .reply-thread.open { display:flex; }
     [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.4); }
+    .reply-thread .reply-thread { padding-left: 0 !important; border-left: none !important; margin-top: 5px; } /* Cấp 2 không thụt lề */
     
     .reply-item { display:flex; gap:10px; align-items:flex-start; position:relative; }
     .reply-avatar { width:28px; height:28px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
@@ -983,7 +942,7 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-// --- 2. FOCUS MODE & AUTO SCROLL ---
+// --- FOCUS MODE & AUTO SCROLL ---
   const fabFocus = document.getElementById('fabFocus');
   if(fabFocus) {
     fabFocus.addEventListener('click', () => {
@@ -1012,12 +971,11 @@ document.addEventListener('DOMContentLoaded', () => {
         autoScrollTimer = setInterval(() => { window.scrollBy(0, 1); }, 30);
       }
     });
-    // Dừng cuộn khi người dùng tự lướt tay
     window.addEventListener('touchstart', () => { if(autoScrollTimer) fabAutoScroll.click(); }, {passive:true});
     window.addEventListener('wheel', () => { if(autoScrollTimer) fabAutoScroll.click(); }, {passive:true});
   }
 
-// --- 3. AUDIO LOGIC ---
+// --- AUDIO LOGIC ---
   const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
   const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
   const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
@@ -1033,10 +991,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadVoices() {
       const allVoices = synth.getVoices();
       if (allVoices.length === 0) return; 
-
       let vnVoices = allVoices.filter(v => v.lang.toLowerCase().includes('vi') || v.name.toLowerCase().includes('viet'));
       if (vnVoices.length === 0) vnVoices = allVoices;
-
       voices = vnVoices;
       voiceSelect.innerHTML = voices.map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`).join('');
     }
@@ -1103,7 +1059,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // --- 4. ADMIN LOGIN ---
+  // --- ADMIN LOGIN ---
   const footerAdminBtn = document.getElementById('footerAdmin');
   if (footerAdminBtn) {
     footerAdminBtn.addEventListener('click', (e) => {
@@ -1129,7 +1085,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (footerAdminBtn && isAdmin) { footerAdminBtn.style.opacity = '1'; footerAdminBtn.style.color = 'var(--sky)'; footerAdminBtn.title = "Đăng xuất Admin"; }
   });
 
-  // --- 5. TÙY CHỈNH THIẾT LẬP ĐỌC ---
+  // --- TÙY CHỈNH THIẾT LẬP ĐỌC ---
   let fz = parseInt(localStorage.getItem('dd_fz') || '18');
   let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
   
@@ -1183,7 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   syncActiveButton('.lh-btn', 'dd_lh', "1.9");
   syncActiveButton('.theme-btn', 'dd_read_theme', "light");
 
-  // --- 6. MENU MỤC LỤC CHƯƠNG ---
+  // --- MENU MỤC LỤC CHƯƠNG ---
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);
     if(!btn || !list) return;
@@ -1191,7 +1147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setupDD('ddBtnTop','ddListTop'); setupDD('ddBtnBot','ddListBot');
 
-// --- 7. HỆ THỐNG COMMENT INLINE TỐI ƯU ---
+// --- HỆ THỐNG COMMENT INLINE (THÊM ĐỆ QUY THREAD) ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
@@ -1232,6 +1188,37 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     });
 
+    // Hàm đệ quy render reply
+    function renderThreadHtml(repliesFlat, parentId, level, rootCid) {
+        const children = repliesFlat.filter(r => (r.replyTo || null) === parentId);
+        if(children.length === 0) return '';
+        
+        const myToken = getMyToken();
+        const html = children.map(r => {
+            const sub = repliesFlat.filter(sr => sr.replyTo === r.id);
+            const rCanDel = window.__ddIsAdmin || r.token === myToken;
+            
+            return `
+              <div class="ic-reply-item">
+                <div class="ic-reply-body">
+                  <div class="ic-reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''} <span style="font-size:0.6rem;color:var(--text-dim);font-weight:normal">${timeAgo(r.ts)}</span></div>
+                  <div class="ic-reply-text">${esc(r.text)}</div>
+                  <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
+                      <button class="ic-reply-at-btn" data-cid="${rootCid}" data-rid="${r.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
+                      ${rCanDel ? `<button class="ic-del-reply-btn" data-cid="${rootCid}" data-rid="${r.id}">✕ Xóa</button>` : ''}
+                  </div>
+                  ${sub.length > 0 ? `<button class="toggle-replies-btn" data-cid="${r.id}">Hiển thị ${sub.length} câu trả lời ▾</button>` : ''}
+                  
+                  <div class="ic-replies" id="thread-${r.id}">
+                     ${renderThreadHtml(repliesFlat, r.id, level + 1, rootCid)}
+                  </div>
+                </div>
+              </div>
+            `;
+        }).join('');
+        return html;
+    }
+
     function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
       const pKey = 'p' + pIdx;
@@ -1249,26 +1236,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const canDel = window.__ddIsAdmin || item.token === myToken;
         
         const repliesData = item.replies || {};
-        const repliesCount = Object.keys(repliesData).length;
-        const replies = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
+        const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
-        const repliesHtml = replies.map(r => {
-            const rCanDel = window.__ddIsAdmin || r.token === myToken;
-            return `
-              <div class="ic-reply-item">
-                <div class="ic-reply-body">
-                  <div class="ic-reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''} <span style="font-size:0.6rem;color:var(--text-dim);font-weight:normal">${timeAgo(r.ts)}</span></div>
-                  <div class="ic-reply-text">${esc(r.text)}</div>
-                  <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
-                      <button class="ic-reply-at-btn" data-cid="${item.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
-                      ${rCanDel ? `<button class="ic-del-reply-btn" data-cid="${item.id}" data-rid="${r.id}">✕ Xóa</button>` : ''}
-                  </div>
-                </div>
-              </div>
-            `;
-        }).join('');
-
-        const toggleBtnHtml = repliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${item.id}">Hiển thị ${repliesCount} câu trả lời ▾</button>` : '';
+        // Render đệ quy từ root (replyTo = null)
+        const rootRepliesHtml = renderThreadHtml(repliesFlat, null, 1, item.id);
+        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo).length;
+        
+        const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${item.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `
           <div class="ic-item">
@@ -1278,15 +1252,16 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="ic-item-text">${esc(item.text)}</div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-               <button class="ic-reply-toggle" data-cid="${item.id}">💬 Trả lời</button>
+               <button class="ic-reply-toggle" data-cid="${item.id}" data-rid="">💬 Trả lời</button>
                ${canDel ? `<button class="ic-del-btn show" data-cid="${item.id}">✕ Xóa</button>` : ''}
             </div>
             
             ${toggleBtnHtml}
             <div class="ic-replies" id="thread-${item.id}">
-               ${repliesHtml}
+               ${rootRepliesHtml}
             </div>
             
+            <!-- Box reply chung cho cả cụm (dùng data-replyto để phân biệt rep ai) -->
             <div class="ic-reply-form" id="ic-rf-${item.id}">
                <input class="ic-form-name" id="ic-rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
                <textarea class="ic-form-text" id="ic-rt-${item.id}" placeholder="Phản hồi..."></textarea>
@@ -1309,34 +1284,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const thread = document.getElementById('thread-' + tgt.dataset.cid);
             if(thread) {
                 const isOpen = thread.classList.toggle('open');
-                const count = thread.querySelectorAll('.ic-reply-item').length;
+                // Tính số lượng reply trực tiếp của cụm này
+                const count = thread.children.length;
                 tgt.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
             }
         }
 
-        if (tgt.classList.contains('ic-reply-toggle')) {
-            const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
-            if (form) form.style.display = form.style.display === 'flex' ? 'none' : 'flex';
-        }
-        
-        if (tgt.classList.contains('ic-reply-at-btn')) {
+        if (tgt.classList.contains('ic-reply-toggle') || tgt.classList.contains('ic-reply-at-btn')) {
             const cid = tgt.dataset.cid;
+            const rid = tgt.dataset.rid || ''; // ID của reply đang được trả lời
             const form = document.getElementById('ic-rf-' + cid);
-            if(form) {
+            if (form) {
                 form.style.display = 'flex';
                 const textInput = document.getElementById('ic-rt-' + cid);
-                textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+                if(tgt.dataset.name) {
+                    textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+                }
                 textInput.focus();
+                // Set data-replyto vào nút send
+                form.querySelector('.ic-rf-send').dataset.replyto = rid;
             }
         }
         
         if (tgt.classList.contains('ic-rf-cancel')) {
             const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
-            if (form) form.style.display = 'none';
+            if (form) {
+                form.style.display = 'none';
+                form.querySelector('.ic-rf-send').dataset.replyto = '';
+            }
         }
         
         if (tgt.classList.contains('ic-rf-send')) {
             const cid = tgt.dataset.cid;
+            const replyTo = tgt.dataset.replyto || null;
             const nameInp = document.getElementById('ic-rn-' + cid);
             const textInp = document.getElementById('ic-rt-' + cid);
             const text = textInp.value.trim();
@@ -1348,12 +1328,15 @@ document.addEventListener('DOMContentLoaded', () => {
             waitFirebase(async ({db, ref, push}) => {
                 try {
                     await push(ref(db, `inline_comments/${pageId}/${pKey}/${cid}/replies`), {
-                        name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin
+                        name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin, replyTo
                     });
                     textInp.value = '';
                     const form = document.getElementById('ic-rf-' + cid);
-                    if(form) form.style.display = 'none'; 
-                    document.getElementById('thread-' + cid)?.classList.add('open');
+                    if(form) { form.style.display = 'none'; form.querySelector('.ic-rf-send').dataset.replyto = ''; }
+                    
+                    // Mở thread nếu đang ẩn
+                    const targetThreadId = replyTo ? `thread-${replyTo}` : `thread-${cid}`;
+                    document.getElementById(targetThreadId)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
                 finally { tgt.disabled = false; tgt.innerText = 'Gửi'; }
             });
@@ -1361,17 +1344,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (tgt.classList.contains('ic-del-btn')) {
             if (confirm('Bạn muốn xóa bình luận này? Toàn bộ trả lời bên trong cũng sẽ bị xóa.')) {
-                waitFirebase(async ({db, ref, remove}) => {
-                    await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}`));
-                });
+                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}`)); });
             }
         }
         
         if (tgt.classList.contains('ic-del-reply-btn')) {
             if (confirm('Bạn muốn xóa phản hồi này?')) {
-                waitFirebase(async ({db, ref, remove}) => {
-                    await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`));
-                });
+                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`)); });
             }
         }
     };
@@ -1431,12 +1410,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('icSidebarClose')) document.getElementById('icSidebarClose').onclick = closeSidebar;
   if (icOverlay) icOverlay.onclick = closeSidebar;
   
-  // Khởi chạy các module khác
   setupChapterLike();
   setupChapComments();
 }); 
 
-/* ══ MODULE: COMMENTS TRANG CHÍNH (CHUẨN WATTPAD) ══ */
+/* ══ MODULE: COMMENTS CUỐI CHƯƠNG (CÓ ĐỆ QUY THREAD) ══ */
 function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');
   if(!btn) return;
@@ -1467,6 +1445,35 @@ function setupChapComments(){
   
   if(cmtName) cmtName.value = getSavedName();
 
+  // Hàm đệ quy render reply
+  function renderMainThreadHtml(repliesFlat, parentId, level, rootCid) {
+        const children = repliesFlat.filter(r => (r.replyTo || null) === parentId);
+        if(children.length === 0) return '';
+        
+        return children.map(r => {
+            const sub = repliesFlat.filter(sr => sr.replyTo === r.id);
+            const rCanDel = window.__ddIsAdmin || r.token === myToken;
+            
+            return `
+            <div class="reply-item">
+              <div class="reply-avatar">${avatarLetter(r.name)}</div>
+              <div class="reply-body">
+                <div class="reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="reply-admin-badge">chủ nhà</span>':''} <span class="reply-time">${timeAgo(r.ts)}</span></div>
+                <div class="reply-text">${esc(r.text)}</div>
+                <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
+                    <button class="reply-at-btn" data-cid="${rootCid}" data-rid="${r.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
+                    ${rCanDel ? `<button class="reply-del show" data-cid="${rootCid}" data-rid="${r.id}">✕ Xóa</button>` : ''}
+                </div>
+                ${sub.length > 0 ? `<button class="toggle-replies-btn" data-cid="${r.id}">Hiển thị ${sub.length} câu trả lời ▾</button>` : ''}
+                  
+                <div class="reply-thread" id="chap-thread-${r.id}">
+                    ${renderMainThreadHtml(repliesFlat, r.id, level + 1, rootCid)}
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+  }
+
   waitFirebase(({db, ref, push, onValue, remove}) => {
     onValue(ref(db, 'comments/'+key), snap => {
       const data = snap.val();
@@ -1476,45 +1483,34 @@ function setupChapComments(){
       
       cmtList.innerHTML = items.map(c => {
         const canDel = window.__ddIsAdmin || c.token === myToken;
-        const repliesData = c.replies || {};
-        const repliesCount = Object.keys(repliesData).length;
-        const replies = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
         
-        const repliesHtml = replies.map(r => {
-          const rCanDel = window.__ddIsAdmin || r.token === myToken;
-          return `
-            <div class="reply-item">
-              <div class="reply-avatar">${avatarLetter(r.name)}</div>
-              <div class="reply-body">
-                <div class="reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="reply-admin-badge">chủ nhà</span>':''} <span class="reply-time">${timeAgo(r.ts)}</span></div>
-                <div class="reply-text">${esc(r.text)}</div>
-                <div style="display:flex; gap: 10px; margin-top: 4px; align-items: center;">
-                    <button class="reply-at-btn" data-cid="${c.id}" data-name="${esc(r.name||'Khách')}">💬 Trả lời</button>
-                    ${rCanDel ? `<button class="reply-del show" data-cid="${c.id}" data-rid="${r.id}">✕ Xóa</button>` : ''}
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
+        const repliesData = c.replies || {};
+        const repliesFlat = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
+        
+        const rootRepliesHtml = renderMainThreadHtml(repliesFlat, null, 1, c.id);
+        const rootRepliesCount = repliesFlat.filter(r => !r.replyTo).length;
 
-        const toggleBtnHtml = repliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${c.id}">Hiển thị ${repliesCount} câu trả lời ▾</button>` : '';
+        const toggleBtnHtml = rootRepliesCount > 0 ? `<button class="toggle-replies-btn" data-cid="${c.id}">Hiển thị ${rootRepliesCount} câu trả lời ▾</button>` : '';
 
         return `
           <div class="comment-card">
             <div class="comment-card-header">
-              <span class="comment-card-name">${esc(c.name)||'Khách'} ${c.isAdmin?'<span class="comment-admin-badge">chủ nhà</span>':''}</span>
-              <span class="comment-card-time">${timeAgo(c.ts)}</span>
+              <div class="comment-card-avatar">${avatarLetter(c.name)}</div>
+              <div>
+                 <span class="comment-card-name">${esc(c.name)||'Khách'} ${c.isAdmin?'<span class="comment-admin-badge">chủ nhà</span>':''}</span>
+                 <span class="comment-card-time">${timeAgo(c.ts)}</span>
+              </div>
             </div>
             <p class="comment-card-text">${esc(c.text)}</p>
             
             <div class="comment-card-actions">
-              <button class="cmt-reply-btn" data-cid="${c.id}">💬 Trả lời</button>
+              <button class="cmt-reply-btn" data-cid="${c.id}" data-rid="">💬 Trả lời</button>
               ${canDel ? `<button class="cmt-del-btn show" data-cid="${c.id}">🗑 Xóa</button>` : ''}
             </div>
             
             ${toggleBtnHtml}
             <div class="reply-thread" id="chap-thread-${c.id}">
-              ${repliesHtml}
+              ${rootRepliesHtml}
             </div>
             
             <div class="reply-form" id="rf-${c.id}">
@@ -1537,34 +1533,34 @@ function setupChapComments(){
            const thread = document.getElementById('chap-thread-' + tgt.dataset.cid);
            if(thread) {
                const isOpen = thread.classList.toggle('open');
-               const count = thread.querySelectorAll('.reply-item').length;
+               const count = thread.children.length; // Chỉ đếm số lượng node con trực tiếp
                tgt.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
            }
        }
        
-       if(tgt.classList.contains('cmt-reply-btn')) {
-         const form = document.getElementById('rf-' + tgt.dataset.cid);
-         if(form) form.classList.toggle('open');
-       }
-       
-       if (tgt.classList.contains('reply-at-btn')) {
-            const cid = tgt.dataset.cid;
-            const form = document.getElementById('rf-' + cid);
-            if(form) {
-                form.classList.add('open');
-                const textInput = document.getElementById('rt-' + cid);
+       if(tgt.classList.contains('cmt-reply-btn') || tgt.classList.contains('reply-at-btn')) {
+         const cid = tgt.dataset.cid;
+         const rid = tgt.dataset.rid || '';
+         const form = document.getElementById('rf-' + cid);
+         if(form) {
+             form.classList.add('open');
+             const textInput = document.getElementById('rt-' + cid);
+             if (tgt.dataset.name) {
                 textInput.value = `@${tgt.dataset.name} ` + textInput.value;
-                textInput.focus();
-            }
+             }
+             textInput.focus();
+             form.querySelector('.reply-send-btn').dataset.replyto = rid;
+         }
        }
        
        if(tgt.classList.contains('reply-cancel-btn')) {
          const form = document.getElementById('rf-' + tgt.dataset.cid);
-         if(form) form.classList.remove('open');
+         if(form) { form.classList.remove('open'); form.querySelector('.reply-send-btn').dataset.replyto = ''; }
        }
        
        if(tgt.classList.contains('reply-send-btn')) {
          const cid = tgt.dataset.cid;
+         const replyTo = tgt.dataset.replyto || null;
          const nameInput = document.getElementById('rn-' + cid);
          const textInput = document.getElementById('rt-' + cid);
          const text = textInput.value.trim();
@@ -1576,12 +1572,14 @@ function setupChapComments(){
          waitFirebase(async ({db, ref, push}) => {
              try {
                  await push(ref(db, `comments/${key}/${cid}/replies`), {
-                   name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin
+                   name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin, replyTo
                  });
                  textInput.value = '';
                  const form = document.getElementById('rf-' + cid);
-                 if(form) form.classList.remove('open');
-                 document.getElementById('chap-thread-' + cid)?.classList.add('open');
+                 if(form) { form.classList.remove('open'); form.querySelector('.reply-send-btn').dataset.replyto = ''; }
+                 
+                 const targetThreadId = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${cid}`;
+                 document.getElementById(targetThreadId)?.classList.add('open');
              } catch (err) { alert("Lỗi: " + err.message); } 
              finally { tgt.disabled = false; tgt.innerText = 'Gửi'; }
          });

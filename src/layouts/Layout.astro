@@ -1587,13 +1587,20 @@ document.addEventListener('DOMContentLoaded', () => {
     icOverlay.classList.remove('show');
   };
 
-  // Hàm tải bình luận riêng cho từng đoạn
+// Hàm tải bình luận riêng cho từng đoạn (Đã Fix lỗi giật lag)
+  let currentInlineUnsub = null; // Khai báo biến dọn dẹp bộ nhớ
+  
   function loadInlineComments(pIdx) {
     const key = 'inline_' + pageKey() + '_p' + pIdx;
     icSidebarList.innerHTML = '<div class="comment-loading">Đang tải...</div>';
     
     waitFirebase(({db, ref, onValue}) => {
-      onValue(ref(db, 'inline_comments/' + key), (snap) => {
+      // Xóa kết nối dữ liệu của đoạn văn trước đó để chống treo máy
+      if (currentInlineUnsub) {
+        currentInlineUnsub(); 
+      }
+      
+      currentInlineUnsub = onValue(ref(db, 'inline_comments/' + key), (snap) => {
         const data = snap.val();
         if (!data) {
           icSidebarList.innerHTML = '<div class="ic-empty">Đoạn này chưa có bình luận. Hãy là người đầu tiên! 🌊</div>';
@@ -1612,7 +1619,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
+  
   // Gửi bình luận inline
   const icSend = document.getElementById('icFormSend');
   const icInput = document.getElementById('icFormText');

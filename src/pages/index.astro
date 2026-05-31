@@ -255,16 +255,31 @@ const recentChaps = allChaps
 .sc-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:2px;}
 .sc-tag { font-size:.58rem; padding:1px 7px; border:1px solid var(--sky-light); border-radius:var(--r-pill); color:#0369a1; background:#e0f2fe; }
 [data-theme="dark"] .sc-tag { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
-.sc-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:6px; }
-.sc-chapters { font-size:.65rem; color:#475569; }
-[data-theme="dark"] .sc-chapters { color:#9bbcdb; }
-.sc-link { font-size:.68rem; padding:4px 12px; background:var(--sky); color:#fff; border-radius:var(--r-pill); transition:var(--t); flex-shrink:0; font-family:'Newsreader', serif;}
-.sc-link:hover { background:var(--sky2); transform: translateX(2px); }
-.sc-link.secondary { background:#e0f2fe; color:#0369a1; }
-[data-theme="dark"] .sc-link.secondary { color:#a8d4f0; background:rgba(20,55,90,.7); border:1px solid rgba(80,150,210,.35); }
-.sc-link.secondary:hover { background:#bae6fd; transform: translateY(-1px); }
-[data-theme="dark"] .sc-link.secondary:hover { background:rgba(80,150,210,.25); }
+/* ─── FIXED: TRÀN NÚT TRÊN ĐIỆN THOẠI ─── */
+.sc-footer { 
+  display: flex; align-items: center; justify-content: space-between; 
+  gap: 8px; margin-top: auto; padding-top: 6px; 
+  flex-wrap: wrap; /* Cho phép rớt dòng */
+}
+.sc-chapters { font-size: .65rem; color: #475569; }
+[data-theme="dark"] .sc-chapters { color: #9bbcdb; }
 
+.sc-link { 
+  font-size: .68rem; padding: 4px 10px; background: var(--sky); 
+  color: #fff; border-radius: var(--r-pill); transition: var(--t); 
+  flex-shrink: 0; font-family: 'Newsreader', serif; white-space: nowrap;
+}
+.sc-link:hover { background: var(--sky2); transform: translateY(-1px); }
+
+.sc-link.secondary { background: #e0f2fe; color: #0369a1; }
+[data-theme="dark"] .sc-link.secondary { color: #a8d4f0; background: rgba(20,55,90,.7); border: 1px solid rgba(80,150,210,.35); }
+[data-theme="dark"] .sc-link.secondary:hover { background: rgba(80,150,210,.25); }
+
+/* Khi màn hình quá nhỏ (< 420px), tự động xếp nút xuống dưới */
+@media(max-width: 420px) {
+  .sc-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .sc-footer > div { width: 100%; display: flex; justify-content: space-between; }
+}
 /* ─── NOTICE ─── */
 .notice-section { margin-top:22px; }
 .notice-img-wrap {

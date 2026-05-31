@@ -238,6 +238,9 @@ if (isNovelPage) {
     body.focus-mode { background: var(--bg-card) !important; }
     body.focus-mode .page-wrapper { margin-top: 0 !important; padding-top: 20px; }
     body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; padding-top: 20px !important; }
+    /* Menu mờ đi khi ở Focus Mode, hover sẽ hiện lại bình thường */
+    body.focus-mode .tool-fab-wrap { opacity: 0.15; transition: opacity 0.3s ease; }
+    body.focus-mode .tool-fab-wrap:hover { opacity: 1; }
 
     .page-wrapper { margin-top:56px; min-height:70vh; transition: margin 0.3s ease;}
     .page-content-wrap { max-width:820px; margin:32px auto 60px; padding:40px 50px; background:var(--bg-card); border-radius:var(--r-lg); box-shadow:var(--sh-soft); border:1px solid var(--border-card); }
@@ -272,6 +275,9 @@ if (isNovelPage) {
     .tag-badge:hover { background:var(--sky-light); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(2,132,199,.1); }
     [data-theme="dark"] .tag-badge { border-color:rgba(80,150,210,.4); background:rgba(20,55,90,.6); color:#a8d4f0; }
     [data-theme="dark"] .tag-badge:hover { background:rgba(80,150,210,.6); }
+
+    .read-time-badge { text-align:center; margin-top: -10px; margin-bottom: 20px; font-size: 0.75rem; color: var(--text-dim); font-style: italic;}
+    [data-theme="dark"] .read-time-badge { color: #8ab8d8; }
 
     .chap-nav-container { margin: 30px auto 40px; display: flex; justify-content: center; width: 100%; padding: 0 16px; box-sizing: border-box;}
     .chap-nav-dock { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1.5px solid var(--sky-light); border-radius: 999px; padding: 4px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12); width: 100%; max-width: 500px; }
@@ -350,32 +356,19 @@ if (isNovelPage) {
     .ic-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 9998; display: none; opacity: 0; transition: opacity 0.3s ease; }
     .ic-overlay.show { display: block; opacity: 1; }
     
-    /* FIX: SIDEBAR FULL MÀN HÌNH */
-    .ic-sidebar { position:fixed; top:0; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:9999; overflow:hidden; }
+    /* SIDEBAR INLINE CHAT ĐÈ LÊN THANH NAV */
+    .ic-sidebar { position:fixed; top:0; right:0; bottom:0; width:320px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:9999; overflow:hidden; }
     .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
-    @media(max-width:600px){ .ic-sidebar { width:min(320px,88vw); } }
+    @media(max-width:600px){ .ic-sidebar { width:min(340px,90vw); } }
 
     .ic-sidebar-inner { display:flex; flex-direction:column; height:100%; overflow:hidden; padding-top: env(safe-area-inset-top, 10px); }
-    .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:14px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; }
-    [data-theme="dark"] .ic-sidebar-header { border-color:rgba(126,200,227,.13); }
+    .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:14px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; background: var(--sky-pale); }
+    [data-theme="dark"] .ic-sidebar-header { border-color:rgba(126,200,227,.13); background: rgba(15,35,54,.8); }
     .ic-para-preview { flex:1; font-size:.68rem; color:var(--text-dim); font-style:italic; line-height:1.5; max-height:3.5em; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-    .ic-sidebar-close { flex-shrink:0; width:24px; height:24px; border-radius:50%; border:1px solid rgba(186,230,253,.5); background:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; transition:var(--t); }
+    .ic-sidebar-close { flex-shrink:0; width:24px; height:24px; border-radius:50%; border:1px solid rgba(186,230,253,.5); background:var(--bg-card); cursor:pointer; font-size:.62rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; transition:var(--t); }
     .ic-sidebar-close:hover { background:var(--sky-pale); color:var(--sky); }
-    [data-theme="dark"] .ic-sidebar-close { border-color:rgba(126,200,227,.18); color:#527a96; }
+    [data-theme="dark"] .ic-sidebar-close { border-color:rgba(126,200,227,.18); color:#527a96; background: rgba(10,25,45,.8);}
     
-    .ic-sidebar-form { padding:10px 12px; border-bottom:1px solid rgba(186,230,253,.3); flex-shrink:0; display:flex; flex-direction:column; gap:6px; }
-    [data-theme="dark"] .ic-sidebar-form { border-color:rgba(126,200,227,.1); }
-    .ic-form-name { width:100%; padding:5px 10px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.72rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; }
-    .ic-form-name:focus { border-color:var(--sky); }
-    [data-theme="dark"] .ic-form-name { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    .ic-form-body { display:flex; gap:6px; align-items:flex-end; }
-    .ic-form-text { flex:1; padding:7px 10px; border:1.5px solid var(--sky-light); border-radius:10px; font-size:.74rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:none; min-height:48px; }
-    .ic-form-text:focus { border-color:var(--sky); }
-    [data-theme="dark"] .ic-form-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    .ic-form-send { width:32px; height:32px; border-radius:50%; background:var(--sky); color:#fff; border:none; cursor:pointer; font-size:.88rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:var(--t); }
-    .ic-form-send:hover { background:var(--sky2); }
-    .ic-form-send:disabled { opacity:.5; cursor:not-allowed; }
-
     .ic-sidebar-list { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; scrollbar-width:thin; scrollbar-color:var(--sky-light) transparent; }
     .ic-sidebar-list::-webkit-scrollbar { width:3px; }
     .ic-sidebar-list::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:3px; }
@@ -410,7 +403,6 @@ if (isNovelPage) {
     .ic-replies { display:none; flex-direction:column; gap:8px; margin-top:7px; padding:7px 0 7px 14px; border-left:2px solid rgba(186,230,253,.8); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-left-color:rgba(126,200,227,.4); }
-    
     .ic-replies .ic-replies { padding: 0 !important; border-left: none !important; margin-top: 5px; }
     
     .ic-reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
@@ -428,23 +420,30 @@ if (isNovelPage) {
     
     .ic-del-reply-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .ic-del-reply-btn:hover { color:#ef4444; }
+
+    /* FORM CHAT INLINE & CUỐI CHƯƠNG TÍCH HỢP ĐẸP MẮT (ZALO STYLE) */
+    .chat-form-modern { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.8); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 5px; box-shadow: inset 0 2px 4px rgba(2,132,199,0.03); transition: border-color 0.3s;}
+    .chat-form-modern.sticky { position: sticky; bottom: 0; border-radius: 16px 16px 0 0; border-bottom: none; z-index: 1000; box-shadow: 0 -4px 15px rgba(2,132,199,0.1); margin: 0;}
+    .chat-form-modern:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+    [data-theme="dark"] .chat-form-modern { background: rgba(10,25,45,.95); border-color: rgba(80,150,210,.3); }
+    [data-theme="dark"] .chat-form-modern:focus-within { border-color: #7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
     
-    .ic-reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
-    .ic-reply-form input, .ic-reply-form textarea { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
-    .ic-reply-form input { border-radius:var(--r-pill); }
-    .ic-reply-form textarea { border-radius:8px; resize:none; min-height:44px; }
-    .ic-reply-form input:focus, .ic-reply-form textarea:focus { border-color:var(--sky); }
-    [data-theme="dark"] .ic-reply-form input, [data-theme="dark"] .ic-reply-form textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    .ic-reply-form-row { display:flex; gap:5px; justify-content:flex-end; }
-    .ic-rf-cancel { padding:3px 9px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
-    .ic-rf-cancel:hover { color:var(--sky); }
-    .ic-rf-send { padding:3px 10px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.66rem; cursor:pointer; transition:var(--t); font-weight:600;}
-    .ic-rf-send:hover { background:var(--sky2); }
-    .ic-rf-send:disabled { opacity:.5; cursor:not-allowed; }
+    .cfm-name { border: none; border-bottom: 1px dashed var(--sky-light); background: transparent; padding: 4px 2px; font-size: 0.7rem; font-family: 'Newsreader', serif; color: var(--text-main); width: 50%; outline: none; transition: var(--t); font-weight: 600;}
+    .cfm-name:focus { border-bottom-color: var(--sky); width: 100%; }
+    [data-theme="dark"] .cfm-name { color: #a8daf0; border-bottom-color: rgba(126,200,227,.3); }
+    [data-theme="dark"] .cfm-name:focus { border-bottom-color: #7ec8e3; }
+    
+    .cfm-bottom { display: flex; gap: 8px; align-items: center; width: 100%; }
+    .cfm-text { flex: 1; border: none; background: transparent; resize: none; min-height: 24px; max-height: 100px; padding: 6px 0; outline: none; font-size: 0.76rem; font-family: 'Newsreader', serif; color: var(--text-main); line-height: 1.4;}
+    [data-theme="dark"] .cfm-text { color: #F3F9FF; }
+    
+    .cfm-send { width: 34px; height: 34px; border-radius: 50%; background: var(--sky); color: #fff; border: none; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; box-shadow: 0 2px 6px rgba(14,165,233,0.3);}
+    .cfm-send:hover { background: var(--sky2); transform: scale(1.05); }
+    .cfm-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     /* ── CHAPTER-END COMMENTS ── */
     .chap-like-area { text-align:center; margin: 30px 0 40px; }
-    .chap-like-btn { background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark); padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08); }
+    .chap-like-btn { background: var(--bg-card); border: 2px solid var(--sky-light); color: var(--sky-dark); padding: 10px 24px; border-radius: var(--r-pill); font-size: .9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: inline-flex; align-items: center; box-shadow: 0 4px 12px rgba(2,132,199,.08); user-select: none;}
     .chap-like-btn .heart { transition: transform 0.3s; display: inline-block; margin-right: 6px; font-size: 1.1rem; }
     .chap-like-btn:hover { transform: translateY(-3px); border-color: var(--sky); box-shadow: 0 6px 16px rgba(2,132,199,.15); }
     .chap-like-btn:hover .heart { transform: scale(1.2); }
@@ -458,22 +457,7 @@ if (isNovelPage) {
     [data-theme="dark"] .chap-comment-title { color:#a8daf0; }
     [data-theme="dark"] .chap-comment-title::after { background:linear-gradient(to right,#1e4a6a,transparent); }
     
-    .comment-form { background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; padding:20px; margin-bottom:24px; box-shadow: var(--sh-soft); }
-    [data-theme="dark"] .comment-form { background:#0f2336 !important; border-color:rgba(126,200,227,.16) !important; }
-    .comment-form-row { display:flex; gap:8px; margin-bottom:12px; }
-    .comment-inp { flex:1; padding:10px 14px; border:1.5px solid var(--sky-light); border-radius:var(--r-pill); font-size:.85rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; transition: var(--t); }
-    .comment-inp:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
-    [data-theme="dark"] .comment-inp { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    [data-theme="dark"] .comment-inp:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
-    .comment-textarea { width:100%; padding:14px; border:1.5px solid var(--sky-light); border-radius:12px; font-size:.9rem; font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; resize:vertical; min-height:90px; margin-bottom:12px; box-sizing: border-box; transition: var(--t); }
-    .comment-textarea:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
-    [data-theme="dark"] .comment-textarea { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    [data-theme="dark"] .comment-textarea:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
-    .comment-submit-btn { padding:8px 24px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.85rem; cursor:pointer; font-family:'Newsreader',serif; transition:var(--t); font-weight: bold; }
-    .comment-submit-btn:hover { background:var(--sky2); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(14,165,233,0.3); }
-    .comment-submit-btn:disabled { opacity:.5; cursor:not-allowed; transform: none; box-shadow: none;}
-    
-    .comment-list { display:flex; flex-direction:column; gap:12px; }
+    .comment-list { display:flex; flex-direction:column; gap:12px; margin-top: 24px;}
     .comment-card { background:var(--bg-card); border:1px solid rgba(186,230,253,.45); border-radius:14px; padding:15px 17px; transition:box-shadow .2s; }
     [data-theme="dark"] .comment-card { background:#0f2336 !important; border-color:rgba(126,200,227,.14) !important; }
     .comment-card:hover { box-shadow:0 4px 16px rgba(2,132,199,.08); }
@@ -519,23 +503,9 @@ if (isNovelPage) {
     [data-theme="dark"] .reply-text { color:#c8e0f0; }
     .reply-del { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .reply-del:hover { color:#ef4444; }
-    
-    .reply-form { display:none; margin-top:10px; flex-direction:column; gap:5px; }
-    .reply-form.open { display:flex; }
-    .reply-inp,.reply-inp-text { padding:6px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
-    .reply-inp { border-radius:var(--r-pill); font-size:.75rem; }
-    .reply-inp-text { border-radius:10px; font-size:.76rem; resize:none; min-height:52px; }
-    .reply-inp:focus,.reply-inp-text:focus { border-color:var(--sky); }
-    [data-theme="dark"] .reply-inp,[data-theme="dark"] .reply-inp-text { background:#091620; border-color:#1e4a6a; color:#F3F9FF; }
-    .reply-form-btns { display:flex; gap:6px; justify-content:flex-end; }
-    .reply-cancel-btn { padding:4px 11px; background:none; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; color:var(--text-dim); transition:var(--t); }
-    .reply-cancel-btn:hover { color:var(--sky); }
-    .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); font-weight:600;}
-    .reply-send-btn:hover { background:var(--sky2); }
-    .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
 
-    /* ── POPUPS SETTINGS & REVIEWS ── */
-    .rs-popup { position:fixed; bottom:80px; right:74px; z-index:420; width:280px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15); padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95); transition:opacity .2s ease, transform .2s ease; transform-origin: bottom right; }
+    /* POPUP SETTINGS */
+    .rs-popup { position:fixed; bottom:80px; right:74px; z-index:99999; width:280px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15); padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95); transition:opacity .2s ease, transform .2s ease; transform-origin: bottom right; }
     [data-theme="dark"] .rs-popup { border-color:rgba(126,200,227,.2); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
     .rs-popup.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
     .rs-title { font-family:'Merriweather',serif; font-size:.75rem; color:var(--sky-dark); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; text-align:center; font-weight:bold;}
@@ -709,6 +679,8 @@ if (isNovelPage) {
         </div>
         )}
 
+      <div class="read-time-badge" id="readTimeBadge" style="display:none;"></div>
+      
       <div class="novel-content" id="novelContent">
         <slot />
         {frontmatter?.editor_note && (
@@ -720,7 +692,7 @@ if (isNovelPage) {
       </div>     
       
       <div class="chap-like-area">
-        <button class="chap-like-btn" id="btnLikeChapter">
+        <button class="chap-like-btn" id="btnLikeChapter" title="Click hoặc Nhấn đúp vào màn hình để thả tim!">
           <span class="heart">🤍</span> Yêu thích chương này <span class="count" id="chapLikeCount" style="font-weight:bold;margin-left:4px">0</span>
         </button>
       </div>
@@ -731,16 +703,19 @@ if (isNovelPage) {
             <div class="ic-para-preview" id="icParaPreview"></div>
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
           </div>
-          <div class="ic-sidebar-form">
-            <input class="ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
-            <div class="ic-form-body">
-              <textarea class="ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="2"></textarea>
-              <button class="ic-form-send" id="icFormSend">↑</button>
-            </div>
-          </div>
+          
           <div class="ic-sidebar-list" id="icSidebarList">
             <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
           </div>
+
+          <div class="chat-form-modern sticky" style="border-radius: 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); margin: 0; padding: 12px 14px;">
+              <input class="cfm-name ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
+              <div class="cfm-bottom">
+                  <textarea class="cfm-text ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="1"></textarea>
+                  <button class="cfm-send ic-form-send" id="icFormSend">➤</button>
+              </div>
+          </div>
+
         </div>
       </aside>
     </div>
@@ -782,13 +757,15 @@ if (isNovelPage) {
         <span id="adminStatus"></span>
         <button class="admin-login-btn" id="adminLoginBtn">Đăng nhập Google</button>
       </div>
-      <div class="comment-form">
-        <div class="comment-form-row">
-          <input class="comment-inp" id="cmtName" placeholder="Tên của bạn (tùy chọn)" style="max-width:220px" autocomplete="off" />
-        </div>
-        <textarea class="comment-textarea" id="cmtText" placeholder="Chia sẻ cảm nhận về chương này... 🌊"></textarea>
-        <button class="comment-submit-btn" id="cmtSubmit">Gửi bình luận ✦</button>
+      
+      <div class="chat-form-modern" style="padding: 16px;">
+         <input class="cfm-name comment-inp" id="cmtName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" style="width: 100%; max-width: 250px; margin-bottom: 8px;"/>
+         <div class="cfm-bottom" style="align-items: flex-end;">
+             <textarea class="cfm-text comment-textarea" id="cmtText" placeholder="Chia sẻ cảm nhận về chương này... 🌊" style="min-height: 60px; margin-bottom: 0;"></textarea>
+             <button class="cfm-send comment-submit-btn" id="cmtSubmit" style="border-radius: 12px; width: auto; padding: 0 20px; font-weight: bold; height: 38px;">Gửi bình luận ✦</button>
+         </div>
       </div>
+
       <div id="cmtList" class="comment-list">
         <div class="comment-loading">Đang tải bình luận...</div>
       </div>
@@ -916,6 +893,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);
       localStorage.setItem('dd_last_read_title', chapTitle);
+      
+      // Tính thời gian đọc
+      const contentEl = document.getElementById('novelContent');
+      if (contentEl) {
+         const words = contentEl.innerText.trim().split(/\s+/).length;
+         const readTime = Math.ceil(words / 200); // TB đọc 200 từ/phút
+         const badge = document.getElementById('readTimeBadge');
+         if (badge) {
+             badge.innerHTML = `⏳ Thời gian đọc: ~${readTime} phút`;
+             badge.style.display = 'block';
+         }
+      }
   }
 
   const mm = document.getElementById('mobileMenu'), hb = document.getElementById('hamburger');
@@ -961,7 +950,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.body.classList.contains('focus-mode')) {
         fabFocus.style.background = '#ef4444';
         fabFocus.innerText = '✕';
-        alert('Đã bật Chế độ Tập trung. Bấm X để thoát.');
+        alert('Đã bật Chế độ Tập trung. (Menu nổi vẫn có thể tương tác khi di chuột vào)');
       } else {
         fabFocus.style.background = '#10b981';
         fabFocus.innerText = '👁️';
@@ -1097,7 +1086,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (footerAdminBtn && isAdmin) { footerAdminBtn.style.opacity = '1'; footerAdminBtn.style.color = 'var(--sky)'; footerAdminBtn.title = "Đăng xuất Admin"; }
     
     // Khóa trường tên nếu là Admin
-    document.querySelectorAll('.ic-form-name, .comment-inp, .reply-inp').forEach(inp => {
+    document.querySelectorAll('.ic-form-name, .comment-inp, .cfm-name, .reply-inp').forEach(inp => {
         if(isAdmin) {
             inp.value = 'dynamic duo 𓆝';
             inp.disabled = true;
@@ -1284,13 +1273,13 @@ document.addEventListener('DOMContentLoaded', () => {
                ${rootRepliesHtml}
             </div>
             
-            <div class="ic-reply-form" id="ic-rf-${item.id}">
-               <input class="ic-form-name" id="ic-rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
-               <textarea class="ic-form-text" id="ic-rt-${item.id}" placeholder="Phản hồi..."></textarea>
-               <div class="ic-reply-form-row">
-                  <button class="ic-rf-cancel" data-cid="${item.id}">Hủy</button>
-                  <button class="ic-rf-send" data-cid="${item.id}" data-pidx="${pIdx}">Gửi</button>
+            <div class="chat-form-modern" id="ic-rf-${item.id}" style="display:none;">
+               <input class="cfm-name" id="ic-rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+               <div class="cfm-bottom">
+                  <textarea class="cfm-text" id="ic-rt-${item.id}" placeholder="Phản hồi..." rows="1"></textarea>
+                  <button class="cfm-send ic-rf-send" data-cid="${item.id}" data-pidx="${pIdx}">➤</button>
                </div>
+               <button class="ic-rf-cancel" data-cid="${item.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0;">Hủy</button>
             </div>
           </div>
         `;
@@ -1298,54 +1287,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('icSidebarList').onclick = async (e) => {
-        const tgt = e.target;
+        const tgtBtn = e.target.closest('button');
+        if (!tgtBtn) return;
+        
         const pIdx = document.getElementById('icFormSend').getAttribute('data-current-p');
         const pKey = 'p' + pIdx;
         
-        if (tgt.classList.contains('toggle-replies-btn')) {
-            const thread = document.getElementById('thread-' + tgt.dataset.cid);
+        if (tgtBtn.classList.contains('toggle-replies-btn')) {
+            const thread = document.getElementById('thread-' + tgtBtn.dataset.cid);
             if(thread) {
                 const isOpen = thread.classList.toggle('open');
                 const count = thread.children.length;
-                tgt.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
+                tgtBtn.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
             }
         }
 
-        if (tgt.classList.contains('ic-reply-toggle') || tgt.classList.contains('ic-reply-at-btn')) {
-            const cid = tgt.dataset.cid;
-            const rid = tgt.dataset.rid || ''; 
+        if (tgtBtn.classList.contains('ic-reply-toggle') || tgtBtn.classList.contains('ic-reply-at-btn')) {
+            const cid = tgtBtn.dataset.cid;
+            const rid = tgtBtn.dataset.rid || ''; 
             const form = document.getElementById('ic-rf-' + cid);
             if (form) {
                 form.style.display = 'flex';
                 const textInput = document.getElementById('ic-rt-' + cid);
-                if(tgt.dataset.name) {
-                    textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+                if(tgtBtn.dataset.name) {
+                    textInput.value = `@${tgtBtn.dataset.name} ` + textInput.value;
                 }
                 textInput.focus();
                 form.querySelector('.ic-rf-send').dataset.replyto = rid;
             }
         }
         
-        if (tgt.classList.contains('ic-rf-cancel')) {
-            const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
+        if (tgtBtn.classList.contains('ic-rf-cancel')) {
+            const form = document.getElementById('ic-rf-' + tgtBtn.dataset.cid);
             if (form) {
                 form.style.display = 'none';
                 form.querySelector('.ic-rf-send').dataset.replyto = '';
             }
         }
         
-        if (tgt.classList.contains('ic-rf-send')) {
-            const cid = tgt.dataset.cid;
-            const replyTo = tgt.dataset.replyto || null;
+        if (tgtBtn.classList.contains('ic-rf-send')) {
+            const cid = tgtBtn.dataset.cid;
+            const replyTo = tgtBtn.dataset.replyto || null;
             const nameInp = document.getElementById('ic-rn-' + cid);
             const textInp = document.getElementById('ic-rt-' + cid);
             const text = textInp.value.trim();
             
-            // Xử lý áp đặt tên Admin vào Reply
+            // Xử lý ép buộc tên Admin
             const finalName = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (nameInp.value.trim() || 'Khách');
             
             if (!text) return;
-            tgt.disabled = true; tgt.innerText = '...'; saveName(finalName);
+            tgtBtn.disabled = true; tgtBtn.innerHTML = '...'; saveName(finalName);
             
             waitFirebase(async ({db, ref, push}) => {
                 try {
@@ -1359,19 +1350,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const targetThreadId = replyTo ? `thread-${replyTo}` : `thread-${cid}`;
                     document.getElementById(targetThreadId)?.classList.add('open');
                 } catch(err) { alert("Lỗi: " + err.message); } 
-                finally { tgt.disabled = false; tgt.innerText = 'Gửi'; }
+                finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
             });
         }
         
-        if (tgt.classList.contains('ic-del-btn')) {
+        if (tgtBtn.classList.contains('ic-del-btn')) {
             if (confirm('Bạn muốn xóa bình luận này? Toàn bộ trả lời bên trong cũng sẽ bị xóa.')) {
-                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}`)); });
+                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgtBtn.dataset.cid}`)); });
             }
         }
         
-        if (tgt.classList.contains('ic-del-reply-btn')) {
+        if (tgtBtn.classList.contains('ic-del-reply-btn')) {
             if (confirm('Bạn muốn xóa phản hồi này?')) {
-                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`)); });
+                waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgtBtn.dataset.cid}/replies/${tgtBtn.dataset.rid}`)); });
             }
         }
     };
@@ -1436,11 +1427,27 @@ document.addEventListener('DOMContentLoaded', () => {
   setupChapComments();
 }); 
 
-/* ══ MODULE: COMMENTS CUỐI CHƯƠNG (CÓ ĐỆ QUY THREAD) ══ */
+/* ══ MODULE: DOUBLE TAP TO LIKE & COMMENTS CUỐI CHƯƠNG ══ */
 function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');
   if(!btn) return;
   const key = 'chap_' + pageKey(), myToken = getMyToken();
+  
+  // Xử lý Double tap thả tim
+  let lastTap = 0;
+  const contentEl = document.getElementById('novelContent');
+  if (contentEl) {
+      contentEl.addEventListener('touchend', (e) => {
+          const currentTime = new Date().getTime();
+          const tapLength = currentTime - lastTap;
+          if (tapLength < 500 && tapLength > 0) {
+              btn.click();
+              e.preventDefault();
+          }
+          lastTap = currentTime;
+      });
+  }
+
   waitFirebase(({db, ref, onValue, update, remove}) => {
     onValue(ref(db, 'chapter_likes/' + key), snap => {
       const data = snap.val() || {}; countEl.textContent = Object.keys(data).length;
@@ -1534,13 +1541,13 @@ function setupChapComments(){
               ${rootRepliesHtml}
             </div>
             
-            <div class="reply-form" id="rf-${c.id}">
-              <input class="reply-inp" id="rn-${c.id}" placeholder="Tên của bạn..." value="${esc(getSavedName())}">
-              <textarea class="reply-inp-text" id="rt-${c.id}" placeholder="Viết phản hồi..."></textarea>
-              <div class="reply-form-btns">
-                <button class="reply-cancel-btn" data-cid="${c.id}">Hủy</button>
-                <button class="reply-send-btn" data-cid="${c.id}">Gửi</button>
-              </div>
+            <div class="chat-form-modern" id="rf-${c.id}" style="display:none;">
+               <input class="cfm-name reply-inp" id="rn-${c.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+               <div class="cfm-bottom">
+                  <textarea class="cfm-text reply-inp-text" id="rt-${c.id}" placeholder="Phản hồi..." rows="1"></textarea>
+                  <button class="cfm-send reply-send-btn" data-cid="${c.id}">➤</button>
+               </div>
+               <button class="reply-cancel-btn" data-cid="${c.id}" style="font-size: 0.6rem; color: var(--text-dim); background: none; border: none; text-align: right; margin-top: -5px; padding: 0;">Hủy</button>
             </div>
           </div>
         `;
@@ -1548,40 +1555,41 @@ function setupChapComments(){
     });
     
     cmtList.onclick = async (e) => {
-       const tgt = e.target;
+       const tgtBtn = e.target.closest('button');
+       if (!tgtBtn) return;
        
-       if(tgt.classList.contains('toggle-replies-btn')) {
-           const thread = document.getElementById('chap-thread-' + tgt.dataset.cid);
+       if(tgtBtn.classList.contains('toggle-replies-btn')) {
+           const thread = document.getElementById('chap-thread-' + tgtBtn.dataset.cid);
            if(thread) {
                const isOpen = thread.classList.toggle('open');
                const count = thread.children.length; 
-               tgt.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
+               tgtBtn.innerHTML = isOpen ? `Ẩn câu trả lời ▴` : `Hiển thị ${count} câu trả lời ▾`;
            }
        }
        
-       if(tgt.classList.contains('cmt-reply-btn') || tgt.classList.contains('reply-at-btn')) {
-         const cid = tgt.dataset.cid;
-         const rid = tgt.dataset.rid || '';
+       if(tgtBtn.classList.contains('cmt-reply-btn') || tgtBtn.classList.contains('reply-at-btn')) {
+         const cid = tgtBtn.dataset.cid;
+         const rid = tgtBtn.dataset.rid || '';
          const form = document.getElementById('rf-' + cid);
          if(form) {
-             form.classList.add('open');
+             form.style.display = 'flex';
              const textInput = document.getElementById('rt-' + cid);
-             if (tgt.dataset.name) {
-                textInput.value = `@${tgt.dataset.name} ` + textInput.value;
+             if (tgtBtn.dataset.name) {
+                textInput.value = `@${tgtBtn.dataset.name} ` + textInput.value;
              }
              textInput.focus();
              form.querySelector('.reply-send-btn').dataset.replyto = rid;
          }
        }
        
-       if(tgt.classList.contains('reply-cancel-btn')) {
-         const form = document.getElementById('rf-' + tgt.dataset.cid);
-         if(form) { form.classList.remove('open'); form.querySelector('.reply-send-btn').dataset.replyto = ''; }
+       if(tgtBtn.classList.contains('reply-cancel-btn')) {
+         const form = document.getElementById('rf-' + tgtBtn.dataset.cid);
+         if(form) { form.style.display = 'none'; form.querySelector('.reply-send-btn').dataset.replyto = ''; }
        }
        
-       if(tgt.classList.contains('reply-send-btn')) {
-         const cid = tgt.dataset.cid;
-         const replyTo = tgt.dataset.replyto || null;
+       if(tgtBtn.classList.contains('reply-send-btn')) {
+         const cid = tgtBtn.dataset.cid;
+         const replyTo = tgtBtn.dataset.replyto || null;
          const nameInput = document.getElementById('rn-' + cid);
          const textInput = document.getElementById('rt-' + cid);
          const text = textInput.value.trim();
@@ -1589,7 +1597,7 @@ function setupChapComments(){
          const finalName = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (nameInput.value.trim() || 'Khách');
          
          if(!text) return;
-         tgt.disabled = true; tgt.innerText = '...'; saveName(finalName);
+         tgtBtn.disabled = true; tgtBtn.innerHTML = '...'; saveName(finalName);
          
          waitFirebase(async ({db, ref, push}) => {
              try {
@@ -1598,24 +1606,24 @@ function setupChapComments(){
                  });
                  textInput.value = '';
                  const form = document.getElementById('rf-' + cid);
-                 if(form) { form.classList.remove('open'); form.querySelector('.reply-send-btn').dataset.replyto = ''; }
+                 if(form) { form.style.display = 'none'; form.querySelector('.reply-send-btn').dataset.replyto = ''; }
                  
                  const targetThreadId = replyTo ? `chap-thread-${replyTo}` : `chap-thread-${cid}`;
                  document.getElementById(targetThreadId)?.classList.add('open');
              } catch (err) { alert("Lỗi: " + err.message); } 
-             finally { tgt.disabled = false; tgt.innerText = 'Gửi'; }
+             finally { tgtBtn.disabled = false; tgtBtn.innerHTML = '➤'; }
          });
        }
        
-       if(tgt.classList.contains('cmt-del-btn')) {
+       if(tgtBtn.classList.contains('cmt-del-btn')) {
          if(confirm('Bạn muốn xóa bình luận này? Các phản hồi bên trong cũng sẽ biến mất.')) {
-           waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `comments/${key}/${tgt.dataset.cid}`)); });
+           waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `comments/${key}/${tgtBtn.dataset.cid}`)); });
          }
        }
        
-       if(tgt.classList.contains('reply-del')) {
+       if(tgtBtn.classList.contains('reply-del')) {
          if(confirm('Bạn muốn xóa phản hồi này?')) {
-           waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `comments/${key}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`)); });
+           waitFirebase(async ({db, ref, remove}) => { await remove(ref(db, `comments/${key}/${tgtBtn.dataset.cid}/replies/${tgtBtn.dataset.rid}`)); });
          }
        }
     };

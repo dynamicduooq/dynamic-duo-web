@@ -226,19 +226,27 @@ const recentChaps = allChaps
 
 .msg-panel { display:none; animation: fadeUpAnim 0.3s ease; }
 .msg-panel.active { display:flex; flex-direction: column; }
-.msg-inp, .msg-textarea { width:100%; padding:8px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:#fff; outline:none; box-sizing:border-box; font-size:.75rem; margin-bottom:8px; border-radius:var(--r-pill); transition: border-color 0.2s, box-shadow 0.2s; }
-.msg-textarea { border-radius:12px; resize:none; min-height:48px; margin-bottom:0; flex:1;}
-.msg-inp:focus, .msg-textarea:focus { border-color:var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
-[data-theme="dark"] .msg-inp, [data-theme="dark"] .msg-textarea { background:rgba(10,25,45,.9); border-color:rgba(80,150,210,.4); color:#d8eeff; }
-[data-theme="dark"] .msg-inp:focus, [data-theme="dark"] .msg-textarea:focus { border-color:#7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
-[data-theme="dark"] .msg-inp::placeholder, [data-theme="dark"] .msg-textarea::placeholder { color:#4a7a9a; }
 
-.msg-send-btn { padding:8px 14px; background:var(--sky); color:#fff; border:none; border-radius:12px; font-size:.8rem; cursor:pointer; transition:var(--t); font-weight: 600; display:flex; align-items:center; justify-content:center;}
-.msg-send-btn:hover { background:var(--sky2); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(2,132,199,.2); }
-.msg-send-btn:disabled { opacity:.5; cursor:not-allowed; transform: none; box-shadow: none;}
+/* UI KHUNG CHAT MỚI BO TRÒN TÍCH HỢP */
+.chat-form-modern { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.8); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 5px; box-shadow: inset 0 2px 4px rgba(2,132,199,0.03); transition: border-color 0.3s;}
+.chat-form-modern:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
+[data-theme="dark"] .chat-form-modern { background: rgba(10,25,45,.6); border-color: rgba(80,150,210,.3); }
+[data-theme="dark"] .chat-form-modern:focus-within { border-color: #7ec8e3; box-shadow: 0 0 0 3px rgba(126,200,227,0.15); }
 
-/* --- GIAO DIỆN CHAT BUBBLE --- */
-.chat-feed-container { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; padding: 4px 8px 4px 4px; scrollbar-width: thin; scrollbar-color: var(--sky-light) transparent; }
+.cfm-name { border: none; border-bottom: 1px dashed var(--sky-light); background: transparent; padding: 4px 2px; font-size: 0.7rem; font-family: 'Newsreader', serif; color: var(--text-main); width: 60%; outline: none; transition: var(--t); font-weight: 600;}
+.cfm-name:focus { border-bottom-color: var(--sky); width: 100%; }
+[data-theme="dark"] .cfm-name { color: #a8daf0; border-bottom-color: rgba(126,200,227,.3); }
+[data-theme="dark"] .cfm-name:focus { border-bottom-color: #7ec8e3; }
+
+.cfm-bottom { display: flex; gap: 8px; align-items: center; width: 100%; }
+.cfm-text { flex: 1; border: none; background: transparent; resize: none; min-height: 24px; max-height: 100px; padding: 6px 0; outline: none; font-size: 0.76rem; font-family: 'Newsreader', serif; color: var(--text-main); line-height: 1.4;}
+[data-theme="dark"] .cfm-text { color: #F3F9FF; }
+
+.cfm-send { width: 34px; height: 34px; border-radius: 50%; background: var(--sky); color: #fff; border: none; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; box-shadow: 0 2px 6px rgba(14,165,233,0.3);}
+.cfm-send:hover { background: var(--sky2); transform: scale(1.05); }
+.cfm-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.chat-feed-container { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 5px; padding: 4px 8px 4px 4px; scrollbar-width: thin; scrollbar-color: var(--sky-light) transparent; }
 .chat-feed-container::-webkit-scrollbar { width:4px; }
 .chat-feed-container::-webkit-scrollbar-thumb { background:var(--sky-light); border-radius:4px; }
 
@@ -258,7 +266,6 @@ const recentChaps = allChaps
 .chat-del-btn { background:none; border:none; color: var(--text-dim); font-size: .55rem; cursor: pointer; padding: 0; }
 .chat-del-btn:hover { color: #ef4444; }
 
-.chat-input-wrapper { display: flex; gap: 6px; align-items: flex-end; margin-top: 5px; }
 .msg-public-empty { font-size:.7rem; color:var(--text-dim); font-style:italic; text-align:center; padding:12px 0; width: 100%;}
 [data-theme="dark"] .msg-public-empty { color:#4a6a8a; }
 
@@ -285,17 +292,7 @@ const recentChaps = allChaps
 .copy-tooltip { position: absolute; background: #333; color: #fff; font-size: 0.65rem; padding: 4px 8px; border-radius: 4px; pointer-events: none; opacity: 0; transform: translateY(-5px); transition: all 0.2s; white-space: nowrap; z-index: 1000; }
 .copy-tooltip.show { opacity: 1; transform: translateY(-30px); }
 
-/* FLOATING MAIL BUBBLE - Dành riêng cho index.astro */
-.msg-bubble-btn {
-  position:fixed; bottom: 190px; right: 22px; z-index: 9998; width: 44px; height: 44px; border-radius:50%; 
-  background:linear-gradient(135deg, rgba(14,165,233,0.9), rgba(2,132,199,0.9)); backdrop-filter: blur(8px);
-  border:1px solid rgba(255,255,255,0.2); cursor:pointer; color:#fff; font-size:1.1rem; box-shadow:0 6px 16px rgba(2,132,199,.4);
-  display:flex; align-items:center; justify-content:center; transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s ease;
-}
-.msg-bubble-btn:hover { transform:scale(1.15) translateY(-3px); box-shadow:0 10px 25px rgba(2,132,199,.55); }
-[data-theme="dark"] .msg-bubble-btn { background:linear-gradient(135deg,rgba(26,90,144,0.9),rgba(14,61,110,0.9)); border-color:rgba(126,200,227,0.2); }
-@media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
-
+/* POPUP THƯ TỪ NÚT FAB */
 .msg-popup {
   position:fixed; bottom:80px; right:75px; z-index:9999; width:min(360px,calc(100vw - 32px));
   background:rgba(255,255,255,0.98); backdrop-filter: blur(16px); border:1px solid rgba(186,230,253,.6);
@@ -315,6 +312,7 @@ const recentChaps = allChaps
 [data-theme="dark"] .msg-popup-close:hover { background:rgba(239,68,68,0.15); border-color:#ef4444;}
 </style>
 
+<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
     <span class="ticker-item">Chào mừng đến với dynamic duo 𓆝.°•</span>
@@ -327,8 +325,10 @@ const recentChaps = allChaps
 </div>
 
 <div class="home-shell">
+  <!-- ── MAIN COLUMN ── -->
   <div class="main-col">
 
+    <!-- HERO -->
     <div class="hero">
       <div id="dynamicGreeting" class="hero-greeting">Chào bạn!</div>
       <div class="hero-banner-wrap reveal">
@@ -339,6 +339,7 @@ const recentChaps = allChaps
       <p class="hero-tagline reveal">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
+    <!-- LƯU Ý -->
     <div class="notice-section reveal">
       <div class="sec-hd">
         <h2>📌 Lưu ý</h2>
@@ -349,6 +350,7 @@ const recentChaps = allChaps
       </div>
     </div>
 
+    <!-- FILTER + STORIES -->
     <div class="sec-hd reveal">
       <h2>📚 Tủ truyện</h2>
       <div class="sec-line"></div>
@@ -465,7 +467,8 @@ const recentChaps = allChaps
       </div>
     </div>
 
-<div class="sec-hd reveal" style="margin-top:32px">
+<!-- MỚI CẬP NHẬT -->
+    <div class="sec-hd reveal" style="margin-top:32px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
@@ -494,7 +497,10 @@ const recentChaps = allChaps
       })}
     </div>
 
-  </div><aside class="sidebar-col">
+  </div><!-- /main-col -->
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar-col">
 
     <div class="widget reveal">
       <div class="widget-title">✦ Về nhà cá</div>
@@ -557,6 +563,7 @@ const recentChaps = allChaps
               </ul>
             </details>
           </li>
+    <!-- Quote of the day -->
     <div class="widget reveal" style="margin-top: 16px;">
       <div class="widget-title">✨ Quote of the day</div>
       <div class="quote-widget-inner">
@@ -565,6 +572,7 @@ const recentChaps = allChaps
       </div>
     </div>
 
+    <!-- ✉ LỜI NHẮN WIDGET (CHAT BUBBLE STYLE) -->
     <div class="widget reveal" id="msgSidebarWidget">
       <div class="widget-title">✉ Lời nhắn</div>
       <div class="msg-widget-tabs">
@@ -572,17 +580,22 @@ const recentChaps = allChaps
         <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Tường chung</button>
       </div>
 
+      <!-- Panel: Riêng tư -->
       <div class="msg-panel active" id="msgPanelPrivate">
+        <!-- Khung chat của User -->
         <div id="msgPrivateUserBox">
             <p style="font-size:.65rem;color:var(--text-dim);font-style:italic;margin-bottom:8px;text-align:center;">Nhắn riêng cho chủ nhà 🐋 (Chỉ admin đọc được)</p>
             <div class="chat-feed-container" id="msgPrivateFeedSidebar"></div>
-            <div class="chat-input-wrapper">
-                <input type="text" id="msgPrivNameSidebar" class="msg-inp" placeholder="Tên (tùy chọn)" style="margin-bottom: 0; max-width: 90px; border-radius: 12px; padding: 8px;" />
-                <textarea class="msg-textarea" id="msgPrivTextSidebar" placeholder="Nhắn gì đó..." rows="1"></textarea>
-                <button class="msg-send-btn" id="msgPrivSendSidebar">➤</button>
+            <div class="chat-form-modern">
+               <input class="cfm-name" id="msgPrivNameSidebar" placeholder="Tên (tùy chọn)..." />
+               <div class="cfm-bottom">
+                   <textarea class="cfm-text" id="msgPrivTextSidebar" placeholder="Nhắn gì đó..." rows="1"></textarea>
+                   <button class="cfm-send" id="msgPrivSendSidebar">➤</button>
+               </div>
             </div>
         </div>
 
+        <!-- Khung danh sách của Admin -->
         <div id="msgPrivateAdminBox" style="display:none">
             <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic; border-bottom: 1px solid rgba(186,230,253,.4); padding-bottom: 5px;">📬 Danh sách thư (Admin):</p>
             <div class="admin-user-list" id="msgAdminUserListSidebar"></div>
@@ -590,28 +603,32 @@ const recentChaps = allChaps
             <div id="msgAdminActiveChatSidebar" style="display:none; margin-top: 10px; border-top: 1px dashed rgba(186,230,253,.4); padding-top: 10px;">
                 <button id="msgAdminBackSidebar" style="background:none; border:none; font-size:.65rem; color:var(--sky); cursor:pointer; font-weight:bold; padding:0; margin-bottom:8px;">← Quay lại danh sách</button>
                 <div class="chat-feed-container" id="msgAdminFeedSidebar" style="max-height: 200px;"></div>
-                <div class="chat-input-wrapper">
-                    <textarea class="msg-textarea" id="msgAdminReplyTextSidebar" placeholder="Trả lời người này..." rows="1"></textarea>
-                    <button class="msg-send-btn" id="msgAdminReplySendSidebar">➤</button>
+                <div class="chat-form-modern">
+                   <div class="cfm-bottom">
+                       <textarea class="cfm-text" id="msgAdminReplyTextSidebar" placeholder="Trả lời người này..." rows="1"></textarea>
+                       <button class="cfm-send" id="msgAdminReplySendSidebar">➤</button>
+                   </div>
                 </div>
             </div>
         </div>
       </div>
 
+      <!-- Panel: Public -->
       <div class="msg-panel" id="msgPanelPublic">
         <div class="chat-feed-container" id="msgPublicFeed">
           <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
         </div>
-        <div class="chat-input-wrapper" style="flex-wrap: wrap;">
-            <input class="msg-inp" id="msgPublicName" placeholder="Tên (tùy chọn)" style="margin-bottom:0;" />
-            <div style="display: flex; gap: 6px; width: 100%; align-items:flex-end; margin-top: 6px;">
-                <textarea class="msg-textarea" id="msgPublicText" placeholder="Để lại lời nhắn..." rows="1"></textarea>
-                <button class="msg-send-btn" id="msgPublicSend">➤</button>
-            </div>
+        <div class="chat-form-modern">
+           <input class="cfm-name" id="msgPublicName" placeholder="Tên (tùy chọn)..." />
+           <div class="cfm-bottom">
+               <textarea class="cfm-text" id="msgPublicText" placeholder="Để lại lời nhắn..." rows="1"></textarea>
+               <button class="cfm-send" id="msgPublicSend">➤</button>
+           </div>
         </div>
       </div>
     </div>
 
+    <!-- Contact widget with Copy Feature -->
     <div class="widget reveal" style="text-align:center; position: relative;">
       <div class="widget-title">✉ Liên hệ</div>
       <p class="contact-email" id="sidebarEmailCopy" title="Nhấn để copy" style="cursor: pointer; position: relative;">dynamicduoo.q@gmail.com 📋</p>
@@ -622,8 +639,9 @@ const recentChaps = allChaps
     </div>
 
   </aside>
-</div><div class="msg-bubble-btn" id="msgBubbleBtn">✉️</div>
+</div><!-- /home-shell -->
 
+<!-- Popup from bubble (Đồng bộ với Sidebar) -->
 <div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
     <span class="msg-popup-title">✉ Hòm thư nhà cá</span>
@@ -635,25 +653,31 @@ const recentChaps = allChaps
   </div>
   
   <div class="msg-panel active" id="msgPopupPanelPrivate">
+     <!-- Bubble: Khung chat của User -->
      <div id="msgPrivateUserBoxPopup">
         <p style="font-size:.65rem;color:var(--text-dim);margin:0 0 8px;font-style:italic;line-height:1.5;text-align:center;">Tin nhắn gửi ở đây chỉ có Admin đọc được thui nhé 🐋</p>
         <div class="chat-feed-container" id="msgPrivateFeedPopup"></div>
-        <div class="chat-input-wrapper">
-            <input type="text" id="msgPrivNamePopup" class="msg-inp" placeholder="Tên (tùy chọn)" style="margin-bottom: 0; max-width: 90px; border-radius: 12px; padding: 8px;" />
-            <textarea class="msg-textarea" id="msgPrivTextPopup" placeholder="Lời nhắn gửi chủ nhà..." rows="1"></textarea>
-            <button class="msg-send-btn" id="msgPrivSendPopup">➤</button>
+        <div class="chat-form-modern">
+           <input class="cfm-name" id="msgPrivNamePopup" placeholder="Tên (tùy chọn)..." />
+           <div class="cfm-bottom">
+               <textarea class="cfm-text" id="msgPrivTextPopup" placeholder="Nhắn gì đó..." rows="1"></textarea>
+               <button class="cfm-send" id="msgPrivSendPopup">➤</button>
+           </div>
         </div>
      </div>
      
+     <!-- Bubble: Khung Admin -->
      <div id="msgPrivateAdminBoxPopup" style="display:none">
         <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic;">📬 Danh sách thư:</p>
         <div class="admin-user-list" id="msgAdminUserListPopup"></div>
         <div id="msgAdminActiveChatPopup" style="display:none; margin-top: 10px;">
             <button id="msgAdminBackPopup" style="background:none; border:none; font-size:.65rem; color:var(--sky); cursor:pointer; font-weight:bold; padding:0; margin-bottom:8px;">← Quay lại</button>
             <div class="chat-feed-container" id="msgAdminFeedPopup" style="max-height: 200px;"></div>
-            <div class="chat-input-wrapper">
-                <textarea class="msg-textarea" id="msgAdminReplyTextPopup" placeholder="Trả lời người này..." rows="1"></textarea>
-                <button class="msg-send-btn" id="msgAdminReplySendPopup">➤</button>
+            <div class="chat-form-modern">
+               <div class="cfm-bottom">
+                   <textarea class="cfm-text" id="msgAdminReplyTextPopup" placeholder="Trả lời..." rows="1"></textarea>
+                   <button class="cfm-send" id="msgAdminReplySendPopup">➤</button>
+               </div>
             </div>
         </div>
      </div>
@@ -663,12 +687,12 @@ const recentChaps = allChaps
     <div class="chat-feed-container" id="msgPopupPublicFeed">
       <div class="msg-public-empty">Chưa có lời nhắn 𓆝</div>
     </div>
-    <div class="chat-input-wrapper" style="flex-wrap: wrap;">
-        <input class="msg-inp" id="msgPopupPublicName" placeholder="Tên (tùy chọn)" style="margin-bottom:0;" />
-        <div style="display: flex; gap: 6px; width: 100%; align-items:flex-end; margin-top: 6px;">
-            <textarea class="msg-textarea" id="msgPopupPublicText" placeholder="Cùng thả cá vào đây nào..." rows="1"></textarea>
-            <button class="msg-send-btn" id="msgPopupPublicSend">➤</button>
-        </div>
+    <div class="chat-form-modern">
+       <input class="cfm-name" id="msgPopupPublicName" placeholder="Tên (tùy chọn)..." />
+       <div class="cfm-bottom">
+           <textarea class="cfm-text" id="msgPopupPublicText" placeholder="Gửi lên tường..." rows="1"></textarea>
+           <button class="cfm-send" id="msgPopupPublicSend">➤</button>
+       </div>
     </div>
   </div>
 </div>
@@ -794,18 +818,19 @@ const recentChaps = allChaps
   }
 
   const myToken = getMsgToken();
+  const ADMIN_NAME = 'dynamic duo 𓆝';
   const popup = document.getElementById('msgPopup');
-  const msgBubbleBtn = document.getElementById('msgBubbleBtn');
+  const fabMailBtn = document.getElementById('fabMail'); // Chỉ dùng Nút Thư trong FAB
 
   // ── POPUP CONTROL ──
-  if(msgBubbleBtn && popup) {
-    msgBubbleBtn.addEventListener('click', (e) => {
+  if(fabMailBtn && popup) {
+    fabMailBtn.addEventListener('click', (e) => {
       e.stopPropagation(); popup.classList.toggle('open');
       document.getElementById('toolFabWrap')?.classList.remove('open');
     });
     document.getElementById('msgPopupClose')?.addEventListener('click', () => popup.classList.remove('open'));
     document.addEventListener('click', (e) => {
-      if(popup.classList.contains('open') && !popup.contains(e.target) && !msgBubbleBtn.contains(e.target)) popup.classList.remove('open');
+      if(popup.classList.contains('open') && !popup.contains(e.target) && !fabMailBtn.contains(e.target)) popup.classList.remove('open');
     });
   }
 
@@ -868,10 +893,10 @@ const recentChaps = allChaps
       document.getElementById('msgPrivateAdminBoxPopup').style.display = isAdmin ? 'block' : 'none';
       document.getElementById('msgPrivateUserBoxPopup').style.display = isAdmin ? 'none' : 'block';
 
-      // Khoá tên Admin
-      document.querySelectorAll('#msgPublicName, #msgPopupPublicName, #msgPrivNameSidebar, #msgPrivNamePopup').forEach(inp => {
+      // Khóa và set cứng tên Admin
+      document.querySelectorAll('.cfm-name').forEach(inp => {
           if (isAdmin) {
-              inp.value = 'dynamic duo 𓆝';
+              inp.value = ADMIN_NAME;
               inp.disabled = true;
               inp.style.opacity = '0.7';
           } else {
@@ -1008,7 +1033,7 @@ const recentChaps = allChaps
     document.getElementById('msgAdminBackSidebar')?.addEventListener('click', closeAdminChatView);
     document.getElementById('msgAdminBackPopup')?.addEventListener('click', closeAdminChatView);
 
-    // ── SEND LOGIC ──
+    // ── SEND LOGIC TỐI ƯU ──
     const handleSend = async (btnId, nameId, textId, targetPathResolver, isAdminMode = false) => {
       const btn = document.getElementById(btnId);
       if(!btn) return;
@@ -1018,7 +1043,7 @@ const recentChaps = allChaps
         if(!text) return;
         
         btn.disabled = true;
-        const name = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (document.getElementById(nameId)?.value.trim() || 'Khách');
+        const name = window.__ddIsAdmin ? ADMIN_NAME : (document.getElementById(nameId)?.value.trim() || 'Khách');
         const tokenToSave = isAdminMode ? activeAdminChatToken : myToken;
         const payload = { name, text, ts: Date.now(), token: tokenToSave, isAdmin: !!window.__ddIsAdmin };
         
@@ -1027,8 +1052,8 @@ const recentChaps = allChaps
           if(!path) throw new Error('Không xác định được luồng tin nhắn');
           await fb.push(fb.ref(fb.db, path), payload);
           textInp.value = '';
-        } catch(e) { alert(e.message); }
-        btn.disabled = false;
+        } catch(e) { alert("Lỗi: " + e.message); }
+        finally { btn.disabled = false; }
       });
     };
 

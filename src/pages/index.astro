@@ -14,6 +14,7 @@ const storiesData = slugs.map(slug => {
   const infoFile = storyChaps.find(c => c.frontmatter?.truyen_name) || storyChaps[0];
   const fm = infoFile?.frontmatter || {};
   const fallbackTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
   const chapCount = storyChaps.filter(c => c.frontmatter?.chuong !== undefined && c.frontmatter?.chuong !== 0).length;
   const tongSoChuong = fm.tong_so_chuong || 0;
   const isCompleted = tongSoChuong > 0 && chapCount >= tongSoChuong;
@@ -46,7 +47,10 @@ const recentChaps = allChaps
 ---
 <Layout title="Trang chủ" isHome={true}>
 <style is:global>
-.home-shell { display: grid; grid-template-columns: 1fr 300px; gap: 32px; max-width: 1150px; margin: 0 auto; padding: 20px 50px 80px; align-items: start; box-sizing: border-box; width: 100%; }
+.home-shell {
+  display: grid; grid-template-columns: 1fr 300px; gap: 32px; max-width: 1150px;
+  margin: 0 auto; padding: 20px 50px 80px; align-items: start; box-sizing: border-box; width: 100%;
+}
 @media(max-width:1100px){ .home-shell { grid-template-columns: 1fr 260px; padding: 18px 40px 80px; } }
 @media(max-width:900px){  
   .home-shell { display: flex; flex-direction: column; align-items: center; padding: 14px 20px 80px; }
@@ -210,7 +214,7 @@ const recentChaps = allChaps
 .quote-src { font-size:.64rem; color:#94a3b8; margin-top:8px; text-align:right; font-weight: 600; }
 [data-theme="dark"] .quote-src { color:#a3cbeb; }
 
-/* ─── CẬP NHẬT: MESSAGE WIDGET (CHAT BUBBLE STYLE) ─── */
+/* ─── MESSAGE WIDGET (CHAT BUBBLE STYLE) ─── */
 .msg-widget-tabs { display:flex; gap:0; margin-bottom:12px; border:1px solid rgba(186,230,253,.6); border-radius:var(--r-pill); overflow:hidden; background: var(--bg-card); }
 [data-theme="dark"] .msg-widget-tabs { border-color:rgba(80,150,210,.3); }
 .msg-tab { flex:1; padding:7px 0; font-size:.7rem; letter-spacing:.5px; text-transform:uppercase; background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; color:var(--text-mid); transition:all .3s ease; position: relative; }
@@ -283,7 +287,7 @@ const recentChaps = allChaps
 
 /* FLOATING MAIL BUBBLE - Dành riêng cho index.astro */
 .msg-bubble-btn {
-  position:fixed; bottom: 190px; right: 22px; z-index: 410; width: 44px; height: 44px; border-radius:50%; 
+  position:fixed; bottom: 190px; right: 22px; z-index: 9998; width: 44px; height: 44px; border-radius:50%; 
   background:linear-gradient(135deg, rgba(14,165,233,0.9), rgba(2,132,199,0.9)); backdrop-filter: blur(8px);
   border:1px solid rgba(255,255,255,0.2); cursor:pointer; color:#fff; font-size:1.1rem; box-shadow:0 6px 16px rgba(2,132,199,.4);
   display:flex; align-items:center; justify-content:center; transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s ease;
@@ -293,7 +297,7 @@ const recentChaps = allChaps
 @media(max-width:900px){ body.novel-sidebar-open .msg-bubble-btn { display:none; } }
 
 .msg-popup {
-  position:fixed; bottom:80px; right:75px; z-index:420; width:min(360px,calc(100vw - 32px));
+  position:fixed; bottom:80px; right:75px; z-index:9999; width:min(360px,calc(100vw - 32px));
   background:rgba(255,255,255,0.98); backdrop-filter: blur(16px); border:1px solid rgba(186,230,253,.6);
   border-radius:18px; box-shadow:0 16px 50px rgba(2,132,199,.2); padding:18px 16px 16px;
   opacity:0; pointer-events:none; transform:translateY(15px) scale(.95);
@@ -310,8 +314,6 @@ const recentChaps = allChaps
 [data-theme="dark"] .msg-popup-close { border-color:rgba(80,150,210,.3); color:#5a7a9a; }
 [data-theme="dark"] .msg-popup-close:hover { background:rgba(239,68,68,0.15); border-color:#ef4444;}
 </style>
-
-<button class="msg-bubble-btn" id="msgBubbleBtn" title="Hòm thư nhà cá">✉️</button>
 
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
@@ -463,7 +465,7 @@ const recentChaps = allChaps
       </div>
     </div>
 
-    <div class="sec-hd reveal" style="margin-top:32px">
+<div class="sec-hd reveal" style="margin-top:32px">
       <h2>🕊 Mới cập nhật</h2>
       <div class="sec-line"></div>
     </div>
@@ -571,11 +573,9 @@ const recentChaps = allChaps
       </div>
 
       <div class="msg-panel active" id="msgPanelPrivate">
-        
         <div id="msgPrivateUserBox">
             <p style="font-size:.65rem;color:var(--text-dim);font-style:italic;margin-bottom:8px;text-align:center;">Nhắn riêng cho chủ nhà 🐋 (Chỉ admin đọc được)</p>
-            <div class="chat-feed-container" id="msgPrivateFeedSidebar">
-                </div>
+            <div class="chat-feed-container" id="msgPrivateFeedSidebar"></div>
             <div class="chat-input-wrapper">
                 <input type="text" id="msgPrivNameSidebar" class="msg-inp" placeholder="Tên (tùy chọn)" style="margin-bottom: 0; max-width: 90px; border-radius: 12px; padding: 8px;" />
                 <textarea class="msg-textarea" id="msgPrivTextSidebar" placeholder="Nhắn gì đó..." rows="1"></textarea>
@@ -585,8 +585,7 @@ const recentChaps = allChaps
 
         <div id="msgPrivateAdminBox" style="display:none">
             <p style="font-size:.7rem;color:var(--text-dim);margin:0 0 10px;font-style:italic; border-bottom: 1px solid rgba(186,230,253,.4); padding-bottom: 5px;">📬 Danh sách thư (Admin):</p>
-            <div class="admin-user-list" id="msgAdminUserListSidebar">
-                </div>
+            <div class="admin-user-list" id="msgAdminUserListSidebar"></div>
             
             <div id="msgAdminActiveChatSidebar" style="display:none; margin-top: 10px; border-top: 1px dashed rgba(186,230,253,.4); padding-top: 10px;">
                 <button id="msgAdminBackSidebar" style="background:none; border:none; font-size:.65rem; color:var(--sky); cursor:pointer; font-weight:bold; padding:0; margin-bottom:8px;">← Quay lại danh sách</button>
@@ -597,7 +596,6 @@ const recentChaps = allChaps
                 </div>
             </div>
         </div>
-
       </div>
 
       <div class="msg-panel" id="msgPanelPublic">
@@ -624,7 +622,9 @@ const recentChaps = allChaps
     </div>
 
   </aside>
-</div><div class="msg-popup" id="msgPopup">
+</div><div class="msg-bubble-btn" id="msgBubbleBtn">✉️</div>
+
+<div class="msg-popup" id="msgPopup">
   <div class="msg-popup-header">
     <span class="msg-popup-title">✉ Hòm thư nhà cá</span>
     <button class="msg-popup-close" id="msgPopupClose">✕</button>
@@ -678,41 +678,39 @@ const recentChaps = allChaps
    1. HELPERS & DYNAMIC UI
    ══════════════════════════════════════════ */
 (function setupGeneralUI() {
-  try {
-      const hour = new Date().getHours();
-      let greeting = 'Chào buổi tối';
-      if (hour >= 5 && hour < 11) greeting = 'Chào buổi sáng';
-      else if (hour >= 11 && hour < 14) greeting = 'Chào buổi trưa';
-      else if (hour >= 14 && hour < 18) greeting = 'Chào buổi chiều';
-      const grEl = document.getElementById('dynamicGreeting');
-      if(grEl) grEl.textContent = greeting + ', đọc truyện vui vẻ nhé! ';
+  const hour = new Date().getHours();
+  let greeting = 'Chào buổi tối';
+  if (hour >= 5 && hour < 11) greeting = 'Chào buổi sáng';
+  else if (hour >= 11 && hour < 14) greeting = 'Chào buổi trưa';
+  else if (hour >= 14 && hour < 18) greeting = 'Chào buổi chiều';
+  const grEl = document.getElementById('dynamicGreeting');
+  if(grEl) grEl.textContent = greeting + ', đọc truyện vui vẻ nhé! ';
 
-      const lastReadUrl = localStorage.getItem('dd_last_read_url');
-      const lastReadTitle = localStorage.getItem('dd_last_read_title');
-      const crBanner = document.getElementById('continueReading');
-      const crLink = document.getElementById('crLink');
-      if (lastReadUrl && lastReadTitle && crBanner && crLink) {
-        crLink.textContent = lastReadTitle;
-        crBanner.href = lastReadUrl;
-        crBanner.classList.remove('hidden');
-      }
+  const lastReadUrl = localStorage.getItem('dd_last_read_url');
+  const lastReadTitle = localStorage.getItem('dd_last_read_title');
+  const crBanner = document.getElementById('continueReading');
+  const crLink = document.getElementById('crLink');
+  if (lastReadUrl && lastReadTitle && crBanner && crLink) {
+    crLink.textContent = lastReadTitle;
+    crBanner.href = lastReadUrl;
+    crBanner.classList.remove('hidden');
+  }
 
-      const obs = new IntersectionObserver(es => es.forEach(e => { 
-        if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } 
-      }), { threshold: 0.1 });
-      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  const obs = new IntersectionObserver(es => es.forEach(e => { 
+    if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } 
+  }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-      const copyBtn = document.getElementById('sidebarEmailCopy');
-      const tooltip = document.getElementById('emailTooltip');
-      if(copyBtn && tooltip) {
-        copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
-            tooltip.classList.add('show');
-            setTimeout(() => tooltip.classList.remove('show'), 2000);
-          });
-        });
-      }
-  } catch(e) { console.error('General UI Init Error:', e); }
+  const copyBtn = document.getElementById('sidebarEmailCopy');
+  const tooltip = document.getElementById('emailTooltip');
+  if(copyBtn && tooltip) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText('dynamicduoo.q@gmail.com').then(() => {
+        tooltip.classList.add('show');
+        setTimeout(() => tooltip.classList.remove('show'), 2000);
+      });
+    });
+  }
 })();
 
 /* ══════════════════════════════════════════
@@ -796,24 +794,22 @@ const recentChaps = allChaps
   }
 
   const myToken = getMsgToken();
-  const ADMIN_NAME = 'dynamic duo 𓆝';
   const popup = document.getElementById('msgPopup');
-  
-  // ── POPUP BUBBLE THƯ ĐƯỢC CẤU HÌNH LẠI TRÁNH LỖI ──
-  try {
-      const bubbleBtn = document.getElementById('msgBubbleBtn');
-      if (bubbleBtn && popup) {
-          bubbleBtn.addEventListener('click', (e) => {
-              e.stopPropagation(); popup.classList.toggle('open');
-              document.getElementById('toolFabWrap')?.classList.remove('open');
-          });
-      }
-      document.getElementById('msgPopupClose')?.addEventListener('click', () => popup?.classList.remove('open'));
-      document.addEventListener('click', (e) => {
-        if(popup?.classList.contains('open') && !popup.contains(e.target) && !bubbleBtn?.contains(e.target)) popup.classList.remove('open');
-      });
-  } catch(e) { console.error("Bubble Menu Error:", e); }
+  const msgBubbleBtn = document.getElementById('msgBubbleBtn');
 
+  // ── POPUP CONTROL ──
+  if(msgBubbleBtn && popup) {
+    msgBubbleBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); popup.classList.toggle('open');
+      document.getElementById('toolFabWrap')?.classList.remove('open');
+    });
+    document.getElementById('msgPopupClose')?.addEventListener('click', () => popup.classList.remove('open'));
+    document.addEventListener('click', (e) => {
+      if(popup.classList.contains('open') && !popup.contains(e.target) && !msgBubbleBtn.contains(e.target)) popup.classList.remove('open');
+    });
+  }
+
+  // Tabs cho Widget và Popup
   function setupTabs(containerId, dataAttr) {
     const container = document.getElementById(containerId);
     if(!container) return;
@@ -838,11 +834,13 @@ const recentChaps = allChaps
   function initFirebaseLogic() {
     const fb = window.__ddFirebase; if(!fb || !fb.db) return;
     
+    // Tạo cấu trúc render Chat Bubble
     const renderChatFeed = (messages, currentToken, isAdminUser) => {
         if(!messages || messages.length === 0) return '<div class="msg-public-empty">Hãy bắt đầu trò chuyện 𓆝</div>';
         return messages.map(m => {
             const isSentByAdmin = m.isAdmin; 
             const isMyMsg = isAdminUser ? isSentByAdmin : (m.token === currentToken && !isSentByAdmin);
+            
             const wrapClass = isMyMsg ? 'user' : 'admin';
             const nameLabel = isSentByAdmin ? '🐋 Admin' : (esc(m.name) || 'Khách');
             const canDel = isAdminUser || (m.token === currentToken && !isSentByAdmin);
@@ -861,19 +859,29 @@ const recentChaps = allChaps
 
     let activeAdminChatToken = null;
 
+    // Update UI theo quyền Admin
     const syncAdminUI = () => {
       const isAdmin = !!window.__ddIsAdmin;
-      const elAdminBox = document.getElementById('msgPrivateAdminBox');
-      const elUserBox = document.getElementById('msgPrivateUserBox');
-      if(elAdminBox) elAdminBox.style.display = isAdmin ? 'block' : 'none';
-      if(elUserBox) elUserBox.style.display = isAdmin ? 'none' : 'block';
+      document.getElementById('msgPrivateAdminBox').style.display = isAdmin ? 'block' : 'none';
+      document.getElementById('msgPrivateUserBox').style.display = isAdmin ? 'none' : 'block';
       
-      const elAdminPopup = document.getElementById('msgPrivateAdminBoxPopup');
-      const elUserPopup = document.getElementById('msgPrivateUserBoxPopup');
-      if(elAdminPopup) elAdminPopup.style.display = isAdmin ? 'block' : 'none';
-      if(elUserPopup) elUserPopup.style.display = isAdmin ? 'none' : 'block';
+      document.getElementById('msgPrivateAdminBoxPopup').style.display = isAdmin ? 'block' : 'none';
+      document.getElementById('msgPrivateUserBoxPopup').style.display = isAdmin ? 'none' : 'block';
+
+      // Khoá tên Admin
+      document.querySelectorAll('#msgPublicName, #msgPopupPublicName, #msgPrivNameSidebar, #msgPrivNamePopup').forEach(inp => {
+          if (isAdmin) {
+              inp.value = 'dynamic duo 𓆝';
+              inp.disabled = true;
+              inp.style.opacity = '0.7';
+          } else {
+              inp.disabled = false;
+              inp.style.opacity = '1';
+          }
+      });
     };
 
+    // 1. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
       const data = snap.val();
       const renderPublic = (containerId) => {
@@ -888,7 +896,7 @@ const recentChaps = allChaps
           return `
             <div style="background: ${m.isAdmin?'rgba(14,165,233,0.1)':'var(--sky-pale)'}; padding: 8px 10px; border-radius: 10px; font-size: .7rem; border: 1px solid rgba(186,230,253,.4); margin-bottom: 6px;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                    <strong style="color:var(--sky-dark)">${m.isAdmin?'🐋 dynamic duo 𓆝':esc(m.name||'Khách')}</strong>
+                    <strong style="color:var(--sky-dark)">${m.isAdmin?'🐋 ':''}${esc(m.name||'Khách')}</strong>
                     <span style="color:var(--text-dim); font-size:.6rem">${timeAgo(m.ts)}</span>
                 </div>
                 <div style="color:var(--text-main); word-break:break-word; line-height:1.4">${esc(m.text)}</div>
@@ -906,6 +914,8 @@ const recentChaps = allChaps
       renderPublic('msgPopupPublicFeed');
     });
 
+    // 2. PRIVATE MESSAGING LOGIC (Khung Chat)
+    // USER LISTENER
     fb.onValue(fb.ref(fb.db, `private_messages/${myToken}`), snap => {
         if(window.__ddIsAdmin) return;
         const data = snap.val();
@@ -916,7 +926,7 @@ const recentChaps = allChaps
             const el = document.getElementById(id);
             if(el) {
                 el.innerHTML = html;
-                el.scrollTop = el.scrollHeight;
+                el.scrollTop = el.scrollHeight; 
                 el.querySelectorAll('.chat-del-btn').forEach(b => b.addEventListener('click', () => {
                     if(confirm('Xóa tin nhắn này?')) fb.remove(fb.ref(fb.db, `private_messages/${myToken}/${b.dataset.id}`));
                 }));
@@ -924,6 +934,7 @@ const recentChaps = allChaps
         });
     });
 
+    // ADMIN LISTENER
     fb.onValue(fb.ref(fb.db, 'private_messages'), snap => {
         if(!window.__ddIsAdmin) return;
         const fullData = snap.val() || {};
@@ -937,7 +948,7 @@ const recentChaps = allChaps
         const listHtml = userListItems.map(u => `
             <div class="admin-user-card" data-token="${u.token}">
                 <div>
-                    <div class="auc-name">${u.lastMsg.isAdmin ? 'Từ Admin' : (esc(u.lastMsg.name) || 'Khách ẩn danh')}</div>
+                    <div class="auc-name">${esc(u.lastMsg.name) || 'Khách ẩn danh'}</div>
                     <div class="auc-meta" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${esc(u.lastMsg.text)}</div>
                 </div>
                 <div class="auc-meta">${timeAgo(u.lastMsg.ts)}</div>
@@ -958,9 +969,7 @@ const recentChaps = allChaps
             }
         });
 
-        if(activeAdminChatToken) {
-            renderActiveAdminChat();
-        }
+        if(activeAdminChatToken) renderActiveAdminChat();
 
         function renderActiveAdminChat() {
             if(!activeAdminChatToken) return;
@@ -999,6 +1008,7 @@ const recentChaps = allChaps
     document.getElementById('msgAdminBackSidebar')?.addEventListener('click', closeAdminChatView);
     document.getElementById('msgAdminBackPopup')?.addEventListener('click', closeAdminChatView);
 
+    // ── SEND LOGIC ──
     const handleSend = async (btnId, nameId, textId, targetPathResolver, isAdminMode = false) => {
       const btn = document.getElementById(btnId);
       if(!btn) return;
@@ -1008,10 +1018,7 @@ const recentChaps = allChaps
         if(!text) return;
         
         btn.disabled = true;
-        const nameInp = document.getElementById(nameId);
-        const rawName = nameInp ? nameInp.value.trim() : '';
-        const name = window.__ddIsAdmin ? ADMIN_NAME : (rawName || 'Khách');
-        
+        const name = window.__ddIsAdmin ? 'dynamic duo 𓆝' : (document.getElementById(nameId)?.value.trim() || 'Khách');
         const tokenToSave = isAdminMode ? activeAdminChatToken : myToken;
         const payload = { name, text, ts: Date.now(), token: tokenToSave, isAdmin: !!window.__ddIsAdmin };
         

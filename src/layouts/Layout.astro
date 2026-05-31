@@ -323,8 +323,14 @@ if (isNovelPage) {
     [data-theme="dark"] .novel-content, [data-theme="dark"] .page-content-wrap { color:#d8eeff; }
     
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
-    @media(max-width:640px){ .novel-content, .page-content-wrap { padding:24px 18px; margin:16px 12px 40px; } }
-    
+@media(max-width:640px){ 
+      .novel-content, .page-content-wrap { 
+        padding: 24px 16px; 
+        margin: 16px auto 40px; /* Thay 12px thành auto để tự động căn giữa */
+        width: 100%; 
+        box-sizing: border-box;
+      } 
+    }    
     .novel-content p { position:relative; text-align:justify; text-justify:inter-word; position:relative; margin-bottom:1.1em; display:block; }
     [data-theme="dark"] .novel-content p { color:#d8eeff; }
     blockquote { font-style:italic; font-size:.9rem; color:var(--text-mid); line-height:1.75; border-left:3px solid var(--sky-light); padding:15px 20px; margin:20px 0; background:var(--sky-pale); border-radius:0 12px 12px 0; }
@@ -1619,7 +1625,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-  
+
   // Gửi bình luận inline
   const icSend = document.getElementById('icFormSend');
   const icInput = document.getElementById('icFormText');

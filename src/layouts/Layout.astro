@@ -24,6 +24,7 @@ const slugs = [...new Set([
     return idx !== -1 ? parts[idx + 1] : null;
   })
 ])].filter(Boolean) as string[];
+
 // 3. Xây dựng dữ liệu cho Navbar
 const navStories = slugs.map(slug => {
   const storyChaps = allPosts.filter(p => p.url?.includes(`/truyen/${slug}/`));
@@ -375,11 +376,12 @@ if (isNovelPage) {
     [data-theme="dark"] .novel-content, [data-theme="dark"] .page-content-wrap { color:#d8eeff; }
     
     @media(max-width:768px){ .novel-content{ padding:30px 28px; } }
-@media(max-width:640px){ 
+    @media(max-width:640px){ 
       .novel-content, .page-content-wrap { 
-        padding: 24px 16px; 
-        margin: 16px auto 40px; /* Thay 12px thành auto để tự động căn giữa */
-        width: 100%; 
+        /* Bỏ các loại padding thừa gây lệch, đảm bảo đều 2 bên */
+        padding: 24px 20px !important; 
+        margin: 16px auto 40px !important;
+        width: 100% !important; 
         box-sizing: border-box;
       } 
     }    
@@ -614,60 +616,44 @@ if (isNovelPage) {
 }
 [data-theme="dark"] .ic-count { color: #a8daf0; }
 
-/* Responsive cho Mobile: Không để bong bóng bay mất khỏi màn hình */
+/* Responsive cho Mobile: Fix lệch chữ và bong bóng */
 @media (max-width: 640px) {
-  .novel-content { padding-left: 35px !important; } /* Tạo lề trái */
-  .ic-trigger { left: 8px; opacity: 0.5; } /* Đưa bong bóng vào lề vừa tạo */
+  .ic-trigger { 
+    left: -10px; /* Đặt lấn một chút ra lề trái của trang để không bị ép vào chữ */
+    opacity: 0.5; 
+    transform: scale(0.85); /* Thu nhỏ bong bóng lại */
+  } 
+  .novel-content p:hover .ic-trigger, .ic-trigger.has-comments {
+    transform: scale(0.85); /* Giữ tỷ lệ nhỏ khi hiện rõ */
+  }
+  .ic-trigger:hover {
+    transform: scale(1) translateY(-2px); 
+  }
 }
-    .ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:460; overflow:hidden; }
-    .novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
-/* 1. Lớp phủ Overlay (Sửa lại đoạn .ic-overlay hiện có hoặc thêm mới) */
+
+/* 1. Lớp phủ Overlay */
 .ic-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
   backdrop-filter: blur(2px);    /* Làm mờ nhẹ hậu cảnh */
-  z-index: 950;                  /* Nằm dưới Sidebar (1000) nhưng trên nội dung */
+  z-index: 998;                  /* Nằm sát dưới Sidebar */
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 /* Hiện overlay khi mở sidebar */
-.sidebar-open .ic-overlay {
+.ic-overlay.show {
   display: block;
   opacity: 1;
 }
 
-/* 2. Sửa lỗi lệch nội dung trên Mobile (Khoảng dòng 210) */
-@media (max-width: 640px) {
-  .novel-content {
-    /* Đổi padding thành cân bằng 2 bên để chữ ra giữa */
-    padding: 24px 16px !important; 
-    margin: 16px auto !important;
-    width: 100% !important;
-    box-sizing: border-box;
-    position: relative;
-  }
+/* 2. Sidebar được ưu tiên nằm trên cùng */
+.ic-sidebar { position:fixed; top:56px; right:0; bottom:0; width:300px; display:flex; flex-direction:column; background:var(--bg-card); border-left:1px solid var(--border-card); border-radius:var(--r-lg) 0 0 var(--r-lg); box-shadow:-8px 0 40px rgba(2,132,199,.18); opacity:0; pointer-events:none; transform:translateX(100%); transition:opacity .25s ease,transform .25s ease; z-index:999; overflow:hidden; }
+.novel-layout-wrap.sidebar-open .ic-sidebar { opacity:1; pointer-events:auto; transform:translateX(0); }
 
-  /* Đưa bong bóng vào bên trong phần padding trái để không đẩy khung */
-  .ic-trigger {
-    left: 4px !important;   /* Nằm sát mép trái bên trong khung */
-    opacity: 0.4;   /* Để mờ mờ cho đỡ rối mắt trên màn hình nhỏ */
-    width: 20px;    /* Nhỏ hơn một chút trên mobile */
-    height: 16px;
-    z-index: 5;
-  }
-  
-  .ic-count {
-    font-size: 8px;
-  }
-    /* Khi Sidebar mở trên mobile, nó sẽ chiếm gần hết màn hình */
-  .ic-sidebar {
-    width: 85vw !important;
-    z-index: 1000;
-  }
-}    @media(max-width:600px){ .ic-sidebar { width:min(300px,88vw); } }
+@media(max-width:600px){ .ic-sidebar { width:min(320px,88vw); } }
 
     .ic-sidebar-inner { display:flex; flex-direction:column; height:100%; overflow:hidden; }
     .ic-sidebar-header { display:flex; align-items:flex-start; gap:8px; padding:14px 14px 10px; border-bottom:1px solid rgba(186,230,253,.4); flex-shrink:0; }
@@ -719,35 +705,25 @@ if (isNovelPage) {
     .ic-reply-toggle { font-size:.64rem; color:var(--sky); background:none; border:none; cursor:pointer; font-family:'Newsreader',serif; padding:0; transition:color .15s; }
     .ic-reply-toggle:hover { color:var(--sky2); text-decoration:underline; }
     [data-theme="dark"] .ic-reply-toggle { color:#a8daf0; }
-    .ic-del-btn { margin-left:auto; font-size:.62rem; color:var(--text-dim); background:none; border:none; cursor:pointer; padding:2px 5px; border-radius:4px; display:none; transition:color .15s; }
+    .ic-del-btn { font-size:.62rem; color:var(--text-dim); background:none; border:1px solid rgba(186,230,253,.5); cursor:pointer; padding:2px 6px; border-radius:4px; display:none; transition:color .15s; }
     .ic-del-btn.show { display:inline-flex; align-items:center; gap:2px; }
-    .ic-del-btn:hover { color:#ef4444; }
+    .ic-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,0.05); }
 
-    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px; border-top:1px solid rgba(186,230,253,.3); }
+    .ic-replies { display:none; flex-direction:column; gap:5px; margin-top:7px; padding:7px; border-left:2px solid rgba(186,230,253,.5); }
     .ic-replies.open { display:flex; }
     [data-theme="dark"] .ic-replies { border-color:rgba(126,200,227,.1); }
-    .ic-reply-item { display:flex; gap:6px; align-items:flex-start; background:rgba(255,255,255,.7); border-radius:7px; padding:6px 8px; position:relative; }
-    [data-theme="dark"] .ic-reply-item { background:rgba(15,45,72,.6) !important; }
-    .ic-reply-avatar { width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,var(--sky-pale),var(--sky-light)); display:flex; align-items:center; justify-content:center; font-size:.58rem; font-weight:700; color:var(--sky-dark); flex-shrink:0; border:1px solid var(--sky-light); }
-    [data-theme="dark"] .ic-reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
+    .ic-reply-item { display:flex; gap:6px; align-items:flex-start; position:relative; }
     .ic-reply-body { flex:1; min-width:0; }
     .ic-reply-name { font-weight:700; font-size:.66rem; color:var(--sky-dark); }
     [data-theme="dark"] .ic-reply-name { color:#a8daf0; }
     .ic-reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
     [data-theme="dark"] .ic-reply-admin-badge { background:#1565a0; }
-    .ic-reply-at { color:var(--sky); font-weight:700; font-size:.66rem; background:rgba(14,165,233,.08); border-radius:3px; padding:0 3px; margin-right:2px; }
-    [data-theme="dark"] .ic-reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
     .ic-reply-text { font-size:.7rem; color:var(--text-main); line-height:1.45; margin-top:2px; word-break:break-word; }
     [data-theme="dark"] .ic-reply-text { color:#b8d8f0; }
-    .ic-rr-btn { display:inline-block; margin-top:3px; background:none; border:none; cursor:pointer; font-size:.6rem; color:var(--sky); padding:0; font-family:'Newsreader',serif; transition:color .15s; }
-    .ic-rr-btn:hover { color:var(--sky2); text-decoration:underline; }
-    [data-theme="dark"] .ic-rr-btn { color:#a8daf0; }
-    .ic-reply-del { position:absolute; top:5px; right:6px; background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 3px; border-radius:3px; display:none; }
-    .ic-reply-item:hover .ic-reply-del { opacity:1; }
-    .ic-reply-del:hover { color:#ef4444; }
-    .ic-reply-del.show { display:block; }
+    .ic-reply-del-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:opacity .15s,color .15s; padding:2px 3px; border-radius:3px; }
+    .ic-reply-del-btn:hover { color:#ef4444; background:rgba(239,68,68,0.05); }
     
-    .ic-reply-form { display:none; flex-direction:column; gap:5px; margin-top:5px; }
+    .ic-reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
     .ic-reply-form.open { display:flex; }
     .ic-reply-form input, .ic-reply-form textarea { width:100%; padding:5px 9px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
     .ic-reply-form input { border-radius:var(--r-pill); }
@@ -814,11 +790,6 @@ if (isNovelPage) {
     [data-theme="dark"] .comment-card-text { color:#F3F9FF; }
     
     .comment-card-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
-    .cmt-like-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
-    .cmt-like-btn:hover { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.06); }
-    .cmt-like-btn.liked { border-color:#f472b6; color:#ec4899; background:rgba(244,114,182,.08); }
-    [data-theme="dark"] .cmt-like-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
-    [data-theme="dark"] .cmt-like-btn.liked { border-color:#f472b6; color:#f9a8d4; }
     .cmt-reply-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:var(--r-pill); border:1px solid rgba(186,230,253,.6); background:none; font-size:.72rem; color:var(--text-dim); cursor:pointer; transition:var(--t); font-family:'Newsreader',serif; }
     .cmt-reply-btn:hover { border-color:var(--sky-light); color:var(--sky); background:var(--sky-pale); }
     [data-theme="dark"] .cmt-reply-btn { border-color:rgba(126,200,227,.18); color:#527a96; }
@@ -827,11 +798,10 @@ if (isNovelPage) {
     .cmt-del-btn.show { display:inline-flex; align-items:center; gap:3px; }
     .cmt-del-btn:hover { color:#ef4444; border-color:#fca5a5; background:rgba(239,68,68,.06); }
     
-    .reply-thread { margin-top:10px; padding-top:10px; border-top:1px solid rgba(186,230,253,.35); display:none; flex-direction:column; gap:7px; }
+    .reply-thread { margin-top:10px; padding-top:10px; border-left:2px solid rgba(186,230,253,.5); padding-left:12px; display:none; flex-direction:column; gap:7px; }
     .reply-thread.open { display:flex; }
-    [data-theme="dark"] .reply-thread { border-top-color:rgba(126,200,227,.13); }
-    .reply-item { display:flex; gap:8px; align-items:flex-start; background:var(--sky-pale); border-radius:10px; padding:9px 11px; position:relative; }
-    [data-theme="dark"] .reply-item { background:rgba(15,45,72,.6) !important; }
+    [data-theme="dark"] .reply-thread { border-left-color:rgba(126,200,227,.2); }
+    .reply-item { display:flex; gap:8px; align-items:flex-start; position:relative; }
     .reply-avatar { width:24px; height:24px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#bae6fd,#7dd3fc); display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:700; color:#0369a1; border:1px solid var(--sky-light); }
     [data-theme="dark"] .reply-avatar { background:rgba(21,101,160,.4); color:#a8daf0; border-color:rgba(126,200,227,.25); }
     .reply-body { flex:1; min-width:0; }
@@ -839,15 +809,13 @@ if (isNovelPage) {
     [data-theme="dark"] .reply-name { color:#a8daf0; }
     .reply-admin-badge { display:inline-block; background:var(--sky); color:#fff; font-size:.46rem; font-weight:700; padding:0 4px; border-radius:var(--r-pill); margin-left:3px; vertical-align:middle; }
     [data-theme="dark"] .reply-admin-badge { background:#1565a0; }
-    .reply-time { font-size:.6rem; color:var(--text-dim); margin-left:6px; }
+    .reply-time { font-size:.6rem; color:var(--text-dim); font-weight:normal; margin-left:6px; }
     .reply-text { font-size:.78rem; color:var(--text-main); margin:3px 0 0; line-height:1.5; word-break:break-word; }
     [data-theme="dark"] .reply-text { color:#c8e0f0; }
-    .reply-del { position:absolute; top:6px; right:8px; background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); opacity:0; transition:opacity .15s,color .15s; padding:2px 4px; border-radius:3px; display:none; }
-    .reply-item:hover .reply-del { opacity:1; }
+    .reply-del { background:none; border:none; cursor:pointer; font-size:.58rem; color:var(--text-dim); transition:color .15s; padding:2px 4px; border-radius:3px; }
     .reply-del:hover { color:#ef4444; background:rgba(239,68,68,.08); }
-    .reply-del.show { display:block; }
     
-    .reply-form { display:none; margin-top:6px; flex-direction:column; gap:5px; }
+    .reply-form { display:none; margin-top:10px; flex-direction:column; gap:5px; }
     .reply-form.open { display:flex; }
     .reply-inp,.reply-inp-text { padding:6px 12px; border:1.5px solid var(--sky-light); font-family:'Newsreader',serif; color:var(--text-main); background:var(--cream); outline:none; font-size:.7rem; }
     .reply-inp { border-radius:var(--r-pill); font-size:.75rem; }
@@ -861,21 +829,6 @@ if (isNovelPage) {
     .reply-send-btn { padding:4px 13px; background:var(--sky); color:#fff; border:none; border-radius:var(--r-pill); font-size:.7rem; cursor:pointer; transition:var(--t); }
     .reply-send-btn:hover { background:var(--sky2); }
     .reply-send-btn:disabled { opacity:.5; cursor:not-allowed; }
-    .reply-at { display:inline-block; color:var(--sky); font-weight:700; font-size:.75em; background:rgba(14,165,233,.08); border-radius:4px; padding:0 4px; margin-right:2px; }
-    [data-theme="dark"] .reply-at { color:#a8daf0; background:rgba(126,200,227,.1); }
-    .reply-quoting { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(14,165,233,.07); border-radius:6px; margin-bottom:6px; border-left:3px solid var(--sky-light); }
-    [data-theme="dark"] .reply-quoting { background:rgba(126,200,227,.08); border-left-color:#1e4a6a; }
-    .reply-quoting-label { flex:1; font-size:.68rem; color:var(--sky); font-style:italic; }
-    [data-theme="dark"] .reply-quoting-label { color:#a8daf0; }
-    .reply-quoting-cancel { background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--text-dim); padding:0 2px; border-radius:3px; transition:color .15s; }
-    .reply-quoting-cancel:hover { color:#ef4444; }
-    .reply-quote-btn { display:inline-block; margin-top:4px; background:none; border:none; cursor:pointer; font-size:.62rem; color:var(--sky); padding:0; font-family:'Newsreader',serif; transition:color .15s; }
-    .reply-quote-btn:hover { color:var(--sky2); text-decoration:underline; }
-    [data-theme="dark"] .reply-quote-btn { color:#a8daf0; }
-    .reply-items-wrap { display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
-    .comment-empty { font-size:.82rem; color:var(--text-dim); font-style:italic; text-align:center; padding:24px; }
-    .comment-loading { font-size:.8rem; color:var(--text-dim); text-align:center; padding:16px; }
-    [data-theme="dark"] .comment-empty,[data-theme="dark"] .comment-loading { color:#3d6a82; }
 
     /* ── POPUPS & REVIEWS ── */
     .rs-popup { position:fixed; bottom:80px; right:74px; z-index:420; width:260px; background:var(--bg-card); border:1px solid var(--border-card); border-radius:14px; box-shadow:0 10px 30px rgba(2,132,199,.15); padding:16px; opacity:0; pointer-events:none; transform:translateY(10px) scale(.95); transition:opacity .2s ease, transform .2s ease; transform-origin: bottom right; }
@@ -892,41 +845,6 @@ if (isNovelPage) {
     .rs-btn.active, .rs-btn:hover { background:var(--sky); color:#fff; }
     [data-theme="dark"] .rs-btn { color:#8fbcd4; }
     [data-theme="dark"] .rs-btn.active, [data-theme="dark"] .rs-btn:hover { background:#1e4a6a; color:#F3F9FF; }
-
-    .rv-modal { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-    .rv-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); opacity: 0; transition: opacity 0.3s; }
-    .rv-content { background: var(--bg-card); width: 90%; max-width: 500px; border-radius: var(--r-lg); padding: 24px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 85vh; display: flex; flex-direction: column; }
-    [data-theme="dark"] .rv-content { border: 1px solid rgba(126,200,227,.2); box-shadow: 0 10px 40px rgba(0,0,0,.6); }
-    .rv-modal.show { pointer-events: auto; }
-    .rv-modal.show .rv-overlay { opacity: 1; }
-    .rv-modal.show .rv-content { opacity: 1; transform: translateY(0); }
-    .rv-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed var(--sky-light); padding-bottom: 12px; }
-    [data-theme="dark"] .rv-header { border-color: rgba(126,200,227,.2); }
-    .rv-title { font-family: 'Merriweather', serif; font-size: 1.1rem; color: var(--sky-dark); margin: 0; }
-    [data-theme="dark"] .rv-title { color: #a8daf0; }
-    .rv-close { background: none; border: none; font-size: 1.2rem; color: var(--text-dim); cursor: pointer; transition: color 0.2s; }
-    .rv-close:hover { color: #ef4444; }
-    .rv-stats { text-align: center; margin-bottom: 20px; }
-    .rv-avg { font-size: 2.5rem; font-weight: bold; color: var(--sky-dark); line-height: 1; }
-    [data-theme="dark"] .rv-avg { color: #a8daf0; }
-    .rv-stars-display { color: #fbbf24; font-size: 1.2rem; margin: 4px 0; letter-spacing: 2px;}
-    .rv-form { background: var(--sky-pale); padding: 16px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(186,230,253,.4); }
-    [data-theme="dark"] .rv-form { background: rgba(15,35,54,.6); border-color: rgba(126,200,227,.15); }
-    .rv-star-select { font-size: 1.8rem; color: #d1d5db; cursor: pointer; user-select: none; text-align: center; margin-bottom: 10px; }
-    .rv-star-select span { transition: color 0.2s; }
-    .rv-star-select span:hover, .rv-star-select span.active { color: #fbbf24; }
-    .rv-list { flex: 1; overflow-y: auto; padding-right: 8px; display: flex; flex-direction: column; gap: 12px; }
-    .rv-list::-webkit-scrollbar { width: 4px; }
-    .rv-list::-webkit-scrollbar-thumb { background: var(--sky-light); border-radius: 4px; }
-    .rv-item { background: var(--bg-card); border: 1px solid var(--sky-light); border-radius: 10px; padding: 12px; }
-    [data-theme="dark"] .rv-item { border-color: rgba(126,200,227,.15); background: rgba(10,25,45,.4); }
-    .rv-item-hd { display: flex; justify-content: space-between; margin-bottom: 6px; }
-    .rv-item-name { font-weight: bold; font-size: .85rem; color: var(--sky-dark); }
-    [data-theme="dark"] .rv-item-name { color: #a8daf0; }
-    .rv-item-stars { color: #fbbf24; font-size: .8rem; letter-spacing: 1px; }
-    .rv-item-text { font-size: .85rem; color: var(--text-main); margin: 0 0 6px 0; line-height: 1.5; }
-    [data-theme="dark"] .rv-item-text { color: #F3F9FF; }
-    .rv-item-time { font-size: .7rem; color: var(--text-dim); }
 
     /* ── FOOTER & FAB TOOLS ── */
     footer { background:var(--bg-card); border-top:1px solid var(--border-card); padding:44px 20px 26px; margin-top:auto; }
@@ -984,10 +902,6 @@ if (isNovelPage) {
   margin: 0 auto !important;
 }
 
-/* ------------------------------------------------
-   1. ĐƯA MỤC LỤC LÊN HÀNG TRÊN CÙNG & CANH GIỮA
-   (Dùng :nth-child(2) vì trong ảnh Mục lục đứng thứ 2)
-   ------------------------------------------------ */
 .chap-nav-row > :nth-child(2) {
   order: 1 !important; /* Đẩy lên vị trí đầu tiên */
   flex: 0 0 100% !important; /* Ép chiếm trọn 100% chiều ngang để rớt dòng */
@@ -995,9 +909,6 @@ if (isNovelPage) {
   margin: 0 auto 4px auto !important; /* Canh giữa và cách hàng dưới 4px */
 }
 
-/* ------------------------------------------------
-   2. BA NÚT CÒN LẠI (HÀNG DƯỚI)
-   ------------------------------------------------ */
 .chap-pn, 
 .chap-dd-wrap {
   order: 2; /* Nằm ở hàng thứ 2 */
@@ -1009,9 +920,6 @@ if (isNovelPage) {
   width: 100%; /* Nút chọn chương tự động co giãn bằng 2 nút kia */
 }
 
-/* ------------------------------------------------
-   3. ĐỊNH DẠNG CHUNG CHO TẤT CẢ CÁC NÚT (BO TRÒN, MÀU SẮC)
-   ------------------------------------------------ */
 .chap-pn, 
 .chap-dd-btn,
 .chap-nav-row > :nth-child(2) {
@@ -1038,7 +946,6 @@ if (isNovelPage) {
   transition: all 0.2s ease-in-out;
 }
 
-/* Hiệu ứng khi lướt qua (Hover) */
 .chap-pn:hover, 
 .chap-dd-btn:hover,
 .chap-nav-row > :nth-child(2):hover {
@@ -1048,7 +955,6 @@ if (isNovelPage) {
   box-shadow: 0 4px 8px rgba(2, 136, 209, 0.2);
 }
 
-/* Hiệu ứng khi chạm/bấm (Active) */
 .chap-pn:active, 
 .chap-dd-btn:active,
 .chap-nav-row > :nth-child(2):active {
@@ -1056,9 +962,6 @@ if (isNovelPage) {
   background-color: #b3e5fc !important;
 }
 
-/* =========================================
-   4. RESPONSIVE CHO MÀN HÌNH SIÊU NHỎ (< 480px)
-   ========================================= */
 @media (max-width: 480px) {
   .chap-nav-row {
     gap: 8px; /* Thu hẹp khoảng cách giữa các nút */
@@ -1399,36 +1302,6 @@ if (isNovelPage) {
   </div>
 )}
 
-{isNovelPage && (
-  <div class="rv-modal" id="rvModal">
-    <div class="rv-overlay" id="rvOverlay"></div>
-    <div class="rv-content">
-      <div class="rv-header">
-        <h3 class="rv-title">⭐ Đánh giá tổng truyện</h3>
-        <button class="rv-close" id="rvClose">✕</button>
-      </div>
-      <div class="rv-stats">
-        <div class="rv-avg" id="rvAvg">0.0</div>
-        <div class="rv-stars-display" id="rvStarsDisplay">☆☆☆☆☆</div>
-        <div style="font-size:.7rem; color:var(--text-dim)" id="rvCount">0 đánh giá</div>
-      </div>
-      <div class="rv-form">
-        <div class="rv-star-select" id="rvStarSelect">
-          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5" class="active">★</span>
-        </div>
-        <input class="comment-inp" id="rvName" placeholder="Tên của bạn (Tùy chọn)" style="width:100%; margin-bottom:8px;" autocomplete="off" />
-        <textarea class="comment-textarea" id="rvText" placeholder="Nêu cảm nhận của bạn về bộ truyện này nhé..." rows="3" style="margin-bottom:8px;"></textarea>
-        <div style="text-align:right">
-          <button class="comment-submit-btn" id="rvSubmit" style="padding: 6px 16px; font-size: .8rem; background: #f59e0b;">Gửi đánh giá</button>
-        </div>
-      </div>
-      <div class="rv-list" id="rvList">
-        <div class="comment-loading">Đang tải đánh giá...</div>
-      </div>
-    </div>
-  </div>
-)}
-
 <script is:inline>
 /* ══ HELPERS ══ */
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1491,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-// 3. AUDIO LOGIC (SENTENCE BY SENTENCE - FIX LỖI DANH SÁCH GIỌNG)
+// 3. AUDIO LOGIC
   const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
   const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
   const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
@@ -1504,36 +1377,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPaused = false;
     let voices = []; 
 
-    // Hàm tải và lọc giọng đọc
     function loadVoices() {
       const allVoices = synth.getVoices();
-      
-      // Khắc phục lỗi độ trễ: Nếu trình duyệt chưa tải xong giọng, tạm dừng và đợi sự kiện onvoiceschanged
       if (allVoices.length === 0) return; 
 
-      // 1. Cố gắng lọc các giọng đọc Tiếng Việt (có chứa 'vi' hoặc 'viet')
       let vnVoices = allVoices.filter(v => 
         v.lang.toLowerCase().includes('vi') || 
         v.name.toLowerCase().includes('viet')
       );
 
-      // 2. Dự phòng: Nếu máy không cài giọng TV nào, hiển thị TOÀN BỘ giọng đang có để user tự chọn
       if (vnVoices.length === 0) {
         vnVoices = allVoices;
       }
 
-      voices = vnVoices; // Lưu vào biến toàn cục
+      voices = vnVoices;
 
-      // Render danh sách ra thẻ Select
       voiceSelect.innerHTML = voices.map((v, i) => 
         `<option value="${i}">${v.name} (${v.lang})</option>`
       ).join('');
     }
 
-    // Chạy lần đầu (dành cho trình duyệt đã cache sẵn giọng)
     loadVoices();
     
-    // Bắt sự kiện khi tải xong giọng (Cực kỳ quan trọng để fix lỗi trên Chrome/Safari)
     if(synth.onvoiceschanged !== undefined) {
       synth.onvoiceschanged = loadVoices;
     }
@@ -1563,13 +1428,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const utter = new SpeechSynthesisUtterance(sentences[currentIdx]);
       utter.rate = parseFloat(rateRange.value || 1);
       
-      // Áp dụng đúng giọng đọc đã chọn
       const selectedIdx = voiceSelect.value;
       if (voices.length > 0 && selectedIdx !== "") {
         utter.voice = voices[selectedIdx];
-        utter.lang = utter.voice.lang; // Gắn lang theo đúng giọng đó để tránh trình duyệt tự ghi đè
+        utter.lang = utter.voice.lang; 
       } else {
-        utter.lang = 'vi-VN'; // Fallback cuối cùng
+        utter.lang = 'vi-VN'; 
       }
 
       utter.onend = () => {
@@ -1634,30 +1498,26 @@ document.addEventListener('DOMContentLoaded', () => {
       waitFirebase(async ({ auth, GoogleAuthProvider, signInWithPopup, signOut }) => {
         if (!auth) return alert('Hệ thống Firebase chưa sẵn sàng. Vui lòng thử lại sau.');
         
-        // Nếu đã đăng nhập thì hỏi xem có muốn đăng xuất không
         if (window.__ddIsAdmin) {
           if (confirm('Bạn đang đăng nhập với quyền Admin. Bạn có muốn đăng xuất không?')) {
             await signOut(auth);
             alert('Đã đăng xuất thành công.');
-            location.reload(); // Tải lại trang để xóa các nút xóa/sửa
+            location.reload(); 
           }
         } else {
-          // Chưa đăng nhập -> Gọi popup Google Login
           try {
             const provider = new GoogleAuthProvider();
             const result = await signInWithPopup(auth, provider);
             
-            // Kiểm tra xem email đăng nhập có khớp với ADMIN_EMAIL không
             if (result.user.email === window.__ddFirebase.ADMIN_EMAIL) {
               alert('Chào mừng Admin đã quay trở lại! 🌊');
-              location.reload(); // Tải lại trang để hiện các nút quyền lực (Xóa bình luận,...)
+              location.reload(); 
             } else {
               alert('Cảnh báo: Tài khoản này không có quyền Admin!');
-              await signOut(auth); // Ép đăng xuất ngay lập tức
+              await signOut(auth); 
             }
           } catch (error) {
             console.error(error);
-            // Bỏ qua lỗi nếu người dùng tự bấm đóng popup
             if (error.code !== 'auth/popup-closed-by-user') {
               alert('Lỗi đăng nhập: ' + error.message);
             }
@@ -1667,7 +1527,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- LÀM SÁNG CHÌA KHÓA KHI ADMIN ĐÃ ĐĂNG NHẬP ---
   window.addEventListener('dd-auth-change', (e) => {
     const isAdmin = e.detail?.isAdmin;
     if (footerAdminBtn && isAdmin) {
@@ -1676,6 +1535,7 @@ document.addEventListener('DOMContentLoaded', () => {
       footerAdminBtn.title = "Đăng xuất Admin";
     }
   });
+
   // 3. DROPDOWNS
   function setupDD(btnId, listId){
     const btn=document.getElementById(btnId), list=document.getElementById(listId);
@@ -1697,48 +1557,43 @@ document.addEventListener('DOMContentLoaded', () => {
       popSet.querySelectorAll('[data-font]').forEach(b=>b.classList.remove('active')); fb.classList.add('active');
   }));
 
-  // Khởi chạy Firebase module
-  setupChapterLike();
-  setupChapComments();
 // --- HỆ THỐNG COMMENT INLINE TỐI ƯU ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
-  const pageId = pageKey(); // Ví dụ: _truyen_vat_de_vo_chuong_01
-  let allInlineComments = {}; // Biến cục bộ lưu toàn bộ comment của chương
+  const icOverlay = document.getElementById('icOverlay');
+  const pageId = pageKey(); 
+  let allInlineComments = {}; 
 
   if (novelContent && icSidebar) {
     const paragraphs = novelContent.querySelectorAll('p');
     
     // 1. Gắn bong bóng vào từng đoạn văn
     paragraphs.forEach((p, index) => {
-const btn = document.createElement('button');
-btn.className = 'ic-trigger';
-btn.innerHTML = '<span class="ic-count">0</span>'; // Bỏ icon 💬, chỉ để số
+      const btn = document.createElement('button');
+      btn.className = 'ic-trigger';
+      btn.innerHTML = '<span class="ic-count">0</span>'; 
       btn.setAttribute('data-idx', index);
       p.prepend(btn);
 
-btn.onclick = (e) => {
+      btn.onclick = (e) => {
         e.stopPropagation();
-        // 1. Đổi màu đoạn văn đang chọn
         document.querySelectorAll('.novel-content p').forEach(el => el.classList.remove('ic-active'));
         p.classList.add('ic-active');
         
-        // 2. Mở Sidebar và hiện lớp mờ
         layoutWrap.classList.add('sidebar-open');
-        document.body.style.overflow = 'hidden'; // Chống cuộn trang khi đang mở comment
+        icOverlay.classList.add('show'); // SỬA LỖI 1: Bật Lớp Phủ Overlay
+        document.body.style.overflow = 'hidden'; 
 
-        // 3. Cập nhật thông tin Preview
         document.getElementById('icParaPreview').innerText = p.innerText.substring(0, 80) + '...';
         document.getElementById('icFormSend').setAttribute('data-current-p', index);
         
-        // 4. Vẽ danh sách comment của đoạn này ra sidebar
         renderSidebarComments(index);
       };
-          });
+    });
 
-    // 2. Hàm vẽ comment ra Sidebar (Lấy từ biến allInlineComments đã tải sẵn)
-function renderSidebarComments(pIdx) {
+    // 2. Hàm vẽ comment ra Sidebar hỗ trợ REPLY
+    function renderSidebarComments(pIdx) {
       const listEl = document.getElementById('icSidebarList');
       const pKey = 'p' + pIdx;
       const pComments = allInlineComments[pKey];
@@ -1748,46 +1603,119 @@ function renderSidebarComments(pIdx) {
         return;
       }
 
-      const items = Object.entries(pComments)
-        .map(([id, v]) => ({ id, ...v }))
-        .sort((a, b) => a.ts - b.ts);
+      const myToken = getMyToken();
+      const items = Object.entries(pComments).map(([id, v]) => ({ id, ...v })).sort((a, b) => a.ts - b.ts);
 
       listEl.innerHTML = items.map(item => {
-        // Kiểm tra quyền xóa: Nếu là Admin HOẶC Token trùng khớp
-        const canDel = window.__ddIsAdmin || item.token === getMyToken();
+        const canDel = window.__ddIsAdmin || item.token === myToken;
+        
+        // Tải danh sách Reply
+        const repliesData = item.replies || {};
+        const replies = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
+        
+        const repliesHtml = replies.map(r => {
+            const rCanDel = window.__ddIsAdmin || r.token === myToken;
+            return `
+              <div class="ic-reply-item">
+                <div class="ic-reply-body">
+                  <div class="ic-reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''} <span style="font-size:0.6rem;color:var(--text-dim);font-weight:normal">${timeAgo(r.ts)}</span></div>
+                  <div class="ic-reply-text">${esc(r.text)}</div>
+                </div>
+                ${rCanDel ? `<button class="ic-del-reply-btn" data-cid="${item.id}" data-rid="${r.id}" style="font-size:0.6rem; color:#ef4444; background:none; border:none; cursor:pointer;">✕</button>` : ''}
+              </div>
+            `;
+        }).join('');
 
         return `
           <div class="ic-item">
             <div class="ic-item-header">
-              <span class="ic-item-name">${esc(item.name || 'Khách')}</span>
+              <span class="ic-item-name">${esc(item.name || 'Khách')} ${item.isAdmin?'<span class="ic-item-admin-badge">chủ nhà</span>':''}</span>
               <span class="ic-item-time">${timeAgo(item.ts)}</span>
             </div>
             <div class="ic-item-text">${esc(item.text)}</div>
-            ${canDel ? `<button class="ic-del-btn show" data-id="${item.id}" style="font-size: 0.6rem; color: #ef4444; background: none; border: 1px solid #fca5a5; padding: 2px 6px; border-radius: 4px; cursor: pointer; margin-top: 5px;">✕ Xóa</button>` : ''}
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+               <button class="ic-reply-toggle" data-cid="${item.id}">💬 Trả lời</button>
+               ${canDel ? `<button class="ic-del-btn" data-cid="${item.id}">✕ Xóa</button>` : ''}
+            </div>
+            
+            <div class="ic-replies ${replies.length > 0 ? 'open' : ''}">
+               ${repliesHtml}
+            </div>
+            
+            <div class="ic-reply-form" id="ic-rf-${item.id}">
+               <input class="ic-form-name" id="ic-rn-${item.id}" placeholder="Tên..." value="${esc(getSavedName())}">
+               <textarea class="ic-form-text" id="ic-rt-${item.id}" placeholder="Phản hồi..."></textarea>
+               <div class="ic-reply-form-row">
+                  <button class="ic-rf-cancel" data-cid="${item.id}">Hủy</button>
+                  <button class="ic-rf-send" data-cid="${item.id}" data-pidx="${pIdx}">Gửi</button>
+               </div>
+            </div>
           </div>
         `;
       }).join('');
-
-      // Gắn sự kiện xóa cho các nút vừa tạo
-      listEl.querySelectorAll('.ic-del-btn').forEach(btn => {
-        btn.onclick = async () => {
-          if (!confirm('Bạn muốn xóa bình luận này?')) return;
-          const cId = btn.dataset.id;
-          waitFirebase(async ({ db, ref, remove }) => {
-            await remove(ref(db, `inline_comments/${pageId}/${pKey}/${cId}`));
-            // Sidebar sẽ tự động cập nhật lại nhờ hàm onValue đã cài đặt trước đó
-          });
-        };
-      });
     }
-        // 3. Lắng nghe dữ liệu Realtime (Chỉ kết nối 1 lần cho cả trang)
+
+    // Lắng nghe sự kiện click cho các nút Trả lời / Xóa bên trong Sidebar
+    document.getElementById('icSidebarList').onclick = async (e) => {
+        const tgt = e.target;
+        const pIdx = document.getElementById('icFormSend').getAttribute('data-current-p');
+        const pKey = 'p' + pIdx;
+        
+        // Mở khung trả lời
+        if (tgt.classList.contains('ic-reply-toggle')) {
+            const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
+            if (form) form.style.display = form.style.display === 'flex' ? 'none' : 'flex';
+        }
+        
+        // Nút Hủy Trả lời
+        if (tgt.classList.contains('ic-rf-cancel')) {
+            const form = document.getElementById('ic-rf-' + tgt.dataset.cid);
+            if (form) form.style.display = 'none';
+        }
+        
+        // Nút Gửi Trả lời
+        if (tgt.classList.contains('ic-rf-send')) {
+            const cid = tgt.dataset.cid;
+            const nameInp = document.getElementById('ic-rn-' + cid);
+            const textInp = document.getElementById('ic-rt-' + cid);
+            const text = textInp.value.trim();
+            const name = nameInp.value.trim() || 'Khách';
+            
+            if (!text) return;
+            tgt.disabled = true;
+            saveName(name);
+            
+            waitFirebase(async ({db, ref, push}) => {
+                await push(ref(db, `inline_comments/${pageId}/${pKey}/${cid}/replies`), {
+                    name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin
+                });
+            });
+        }
+        
+        // Nút Xóa Bình luận gốc
+        if (tgt.classList.contains('ic-del-btn')) {
+            if (confirm('Bạn muốn xóa bình luận này? Toàn bộ trả lời bên trong cũng sẽ bị xóa.')) {
+                waitFirebase(async ({db, ref, remove}) => {
+                    await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}`));
+                });
+            }
+        }
+        
+        // Nút Xóa Trả lời
+        if (tgt.classList.contains('ic-del-reply-btn')) {
+            if (confirm('Bạn muốn xóa phản hồi này?')) {
+                waitFirebase(async ({db, ref, remove}) => {
+                    await remove(ref(db, `inline_comments/${pageId}/${pKey}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`));
+                });
+            }
+        }
+    };
+
     function startListeningInline() {
       waitFirebase(({ db, ref, onValue }) => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
-          allInlineComments = snap.val() || {}; // Cập nhật biến tổng
+          allInlineComments = snap.val() || {}; 
           
-          // Cập nhật số lượng trên từng bong bóng 💬
-// Cập nhật số lượng trên từng bong bóng (Số 0 mờ, Số > 0 hiện rõ)
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
             const trigger = p.querySelector('.ic-trigger');
@@ -1804,7 +1732,7 @@ function renderSidebarComments(pIdx) {
               }
             }
           });
-          // Nếu người dùng đang mở sidebar ở đoạn nào đó, cập nhật luôn nội dung sidebar đó
+          
           const activeIdx = document.getElementById('icFormSend')?.getAttribute('data-current-p');
           if (activeIdx !== null && activeIdx !== undefined) {
             renderSidebarComments(activeIdx);
@@ -1813,11 +1741,10 @@ function renderSidebarComments(pIdx) {
       });
     }
 
-// 4. Xử lý khi nhấn nút Gửi (Dòng 1146)
     document.getElementById('icFormSend').onclick = async () => {
       const btn = document.getElementById('icFormSend');
       const pIdx = btn.getAttribute('data-current-p');
-      const textEl = document.getElementById('icFormText'); // Lấy element để xóa chữ sau khi gửi
+      const textEl = document.getElementById('icFormText'); 
       const text = textEl.value.trim();
       const name = document.getElementById('icFormName').value.trim() || 'Khách';
       
@@ -1827,9 +1754,9 @@ function renderSidebarComments(pIdx) {
       waitFirebase(async ({ db, ref, push }) => {
         try {
           await push(ref(db, `inline_comments/${pageId}/p${pIdx}`), {
-            name, text, ts: Date.now(), token: getMyToken()
+            name, text, ts: Date.now(), token: getMyToken(), isAdmin: window.__ddIsAdmin
           });
-          textEl.value = ''; // Xóa khung nhập sau khi gửi thành công
+          textEl.value = ''; 
         } catch (e) {
           alert("Lỗi gửi comment: " + e.message);
         } finally {
@@ -1837,22 +1764,26 @@ function renderSidebarComments(pIdx) {
         }
       });
     };
-    // Khởi chạy lắng nghe ngay khi load trang
+    
     startListeningInline();
   }
 
-  // Đóng sidebar
-  document.getElementById('icSidebarClose').onclick = () => {
+  // Đóng sidebar & Overlay
+  const closeSidebar = () => {
     layoutWrap.classList.remove('sidebar-open');
-    document.getElementById('icOverlay').classList.remove('show');
+    if (icOverlay) icOverlay.classList.remove('show');
+    document.body.style.overflow = '';
   };
+  
+  if (document.getElementById('icSidebarClose')) document.getElementById('icSidebarClose').onclick = closeSidebar;
+  if (icOverlay) icOverlay.onclick = closeSidebar;
   
   // Khởi chạy các module khác
   setupChapterLike();
   setupChapComments();
-}); // Kết thúc DOMContentLoaded
+}); 
 
-/* ══ MODULE: LIKE & COMMENTS TRANG ══ */
+/* ══ MODULE: LIKE & COMMENTS TRANG (HỖ TRỢ TRẢ LỜI & XÓA) ══ */
 function setupChapterLike(){
   const btn = document.getElementById('btnLikeChapter'), countEl = document.getElementById('chapLikeCount');
   if(!btn) return;
@@ -1874,25 +1805,124 @@ function setupChapterLike(){
 function setupChapComments(){
   const section = document.getElementById('chapCommentSection');
   if(!section) return;
-  const cmtList = document.getElementById('cmtList'), cmtName = document.getElementById('cmtName'), cmtText = document.getElementById('cmtText'), cmtSubmit = document.getElementById('cmtSubmit');
-  const key = 'chap_' + pageKey(), myToken = getMyToken();
+  const cmtList = document.getElementById('cmtList');
+  const cmtName = document.getElementById('cmtName');
+  const cmtText = document.getElementById('cmtText');
+  const cmtSubmit = document.getElementById('cmtSubmit');
+  const key = 'chap_' + pageKey();
+  const myToken = getMyToken();
+  
   if(cmtName) cmtName.value = getSavedName();
 
-  waitFirebase(({db, ref, push, onValue}) => {
+  waitFirebase(({db, ref, push, onValue, remove}) => {
     onValue(ref(db, 'comments/'+key), snap => {
       const data = snap.val();
       if(!data) { cmtList.innerHTML = '<div class="comment-empty">Chưa có bình luận nào 🌊</div>'; return; }
+      
       const items = Object.entries(data).map(([id,v]) => ({id,...v})).sort((a,b) => a.ts - b.ts);
-      cmtList.innerHTML = items.map(c => `
-        <div class="comment-card">
-          <div class="comment-card-header">
-            <span class="comment-card-name">${esc(c.name)||'Khách'} ${c.isAdmin?'<span class="comment-admin-badge">chủ nhà</span>':''}</span>
-            <span class="comment-card-time">${timeAgo(c.ts)}</span>
+      
+      cmtList.innerHTML = items.map(c => {
+        const canDel = window.__ddIsAdmin || c.token === myToken;
+        
+        // Parse Replies
+        const repliesData = c.replies || {};
+        const replies = Object.entries(repliesData).map(([rid, rv]) => ({id: rid, ...rv})).sort((a,b) => a.ts - b.ts);
+        
+        const repliesHtml = replies.map(r => {
+          const rCanDel = window.__ddIsAdmin || r.token === myToken;
+          return `
+            <div class="reply-item">
+              <div class="reply-avatar">${avatarLetter(r.name)}</div>
+              <div class="reply-body">
+                <div class="reply-name">${esc(r.name||'Khách')} ${r.isAdmin?'<span class="reply-admin-badge">chủ nhà</span>':''} <span class="reply-time">${timeAgo(r.ts)}</span></div>
+                <div class="reply-text">${esc(r.text)}</div>
+              </div>
+              ${rCanDel ? `<button class="reply-del show" data-cid="${c.id}" data-rid="${r.id}">✕</button>` : ''}
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="comment-card">
+            <div class="comment-card-header">
+              <span class="comment-card-name">${esc(c.name)||'Khách'} ${c.isAdmin?'<span class="comment-admin-badge">chủ nhà</span>':''}</span>
+              <span class="comment-card-time">${timeAgo(c.ts)}</span>
+            </div>
+            <p class="comment-card-text">${esc(c.text)}</p>
+            
+            <div class="comment-card-actions">
+              <button class="cmt-reply-btn" data-cid="${c.id}">💬 Trả lời</button>
+              ${canDel ? `<button class="cmt-del-btn show" data-cid="${c.id}">🗑 Xóa</button>` : ''}
+            </div>
+            
+            <div class="reply-thread ${replies.length > 0 ? 'open' : ''}">
+              ${repliesHtml}
+            </div>
+            
+            <div class="reply-form" id="rf-${c.id}">
+              <input class="reply-inp" id="rn-${c.id}" placeholder="Tên của bạn..." value="${esc(getSavedName())}">
+              <textarea class="reply-inp-text" id="rt-${c.id}" placeholder="Viết phản hồi..."></textarea>
+              <div class="reply-form-btns">
+                <button class="reply-cancel-btn" data-cid="${c.id}">Hủy</button>
+                <button class="reply-send-btn" data-cid="${c.id}">Gửi</button>
+              </div>
+            </div>
           </div>
-          <p class="comment-card-text">${esc(c.text)}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     });
+    
+    // Bắt các sự kiện click bên trong danh sách comment
+    cmtList.onclick = async (e) => {
+       const tgt = e.target;
+       
+       // Mở khung trả lời
+       if(tgt.classList.contains('cmt-reply-btn')) {
+         const form = document.getElementById('rf-' + tgt.dataset.cid);
+         if(form) form.classList.toggle('open');
+       }
+       
+       // Hủy trả lời
+       if(tgt.classList.contains('reply-cancel-btn')) {
+         const form = document.getElementById('rf-' + tgt.dataset.cid);
+         if(form) form.classList.remove('open');
+       }
+       
+       // Gửi trả lời
+       if(tgt.classList.contains('reply-send-btn')) {
+         const cid = tgt.dataset.cid;
+         const nameInput = document.getElementById('rn-' + cid);
+         const textInput = document.getElementById('rt-' + cid);
+         const text = textInput.value.trim();
+         const name = nameInput.value.trim() || 'Khách';
+         
+         if(!text) return;
+         tgt.disabled = true;
+         saveName(name);
+         
+         await push(ref(db, `comments/${key}/${cid}/replies`), {
+           name, text, ts: Date.now(), token: myToken, isAdmin: window.__ddIsAdmin
+         });
+         
+         textInput.value = '';
+         tgt.disabled = false;
+       }
+       
+       // Xóa Comment cha
+       if(tgt.classList.contains('cmt-del-btn')) {
+         if(confirm('Bạn muốn xóa bình luận này? Các phản hồi bên trong cũng sẽ biến mất.')) {
+           await remove(ref(db, `comments/${key}/${tgt.dataset.cid}`));
+         }
+       }
+       
+       // Xóa Reply con
+       if(tgt.classList.contains('reply-del')) {
+         if(confirm('Bạn muốn xóa phản hồi này?')) {
+           await remove(ref(db, `comments/${key}/${tgt.dataset.cid}/replies/${tgt.dataset.rid}`));
+         }
+       }
+    };
+
     cmtSubmit.onclick = async () => {
       const text = cmtText.value.trim(), name = cmtName.value.trim() || 'Khách';
       if(!text) return; cmtSubmit.disabled = true; saveName(name);

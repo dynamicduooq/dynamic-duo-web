@@ -1,6 +1,6 @@
 ---
-const { frontmatter } = Astro.props;
 import settings from '../data/settings.json';
+const { frontmatter } = Astro.props;
 
 const currentPath = Astro.url?.pathname ?? '';
 const isNovelPage = frontmatter?.chuong !== undefined && frontmatter?.chuong !== 0;
@@ -46,7 +46,6 @@ const navDuoiNuoc = navStories.filter(s => s.isOngoing);
 const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
-// KHẮC PHỤC LỖI CURRENTFOLDER TẠI ĐÂY
 const curPathNorm = currentPath.replace(/\/$/, '').replace(/\/index$/, '');
 const currentFolder = curPathNorm.substring(0, curPathNorm.lastIndexOf('/')) || '/';
 

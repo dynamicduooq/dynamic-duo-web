@@ -132,7 +132,7 @@ const caTrenBanList = storiesData.filter(s => s.isCompleted);
             <div class="story-tags">
               {s.tags.map((t: string) => <span class="story-tag"># {t}</span>)}
             </div>
-            <p class="story-progress">📖 Đã dịch đủ {s.tong_so_chuong} chương</p>
+            <p class="story-progress">📖 Đã edit đủ {s.tong_so_chuong} chương</p>
             <div class="story-btns">
               <a href={s.url} class="btn-outline">Trang truyện</a>
               <a href={`${s.url}chuong-01/`} class="btn-fill">Đọc từ chương 1 →</a>

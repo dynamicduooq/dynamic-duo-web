@@ -9,6 +9,9 @@ tags:
   - "đam mỹ"
   - "hiện đại"
   - "chua xót"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## Chương 2: Diễn đàn
@@ -45,8 +48,7 @@ Trên cửa thang máy phản chiếu gương mặt tôi, vẻ mặt lạnh lùn
 
 Sau khi rửa bát xong, tôi mở máy tính lướt Tieba* một lúc.
 
-*Chú thích*
-*(*) Một diễn đàn trực tuyến.*
+(*) Một diễn đàn trực tuyến.*
 
 Trước đây tôi chưa bao giờ nhận ra mình là người hay hoài niệm quá khứ. Nhưng mấy năm gần đây, dường như tôi càng ngày càng hoài niệm hơn. Hồi đại học theo đuổi vợ, tôi từng mở một topic trên Tieba, ngày ngày chia sẻ hành trình theo đuổi vợ của mình. Topic đó còn hot một thời, có rất nhiều cư dân mạng theo dõi, lo lắng cho tôi, giúp tôi nghĩ cách. Haha.
 

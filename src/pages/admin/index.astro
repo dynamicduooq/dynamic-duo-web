@@ -303,16 +303,30 @@
         <h2 class="page-title">Đăng chương hàng loạt (Bulk Upload)</h2>
         <div class="card">
             <p style="font-size:.85rem; color:var(--text-mid); margin-top:0">Tính năng này cho phép dán nguyên một cụm văn bản lớn chứa nhiều chương. Hệ thống tự động cắt dựa trên từ khóa "Chương [số]".</p>
-            <div class="field">
-                <label>Chọn Truyện Đích</label>
-                <select id="bulk-story-select"></select>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
+                <div class="field">
+                    <label>Chọn Truyện Đích</label>
+                    <select id="bulk-story-select"></select>
+                </div>
+                <div class="field">
+                    <label>Trạng thái đăng (Mặc định cho toàn bộ)</label>
+                    <select id="bulk-status">
+                        <option value="draft">Bản nháp (Draft) - Khuyên dùng</option>
+                        <option value="published">Xuất bản luôn (Public)</option>
+                    </select>
+                </div>
             </div>
             <div class="field">
                 <label>Dán nội dung vào đây</label>
                 <textarea id="bulk-content" style="height: 300px" placeholder="Chương 1: Bắt đầu...&#10;(Nội dung chương 1)&#10;&#10;Chương 2: Tiếp diễn...&#10;(Nội dung chương 2)"></textarea>
             </div>
-            <button class="btn btn-sky" onclick="processBulkUpload()">Cắt & Lưu lên GitHub</button>
-            <div id="bulk-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--text-dim); white-space:pre-wrap"></div>
+            
+            <div style="display:flex; gap:10px">
+                <button class="btn btn-outline" onclick="previewBulk()">👁️ Xem trước khi cắt</button>
+                <button class="btn btn-sky" onclick="processBulkUpload()">🚀 Cắt & Lưu lên GitHub</button>
+            </div>
+            
+            <div id="bulk-log" style="margin-top:15px; font-size:.8rem; font-family:monospace; color:var(--text-dim); white-space:pre-wrap; background: var(--sky-pale); padding: 10px; border-radius: 6px; display: none; max-height: 400px; overflow-y: auto;"></div>
         </div>
       </section>
       
@@ -508,7 +522,7 @@ $('loginBtn').onclick = async () => {
 };
 
 /* ==========================================================================
-   ROUTING TÍCH HỢP LỊCH SỬ TRÌNH DUYỆT (BROWSER BACK/FORWARD)
+   ROUTING TÍCH HỢP LỊCH SỬ TRÌNH DUYỆT
    ========================================================================== */
 function navTo(id, pushHistory = true) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -902,17 +916,15 @@ function cleanFormatting() {
   let val = ta.value.trim();
 
   // 1. Tự động thêm dấu ## cho các dòng bắt đầu bằng chữ "Chương..."
-  // Nó sẽ tìm dòng "Chương 1", "Chương 10: Tên chương" để biến thành Heading
   val = val.replace(/^(Chương\s+\d+.*)$/gm, '## $1');
 
   // 2. Xử lý xuống dòng: Biến 1 lần xuống dòng thành 2 lần (để Markdown nhận diện đoạn văn)
-  // Nhưng tránh làm hỏng các đoạn vốn đã có 2 dòng trống trở lên
   val = val.replace(/\n(?!\n)/g, '\n\n');
 
   // 3. Xóa các khoảng trắng thừa ở đầu và cuối mỗi dòng
   val = val.split('\n').map(line => line.trim()).join('\n');
 
-  // 4. Dọn dẹp các dòng trống bị thừa (nếu có 3 dòng trống liên tiếp thì chỉ giữ lại 2)
+  // 4. Dọn dẹp các dòng trống bị thừa
   val = val.replace(/\n{3,}/g, '\n\n');
 
   ta.value = val;
@@ -975,27 +987,24 @@ $('ed-saveBtn').onclick = async () => {
   const btn = $('ed-saveBtn');
   btn.disabled = true; btn.textContent = 'Đang đẩy lên Git...';
   
-// 1. Chuẩn bị nội dung Editor Note (Tự động thêm dấu | và thụt lề)
   const noteRaw = $('ed-note').value.trim();
-  let noteFinal = '""'; // Mặc định là chuỗi rỗng
+  let noteFinal = '""'; 
   if (noteRaw) {
-      // Biến nội dung thành dạng: | (xuống dòng) (cách 2 ô) Dòng 1...
       noteFinal = "|\n  " + noteRaw.split('\n').join('\n  ');
   }
 
   let finalFm = "";
-// logic mới: Nếu ô Tag ở chương trống, Admin sẽ tự tìm Tag của bộ truyện để điền vào
-let tagsRaw = $('ed-tags').value.trim();
+  let tagsRaw = $('ed-tags').value.trim();
 
-// Nếu cậu không nhập tag cho chương, nó sẽ lấy tag mặc định của truyện (cần lấy từ biến storiesList)
-if (!tagsRaw && currentStory) {
-    const storyInfo = storiesList.find(s => s.id === currentStory.id);
-    if (storyInfo && storyInfo.tags) {
-        tagsRaw = storyInfo.tags.join(', ');
-    }
-}
+  if (!tagsRaw && currentStory) {
+      const storyInfo = storiesList.find(s => s.id === currentStory.id);
+      if (storyInfo && storyInfo.tags) {
+          tagsRaw = storyInfo.tags.join(', ');
+      }
+  }
 
-const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
+  const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()).join('"\n  - "') + `"` : ' []';
+  
   // TRƯỜNG HỢP A: SỬA CHƯƠNG ĐÃ CÓ
   if (currentChap && window.__currentRawFm) {
       finalFm = window.__currentRawFm;
@@ -1015,7 +1024,6 @@ const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()
       setKey('description', $('ed-desc').value.replace(/"/g, '\\"'));
       setKey('draft', $('ed-status').value === 'draft' ? 'true' : 'false', false);
       
-      // Xử lý riêng cho editor_note vì nó dùng dấu | không bọc ngoặc kép
       const noteRegex = /^editor_note:.*$/m;
       if (noteRegex.test(finalFm)) {
           finalFm = finalFm.replace(noteRegex, `editor_note: ${noteFinal}`);
@@ -1023,7 +1031,6 @@ const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()
           finalFm += `\neditor_note: ${noteFinal}`;
       }
       
-      // (Phần xử lý tags giữ nguyên như cũ của cậu...)
       if (/^tags:\s*\[.*?\]/m.test(finalFm)) {
           finalFm = finalFm.replace(/^tags:\s*\[.*?\]/m, `tags: [${tagsRaw.split(',').map(t => `"${t.trim()}"`).join(', ')}]`);
       } else if (/^tags:\s*\n(?:  - .*\n?)+/m.test(finalFm)) {
@@ -1033,7 +1040,7 @@ const tagsFormatted = tagsRaw ? `\n  - "` + tagsRaw.split(',').map(t => t.trim()
       }
 
   } 
-  // TRƯỜNG HỢP B: TẠO CHƯƠNG MỚI HOÀN TOÀN (Đây là phần ELSE cậu hỏi)
+  // TRƯỜNG HỢP B: TẠO CHƯƠNG MỚI HOÀN TOÀN
   else {
       finalFm = `layout: "../../../layouts/Layout.astro"
 title: "${$('ed-title').value.replace(/"/g, '\\"')}"
@@ -1043,7 +1050,7 @@ date: "${new Date().toISOString().split('T')[0]}"
 tags:${tagsFormatted}
 description: "${$('ed-desc').value.replace(/"/g, '\\"')}"
 draft: ${$('ed-status').value === 'draft' ? 'true' : 'false'}
-editor_note: ${noteFinal}`; // <-- noteFinal đã bao gồm dấu | và thụt lề
+editor_note: ${noteFinal}`;
   }  
   const content = `---\n${finalFm.trim()}\n---\n\n${$('ed-content').value}`;
   
@@ -1084,19 +1091,57 @@ editor_note: ${noteFinal}`; // <-- noteFinal đã bao gồm dấu | và thụt l
 };
 
 /* ==========================================================================
-   BULK UPLOAD (ĐÃ NÂNG CẤP REGEX)
+   BULK UPLOAD (MỚI BỔ SUNG CÁC TÍNH NĂNG ADMIN CẦN THIẾT)
    ========================================================================== */
+function previewBulk() {
+    let rawText = $('bulk-content').value;
+    if(!rawText) return showToast('Vui lòng dán nội dung', 'error');
+
+    // Lọc ký tự trắng tàng hình (Word / Google Docs rác)
+    rawText = rawText.replace(/[\u200B-\u200D\uFEFF]/g, '');
+
+    const chapters = rawText.split(/(?=(?:^|\n)\s*Chương\s+\d+)/i).map(s => s.trim()).filter(s => s.length > 50);
+    const log = $('bulk-log');
+    log.style.display = 'block';
+
+    if(chapters.length === 0) {
+        log.innerHTML = '❌ Lỗi: Không tìm thấy định dạng "Chương [số]". Vui lòng kiểm tra lại văn bản của bạn.';
+        return;
+    }
+
+    let html = `<b style="color:var(--sky-dark)">✅ Đã nhận diện được ${chapters.length} chương:</b><br><ul style="margin-top:5px; padding-left:20px; font-size:.8rem; max-height:200px; overflow-y:auto">`;
+    chapters.forEach((text, i) => {
+        const titleLine = text.split('\n')[0].trim();
+        html += `<li>${titleLine}</li>`;
+    });
+    html += `</ul><span style="color:var(--amber); font-weight:bold">Hãy lướt qua danh sách trên kiểm tra xem đã cắt đúng tên chương chưa trước khi ấn "🚀 Cắt & Lưu" nhé!</span>`;
+    log.innerHTML = html;
+}
+
 async function processBulkUpload() {
-    const rawText = $('bulk-content').value;
+    let rawText = $('bulk-content').value;
     const target = $('bulk-story-select').value;
     if(!rawText || !target) return showToast('Vui lòng nhập nội dung và chọn truyện', 'error');
-    
+
+    // Dọn dẹp Zero-width space
+    rawText = rawText.replace(/[\u200B-\u200D\uFEFF]/g, '');
+
     const [cat, id, shortId] = target.split('|');
     const log = $('bulk-log');
+    log.style.display = 'block';
     log.innerHTML = 'Bắt đầu xử lý...\n';
     
     const chapters = rawText.split(/(?=(?:^|\n)\s*Chương\s+\d+)/i).map(s => s.trim()).filter(s => s.length > 50);
     log.innerHTML += `Tìm thấy ${chapters.length} chương. Bắt đầu đẩy lên GitHub...\n\n`;
+
+    // Lấy tag mặc định của truyện để gắn vào frontmatter
+    const storyInfo = storiesList.find(s => s.id === id);
+    let tagsFormatted = ' []';
+    if (storyInfo && storyInfo.tags && storyInfo.tags.length > 0) {
+        tagsFormatted = `\n  - "` + storyInfo.tags.join('"\n  - "') + `"`;
+    }
+
+    const isDraft = $('bulk-status').value === 'draft' ? 'true' : 'false';
     
     let success = 0;
     for(const text of chapters) {
@@ -1112,16 +1157,23 @@ async function processBulkUpload() {
         const num = parseInt(numMatch[1]);
         const titleMatch = titleLine.replace(/["']/g, ''); 
         
+        // Bổ sung đầy đủ Frontmatter giống như khi Editor viết tay
         const fm = `---
 layout: "../../../layouts/Layout.astro"
 title: "${titleMatch}"
 truyen_id: "${shortId}"
 chuong: ${num}
 date: "${new Date().toISOString().split('T')[0]}"
+tags:${tagsFormatted}
+description: "${titleMatch}"
+draft: ${isDraft}
+editor_note: ""
 ---`;
-let bodyContent = lines.slice(1).join('\n').trim();
-// Tự động tách đoạn cho nội dung chương khi đăng hàng loạt
-bodyContent = bodyContent.replace(/\n(?!\n)/g, '\n\n').replace(/\n{3,}/g, '\n\n');        const content = fm + '\n\n' + bodyContent;
+        let bodyContent = lines.slice(1).join('\n').trim();
+        // Căn lề tự động cho Bulk
+        bodyContent = bodyContent.replace(/\n(?!\n)/g, '\n\n').replace(/\n{3,}/g, '\n\n'); 
+        
+        const content = fm + '\n\n' + bodyContent;
         const filename = `chuong-${String(num).padStart(2,'0')}.md`;
         
         try {
@@ -1130,6 +1182,7 @@ bodyContent = bodyContent.replace(/\n(?!\n)/g, '\n\n').replace(/\n{3,}/g, '\n\n'
             });
             log.innerHTML += `✅ Đã đăng: ${filename}\n`;
             success++;
+            log.scrollTop = log.scrollHeight;
         } catch(e) {
             log.innerHTML += `❌ Lỗi đăng ${filename}: ${e.message}\n`;
         }

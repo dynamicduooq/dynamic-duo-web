@@ -7,7 +7,7 @@ date: "2026-05-29"
 description: ""
 draft: false
 tags: [""]
-editor_note: |
+editor_note: ""
   Chú thích:
   
   [1] Phiếu nghĩ (票拟): Đề xuất cách giải quyết tấu chương do Nội các viết vào một tờ giấy nhỏ dán kèm theo tấu chương.
@@ -144,3 +144,5 @@ Phó Nguyên Thanh quay đầu lại. Bách Lý Thời bước từ trong phòng
 Ông cúi đầu hành lễ: "Sắp tới ta phải ở lại phủ Thuận Thiên để thăm khám cho một số bách tính nghèo khổ, trời sáng sẽ khởi hành, đành cáo từ Chưởng ấn tại đây. Nếu ngài còn việc gì khác, có thể sai người đến Mật Vân tìm ta."
 
 Phó Nguyên Thanh chắp tay đáp lễ: "Không tiễn."
+ 
+[1] Phiếu nghĩ (票拟): Đề xuất cách giải quyết tấu chương do Nội các viết vào một tờ giấy nhỏ dán kèm theo tấu chương.

@@ -150,13 +150,13 @@ const recentChaps = allChaps
 [data-theme="dark"] .sc-link.secondary:hover { background: rgba(80,150,210,.25); }
 @media(max-width: 420px) { .sc-footer { flex-direction: column; align-items: flex-start; gap: 8px; } .sc-footer > div { width: 100%; display: flex; justify-content: space-between; } }
 
+/* Cẩm nang */
 .notice-section { margin-top:22px; }
 .notice-img-wrap { background: #fff; padding: 10px; border-radius: 12px; border: 1px solid rgba(186,230,253,.5); box-shadow: 0 4px 15px rgba(2,132,199,.05); display: flex; justify-content: center; align-items: center; }
 [data-theme="dark"] .notice-img-wrap { background: var(--bg-card); border-color: rgba(80,150,210,.25); }
 .notice-img { width: 90%; max-width: 400px; display:block; border-radius:8px; transition: transform 0.3s; }
 .notice-img:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(2,132,199,.1); }
 @media(max-width:768px){ .notice-img { width: 85%; } }
-/* Cẩm nang */
     .guide-box {
       background: var(--bg-card); border: 1px solid rgba(186,230,253,.6);
       border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 15px rgba(2,132,199,.05);
@@ -341,7 +341,7 @@ const recentChaps = allChaps
       <p class="hero-tagline reveal">𓆝 𓆟 𓆞 &nbsp;·&nbsp; dynamicduoo.q@gmail.com &nbsp;·&nbsp; 𓆝 𓆟 𓆞</p>
     </div>
 
-<!-- LƯU Ý -->
+    <!-- LƯU Ý -->
     <div class="notice-section reveal">
       <div class="sec-hd">
         <h2>📌 Lưu ý</h2>
@@ -352,8 +352,8 @@ const recentChaps = allChaps
       </div>
     </div>
 
-<!-- CẨM NANG HƯỚNG DẪN TỔNG HỢP -->
-<div class="notice-section reveal">
+    <!-- CẨM NANG HƯỚNG DẪN TỔNG HỢP -->
+    <div class="notice-section reveal">
       <div class="sec-hd">
         <h2>📌 Cẩm nang bể cá</h2>
         <div class="sec-line"></div>
@@ -378,7 +378,7 @@ const recentChaps = allChaps
             </div>
             
             <div class="guide-item">
-               <div class="guide-icon">➡️</div>
+               <div class="guide-icon">⬅️➡️</div>
                <div class="guide-text"><strong>Chuyển trang:</strong> Trên máy tính, sử dụng phím mũi tên để chuyển trang.</div>
             </div>
             
@@ -412,10 +412,12 @@ const recentChaps = allChaps
                <div class="guide-text"><strong>Review:</strong> Có riêng phần review, đánh giá cho toàn truyện bên cạnh comment trong chương.</div>
             </div>
          </div>
+         
          <p class="guide-footer">Tụi mình luôn ở phần "Lời nhắn" ✉️ chờ các cậu, xem trong cột sidebar bên phải. Chúc đọc truyện thật vui vẻ và tự do trải nghiệm nhé! 🌊</p>
       </div>
     </div>
-        <!-- FILTER + STORIES -->
+
+    <!-- FILTER + STORIES -->
     <div class="sec-hd reveal">
       <h2>📚 Tủ truyện</h2>
       <div class="sec-line"></div>
@@ -586,17 +588,12 @@ const recentChaps = allChaps
         <span style="font-family:'Merriweather',serif; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--sky-dark); font-weight: bold;">📌 Bảng tin</span>
         <button id="btnEditNotice" class="admin-edit-btn" style="display:none; background: var(--sky); color: white; border: none; border-radius: 4px; font-size: 0.6rem; padding: 2px 6px; cursor: pointer; font-weight: bold;">Sửa</button>
       </div>
-      <div id="siteNoticeContent" style="font-size: .78rem; color: var(--text-main); line-height: 1.6; white-space: pre-wrap; font-family: 'Newsreader', serif;">
-Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
-
-✨ <b>Thả tim nhanh:</b> Chỉ cần <b>nhấp đúp</b> 2 lần vào màn hình để thả tim chương truyện!
-💬 <b>Bình luận ẩn (Inline):</b> Chú ý lề trái mỗi đoạn văn có bóng mờ. Bấm vào đó để comment theo từng đoạn.
-👁️ <b>Chế độ tập trung:</b> Bấm icon 👁️ góc phải để ẩn sạch menu. Nền tối hay sáng tùy cậu chỉnh ở ⚙️.
-🎵 <b>Bật nhạc lofi:</b> Bấm biểu tượng 🎵 để vừa đọc vừa nghe tiếng mưa rơi rả rích nhé.
-⏬ <b>Máy tự cuộn:</b> Cuộn trang tự động.      </div>
+      <div id="siteNoticeContent" style="font-size: .78rem; color: var(--text-main); line-height: 1.6; font-family: 'Newsreader', serif;">
+        ⏳ Đang tải thông báo...
+      </div>
     </div>
 
-<div class="widget reveal">
+    <div class="widget reveal">
       <div class="widget-title">📂 Danh mục</div>
       <div class="cat-tree">
         <ul>
@@ -626,7 +623,7 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
               </ul>
             </details>
           </li>
-<li>
+          <li>
             <details>
               <summary>🌤️ Cá trên trời</summary>
               <ul>
@@ -721,10 +718,10 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
         <!-- Bảng tin ghim trong Chat Chung -->
         <div style="background: rgba(245,158,11,0.08); border: 1px dashed rgba(245,158,11,0.4); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; position: relative;">
             <div style="font-size: 0.65rem; font-weight: bold; color: var(--amber); margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
-                <span>📌 Tin nhắn ghim</span>
-                <button id="btnEditChatNotice" class="admin-edit-btn" style="display:none; background: var(--amber); color: white; border: none; border-radius: 4px; font-size: 0.55rem; padding: 2px 6px; cursor: pointer; margin-left: auto;">Sửa</button>
+                <span>📌 Thông báo ghim</span>
+                <button id="btnEditPopupNotice" class="admin-edit-btn" style="display:none; background: var(--amber); color: white; border: none; border-radius: 4px; font-size: 0.55rem; padding: 2px 6px; cursor: pointer; margin-left: auto;">Sửa</button>
             </div>
-            <div id="chatNoticeContent" style="font-size: 0.75rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap; font-family: 'Newsreader', serif;">⏳ Đang tải...</div>
+            <div id="popupNoticeContent" style="font-size: 0.75rem; color: var(--text-main); line-height: 1.5; font-family: 'Newsreader', serif;">⏳ Đang tải...</div>
         </div>
 
         <div class="chat-feed-container" id="msgPublicFeed">
@@ -953,54 +950,49 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
       });
     };
 
-// 1. BẢNG TIN CHÍNH (Dành cho Cột Sidebar)
+    // 1. BẢNG TIN CHÍNH (SIDEBAR)
+    let rawSiteNotice = '';
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
-        const text = data.content 
-            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+        rawSiteNotice = data.content || '';
+        const text = rawSiteNotice 
+            ? rawSiteNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
             : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';        
         const el = document.getElementById('siteNoticeContent');
         if(el) el.innerHTML = text;
     });
 
     document.getElementById('btnEditNotice')?.addEventListener('click', () => {
-        const currentTextEl = document.getElementById('siteNoticeContent');
-        let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
-        if (currentText.includes('Chưa có thông báo') || currentText.includes('Đang tải')) currentText = '';
-        
-        const newText = prompt('📌 SỬA BẢNG TIN (CỘT BÊN PHẢI):', currentText);
+        const newText = prompt('📌 SỬA BẢNG TIN NHÀ CÁ (Dùng <br> để xuống dòng):', rawSiteNotice);
         if (newText !== null) {
-            fb.update(fb.ref(fb.db, '/'), { site_notice: { content: newText.trim(), ts: Date.now() } })
+            fb.set(fb.ref(fb.db, 'site_notice'), { content: newText.trim(), ts: Date.now() })
               .then(() => alert('✅ Đã cập nhật bảng tin!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
     });
 
-    // 2. TIN NHẮN GHIM (Dành riêng cho khung Chat Chung)
+    // 2. THÔNG BÁO GHIM TRONG CHAT CHUNG
+    let rawChatNotice = '';
     fb.onValue(fb.ref(fb.db, 'chat_notice'), snap => {
         const data = snap.val() || {};
-        const text = data.content 
-            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+        rawChatNotice = data.content || '';
+        const text = rawChatNotice 
+            ? rawChatNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
             : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';        
         const el = document.getElementById('popupNoticeContent');
         if(el) el.innerHTML = text;
     });
 
     document.getElementById('btnEditPopupNotice')?.addEventListener('click', () => {
-        const currentTextEl = document.getElementById('popupNoticeContent');
-        let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
-        if (currentText.includes('Trò chuyện vui vẻ') || currentText.includes('Trò chuyện văn minh, zui zẻ nhéee (,,>ヮ<,,)')) currentText = '';
-        
-        const newText = prompt('📌 SỬA TIN NHẮN GHIM (TƯỜNG CHUNG):', currentText);
+        const newText = prompt('📌 SỬA THÔNG BÁO GHIM (TƯỜNG CHUNG) (Dùng <br> để xuống dòng):', rawChatNotice);
         if (newText !== null) {
-            fb.update(fb.ref(fb.db, '/'), { chat_notice: { content: newText.trim(), ts: Date.now() } })
-              .then(() => alert('✅ Đã cập nhật tin nhắn ghim chat!'))
+            fb.set(fb.ref(fb.db, 'chat_notice'), { content: newText.trim(), ts: Date.now() })
+              .then(() => alert('✅ Đã cập nhật thông báo ghim chat!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
     });
 
-
-    // 1. PUBLIC FEED LOGIC (Tường chung)
+    // 3. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
       const data = snap.val();
       autoCleanupPublic(data); 
@@ -1033,7 +1025,7 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
       renderPublic('msgPublicFeed'); 
     });
 
-    // 2. PRIVATE MESSAGING LOGIC
+    // 4. PRIVATE MESSAGING LOGIC
     fb.onValue(fb.ref(fb.db, `private_messages/${myToken}`), snap => {
         if(window.__ddIsAdmin) return;
         const data = snap.val();
@@ -1050,7 +1042,7 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
         }
     });
 
-    // ADMIN LISTENER
+    // 5. ADMIN LISTENER
     fb.onValue(fb.ref(fb.db, 'private_messages'), snap => {
         if(!window.__ddIsAdmin) return;
         const fullData = snap.val() || {};

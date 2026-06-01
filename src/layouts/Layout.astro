@@ -46,24 +46,23 @@ const navDuoiNuoc = navStories.filter(s => s.isOngoing);
 const navTrenBan = navStories.filter(s => s.isCompleted);
 const navTrenTroi = navStories.filter(s => s.isUpcoming);
 
+// KHẮC PHỤC LỖI CURRENTFOLDER TẠI ĐÂY
+const curPathNorm = currentPath.replace(/\/$/, '').replace(/\/index$/, '');
+const currentFolder = curPathNorm.substring(0, curPathNorm.lastIndexOf('/')) || '/';
+
 let chapters: any[] = [];
 let prevChap: any = null;
 let nextChap: any = null;
-let currentFolder = "";
 
 if (isNovelPage) {
-  const normPath = (u: string) => u.replace(/\/$/, '').replace(/\/index$/, '');
-  const cur = normPath(currentPath);
-  currentFolder = cur.substring(0, cur.lastIndexOf('/'));
-
   chapters = allPosts
     .filter((p: any) => {
-      const pUrl = normPath(p.url || '');
+      const pUrl = (p.url || '').replace(/\/$/, '').replace(/\/index$/, '');
       return pUrl.substring(0, pUrl.lastIndexOf('/')) === currentFolder && p.frontmatter?.chuong;
     })
     .sort((a: any, b: any) => Number(a.frontmatter.chuong) - Number(b.frontmatter.chuong));
 
-  const idx = chapters.findIndex((c: any) => normPath(c.url || '') === cur);
+  const idx = chapters.findIndex((c: any) => (c.url || '').replace(/\/$/, '').replace(/\/index$/, '') === curPathNorm);
   if (idx > 0) prevChap = chapters[idx - 1];
   if (idx < chapters.length - 1) nextChap = chapters[idx + 1];
 }
@@ -154,20 +153,20 @@ if (isNovelPage) {
       --border-card:rgba(186,230,253,.5);
     }
 
-[data-theme="dark"] {
-  --cream:#0a1929; --text-main:#f8fafc; --text-mid:#cbd5e1;  
-  --bg-card:#0f2336; --border-card:rgba(126,200,227,.15);
-}
+    [data-theme="dark"] {
+      --cream:#0a1929; --text-main:#f8fafc; --text-mid:#cbd5e1;  
+      --bg-card:#0f2336; --border-card:rgba(126,200,227,.15);
+    }
 
-[data-theme="dark"] .story-title, [data-theme="dark"] .sc-title { color: #f1f5f9 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-[data-theme="dark"] .btn-outline, [data-theme="dark"] .sc-link.secondary { color: #a8daf0 !important; border-color: rgba(168, 218, 240, 0.4) !important; background: rgba(15, 35, 54, 0.8) !important; }
-[data-theme="dark"] .btn-outline:hover, [data-theme="dark"] .sc-link.secondary:hover { background: rgba(168, 218, 240, 0.1) !important; border-color: #a8daf0 !important; }
-[data-theme="dark"] .intro-block { background: #1e3a5f !important; border-color: rgba(126, 200, 227, 0.2) !important; color: #e2e8f0 !important; }
-[data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
-[data-theme="dark"] .story-item, [data-theme="dark"] .sc, [data-theme="dark"] .author-card { background: #0f2336 !important; border-color: rgba(126,200,227, 0.15) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }    
+    [data-theme="dark"] .story-title, [data-theme="dark"] .sc-title { color: #f1f5f9 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    [data-theme="dark"] .btn-outline, [data-theme="dark"] .sc-link.secondary { color: #a8daf0 !important; border-color: rgba(168, 218, 240, 0.4) !important; background: rgba(15, 35, 54, 0.8) !important; }
+    [data-theme="dark"] .btn-outline:hover, [data-theme="dark"] .sc-link.secondary:hover { background: rgba(168, 218, 240, 0.1) !important; border-color: #a8daf0 !important; }
+    [data-theme="dark"] .intro-block { background: #1e3a5f !important; border-color: rgba(126, 200, 227, 0.2) !important; color: #e2e8f0 !important; }
+    [data-theme="dark"] .intro-block h4 { color: #7ec8e3 !important; }
+    [data-theme="dark"] .story-item, [data-theme="dark"] .sc, [data-theme="dark"] .author-card { background: #0f2336 !important; border-color: rgba(126,200,227, 0.15) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }    
 
-.sc-cover-wrap { padding: 0 !important; background: var(--sky-pale) !important; }
-.sc-cover-wrap img { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 12px 0 0 12px !important; }
+    .sc-cover-wrap { padding: 0 !important; background: var(--sky-pale) !important; }
+    .sc-cover-wrap img { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 12px 0 0 12px !important; }
 
     *, *::before, *::after { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
@@ -226,7 +225,7 @@ if (isNovelPage) {
     [data-theme="dark"] .nav-hamburger span { background:#a8daf0; }
     @media(max-width:768px) { .nav-hamburger { display: flex; } }
 
-    /* ── FOCUS MODE (CHẾ ĐỘ TẬP TRUNG TỐI ƯU CẢ NỀN WEB) ── */
+    /* ── FOCUS MODE ── */
     body.focus-mode nav, 
     body.focus-mode footer, 
     body.focus-mode .chap-nav-container, 
@@ -239,18 +238,15 @@ if (isNovelPage) {
     body.focus-mode .page-wrapper { margin-top: 0 !important; padding-top: 20px; }
     body.focus-mode .novel-content { margin-top: 0 !important; border: none !important; box-shadow: none !important; padding-top: 20px !important; }
     
-    /* Gán Theme màu nền Full Màn hình khi bật Focus Mode */
     body.focus-mode { background-color: var(--bg-card) !important; }
     html[data-read-theme="sepia"] body.focus-mode { background-color: #fcf6e8 !important; }
     html[data-read-theme="green"] body.focus-mode { background-color: #f0fdf4 !important; }
     html[data-read-theme="dark"] body.focus-mode { background-color: #0f172a !important; color: #e2e8f0 !important; }
     
-    /* Fix nền Sidebar Inline Comment trong Focus Mode */
     html[data-read-theme="sepia"] .ic-sidebar { background-color: #fcf6e8 !important; }
     html[data-read-theme="green"] .ic-sidebar { background-color: #f0fdf4 !important; }
     html[data-read-theme="dark"] .ic-sidebar { background-color: #0f172a !important; border-color: #334155 !important; }
 
-    /* Làm mờ FAB ở Focus Mode (Hover hiện lại để chỉnh cài đặt Theme) */
     body.focus-mode .tool-fab-wrap { opacity: 0.15; transition: opacity 0.3s ease; }
     body.focus-mode .tool-fab-wrap:hover { opacity: 1; }
 
@@ -434,7 +430,7 @@ if (isNovelPage) {
     .ic-del-reply-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .ic-del-reply-btn:hover { color:#ef4444; }
 
-    /* FORM CHAT INLINE & CUỐI CHƯƠNG TÍCH HỢP ĐẸP MẮT (ZALO STYLE) */
+    /* FORM CHAT INLINE & CUỐI CHƯƠNG TÍCH HỢP ĐẸP MẮT */
     .chat-form-modern { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.8); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 5px; box-shadow: inset 0 2px 4px rgba(2,132,199,0.03); transition: border-color 0.3s;}
     .chat-form-modern.sticky { position: sticky; bottom: 0; border-radius: 16px 16px 0 0; border-bottom: none; z-index: 1000; box-shadow: 0 -4px 15px rgba(2,132,199,0.1); margin: 0;}
     .chat-form-modern:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
@@ -633,11 +629,11 @@ if (isNovelPage) {
   <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả truyện hoàn thành</a>
   {navTrenBan.map(story => (<a href={story.url}>✦ {story.title}</a>))}
 
-<div class="mobile-section-title">Khác</div>
+  <div class="mobile-section-title">Khác</div>
   <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
   {navTrenTroi.map(story => (<a href={story.url}>✧ {story.title}</a>))}
   <a href="/dynamic-duo-web/about/">✉ About</a>
-  </div>
+</div>
 
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
@@ -718,7 +714,7 @@ if (isNovelPage) {
         </button>
       </div>
 
-   <aside class="ic-sidebar" id="icSidebar">
+      <aside class="ic-sidebar" id="icSidebar">
         <div class="ic-sidebar-inner">
           <div class="ic-sidebar-header">
             <div class="ic-para-preview" id="icParaPreview"></div>
@@ -810,11 +806,11 @@ if (isNovelPage) {
     </div>
     <div class="ft-social">
       <p style="font-size:.68rem;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Ghé thăm</p>
-<div class="ft-social-row">
+      <div class="ft-social-row">
         <a href="https://dynamicduoq.wordpress.com" target="_blank" class="social-ic" title="WordPress">🌐</a>
         <a href="https://www.inkitt.com/q_oudcimanyd" target="_blank" class="social-ic" title="Inkitt">📚</a>
       </div>
-          </div>
+    </div>
   </div>
   <div class="ft-bottom">
     dynamic duo 𓆝.°• · made with 🌊 by Xê &amp; Gờ · 2026 
@@ -1227,8 +1223,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pageId = pageKey(); 
   let allInlineComments = {}; 
   
-  // Hàm dọn rác tự động cho Inline Comments
-  function autoCleanupInline(data, maxItems = 200) {
+  function autoCleanupInline(data, maxItems = 500) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           Object.keys(data).forEach(pKey => {
@@ -1276,9 +1271,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     });
 
-    // Hàm đệ quy render reply
     function renderThreadHtml(repliesFlat, parentId, level, rootCid) {
-        // Fix tương thích cho dữ liệu cũ (lỡ lưu replyTo bằng rootCid)
         const children = repliesFlat.filter(r => {
             const rt = r.replyTo || null;
             return parentId === null ? (rt === null || rt === rootCid) : (rt === parentId);
@@ -1398,7 +1391,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (tgtBtn.classList.contains('ic-reply-toggle') || tgtBtn.classList.contains('ic-reply-at-btn')) {
-            const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid; // Mở form của id tương ứng
+            const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid; 
             const form = document.getElementById('ic-rf-' + rid);
             if (form) {
                 form.style.display = 'flex';
@@ -1418,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tgtBtn.classList.contains('ic-rf-send')) {
             const formId = tgtBtn.dataset.formid;
             const rootCid = tgtBtn.dataset.cid;
-            const replyTo = tgtBtn.dataset.replyto;
+            const replyTo = tgtBtn.dataset.replyto || null;
             
             const nameInp = document.getElementById('rn-' + formId);
             const textInp = document.getElementById('rt-' + formId);
@@ -1462,7 +1455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onValue(ref(db, 'inline_comments/' + pageId), (snap) => {
           const data = snap.val() || {}; 
           allInlineComments = data;
-          autoCleanupInline(data, 200); // Dọn rác
+          autoCleanupInline(data, 500);
           
           paragraphs.forEach((p, idx) => {
             const countEl = p.querySelector('.ic-count');
@@ -1571,8 +1564,7 @@ function setupChapComments(){
   
   if(cmtName) cmtName.value = getSavedName();
 
-  // Dọn rác comment cuối chương
-  function autoCleanupComments(data, maxItems = 300) {
+  function autoCleanupComments(data, maxItems = 500) {
       if(!data) return;
       waitFirebase(({db, ref, remove}) => {
           const keys = Object.keys(data);
@@ -1628,7 +1620,7 @@ function setupChapComments(){
   waitFirebase(({db, ref, push, onValue, remove}) => {
     onValue(ref(db, 'comments/'+key), snap => {
       const data = snap.val();
-      autoCleanupComments(data, 300); // Kích hoạt dọn rác
+      autoCleanupComments(data, 500); 
       
       const openThreads = new Set();
       if(cmtList) { cmtList.querySelectorAll('.reply-thread.open').forEach(el => openThreads.add(el.id)); }
@@ -1719,7 +1711,7 @@ function setupChapComments(){
        if(tgtBtn.classList.contains('reply-send-btn')) {
          const formId = tgtBtn.dataset.formid;
          const rootCid = tgtBtn.dataset.cid;
-         const replyTo = tgtBtn.dataset.replyto;
+         const replyTo = tgtBtn.dataset.replyto || null;
          
          const nameInput = document.getElementById('rn-' + formId);
          const textInput = document.getElementById('rt-' + formId);

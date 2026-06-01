@@ -42,7 +42,7 @@ const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
     .read-btn:hover { background: var(--sky2); transform: translateY(-2px); }
   </style>
 
-  <img src="/dynamic-duo-web/images/biahachaydonghoang.png" alt="Bìa truyện" class="story-cover"
+<img src={`/dynamic-duo-web/images/bia${currentFolder.split('/').pop().replace(/-/g, '')}.png`} alt="Bìa truyện" class="story-cover"
     onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
 
   <div style="text-align:center">

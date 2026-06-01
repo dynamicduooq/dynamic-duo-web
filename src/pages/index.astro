@@ -940,8 +940,9 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
         // Đã bỏ hàm esc() để Admin thoải mái dùng thẻ HTML <br>, <b>, <i>...
-        const text = data.content ? data.content.replace(/\n/g, '<br>') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
-        
+const text = data.content 
+            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+            : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';        
         const el1 = document.getElementById('siteNoticeContent');
         const el2 = document.getElementById('popupNoticeContent');
         if(el1) el1.innerHTML = text;

@@ -928,48 +928,46 @@ function shootConfetti(x, y) {
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
+// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN VÉT SẠCH MỌI ĐỊNH DẠNG)
   const novelContentEl = document.getElementById('novelContent');
   if (novelContentEl) {
       let html = novelContentEl.innerHTML;
       
-      // 1. Phá bỏ các khung <details> cũ bị cứng trong Markdown (do lỗi code trước đây) để đưa về text thuần
+      // 1. Phá bỏ khung details cũ để dọn dẹp
       html = html.replace(/<details[^>]*>[\s\S]*?<div[^>]*>([\s\S]*?)<\/div><\/details>/gi, '$1');
       html = html.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
       
-      // 2. Tẩy cụm từ "Chú thích:" nếu nó đứng liền trước (*), [1]
+      // 2. DỌN RÁC WORDPRESS: Loại bỏ định dạng in nghiêng (* hoặc _) bao quanh chữ "Chú thích" và chú thích chính
+      // Nó sẽ biến *Chú thích* thành "Chú thích" và *(**) Một diễn đàn* thành "(*) Một diễn đàn"
+      html = html.replace(/(?:^|\n|\s)(?:[*_])(Chú thích:?|[\(\[]\d+[\)\]]|\(\*\))(.*?)(?:[*_])(?=\s|$|<)/gi, '$1$2');
+      
+      // 3. Tẩy cụm từ "Chú thích:" (chấp nhận mọi kiểu thẻ HTML còn sót lại)
       html = html.replace(/(?:<p>|<br\s*\/?>|\s)*(?:<b>|<strong>|<i>|<em>|<u>)*Chú thích:?(?:<\/b>|<\/strong>|<\/i>|<\/em>|<\/u>)*(?:<br\s*\/?>|<\/p>\s*<p>|\s)*(?=\(\*\)|\[\d+\]|\(\d+\))/gi, '');
       
-      // 2.5. CHUẨN HÓA WORDPRESS: Biến định dạng "Chú thích ()" thành "(*)"
-      // Quét chữ "Chú thích ()" (chấp nhận cả in nghiêng, in đậm) và chuyển thành (*)
-      html = html.replace(/(>|\s|^)(?:<b>|<strong>|<i>|<em>|<u>)*Chú thích\s*\(\s*\)(?:<\/b>|<\/strong>|<\/i>|<\/em>|<\/u>)*\s*/gi, '$1(*) ');
-
-      // 3. Bọc từng dòng chú thích bằng thẻ tạm <dd-note>
-      // CHỈ bắt các chú thích nằm ở đầu đoạn văn (<p>) hoặc đầu dòng (<br>), BỎ QUA các [1] nằm giữa câu trích dẫn
-      html = html.replace(/(<p>|<br\s*\/?>)\s*(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<\/p>|<br\s*\/?>|$)/gi, (match, prefix, marker, p2) => {
-          return `${prefix}<dd-note><b>${marker}</b> ${p2}</dd-note>`;
+      // 4. Bọc các chú thích (đã được dọn sạch định dạng) thành thẻ <dd-note>
+      html = html.replace(/(?:^|>|\s)(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<br\s*\/?>|<\/p>|$)/gi, (match, p1, p2) => {
+          const prefix = match.substring(0, match.indexOf(p1));
+          return `${prefix}<dd-note><b>${p1}</b> ${p2}</dd-note>`;
       });
       
-      // 4. Gom nhóm tất cả các thẻ <dd-note> liền kề nhau thành 1 khối duy nhất
+      // 5. Gom nhóm các thẻ <dd-note> liền kề
       let prevHtml;
       do {
           prevHtml = html;
-          // Nối các chú thích bằng 1 khoảng trống nhỏ 6px cho dễ nhìn
           html = html.replace(/<\/dd-note>\s*(?:<br\s*\/?>|<\/?p>|\s)*\s*<dd-note>/gi, '<div style="height: 6px;"></div>');
       } while (html !== prevHtml);
       
-      // 5. Biến thẻ tạm thành khung Toggle xịn
+      // 6. Chuyển thành khung Toggle
       html = html.replace(/<dd-note>([\s\S]*?)<\/dd-note>/gi, `</p><details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0; font-weight: normal; display: block;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">$1</div></details><p>`);
       
-      // 6. Dọn dẹp thẻ <p> rỗng (Chống vỡ lề)
+      // 7. Dọn rác thẻ p rỗng
       html = html.replace(/<p>\s*<\/p>/gi, '');
 
-      // Áp dụng HTML đã gộp nhóm
       if (novelContentEl.innerHTML !== html) {
           novelContentEl.innerHTML = html;
       }
   }
-  
+
   if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);

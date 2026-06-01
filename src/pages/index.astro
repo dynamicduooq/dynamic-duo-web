@@ -950,7 +950,7 @@ const recentChaps = allChaps
       });
     };
 
-    // 1. BẢNG TIN CHÍNH (SIDEBAR)
+// 1. BẢNG TIN CHÍNH (SIDEBAR)
     let rawSiteNotice = '';
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
@@ -965,7 +965,8 @@ const recentChaps = allChaps
     document.getElementById('btnEditNotice')?.addEventListener('click', () => {
         const newText = prompt('📌 SỬA BẢNG TIN NHÀ CÁ (Dùng <br> để xuống dòng):', rawSiteNotice);
         if (newText !== null) {
-            fb.set(fb.ref(fb.db, 'site_notice'), { content: newText.trim(), ts: Date.now() })
+            // Đã đổi fb.set thành fb.update để tương thích với thư viện hiện tại
+            fb.update(fb.ref(fb.db, 'site_notice'), { content: newText.trim(), ts: Date.now() })
               .then(() => alert('✅ Đã cập nhật bảng tin!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
@@ -978,7 +979,7 @@ const recentChaps = allChaps
         rawChatNotice = data.content || '';
         const text = rawChatNotice 
             ? rawChatNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
-            : '<i style="color:var(--text-dim)">Trò chuyện văn minh, lịch sự, và thiệt zui zẻ nhéee (,,>ヮ<,,)</i>';        
+            : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';        
         const el = document.getElementById('popupNoticeContent');
         if(el) el.innerHTML = text;
     });
@@ -986,12 +987,13 @@ const recentChaps = allChaps
     document.getElementById('btnEditPopupNotice')?.addEventListener('click', () => {
         const newText = prompt('📌 SỬA THÔNG BÁO GHIM (TƯỜNG CHUNG) (Dùng <br> để xuống dòng):', rawChatNotice);
         if (newText !== null) {
-            fb.set(fb.ref(fb.db, 'chat_notice'), { content: newText.trim(), ts: Date.now() })
+            // Đã đổi fb.set thành fb.update
+            fb.update(fb.ref(fb.db, 'chat_notice'), { content: newText.trim(), ts: Date.now() })
               .then(() => alert('✅ Đã cập nhật thông báo ghim chat!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
     });
-
+    
     // 3. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
       const data = snap.val();

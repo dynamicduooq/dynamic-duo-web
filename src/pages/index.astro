@@ -359,7 +359,7 @@ const recentChaps = allChaps
         <div class="sec-line"></div>
       </div>
       <div class="guide-box">
-         <p class="guide-intro">Chào mừng các cậu đến với nhà của <strong>dynamic duo 𓆝</strong>. Bỏ túi ngay cẩm nang dưới đây để có trải nghiệm đọc truyện chill nhất tại nhà cá nhé:</p>
+         <p class="guide-intro">Chào mừng các cậu đến với nhà của <strong>dynamic duo 𓆝</strong>. Bỏ túi ngay cẩm nang dưới đây để có trải nghiệm đọc truyện tốt nhất tại nhà cá nhé:</p>
          <div class="guide-grid">
             <div class="guide-item">
                <div class="guide-icon">📂</div>
@@ -932,16 +932,17 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
       });
     };
 
-    // BẢNG TIN (NOTICE BOARD)
+// BẢNG TIN (NOTICE BOARD)
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
-        const text = data.content ? esc(data.content).replace(/\n/g, '<br>') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
+        // Đã bỏ hàm esc() để Admin thoải mái dùng thẻ HTML <br>, <b>, <i>...
+        const text = data.content ? data.content.replace(/\n/g, '<br>') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
         
         const el1 = document.getElementById('siteNoticeContent');
         const el2 = document.getElementById('popupNoticeContent');
         if(el1) el1.innerHTML = text;
         if(el2) el2.innerHTML = text;
-    });
+      });
 
     const editNoticeHandler = () => {
         const currentTextEl = document.getElementById('siteNoticeContent');

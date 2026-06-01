@@ -92,7 +92,7 @@ date: 2026-05-02
 <a href="/dynamic-duo-web/ca-tren-ban/" class="cta-btn">Thưởng thức ngay →</a>
 </div>
 <div class="contact-box">
-<p style="font-size: 0.9rem; color: var(--text-mid); margin: 0 0 12px 0;">Hòm thư liên hệ góp ý, báo lỗi, hoặc chỉ để hỏi thăm!</p>
+<p style="font-size: 0.9rem; color: var(--text-mid); margin: 0 0 12px 0;">Hòm thư liên hệ góp ý, báo lỗi. </p>
 <div class="email-copy" id="aboutEmailCopy" title="Nhấn để copy">
 <span id="aboutTooltip" class="copy-tooltip-about">Bắt được cá! ✔️</span>
 ✉ dynamicduoo.q@gmail.com

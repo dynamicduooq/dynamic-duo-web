@@ -569,11 +569,30 @@ const recentChaps = allChaps
         <button class="msg-tab"        data-panel="public"  id="msgTabPublic">🌊 Tường chung</button>
       </div>
 
+<!-- Panel: Riêng tư -->
       <div class="msg-panel active" id="msgPanelPrivate">
+        <!-- Khung chat của User -->
         <div id="msgPrivateUserBox">
-            <p style="font-size:.65rem;color:var(--text-dim);font-style:italic;margin-bottom:8px;text-align:center;">Nhắn riêng cho chủ nhà 🐋 (Chỉ admin đọc được)</p>
+            <!-- AUTO REPLY & FAQ BLOCK -->
+            <div style="background: rgba(14,165,233,0.08); border: 1px dashed rgba(14,165,233,0.4); border-radius: 12px; padding: 10px; margin-bottom: 10px; font-size: 0.7rem; color: var(--text-main); line-height: 1.5;">
+                <div style="display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start;">
+                    <span style="font-size: 1.1rem; line-height: 1;">🤖</span>
+                    <div>
+                        <strong>Auto-reply:</strong> Chào cậu! Hiện chủ nhà đang bận sấp mặt chạy deadline 🐢. Cậu cứ để lại tin nhắn nhé, tụi mình sẽ ráng rep sớm nhất có thể! 💙
+                    </div>
+                </div>
+                <details style="cursor: pointer; color: var(--sky);">
+                    <summary style="font-weight: 600; font-size: 0.65rem; transition: color 0.2s;">📌 Bấm xem hướng dẫn giải đáp (FAQ)</summary>
+                    <ul style="margin: 6px 0 0; padding-left: 18px; color: var(--text-mid); font-size: 0.65rem; list-style-type: square; cursor: text;">
+                        <li style="margin-bottom: 4px;"><strong>Hỏi Pass truyện:</strong> Tụi mình không share pass trực tiếp nha. Cậu chịu khó tìm gợi ý ở văn án hoặc cuối chương trước nhé.</li>
+                        <li style="margin-bottom: 4px;"><strong>Lịch đăng chương mới:</strong> Tụi mình edit vì đam mê + rảnh rỗi nên không có lịch cố định, có chương là sẽ lên liền!</li>
+                        <li><strong>Báo lỗi (web/link/ảnh):</strong> Cậu ghi rõ lỗi bị ở truyện nào, chương mấy để tụi mình kiểm tra và fix lẹ nhất nha.</li>
+                    </ul>
+                </details>
+            </div>
+
             <div class="chat-feed-container" id="msgPrivateFeedSidebar"></div>
-            <div class="chat-form-modern">
+                        <div class="chat-form-modern">
                <input class="cfm-name" id="msgPrivNameSidebar" placeholder="Tên (tùy chọn)..." />
                <div class="cfm-bottom">
                    <textarea class="cfm-text" id="msgPrivTextSidebar" placeholder="Nhắn gì đó..." rows="1"></textarea>

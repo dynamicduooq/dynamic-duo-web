@@ -7,10 +7,14 @@ date: "2026-05-29"
 description: ""
 draft: false
 tags: [""]
+<<<<<<< Updated upstream
 editor_note: ""
   Chú thích:
   
   [1] Phiếu nghĩ (票拟): Đề xuất cách giải quyết tấu chương do Nội các viết vào một tờ giấy nhỏ dán kèm theo tấu chương.
+=======
+editor_note: 
+>>>>>>> Stashed changes
 ---
 
 ## Chương 2: Đại Hoang Ngọc Kinh

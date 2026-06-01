@@ -9,6 +9,9 @@ tags:
   - "đam mỹ"
   - "hiện đại"
   - "chua xót"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## Chương 14: Qua
@@ -137,5 +140,4 @@ Tôi là người không chịu nổi những câu như “Không sao, rồi s�
 
 Nói theo kiểu của Quách Đức Cương* thì sẽ là: tôi bị đâm một nhát dao, còn đang chảy máu đây này, sao bạn lại nói không sao thay tôi? Chuyện này đã qua hay chưa, không ai hiểu rõ hơn tôi. Hơn nữa, người tôi muốn không phải là các bạn, cũng không phải người nào khác.
 
-*Chú thích*
-*(*) Tên một diễn viên hài.*
+(*) Tên một diễn viên hài.*

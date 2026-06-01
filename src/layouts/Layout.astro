@@ -81,7 +81,9 @@ if (isNovelPage) {
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, push, onValue, remove, update, get, goOffline, goOnline } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getDatabase, ref, push, onValue, remove, update, get, goOffline, goOnline, query, limitToLast } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';    
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    
     const firebaseConfig = {
       apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
       authDomain: "dynamic-duo-comments.firebaseapp.com",
@@ -100,7 +102,7 @@ import { getDatabase, ref, push, onValue, remove, update, get, goOffline, goOnli
       auth = getAuth(app);
     } catch(e) { console.warn('[DD] Firebase init failed:', e.message); }
 
-window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get, goOffline, goOnline, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, ADMIN_EMAIL };
+    window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get, goOffline, goOnline, query, limitToLast, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, ADMIN_EMAIL };
     window.__ddIsAdmin = false;
 
     if (auth) {
@@ -925,7 +927,8 @@ function shootConfetti(x, y) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
+
+  // TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
   const novelContentEl = document.getElementById('novelContent');
   if (novelContentEl) {
       let html = novelContentEl.innerHTML;
@@ -962,7 +965,8 @@ document.addEventListener('DOMContentLoaded', () => {
           novelContentEl.innerHTML = html;
       }
   }
-        if(window.location.pathname.includes('/chuong-')) {
+
+  if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);
       localStorage.setItem('dd_last_read_title', chapTitle);
@@ -1537,6 +1541,94 @@ document.addEventListener('DOMContentLoaded', () => {
   
   setupChapterLike();
   setupChapComments();
+
+  // BẢNG TIN (SIDEBAR & CHAT CHUNG) - LẤY BẰNG GET() ĐỂ GIẢM DOWNLOADS FIREBASE
+  waitFirebase(({ db, ref, get, update }) => {
+      let rawSiteNotice = '';
+      get(ref(db, 'site_notice')).then(snap => {
+          const data = snap.val() || {};
+          rawSiteNotice = data.content || '';
+          const text = rawSiteNotice 
+              ? rawSiteNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+              : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';        
+          const el = document.getElementById('siteNoticeContent');
+          if(el) el.innerHTML = text;
+      });
+
+      document.getElementById('btnEditNotice')?.addEventListener('click', () => {
+          const newText = prompt('📌 SỬA BẢNG TIN NHÀ CÁ (Dùng <br> để xuống dòng):', rawSiteNotice);
+          if (newText !== null) {
+              update(ref(db, 'site_notice'), { content: newText.trim(), ts: Date.now() })
+                .then(() => {
+                    alert('✅ Đã cập nhật bảng tin! Tải lại trang để xem thay đổi.');
+                    rawSiteNotice = newText.trim();
+                    const text = rawSiteNotice ? rawSiteNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
+                    const el = document.getElementById('siteNoticeContent');
+                    if(el) el.innerHTML = text;
+                })
+                .catch(e => alert('Lỗi: ' + e.message));
+          }
+      });
+
+      let rawChatNotice = '';
+      get(ref(db, 'chat_notice')).then(snap => {
+          const data = snap.val() || {};
+          rawChatNotice = data.content || '';
+          const text = rawChatNotice 
+              ? rawChatNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+              : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';        
+          const el = document.getElementById('popupNoticeContent');
+          if(el) el.innerHTML = text;
+      });
+
+      document.getElementById('btnEditPopupNotice')?.addEventListener('click', () => {
+          const newText = prompt('📌 SỬA THÔNG BÁO GHIM (TƯỜNG CHUNG) (Dùng <br> để xuống dòng):', rawChatNotice);
+          if (newText !== null) {
+              update(ref(db, 'chat_notice'), { content: newText.trim(), ts: Date.now() })
+                .then(() => {
+                    alert('✅ Đã cập nhật thông báo ghim chat!');
+                    rawChatNotice = newText.trim();
+                    const text = rawChatNotice ? rawChatNotice.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';
+                    const el = document.getElementById('popupNoticeContent');
+                    if(el) el.innerHTML = text;
+                })
+                .catch(e => alert('Lỗi: ' + e.message));
+          }
+      });
+  });
+
+  // TƯỜNG CHUNG - CHỈ LẤY 30 TIN NHẮN MỚI NHẤT
+  waitFirebase(({ db, ref, onValue, query, limitToLast, remove }) => {
+      const recentChatQuery = query(ref(db, 'public_messages'), limitToLast(30));
+      onValue(recentChatQuery, snap => {
+          const data = snap.val();
+          const el = document.getElementById('msgPublicFeed');
+          if(!el) return;
+          if(!data) { el.innerHTML = '<div class="msg-public-empty">Chưa có tin nhắn 𓆝</div>'; return; }
+          const items = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>a.ts-b.ts);
+          
+          const myToken = getMyToken();
+          el.innerHTML = items.map(m => {
+            const isMine = m.token === myToken && !m.isAdmin;
+            const canDel = window.__ddIsAdmin || isMine;
+            return `
+              <div style="background: ${m.isAdmin?'rgba(14,165,233,0.1)':'var(--sky-pale)'}; padding: 8px 10px; border-radius: 10px; font-size: .7rem; border: 1px solid rgba(186,230,253,.4); margin-bottom: 6px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                      <strong style="color:var(--sky-dark)">${m.isAdmin?'🐋 ':''}${esc(m.name||'Khách')}</strong>
+                      <span style="color:var(--text-dim); font-size:.6rem">${timeAgo(m.ts)}</span>
+                  </div>
+                  <div style="color:var(--text-main); word-break:break-word; line-height:1.4">${esc(m.text)}</div>
+                  ${canDel ? `<button class="chat-del-btn" style="margin-top:4px" data-id="${m.id}" data-type="public">✕ Xóa</button>` : ''}
+              </div>
+            `;
+          }).join('');
+          el.scrollTop = el.scrollHeight;
+
+          el.querySelectorAll('.chat-del-btn').forEach(b => b.addEventListener('click', () => {
+            if(confirm('Xóa tin nhắn này?')) remove(ref(db, 'public_messages/' + b.dataset.id));
+          }));
+      });
+  });
 }); 
 
 /* ══ MODULE: DOUBLE TAP LIKES & CHAT CUỐI CHƯƠNG ══ */

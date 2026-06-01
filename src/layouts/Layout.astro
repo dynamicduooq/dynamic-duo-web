@@ -925,23 +925,30 @@ function shootConfetti(x, y) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN NÂNG CẤP MẠNH MẼ)
+// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM)
   const novelContentEl = document.getElementById('novelContent');
   if (novelContentEl) {
       let contentHtml = novelContentEl.innerHTML;
       
-      // Quét tất cả các dạng chú thích: (*), [1], (1) kể cả có dấu cách thừa hoặc nằm sau thẻ <br>
-      const regex = /(<p>|<br\s*\/?>)\s*(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<\/p>|<br\s*\/?>|$)/gi;
+      // Bước 1: Dọn dẹp rác HTML nếu lỡ bị bọc thẻ <details> từ code cũ
+      contentHtml = contentHtml.replace(/<details[^>]*>[\s\S]*?<div[^>]*>([\s\S]*?)<\/div><\/details>/gi, '$1');
+      contentHtml = contentHtml.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
       
-      const newHtml = contentHtml.replace(regex, (match, prefix, marker, contentText) => {
-          return `${prefix}<details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0; font-weight: normal; display: block;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích ${marker}</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">${contentText}</div></details>`;
+      // Bước 2: Tìm và gom nhóm TẤT CẢ các dòng chú thích nằm liền kề nhau
+      const regex = /(?:(?:<p>|<br\s*\/?>)\s*(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<\/p>|<br\s*\/?>|$)\s*)+/gi;
+      
+      const newHtml = contentHtml.replace(regex, (match) => {
+          // Làm sạch mớ hỗn độn (loại bỏ thẻ <p> bọc ngoài)
+          const cleanMatch = match.replace(/<\/?p>/g, '<br>').replace(/^(?:<br\s*\/?>\s*)+/, '');
+          
+          return `<br><details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0; font-weight: normal; display: block;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">${cleanMatch}</div></details>`;
       });
 
       if (contentHtml !== newHtml) {
           novelContentEl.innerHTML = newHtml;
       }
   }
-    if(window.location.pathname.includes('/chuong-')) {
+      if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);
       localStorage.setItem('dd_last_read_title', chapTitle);

@@ -156,7 +156,28 @@ const recentChaps = allChaps
 .notice-img { width: 90%; max-width: 400px; display:block; border-radius:8px; transition: transform 0.3s; }
 .notice-img:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(2,132,199,.1); }
 @media(max-width:768px){ .notice-img { width: 85%; } }
-
+/* Cẩm nang */
+    .guide-box {
+      background: var(--bg-card); border: 1px solid rgba(186,230,253,.6);
+      border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 15px rgba(2,132,199,.05);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    [data-theme="dark"] .guide-box { border-color: rgba(80,150,210,.3); background: rgba(15,35,54,.4);}
+    .guide-intro { font-size: 0.85rem; color: var(--text-main); line-height: 1.6; margin-top: 0; margin-bottom: 20px; font-family: 'Newsreader', serif;}
+    [data-theme="dark"] .guide-intro { color: #d8eeff; }
+    .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;}
+    @media (max-width: 600px) { .guide-grid { grid-template-columns: 1fr; } }
+    .guide-item { display: flex; gap: 12px; align-items: flex-start; background: var(--sky-pale); padding: 14px; border-radius: 12px; border: 1px dashed rgba(186,230,253,.8); transition: transform 0.2s;}
+    .guide-item:hover { transform: translateY(-2px); }
+    [data-theme="dark"] .guide-item { background: rgba(15,35,60,.5); border-color: rgba(126,200,227,.2); }
+    .guide-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; background: #fff; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(2,132,199,.1);}
+    [data-theme="dark"] .guide-icon { background: rgba(10,25,45,.8); box-shadow: 0 2px 5px rgba(0,0,0,.3);}
+    .guide-text { font-size: 0.75rem; color: var(--text-mid); line-height: 1.55; }
+    [data-theme="dark"] .guide-text { color: #a8daf0; }
+    .guide-text strong { color: var(--sky-dark); font-weight: 600;}
+    [data-theme="dark"] .guide-text strong { color: #e8f4ff; }
+    .guide-footer { font-size: 0.8rem; font-style: italic; color: var(--sky); text-align: center; margin: 20px 0 0 0; font-weight: bold; font-family: 'Merriweather', serif;}
+    [data-theme="dark"] .guide-footer { color: #8ab8d8; }
 .recent-list { display:flex; flex-direction:column; gap:8px; }
 .recent-item { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid rgba(186,230,253,.4); border-radius:10px; transition:var(--t); color:var(--text-main); box-shadow:0 2px 6px rgba(0,0,0,.02); }
 [data-theme="dark"] .recent-item { border-color:rgba(80,150,210,.25); }
@@ -334,15 +355,15 @@ const recentChaps = allChaps
     <!-- CẨM NANG HƯỚNG DẪN TỔNG HỢP -->
     <div class="notice-section reveal">
       <div class="sec-hd">
-        <h2>📌 Cẩm nang lặn biển</h2>
+        <h2>📌 Cẩm nang bể cá</h2>
         <div class="sec-line"></div>
       </div>
       <div class="guide-box">
-         <p class="guide-intro">Chào mừng các cậu lặn xuống vùng biển của <strong>dynamic duo 𓆝</strong>. Bỏ túi ngay cẩm nang dưới đây để có trải nghiệm đọc truyện chill nhất tại nhà cá nhé:</p>
+         <p class="guide-intro">Chào mừng các cậu đến với nhà của <strong>dynamic duo 𓆝</strong>. Bỏ túi ngay cẩm nang dưới đây để có trải nghiệm đọc truyện chill nhất tại nhà cá nhé:</p>
          <div class="guide-grid">
             <div class="guide-item">
                <div class="guide-icon">📂</div>
-               <div class="guide-text"><strong>Quy hoạch:</strong> Truyện chia làm 3 mâm: <em>Cá dưới nước</em> (đang tiến hành), <em>Cá trên bàn</em> (đã hoàn thành) và <em>Cá trên trời</em> (dự án sắp đào). Nhớ check kỹ nhé!</div>
+               <div class="guide-text"><strong>Bản đồ:</strong> Truyện chia làm 3 phần: <em>Cá dưới nước</em> (đang tiến hành), <em>Cá trên bàn</em> (đã hoàn thành) và <em>Cá trên trời</em> (dự án sắp đào). Nhớ check kỹ nhé!</div>
             </div>
             <div class="guide-item">
                <div class="guide-icon">👁️</div>
@@ -350,25 +371,29 @@ const recentChaps = allChaps
             </div>
             <div class="guide-item">
                <div class="guide-icon">💬</div>
-               <div class="guide-text"><strong>Bình luận chèn dòng:</strong> Thấy icon mờ bên lề mỗi đoạn văn chứ? Bấm vào đó để chém gió ngay đúng phân đoạn các cậu thích mà không cần cuộn xuống cuối trang.</div>
+               <div class="guide-text"><strong>Bình luận chèn dòng:</strong> Thấy icon mờ bên lề mỗi đoạn văn chứ? Bấm vào đó để bình luận theo từng dòng.</div>
+            </div>
+                        <div class="guide-item">
+               <div class="guide-icon">3️⃣</div>
+               <div class="guide-text"><strong>Công cụ:</strong> Icon 3 dấu chấm bên góc phải có các công cụ cần thiết để nâng cao trải nghiệm đọc, hãy thử xem nhé!</div>
             </div>
             <div class="guide-item">
                <div class="guide-icon">🤍</div>
-               <div class="guide-text"><strong>Thả tim nhanh:</strong> Tương tự Instagram/Wattpad, chỉ cần <em>nhấp đúp 2 lần</em> liên tiếp vào màn hình khi đọc là tim tự động bay lên nha!</div>
+               <div class="guide-text"><strong>Thả tim nhanh:</strong> Tương tự Instagram/Wattpad, trên điện thoại, chỉ cần <em>nhấp đúp 2 lần</em> liên tiếp vào màn hình khi đọc là tim tự động bay lên nha!</div>
             </div>
             <div class="guide-item">
                <div class="guide-icon">🎧</div>
-               <div class="guide-text"><strong>Nghe Audio & Nhạc:</strong> Đầu mỗi chương đều có trình AI đọc truyện tự động. Còn nếu muốn chill? Bấm icon 🎵 ở menu nổi để bật tiếng mưa rơi.</div>
+               <div class="guide-text"><strong>Nghe Audio & Nhạc:</strong> Đầu mỗi chương đều có trình đọc truyện tự động. Ngoài ra, có thể bấm icon 🎵 ở menu nổi để bật tiếng ồn trắng.</div>
             </div>
             <div class="guide-item">
                <div class="guide-icon">⏬</div>
                <div class="guide-text"><strong>Cuộn rảnh tay:</strong> Muốn vừa ăn vừa đọc? Bấm icon ⏬ ở menu nổi, trang sẽ tự động trôi chầm chậm.</div>
             </div>
          </div>
-         <p class="guide-footer">Tụi mình luôn ở phần "Lời nhắn" ✉️ chờ các cậu. Chúc đọc truyện thật vui! 🌊</p>
+         <p class="guide-footer">Tụi mình luôn ở phần "Lời nhắn" ✉️ chờ các cậu, xem trong cột sidebar bên phải. Chúc đọc truyện thật vui vẻ và tự do trải nghiệm nhé! 🌊</p>
       </div>
     </div>
-    
+
     <!-- FILTER + STORIES -->
     <div class="sec-hd reveal">
       <h2>📚 Tủ truyện</h2>

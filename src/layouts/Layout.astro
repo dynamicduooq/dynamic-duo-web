@@ -1881,10 +1881,10 @@ function setupChapComments(){
 }
 </script>
 {isNovelPage && (
-  <script is:inline define:vars={{ prevUrl: prevChap?.url, nextUrl: nextChap?.url }}>
+  <script is:inline define:vars={{ prevUrl: prevChap?.url || null, nextUrl: nextChap?.url || null }}>
     document.addEventListener('keydown', (e) => {
-      // Bỏ qua nếu đang gõ phím trong ô comment/input để tránh nhảy trang oan uổng
-      if (['TEXTAREA', 'INPUT'].includes(e.target.tagName)) return;
+      // Bỏ qua nếu đang gõ phím trong ô comment/input để tránh nhảy trang
+      if (e.target && ['TEXTAREA', 'INPUT'].includes(e.target.tagName)) return;
       
       // Mũi tên trái -> Lùi chương
       if (e.key === 'ArrowLeft' && prevUrl) {

@@ -9,6 +9,9 @@ tags:
   - "đam mỹ"
   - "hiện đại"
   - "chua xót"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## Chương 6: Trời sáng rồi cũng sẽ tối
@@ -97,7 +100,7 @@ Haha, tôi cảm thấy cách hại người tự hại mình như vậy của e
 
 Sau đó có một ngày, bố tôi, người hiếm khi liên lạc, đột nhiên gọi điện, nói ông ấy sắp kết hôn, bảo tôi cuối tuần đến khách sạn nào đó.
 
-Tiếp theo, mẹ tôi, người đã lâu không gặp, cũng gọi điện, gào thét bảo tôi chuyển lời cho bố, rằng bà ấy chưa ký thỏa thuận ly hôn, tiền chưa tính xong thì đừng hòng cưới con đ**m đó.
+Tiếp theo, mẹ tôi, người đã lâu không gặp, cũng gọi điện, gào thét bảo tôi chuyển lời cho bố, rằng bà ấy chưa ký thỏa thuận ly hôn, tiền chưa tính xong thì đừng hòng cưới con điếm đó.
 
 Ngu ngốc.
 

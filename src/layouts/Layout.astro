@@ -928,7 +928,7 @@ function shootConfetti(x, y) {
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-  // TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
+// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
   const novelContentEl = document.getElementById('novelContent');
   if (novelContentEl) {
       let html = novelContentEl.innerHTML;
@@ -940,10 +940,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // 2. Tẩy cụm từ "Chú thích:" (chấp nhận mọi kiểu thẻ in đậm, nghiêng, xuống dòng)
       html = html.replace(/(?:<p>|<br\s*\/?>|\s)*(?:<b>|<strong>|<i>|<em>|<u>)*Chú thích:?(?:<\/b>|<\/strong>|<\/i>|<\/em>|<\/u>)*(?:<br\s*\/?>|<\/p>\s*<p>|\s)*(?=\(\*\)|\[\d+\]|\(\d+\))/gi, '');
       
-      // 3. Bọc từng dòng chú thích bằng thẻ tạm <dd-note>
-      html = html.replace(/(?:^|>|\s)(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<br\s*\/?>|<\/p>|$)/gi, (match, p1, p2) => {
-          const prefix = match.substring(0, match.indexOf(p1));
-          return `${prefix}<dd-note><b>${p1}</b> ${p2}</dd-note>`;
+      // 3. SỬA LỖI TẠI ĐÂY: CHỈ bắt các chú thích nằm ở đầu đoạn văn (<p>) hoặc đầu dòng (<br>), BỎ QUA các [1] nằm giữa câu
+      html = html.replace(/(<p>|<br\s*\/?>)\s*(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<\/p>|<br\s*\/?>|$)/gi, (match, prefix, marker, p2) => {
+          return `${prefix}<dd-note><b>${marker}</b> ${p2}</dd-note>`;
       });
       
       // 4. Gom nhóm tất cả các thẻ <dd-note> liền kề nhau thành 1 khối duy nhất
@@ -965,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
           novelContentEl.innerHTML = html;
       }
   }
-
+  
   if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);

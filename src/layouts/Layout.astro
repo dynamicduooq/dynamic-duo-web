@@ -569,7 +569,7 @@ if (isNovelPage) {
 <div id="read-progress"></div>
 
 <audio id="bgmAudio" loop style="display:none;">
-    <source src="https://assets.mixkit.co/active_storage/sfx/1231/1231-preview.mp3" type="audio/mpeg">
+    <source src="https://open.spotify.com/track/35KfAAi2VoPCtDS43Y2WSi?si=271fde3165ed43aa" type="audio/mpeg">
 </audio>
 
 <nav id="navbar">
@@ -1755,5 +1755,22 @@ function setupChapComments(){
   });
 }
 </script>
+{isNovelPage && (
+  <script is:inline define:vars={{ prevUrl: prevChap?.url, nextUrl: nextChap?.url }}>
+    document.addEventListener('keydown', (e) => {
+      // Bỏ qua nếu đang gõ phím trong ô comment/input để tránh nhảy trang oan uổng
+      if (['TEXTAREA', 'INPUT'].includes(e.target.tagName)) return;
+      
+      // Mũi tên trái -> Lùi chương
+      if (e.key === 'ArrowLeft' && prevUrl) {
+        window.location.href = prevUrl;
+      }
+      // Mũi tên phải -> Tiến chương
+      if (e.key === 'ArrowRight' && nextUrl) {
+        window.location.href = nextUrl;
+      }
+    });
+  </script>
+)}
 </body>
 </html>

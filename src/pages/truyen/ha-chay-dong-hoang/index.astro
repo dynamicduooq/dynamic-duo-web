@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 
-// Sửa lỗi: Lấy tự động tên thư mục hiện tại
+// 1. Thêm 2 dòng này để tự động lấy tên thư mục làm ảnh bìa
 const currentPath = Astro.url?.pathname ?? '';
 const slug = currentPath.split('/').filter(Boolean).pop() || '';
 
@@ -46,6 +46,7 @@ const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
     .read-btn:hover { background: var(--sky2); transform: translateY(-2px); }
   </style>
 
+  <!-- 2. Sửa currentFolder thành slug ở thẻ img -->
   <img src={`/dynamic-duo-web/images/bia${slug.replace(/-/g, '')}.png`} alt="Bìa truyện" class="story-cover"
     onerror="this.src='/dynamic-duo-web/images/frontpage.png'" />
 
@@ -88,7 +89,6 @@ const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
       ))}
     </div>
   </div>
-  
 <!-- =============== KHU VỰC REVIEW CÔNG KHAI =============== -->
 <div class="public-reviews-widget" data-truyen-id="hcdh">
   <div class="prw-header">
@@ -113,7 +113,7 @@ const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
   </div>
 
   <!-- DANH SÁCH ĐÁNH GIÁ -->
-  <div class="prw-list" id="prwList">
+<div class="prw-list" id="prwList">
      <div style="text-align:center; padding: 20px; font-style:italic; color:var(--text-dim); font-size: 0.85rem;">Đang tải đánh giá...</div>
   </div>
 
@@ -151,7 +151,7 @@ const hoan_thanh = false;   // Nếu đã dịch xong 100%, đổi thành true
   .prw-submit-btn:disabled { opacity: 0.5; pointer-events: none; }
 
   /* DANH SÁCH REVIEW (DẠNG LƯỚI CARD) */
-  .prw-list { display: flex; flex-direction: column; gap: 12px; }
+.prw-list { display: flex; flex-direction: column; gap: 12px; }
   
   /* TỪNG THẺ REVIEW MỘT */
   .prw-item {

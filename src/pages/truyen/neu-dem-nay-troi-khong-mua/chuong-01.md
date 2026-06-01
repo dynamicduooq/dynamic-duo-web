@@ -12,6 +12,9 @@ tags:
   - "đam mỹ"
   - "hiện đại"
   - "HE"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## **Chương 1**
@@ -120,8 +123,7 @@ Phòng riêng ở tầng năm, phía trong, bàn lớn đủ bảy người, v�
 
 Họ đều làm việc tại văn phòng Luật sư Quân Bình - một trong những nơi hàng đầu cả nước. Hạ Tranh và Chu Trác với doanh thu ấn tượng đã nghiễm nhiên gia nhập vào hàng ngũ đối tác*, Trương Tiểu Mẫn và Thái Bác Minh là luật sư cấp cao, ba người còn lại là trợ lý.
 
-*Chú thích*
-*(*) “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.*
+(*) “Đối tác” trong công ty luật là những người tham gia vào hàng ngũ quản lý, nắm cổ phần công ty.
 
 Chu Trác có gia thế, mối quan hệ rộng, thầy của Hạ Tranh lại là cây đại thụ trong ngành, nổi danh “Luật sư số một Đài Bắc”. Một người có lợi thế bẩm sinh, một người được chống lưng bởi nhân vật có quyền uy, cộng thêm năng lực chuyên môn xuất sắc, trong ngành luật sư chênh lệch lớn về nguồn khách và thu nhập, họ thực sự là những ngôi sao đang lên, tài năng trẻ xuất chúng.
 

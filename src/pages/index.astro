@@ -651,10 +651,20 @@ const recentChaps = allChaps
         </div>
       </div>
 
-      <!-- Panel: Public -->
+<!-- Panel: Public -->
       <div class="msg-panel" id="msgPanelPublic">
+        
+        <!-- Bảng tin ghim trong Chat Chung -->
+        <div style="background: rgba(245,158,11,0.08); border: 1px dashed rgba(245,158,11,0.4); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; position: relative;">
+            <div style="font-size: 0.65rem; font-weight: bold; color: var(--amber); margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+                <span>📌 Thông báo ghim</span>
+                <button id="btnEditNotice" class="admin-edit-btn" style="display:none; background: var(--amber); color: white; border: none; border-radius: 4px; font-size: 0.55rem; padding: 2px 6px; cursor: pointer; margin-left: auto;">Sửa</button>
+            </div>
+            <div id="siteNoticeContent" style="font-size: 0.75rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap; font-family: 'Newsreader', serif;">⏳ Đang tải...</div>
+        </div>
+
         <div class="chat-feed-container" id="msgPublicFeed">
-          <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
+                  <div class="msg-public-empty">Chưa có lời nhắn nào 𓆝</div>
         </div>
         <div class="chat-form-modern">
            <input class="cfm-name" id="msgPublicName" placeholder="Tên (tùy chọn)..." />
@@ -970,7 +980,7 @@ const recentChaps = allChaps
       document.getElementById('msgPrivateAdminBoxPopup').style.display = isAdmin ? 'block' : 'none';
       document.getElementById('msgPrivateUserBoxPopup').style.display = isAdmin ? 'none' : 'block';
 
-      // Khóa và set cứng tên Admin
+// Khóa và set cứng tên Admin
       document.querySelectorAll('.cfm-name').forEach(inp => {
           if (isAdmin) {
               inp.value = ADMIN_NAME;
@@ -982,6 +992,7 @@ const recentChaps = allChaps
           }
       });
 
+      // ---> THÊM ĐOẠN NÀY VÀO <---
       // Hiện nút sửa Bảng tin cho Admin
       document.querySelectorAll('.admin-edit-btn').forEach(el => {
           el.style.display = isAdmin ? 'block' : 'none';
@@ -1014,6 +1025,7 @@ const recentChaps = allChaps
 
     document.getElementById('btnEditNotice')?.addEventListener('click', editNoticeHandler);
     document.getElementById('btnEditPopupNotice')?.addEventListener('click', editNoticeHandler);
+
 
     // 1. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {

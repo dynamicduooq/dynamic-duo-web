@@ -429,7 +429,7 @@ if (isNovelPage) {
     .ic-del-reply-btn { background:none; border:none; cursor:pointer; font-size:.56rem; color:var(--text-dim); transition:color .15s; padding:0; }
     .ic-del-reply-btn:hover { color:#ef4444; }
 
-    /* FORM CHAT INLINE & CUỐI CHƯƠNG TÍCH HỢP ĐẸP MẮT */
+    /* FORM CHAT INLINE & CUỐI CHƯƠNG TÍCH HỢP ĐẸP MẮT (ZALO STYLE) */
     .chat-form-modern { background: var(--sky-pale); border: 1px solid rgba(186,230,253,.8); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 5px; box-shadow: inset 0 2px 4px rgba(2,132,199,0.03); transition: border-color 0.3s;}
     .chat-form-modern.sticky { position: sticky; bottom: 0; border-radius: 16px 16px 0 0; border-bottom: none; z-index: 1000; box-shadow: 0 -4px 15px rgba(2,132,199,0.1); margin: 0;}
     .chat-form-modern:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
@@ -928,7 +928,6 @@ function shootConfetti(x, y) {
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
-  // LƯU LỊCH SỬ ĐỌC VÀ TÍNH THỜI GIAN ĐỌC
   if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);
@@ -980,7 +979,6 @@ document.addEventListener('DOMContentLoaded', () => {
   themeBtn?.addEventListener('click', toggleTheme); themeBtnMob?.addEventListener('click', toggleTheme);
   syncThemeBtns();
 
-// --- AMBIENT SOUND (BGM) ---
   const fabAudio = document.getElementById('fabAudio');
   const bgm = document.getElementById('bgmAudio');
   let isBgmPlaying = false;
@@ -999,7 +997,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-// --- FOCUS MODE & AUTO SCROLL ---
   const fabFocus = document.getElementById('fabFocus');
   if(fabFocus) {
     fabFocus.addEventListener('click', () => {
@@ -1031,7 +1028,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', () => { if(autoScrollTimer) fabAutoScroll.click(); }, {passive:true});
   }
 
-// --- AUDIO LOGIC ---
   const btnPlay = document.getElementById('btnPlayTTS'), btnPause = document.getElementById('btnPauseTTS'), btnStop = document.getElementById('btnStopTTS');
   const btnNext = document.getElementById('btnNextSent'), btnPrev = document.getElementById('btnPrevSent');
   const voiceSelect = document.getElementById('aaVoiceSelect'), rateRange = document.getElementById('aaRateRange'), rateValue = document.getElementById('aaRateValue');
@@ -1115,7 +1111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // --- ADMIN LOGIN & KHÓA TÊN ---
   const footerAdminBtn = document.getElementById('footerAdmin');
   if (footerAdminBtn) {
     footerAdminBtn.addEventListener('click', (e) => {
@@ -1153,7 +1148,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- TÙY CHỈNH THIẾT LẬP ĐỌC ---
   let fz = parseInt(localStorage.getItem('dd_fz') || '18');
   let ff = localStorage.getItem('dd_ff') || "'Newsreader', serif";
   
@@ -1214,7 +1208,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setupDD('ddBtnTop','ddListTop'); setupDD('ddBotBtn','ddListBot');
 
-// --- HỆ THỐNG COMMENT INLINE (ĐỆ QUY VÔ HẠN - CHỈ THỤT LỀ 1 LẦN) ---
   const novelContent = document.getElementById('novelContent');
   const icSidebar = document.getElementById('icSidebar');
   const layoutWrap = document.getElementById('novelLayoutWrap');
@@ -1390,7 +1383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (tgtBtn.classList.contains('ic-reply-toggle') || tgtBtn.classList.contains('ic-reply-at-btn')) {
-            const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid; 
+            const rid = tgtBtn.dataset.rid || tgtBtn.dataset.cid;
             const form = document.getElementById('ic-rf-' + rid);
             if (form) {
                 form.style.display = 'flex';

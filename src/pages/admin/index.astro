@@ -1118,6 +1118,34 @@ function previewBulk() {
     log.innerHTML = html;
 }
 
+/* ==========================================================================
+   BULK UPLOAD (MỚI BỔ SUNG CÁC TÍNH NĂNG ADMIN CẦN THIẾT)
+   ========================================================================== */
+function previewBulk() {
+    let rawText = $('bulk-content').value;
+    if(!rawText) return showToast('Vui lòng dán nội dung', 'error');
+
+    // Lọc ký tự trắng tàng hình (Word / Google Docs rác)
+    rawText = rawText.replace(/[\u200B-\u200D\uFEFF]/g, '');
+
+    const chapters = rawText.split(/(?=(?:^|\n)\s*Chương\s+\d+)/i).map(s => s.trim()).filter(s => s.length > 50);
+    const log = $('bulk-log');
+    log.style.display = 'block';
+
+    if(chapters.length === 0) {
+        log.innerHTML = '❌ Lỗi: Không tìm thấy định dạng "Chương [số]". Vui lòng kiểm tra lại văn bản của bạn.';
+        return;
+    }
+
+    let html = `<b style="color:var(--sky-dark)">✅ Đã nhận diện được ${chapters.length} chương:</b><br><ul style="margin-top:5px; padding-left:20px; font-size:.8rem; max-height:200px; overflow-y:auto">`;
+    chapters.forEach((text, i) => {
+        const titleLine = text.split('\n')[0].trim();
+        html += `<li>${titleLine}</li>`;
+    });
+    html += `</ul><span style="color:var(--amber); font-weight:bold">Hãy lướt qua danh sách trên kiểm tra xem đã cắt đúng tên chương chưa trước khi ấn "🚀 Cắt & Lưu" nhé!</span>`;
+    log.innerHTML = html;
+}
+
 async function processBulkUpload() {
     let rawText = $('bulk-content').value;
     const target = $('bulk-story-select').value;
@@ -1173,7 +1201,9 @@ editor_note: ""
         // Căn lề tự động cho Bulk
         bodyContent = bodyContent.replace(/\n(?!\n)/g, '\n\n').replace(/\n{3,}/g, '\n\n'); 
         
-        const content = fm + '\n\n' + bodyContent;
+        // CẬP NHẬT Ở ĐÂY: Thêm tự động Tiêu đề Heading 2 (##) vào đầu phần thân bài
+        const content = fm + '\n\n## ' + titleMatch + '\n\n' + bodyContent;
+        
         const filename = `chuong-${String(num).padStart(2,'0')}.md`;
         
         try {
@@ -1189,7 +1219,6 @@ editor_note: ""
     }
     showToast(`Hoàn tất Bulk Upload! Thành công ${success}/${chapters.length}`);
 }
-
 /* ==========================================================================
    FIREBASE & CHART.JS
    ========================================================================== */

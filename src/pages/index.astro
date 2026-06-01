@@ -378,7 +378,7 @@ const recentChaps = allChaps
             </div>
             
             <div class="guide-item">
-               <div class="guide-icon">⬅️➡️</div>
+               <div class="guide-icon">➡️</div>
                <div class="guide-text"><strong>Chuyển trang:</strong> Trên máy tính, sử dụng phím mũi tên để chuyển trang.</div>
             </div>
             
@@ -993,7 +993,7 @@ const recentChaps = allChaps
               .catch(e => alert('Lỗi: ' + e.message));
         }
     });
-    
+
     // 3. PUBLIC FEED LOGIC (Tường chung)
     fb.onValue(fb.ref(fb.db, 'public_messages'), snap => {
       const data = snap.val();

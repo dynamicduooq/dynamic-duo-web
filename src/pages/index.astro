@@ -953,11 +953,12 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
       });
     };
 
-// BẢNG TIN (NOTICE BOARD)
-// 1. BẢNG TIN CHÍNH (SIDEBAR)
+// 1. BẢNG TIN CHÍNH (Dành cho Cột Sidebar)
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
-        const text = data.content ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
+        const text = data.content 
+            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+            : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';        
         const el = document.getElementById('siteNoticeContent');
         if(el) el.innerHTML = text;
     });
@@ -967,7 +968,7 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
         let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
         if (currentText.includes('Chưa có thông báo') || currentText.includes('Đang tải')) currentText = '';
         
-        const newText = prompt('📌 SỬA BẢNG TIN NHÀ CÁ:', currentText);
+        const newText = prompt('📌 SỬA BẢNG TIN (CỘT BÊN PHẢI):', currentText);
         if (newText !== null) {
             fb.update(fb.ref(fb.db, '/'), { site_notice: { content: newText.trim(), ts: Date.now() } })
               .then(() => alert('✅ Đã cập nhật bảng tin!'))
@@ -975,29 +976,28 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
         }
     });
 
-    // 2. THÔNG BÁO GHIM TRONG CHAT CHUNG
+    // 2. THÔNG BÁO GHIM (Dành riêng cho khung Chat Chung)
     fb.onValue(fb.ref(fb.db, 'chat_notice'), snap => {
         const data = snap.val() || {};
-        const text = data.content ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';
-        const el = document.getElementById('chatNoticeContent');
+        const text = data.content 
+            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
+            : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';        
+        const el = document.getElementById('popupNoticeContent');
         if(el) el.innerHTML = text;
     });
 
-    document.getElementById('btnEditChatNotice')?.addEventListener('click', () => {
-        const currentTextEl = document.getElementById('chatNoticeContent');
+    document.getElementById('btnEditPopupNotice')?.addEventListener('click', () => {
+        const currentTextEl = document.getElementById('popupNoticeContent');
         let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
         if (currentText.includes('Trò chuyện vui vẻ') || currentText.includes('Đang tải')) currentText = '';
         
         const newText = prompt('📌 SỬA THÔNG BÁO GHIM (TƯỜNG CHUNG):', currentText);
         if (newText !== null) {
             fb.update(fb.ref(fb.db, '/'), { chat_notice: { content: newText.trim(), ts: Date.now() } })
-              .then(() => alert('✅ Đã cập nhật thông báo ghim!'))
+              .then(() => alert('✅ Đã cập nhật thông báo ghim chat!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
     });
-
-    document.getElementById('btnEditNotice')?.addEventListener('click', editNoticeHandler);
-    document.getElementById('btnEditPopupNotice')?.addEventListener('click', editNoticeHandler);
 
 
     // 1. PUBLIC FEED LOGIC (Tường chung)

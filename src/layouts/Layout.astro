@@ -633,10 +633,11 @@ if (isNovelPage) {
   <a href="/dynamic-duo-web/ca-tren-ban/">🍽️ Tất cả truyện hoàn thành</a>
   {navTrenBan.map(story => (<a href={story.url}>✦ {story.title}</a>))}
 
-  <div class="mobile-section-title">Khác</div>
+<div class="mobile-section-title">Khác</div>
   <a href="/dynamic-duo-web/ca-tren-troi/">🌤️ Cá trên trời</a>
+  {navTrenTroi.map(story => (<a href={story.url}>✧ {story.title}</a>))}
   <a href="/dynamic-duo-web/about/">✉ About</a>
-</div>
+  </div>
 
 {isNovelPage && <div class="ic-overlay" id="icOverlay"></div>}
 
@@ -717,23 +718,23 @@ if (isNovelPage) {
         </button>
       </div>
 
-      <aside class="ic-sidebar" id="icSidebar">
+   <aside class="ic-sidebar" id="icSidebar">
         <div class="ic-sidebar-inner">
           <div class="ic-sidebar-header">
             <div class="ic-para-preview" id="icParaPreview"></div>
             <button class="ic-sidebar-close" id="icSidebarClose" aria-label="Đóng">✕</button>
           </div>
           
-          <div class="ic-sidebar-list" id="icSidebarList">
-            <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
-          </div>
-
-          <div class="chat-form-modern sticky" style="border-radius: 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); margin: 0; padding: 12px 14px;">
+          <div class="chat-form-modern" style="border-radius: 0; border-left: none; border-right: none; border-bottom: 1px solid var(--border-card); box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin: 0; padding: 12px 14px; z-index: 10;">
               <input class="cfm-name ic-form-name" id="icFormName" placeholder="Tên của bạn (tùy chọn)" autocomplete="off" />
               <div class="cfm-bottom">
                   <textarea class="cfm-text ic-form-text" id="icFormText" placeholder="Viết bình luận..." rows="1"></textarea>
                   <button class="cfm-send ic-form-send" id="icFormSend">➤</button>
               </div>
+          </div>
+
+          <div class="ic-sidebar-list" id="icSidebarList">
+            <div class="ic-empty">Chọn một đoạn để xem bình luận 🌊</div>
           </div>
 
         </div>

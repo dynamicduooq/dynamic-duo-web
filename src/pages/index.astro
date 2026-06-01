@@ -722,9 +722,9 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
         <div style="background: rgba(245,158,11,0.08); border: 1px dashed rgba(245,158,11,0.4); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; position: relative;">
             <div style="font-size: 0.65rem; font-weight: bold; color: var(--amber); margin-bottom: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
                 <span>📌 Thông báo ghim</span>
-                <button id="btnEditPopupNotice" class="admin-edit-btn" style="display:none; background: var(--amber); color: white; border: none; border-radius: 4px; font-size: 0.55rem; padding: 2px 6px; cursor: pointer; margin-left: auto;">Sửa</button>
+                <button id="btnEditChatNotice" class="admin-edit-btn" style="display:none; background: var(--amber); color: white; border: none; border-radius: 4px; font-size: 0.55rem; padding: 2px 6px; cursor: pointer; margin-left: auto;">Sửa</button>
             </div>
-            <div id="popupNoticeContent" style="font-size: 0.75rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap; font-family: 'Newsreader', serif;">⏳ Đang tải...</div>
+            <div id="chatNoticeContent" style="font-size: 0.75rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap; font-family: 'Newsreader', serif;">⏳ Đang tải...</div>
         </div>
 
         <div class="chat-feed-container" id="msgPublicFeed">
@@ -954,30 +954,47 @@ Chào mừng cậu đến với nhà cá 🐋! Cẩm nang cho độc giả:
     };
 
 // BẢNG TIN (NOTICE BOARD)
+// 1. BẢNG TIN CHÍNH (SIDEBAR)
     fb.onValue(fb.ref(fb.db, 'site_notice'), snap => {
         const data = snap.val() || {};
-        // Đã bỏ hàm esc() để Admin thoải mái dùng thẻ HTML <br>, <b>, <i>...
-const text = data.content 
-            ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') 
-            : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';        
-        const el1 = document.getElementById('siteNoticeContent');
-        const el2 = document.getElementById('popupNoticeContent');
-        if(el1) el1.innerHTML = text;
-        if(el2) el2.innerHTML = text;
-      });
+        const text = data.content ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Chưa có thông báo mới 𓆝</i>';
+        const el = document.getElementById('siteNoticeContent');
+        if(el) el.innerHTML = text;
+    });
 
-    const editNoticeHandler = () => {
+    document.getElementById('btnEditNotice')?.addEventListener('click', () => {
         const currentTextEl = document.getElementById('siteNoticeContent');
         let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
         if (currentText.includes('Chưa có thông báo') || currentText.includes('Đang tải')) currentText = '';
         
-        const newText = prompt('📌 NHẬP NỘI DUNG BẢNG TIN (Ghim ở trang chủ & Đầu khung chat):', currentText);
+        const newText = prompt('📌 SỬA BẢNG TIN NHÀ CÁ:', currentText);
         if (newText !== null) {
             fb.update(fb.ref(fb.db, '/'), { site_notice: { content: newText.trim(), ts: Date.now() } })
-              .then(() => alert('✅ Đã ghim thông báo mới!'))
+              .then(() => alert('✅ Đã cập nhật bảng tin!'))
               .catch(e => alert('Lỗi: ' + e.message));
         }
-    };
+    });
+
+    // 2. THÔNG BÁO GHIM TRONG CHAT CHUNG
+    fb.onValue(fb.ref(fb.db, 'chat_notice'), snap => {
+        const data = snap.val() || {};
+        const text = data.content ? data.content.replace(/\n/g, '<br>').replace(/(<br\s*\/?>)\s+/gi, '$1') : '<i style="color:var(--text-dim)">Trò chuyện vui vẻ nhé 𓆝</i>';
+        const el = document.getElementById('chatNoticeContent');
+        if(el) el.innerHTML = text;
+    });
+
+    document.getElementById('btnEditChatNotice')?.addEventListener('click', () => {
+        const currentTextEl = document.getElementById('chatNoticeContent');
+        let currentText = currentTextEl ? currentTextEl.innerText.trim() : '';
+        if (currentText.includes('Trò chuyện vui vẻ') || currentText.includes('Đang tải')) currentText = '';
+        
+        const newText = prompt('📌 SỬA THÔNG BÁO GHIM (TƯỜNG CHUNG):', currentText);
+        if (newText !== null) {
+            fb.update(fb.ref(fb.db, '/'), { chat_notice: { content: newText.trim(), ts: Date.now() } })
+              .then(() => alert('✅ Đã cập nhật thông báo ghim!'))
+              .catch(e => alert('Lỗi: ' + e.message));
+        }
+    });
 
     document.getElementById('btnEditNotice')?.addEventListener('click', editNoticeHandler);
     document.getElementById('btnEditPopupNotice')?.addEventListener('click', editNoticeHandler);

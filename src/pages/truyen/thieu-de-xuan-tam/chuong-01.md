@@ -7,11 +7,6 @@ author: Hàn Nha
 truyen_name: Thiếu Đế xuân tâm
 tong_so_chuong: 80
 editor_note: ""
-  --
-  [1] Các Hoàng đế (đặc biệt là triều Minh) thường dùng từ "Đại bạn" (大伴) để gọi những thái giám thân tín.
-  [2] Nguyên văn là "Tích thạch như ngọc, liệt tùng như thúy".
-description: ""
-draft: false
 ---
 
 ## Chương 1: Tiền căn
@@ -259,4 +254,5 @@ Y nén những giọt nước mắt bi thương sắp trào ra, nén đến mứ
 Y nói với Thiếu đế: "Thần sẽ ở cùng người."
 
 [1] Các Hoàng đế (đặc biệt là triều Minh) thường dùng từ "Đại bạn" (大伴) để gọi những thái giám thân tín.
+
 [2] Nguyên văn là "Tích thạch như ngọc, liệt tùng như thúy".

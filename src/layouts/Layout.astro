@@ -81,9 +81,7 @@ if (isNovelPage) {
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getDatabase, ref, push, onValue, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
+import { getDatabase, ref, push, onValue, remove, update, get, goOffline, goOnline } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     const firebaseConfig = {
       apiKey: "AIzaSyBkuHIU0qdS-zNeUFGN7keNGGbAMXvilD0",
       authDomain: "dynamic-duo-comments.firebaseapp.com",
@@ -102,7 +100,7 @@ if (isNovelPage) {
       auth = getAuth(app);
     } catch(e) { console.warn('[DD] Firebase init failed:', e.message); }
 
-    window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, ADMIN_EMAIL };
+window.__ddFirebase = { db, auth, ref, push, onValue, remove, update, get, goOffline, goOnline, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, ADMIN_EMAIL };
     window.__ddIsAdmin = false;
 
     if (auth) {
@@ -1772,5 +1770,20 @@ function setupChapComments(){
     });
   </script>
 )}
+<script is:inline>
+  // TÍNH NĂNG NGỦ ĐÔNG KẾT NỐI (TIẾT KIỆM FIREBASE)
+  document.addEventListener('visibilitychange', () => {
+      const fb = window.__ddFirebase;
+      if (!fb || !fb.db) return;
+
+      if (document.visibilityState === 'hidden') {
+          // Khi người dùng chuyển tab hoặc thu nhỏ web -> Ngắt kết nối
+          fb.goOffline(fb.db);
+      } else {
+          // Khi người dùng quay lại tab này -> Mở lại kết nối
+          fb.goOnline(fb.db);
+      }
+  });
+</script>
 </body>
 </html>

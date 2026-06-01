@@ -9,6 +9,9 @@ tags:
   - "đam mỹ"
   - "hiện đại"
   - "chua xót"
+description: ""
+draft: false
+editor_note: ""
 ---
 
 ## Chương 16: Em biết anh rất buồn
@@ -25,24 +28,7 @@ Chẳng trách người ta nói âm nhạc là sự cộng hưởng tốt nhất
 
 “Em biết anh rất buồn”*, bài hát cũ của Thái Y Lâm, tôi đã quá quen thuộc, là bài hát cố định của vợ ở karaoke.
 
-*Chú thích*
-*(*) “Em biết anh rất buồn” sáng tác năm 2005 của Thái Y Lâm.*
-
- 
- 
- 
- ▶
- 
- 
- 
- 
- 
-我知道你很难过 - 蔡依林
- 
- 
- Nhấn để nghe trên Spotify...
- 
- 
+(*) “Em biết anh rất buồn” (我知道你很难过 - 蔡依林) sáng tác năm 2005 của Thái Y Lâm.*
 
 Em luôn là kiểu người rất hoài cổ, đến bây giờ trong điện thoại vẫn là mấy bài hát đó, Vương Phi, Thái Y Lâm, Trần Dịch Tấn, Châu Kiệt Luân... nghe từ cấp ba đến đại học, lại nghe từ đại học đến bây giờ. Tôi nhắm mắt cũng có thể thuộc nằm lòng danh sách phát của em.
 

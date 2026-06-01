@@ -925,29 +925,43 @@ function shootConfetti(x, y) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM)
+// TỰ ĐỘNG BIẾN CHÚ THÍCH THÀNH TOGGLE TRÊN GIAO DIỆN (BẢN GỘP NHÓM THÔNG MINH)
   const novelContentEl = document.getElementById('novelContent');
   if (novelContentEl) {
-      let contentHtml = novelContentEl.innerHTML;
+      let html = novelContentEl.innerHTML;
       
-      // Bước 1: Dọn dẹp rác HTML nếu lỡ bị bọc thẻ <details> từ code cũ
-      contentHtml = contentHtml.replace(/<details[^>]*>[\s\S]*?<div[^>]*>([\s\S]*?)<\/div><\/details>/gi, '$1');
-      contentHtml = contentHtml.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
+      // 1. Dọn rác thẻ details cũ (nếu lỡ bị lưu từ các bản code trước)
+      html = html.replace(/<details[^>]*>[\s\S]*?<div[^>]*>([\s\S]*?)<\/div><\/details>/gi, '$1');
+      html = html.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
       
-      // Bước 2: Tìm và gom nhóm TẤT CẢ các dòng chú thích nằm liền kề nhau
-      const regex = /(?:(?:<p>|<br\s*\/?>)\s*(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<\/p>|<br\s*\/?>|$)\s*)+/gi;
+      // 2. Tẩy cụm từ "Chú thích:" nếu nó đứng ngay trước một dấu (*), [1] (Chấp luôn việc dính thẻ in đậm/nghiêng hay xuống dòng)
+      html = html.replace(/(?:<b>|<strong>|<i>|<em>|<u>)*Chú thích:?(?:<\/b>|<\/strong>|<\/i>|<\/em>|<\/u>)*\s*(?:<br\s*\/?>|<\/p>\s*<p>)?\s*(?=\(\*\)|\[\d+\]|\(\d+\))/gi, '');
       
-      const newHtml = contentHtml.replace(regex, (match) => {
-          // Làm sạch mớ hỗn độn (loại bỏ thẻ <p> bọc ngoài)
-          const cleanMatch = match.replace(/<\/?p>/g, '<br>').replace(/^(?:<br\s*\/?>\s*)+/, '');
-          
-          return `<br><details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0; font-weight: normal; display: block;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">${cleanMatch}</div></details>`;
+      // 3. Bọc từng dòng chú thích bằng thẻ tạm <dd-note>
+      html = html.replace(/(?:^|>|\s)(\(\*\)|\[\d+\]|\(\d+\))\s*([\s\S]*?)(?=<br\s*\/?>|<\/p>|$)/gi, (match, p1, p2) => {
+          const prefix = match.substring(0, match.indexOf(p1));
+          return `${prefix}<dd-note><b>${p1}</b> ${p2}</dd-note>`;
       });
+      
+      // 4. Gom nhóm tất cả các thẻ <dd-note> liền kề nhau thành 1 khối duy nhất
+      let prevHtml;
+      do {
+          prevHtml = html;
+          // Nối các chú thích bằng 1 khoảng trống nhỏ 6px cho đẹp mắt
+          html = html.replace(/<\/dd-note>\s*(?:<br\s*\/?>|<\/?p>|\s)*\s*<dd-note>/gi, '<div style="height: 6px;"></div>');
+      } while (html !== prevHtml);
+      
+      // 5. Biến thẻ tạm thành khung Toggle xịn sò
+      html = html.replace(/<dd-note>([\s\S]*?)<\/dd-note>/gi, `</p><details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0; font-weight: normal; display: block;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">$1</div></details><p>`);
+      
+      // 6. Dọn dẹp thẻ <p> rỗng (chống vỡ lề)
+      html = html.replace(/<p>\s*<\/p>/gi, '');
 
-      if (contentHtml !== newHtml) {
-          novelContentEl.innerHTML = newHtml;
+      // Áp dụng lại HTML đã được gộp nhóm siêu sạch
+      if (novelContentEl.innerHTML !== html) {
+          novelContentEl.innerHTML = html;
       }
-  }
+    }
       if(window.location.pathname.includes('/chuong-')) {
       const chapTitle = document.title.split('|')[0].trim();
       localStorage.setItem('dd_last_read_url', window.location.pathname);

@@ -925,7 +925,7 @@ function cleanFormatting() {
   val = val.split('\n').map(line => line.trim()).join('\n');
 
 // 4. TỰ ĐỘNG NHẬN DIỆN VÀ TẠO KHUNG CHÚ THÍCH (DẠNG TOGGLE ĐÓNG/MỞ)
-  val = val.replace(/^(\(\*\)|\[\d+\]|\(\d+\))\s*(.*)$/gm, '<details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Nhấn để xem chú thích $1</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">$2</div></details>');
+  val = val.replace(/^(\(\*\)|\[\d+\]|\(\d+\))\s*(.*)$/gm, '<details style="background: var(--sky-pale); padding: 10px 16px; border-left: 3px solid var(--sky); border-radius: 0 12px 12px 0; font-size: 0.85rem; margin: 12px 0;"><summary style="font-weight: 600; cursor: pointer; color: var(--sky-dark); outline: none; user-select: none;">🔍 Chú thích $1</summary><div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--sky-light); font-style: italic; color: var(--text-mid); line-height: 1.6;">$2</div></details>');
   // 5. Dọn dẹp các dòng trống bị thừa
   val = val.replace(/\n{3,}/g, '\n\n');
 
